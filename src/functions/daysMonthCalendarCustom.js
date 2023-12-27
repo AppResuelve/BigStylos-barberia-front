@@ -23,7 +23,11 @@ function daysMonthCalendarCustom(totalDays, boolean) {
         }
         return dia > currentDay;
     });
-
+    if (remaining.length > totalDays) {
+        const resultMonth1 = remaining.slice(0, totalDays);
+        const result1 = { month1: resultMonth1, month2: [] }
+        return result1;
+      }
     const combinedMonth = [...remaining, ...daysNextMonth] // unifica el array de dias del mes actual con los del proximo
     const combinedMonthSlice = combinedMonth.slice(0, totalDays); // obtiene la cantidad de dias especificados del mes actual y toma los del dia proximo si no le alcanza
     const remainingNext = combinedMonthSlice.slice(remaining.length, combinedMonthSlice.length)

@@ -3,7 +3,7 @@ import getToday from '../../functions/getToday';
 import './customCalendar.css';
 
 const CustomCalendar = () => {
-  const daysCalendarCustom = daysMonthCalendarCustom(21, false);
+  const daysCalendarCustom = daysMonthCalendarCustom(3, false);
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
   const getDayPosition = getToday(); // devuelve número que representa qué día de la semana es (lunes, martes, etc)
 
