@@ -4,7 +4,7 @@ const Worker = () => {
 
     return (
         <div>
-            <h1>home de worker</h1>
+            <h1>Administracion del worker</h1>
             <CreateWorkDays/>
          
         </div>

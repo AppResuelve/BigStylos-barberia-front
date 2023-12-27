@@ -3,7 +3,7 @@ import axios from "axios";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const Workers = () => {
+const Users = () => {
   const [allUsers, setAllUsers] = useState([]);
   const [sendAdd, setSendAdd] = useState(false);
 
@@ -118,4 +118,4 @@ const Workers = () => {
     </div>
   );
 };
-export default Workers;
+export default Users;
