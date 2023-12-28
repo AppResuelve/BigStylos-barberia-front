@@ -7,9 +7,9 @@ import "./customCalendar.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const CustomCalendar = ({ setDayIsSelected }) => {
+const CustomCalendar = ({ setDayIsSelected, amountOfDays }) => {
   const { user } = useAuth0();
-  const daysCalendarCustom = daysMonthCalendarCustom(21, false);
+  const daysCalendarCustom = daysMonthCalendarCustom(amountOfDays, false);
   let { currentMonth, nextMonth } = daysCalendarCustom;
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
   const getDayPosition = getToday(); // devuelve número que representa qué día de la semana es (lunes, martes, etc)
@@ -54,7 +54,6 @@ const CustomCalendar = ({ setDayIsSelected }) => {
       </div>
       <div className="line7">
         {daysCalendarCustom.month1.map((day, index) => {
-          console.log(day);
           let colorDay; // Inicializar colorDay fuera del mapeo
           // console.log(typeOfDays[currentMonth][day]);
           if (!typeOfDays[currentMonth] || !typeOfDays[currentMonth][day]) {

@@ -5,7 +5,6 @@ import SelectedDay from "../selectedDay/selectedDay";
 
 const CreateWorkDays = () => {
   const [dayIsSelected, setDayIsSelected] = useState({});
-  console.log(dayIsSelected);
   return (
     <div>
       <CustomCalendar setDayIsSelected={setDayIsSelected} />
