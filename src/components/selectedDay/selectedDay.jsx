@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import './selectedDay.css'
 
 const SelectedDay = () => {
-  const totalSlots = 18;
-  const [selectedSlots, setSelectedSlots] = useState([]);
-  const [isMouseDown, setIsMouseDown] = useState(false);
+  const totalSlots = 18;    // debo ajustar con el valor que viene por workDay
+  const [selectedSlots, setSelectedSlots] = useState([]);  // contiene los valores seleccionados
+  const [isMouseDown, setIsMouseDown] = useState(false);  
+
+  console.log(selectedSlots)
 
   const handleMouseDown = (index) => {
     setIsMouseDown(true);
@@ -35,7 +37,7 @@ const SelectedDay = () => {
     <div>
       <div onMouseUp={handleMouseUp}>
         {Array.from({ length: totalSlots }, (_, index) => (
-          <div
+          <button
             key={index}
             className={`slot ${
               selectedSlots.includes(index) ? "selected" : ""
@@ -44,7 +46,7 @@ const SelectedDay = () => {
             onMouseEnter={() => handleMouseEnter(index)}
           >
             {index}
-          </div>
+          </button>
         ))}
       </div>
     </div>

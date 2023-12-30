@@ -18,10 +18,11 @@ const CustomCalendar = ({ setDayIsSelected, amountOfDays, dayIsSelected }) => {
   useEffect(() => {
     if (user && user.email) {
       let email = user.email;
+      console.log(email)
 
       const fetchData = async () => {
         try {
-          const response = await axios.get(
+          const response = await axios.post(
             `${VITE_BACKEND_URL}/workdays/getdays`,
             email
           );
@@ -35,6 +36,8 @@ const CustomCalendar = ({ setDayIsSelected, amountOfDays, dayIsSelected }) => {
       fetchData();
     }
   }, []);
+
+console.log(dayIsSelected)
 
   const handleDay = (day, colorDay) => {
     setDayIsSelected(prevDays => {  // prevDays representa lo que contiene el estado local
