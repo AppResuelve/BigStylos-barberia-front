@@ -4,13 +4,12 @@ import axios from "axios";
 import SelectedDay from "../selectedDay/selectedDay";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-// ... (importaciones y otras partes del código) ...
-
 const CreateWorkDays = ({ user }) => {
   const [dayIsSelected, setDayIsSelected] = useState({});
   const [days, setDays] = useState({});
   const [firstMonth, setFirstMonth] = useState({});
   const [firstDay, setFirstDay] = useState({});
+  const [timeSelected, setTimeSelected] = useState([]); //estado de la rama fac, no se para que es aun.
 
   useEffect(() => {
     const fetchData = async () => {

@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Box, Button, Grid, Input } from "@mui/material";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { InputOutlined, InputRounded, InputTwoTone } from "@mui/icons-material";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -15,8 +18,8 @@ const Services = () => {
         const { data } = response;
         setServices(data);
       } catch (error) {
-        console.error('Error al obtener los servicios:', error);
-        alert('Error al obtener los servicios');
+        console.error("Error al obtener los servicios:", error);
+        alert("Error al obtener los servicios");
       }
     };
     fetchData();
@@ -35,8 +38,8 @@ const Services = () => {
         setSendAdd(!sendAdd);
       }
     } catch (error) {
-      console.error('Error al agregar el servicio:', error);
-      alert('Error al agregar el servicio');
+      console.error("Error al agregar el servicio:", error);
+      alert("Error al agregar el servicio");
     }
   };
 
@@ -50,27 +53,69 @@ const Services = () => {
       // Refresca la lista de servicios después de eliminar uno
       setSendAdd(!sendAdd);
     } catch (error) {
-      console.error('Error al borrar el servicio:', error);
-      alert('Error al borrar el servicio');
+      console.error("Error al borrar el servicio:", error);
+      alert("Error al borrar el servicio");
     }
   };
 
   return (
-    <div>
-      <input
-        type="text"
-        value={newService}
-        onChange={(e) => setNewService(e.target.value)}
-        placeholder="Nuevo servicio"
-      />
-      <button onClick={handleAddService}>Agregar servicio</button>
-      {services.length > 0 &&
-        services.map((element, index) => (
-          <div key={index}>
-            <h2>{element}</h2>
-            <button onClick={() => deleteHandler(element)}>Borrar</button>
-          </div>
-        ))}
+    <div
+      style={{ display: "flex", flexDirection: "column", alignItems: "end" }}
+    >
+      <Box
+        style={{
+          width: "100%",
+          maxWidth: "500px",
+          display: "flex",
+          justifyContent: "end",
+          marginBottom: "15px",
+        }}
+      >
+        <Input
+          type="text"
+          value={newService}
+          onChange={(e) => setNewService(e.target.value)}
+          style={{
+            fontFamily: "Jost, sans-serif",
+            fontSize: "20px",
+            width: "60%",
+          }}
+        />
+        <Button
+          onClick={handleAddService}
+          variant="contained"
+          style={{ width: "40%" }}
+        >
+          <h4 style={{ fontFamily: "Jost, sans-serif" }}>Agregar</h4>
+        </Button>
+      </Box>
+      <Grid container spacing={2}>
+        {services.length > 0 &&
+          services.map((element, index) => (
+            <Grid
+              item
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+              xs={6}
+              md={3}
+              key={index}
+            >
+              <h2>{element}</h2>
+              <Box style={{ display: "flex" }}>
+                <Button
+                  onClick={() => deleteHandler(element)}
+                  style={{ color: "red", borderRadius: "50px" }}
+                >
+                  <DeleteOutlineIcon />
+                </Button>
+                <hr />
+              </Box>
+            </Grid>
+          ))}
+      </Grid>
     </div>
   );
 };

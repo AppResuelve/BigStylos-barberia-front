@@ -1,24 +1,38 @@
 import { NavLink } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
-import LoginButton from "../login/login";
-import LogoutButton from "../logout/logout";
 import Profile from "../userProfile/userProfile";
-import toHome from "../../assets/home.png";
-import "./nav.css";
+import toHome from "../../assets/icons/home2.png";
+import { Button } from "@mui/material";
 
-const Nav = () => {
-  const { isAuthenticated } = useAuth0();
-
+const Nav = ({ user }) => {
   return (
-    <div className="div_container_nav">
-      <div>
+    <div
+      style={{
+        height: "70px",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: " center",
+        position: "fixed",
+        width: "100%",
+      }}
+    >
+      <div style={{ paddingLeft: "10px" }}>
         <NavLink to="/">
-          <img src={toHome} alt="inicio" width={"50px"} />
+          <Button
+            style={{
+              borderRadius: "50px",
+              width: "0px",
+            }}
+          >
+            <img src={toHome} alt="inicio" style={{ width: "45px" }} />
+          </Button>
         </NavLink>
       </div>
-      <div className="div_subContainer_nav">
-        {isAuthenticated ? <LogoutButton /> : <LoginButton />}
-        <Profile />
+      <div
+        style={{
+          paddingRight: "10px",
+        }}
+      >
+        <Profile userData={user} />
       </div>
     </div>
   );

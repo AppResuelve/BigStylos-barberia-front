@@ -2,15 +2,26 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import CustomCalendarTurns from "../customCalendar/customCalendarTurns";
 import SelectedDayTurns from "../selectedDay/selectedDayTurns";
-
+import ModalMUI from "../interfazMUI/alertModal";
+import Button from "@mui/material/Button";
+import { Grid } from "@mui/material";
+import corteDePelo from "../../assets/images/corte-pelo-masculino.jpg";
+import pancho from "../../assets/images/pancho.avif";
+import peinado from "../../assets/images/peinados.jpg";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const Turns = () => {
+const Turns = ({ user }) => {
+  const [toggle, setToggle] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
   const [workDays, setWorkDays] = useState([]);
   const [arrOfServices, setArrOfServices] = useState([]);
   const [dayIsSelected, setDayIsSelected] = useState(false);
   const [daysForCalendar, setDaysForCalendar] = useState({});
   const [workerWithTime, setWorkerWithTime] = useState({});
+  const [userIsLogged, setUserIsLogged] = useState(false);
+
+  const arrOfServicesImg = [corteDePelo, peinado, pancho];
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -25,8 +36,10 @@ const Turns = () => {
       }
     };
     fetchData();
-  }, []);
-
+    if (user && user.name) {
+      setUserIsLogged(true);
+    }
+  }, [user]);
   useEffect(() => {
     // pone en un estado local arrOfServices los servicios totales disponibles
     if (workDays.length > 0) {
@@ -66,7 +79,7 @@ const Turns = () => {
               (minute) => minute === "free"
             );
             if (isConsecutive) {
-              const month = workday.month
+              const month = workday.month;
               const dayOfMonth = workday.day;
               // Verificar si ya existe result[month] y asignar un valor en consecuencia
               result[month] = result[month] || {};
@@ -114,13 +127,106 @@ const Turns = () => {
   }
 
   return (
-    <div>
-      <h1>Selecciona un servicio</h1>
-      {arrOfServices.map((service, index) => (
-        <button key={index} onClick={() => handleSelectService(service)}>
-          {service}
-        </button>
-      ))}
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        height: "100vh",
+        paddingTop: "70px",
+      }}
+    >
+      <h1
+        style={{
+          marginBottom: "80px",
+          fontSize: "35px",
+        }}
+      >
+        Selecciona un servicio
+      </h1>
+      <Grid
+        container
+        style={{
+          display: "flex",
+          width: "90%",
+          maxWidth: "900px",
+        }}
+      >
+        {arrOfServices.map((service, index) => (
+          <Grid
+            item
+            xs={6}
+            md={4}
+            style={{
+              gap: "10px",
+              marginBottom: "20px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            key={index}
+          >
+            <div
+              style={{
+                fontSize: "25px",
+              }}
+            >
+              {service}
+            </div>
+            <div
+              onClick={() => {
+                {
+                  userIsLogged
+                    ? (handleSelectService(service), setToggle(index + 1))
+                    : setIsOpen(true);
+                }
+              }}
+              style={{
+                scrollbarGutter: "auto",
+                width: "155px",
+                height: "155px",
+                backgroundColor: "black",
+                borderRadius: "100%",
+                border: "2px solid black",
+                boxShadow: "0px 45px 22px -34px rgba(0,0,0,0.57)",
+                overflow: "hidden",
+              }}
+            >
+              {/* <Button
+                variant="contained"
+                onClick={() => {
+                  {
+                    userIsLogged
+                      ? (handleSelectService(service), setToggle(index + 1))
+                      : setIsOpen(true);
+                  }
+                }}
+                style={{
+                  borderRadius: "100%",
+                  width: "155px",
+                  height: "155px",
+                  backgroundColor: "black",
+                  boxShadow: "0px 45px 22px -34px rgba(0,0,0,0.57)", // Propiedades de la sombra
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  
+                }}
+              > */}
+              <img
+                src={arrOfServicesImg[index]}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: "200px",
+                  objectFit: "cover", // Ajusta el contenido de la imagen para cubrir todo el espacio disponible
+                }}
+              />
+            </div>
+          </Grid>
+        ))}
+      </Grid>
       {Object.keys(daysForCalendar).length > 0 && (
         <CustomCalendarTurns
           daysForCalendar={daysForCalendar}
@@ -131,6 +237,7 @@ const Turns = () => {
       {Object.keys(justWorkerWithTime).length > 1 && (
         <SelectedDayTurns justWorkerWithTime={justWorkerWithTime} />
       )}
+      <ModalMUI isOpen={isOpen} setIsOpen={setIsOpen} />
     </div>
   );
 };

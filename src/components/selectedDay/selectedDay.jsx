@@ -1,30 +1,43 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import formatHour from "../../functions/formatHour";
 
-const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+const SelectedDay = ({ firstMonth, firstDay, days }) => {
+  const newTime = Array(1441).fill(null);
+  const open = {
+    first: {
+      open: 480,
+      close: 720,
+    },
+    second: {
+      open: 900,
+      close: 1200,
+    },
+  };
 
-
-const SelectedDay = ({ dayIsSelected }) => {
-  const [timeAvailable, setTimeAvailable] = useState(/* como se trae??? */);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `${VITE_BACKEND_URL}/workdays/getdays`,
-          dayIsSelected.currentDay,
-          dayIsSelected.email
-        );
-        const { data } = response;
-        setTimeAvailable(data);
-      } catch (error) {
-        console.error("Error al obtener los dias:", error);
-        alert("Error al obtener los dias");
-      }
-    };
-    fetchData();
-  }, []);
-
-  return <div>Time available</div>;
+  return (
+    <div>
+      <h2>Esto es SelectedDay</h2>
+      {days[firstMonth][firstDay] ? (
+        <h2>Existe</h2>
+      ) : (
+        (() => {
+          let counter = 0;
+          return newTime.map((element, index) => {
+            if (
+              (index > open.first.open && index < open.first.close) ||
+              (index > open.second.open && open.second.close)
+            )
+              if (counter === 30) {
+                counter = 0; // Reiniciar el contador si llega a 30
+                return <div key={index}>{index}</div>;
+              } else {
+                counter++;
+                return null; // Renderizar null en este caso
+              }
+          });
+        })()
+      )}
+    </div>
+  );
 };
 
 export default SelectedDay;
