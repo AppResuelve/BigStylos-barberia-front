@@ -4,16 +4,18 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import { Box } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import bgImgLocal from "../../assets/images/bg-img-local.png";
 import Services from "../services/services";
 import OpeningAndClosing from "../openingAndClosing/openingAndClosing";
 import WeekDaysAndExceptions from "../weekDaysAndExceptions/weekDaysAndExceptions";
 import Users from "../users/users";
 
-const AdminWorkerAcordeonModal = () => {
+const AdminAcordeon = () => {
   const [expanded, setExpanded] = useState(false);
 
   const handleChange = (panel) => (event, isExpanded) => {
+    console.log(panel);
+    console.log(isExpanded);
+
     setExpanded(isExpanded ? panel : false);
   };
 
@@ -28,15 +30,6 @@ const AdminWorkerAcordeonModal = () => {
       }}
     >
       <Box style={{ position: "relative" }}>
-        <img
-          src={bgImgLocal}
-          style={{
-            width: "350px",
-            position: "absolute",
-            top: "30vh",
-            left: "10vw",
-          }}
-        />
         <Accordion
           style={{
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
@@ -52,7 +45,7 @@ const AdminWorkerAcordeonModal = () => {
             <h2>Servicios</h2>
           </AccordionSummary>
           <AccordionDetails>
-            <Services />
+            {expanded === "panel1" && <Services />}
           </AccordionDetails>
         </Accordion>
         {/*  //------------------// */}
@@ -62,37 +55,37 @@ const AdminWorkerAcordeonModal = () => {
           }}
           expanded={expanded === "panel2"}
           onChange={handleChange("panel2")}
-        >
+          >
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel2bh-content"
             id="panel2bh-header"
-          >
-            <h2>Apertura y cierre</h2>
-          </AccordionSummary>
-          <AccordionDetails>
-            <OpeningAndClosing />
-          </AccordionDetails>
-        </Accordion>
-        {/*  //------------------// */}
-        <Accordion
-          style={{
-            boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
-          }}
-          expanded={expanded === "panel3"}
-          onChange={handleChange("panel3")}
-        >
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel3bh-content"
-            id="panel3bh-header"
-          >
+            >
             <h2>Dias laborales y excepciones</h2>
           </AccordionSummary>
           <AccordionDetails>
-            <WeekDaysAndExceptions />
+            {expanded === "panel2" && <WeekDaysAndExceptions />}
           </AccordionDetails>
         </Accordion>
+            {/*  //------------------// */}
+            <Accordion
+              style={{
+                boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
+              }}
+              expanded={expanded === "panel3"}
+              onChange={handleChange("panel3")}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel3bh-content"
+                id="panel3bh-header"
+              >
+                <h2>Apertura y cierre</h2>
+              </AccordionSummary>
+              <AccordionDetails>
+                {expanded === "panel3" && <OpeningAndClosing />}
+              </AccordionDetails>
+            </Accordion>
         {/*  //------------------// */}
         <Accordion
           style={{
@@ -109,7 +102,7 @@ const AdminWorkerAcordeonModal = () => {
             <h2>Usuarios</h2>
           </AccordionSummary>
           <AccordionDetails>
-            <Users />
+            {expanded === "panel4" && <Users />}
           </AccordionDetails>
         </Accordion>
         {/*  //------------------// */}
@@ -133,4 +126,4 @@ const AdminWorkerAcordeonModal = () => {
     </div>
   );
 };
-export default AdminWorkerAcordeonModal;
+export default AdminAcordeon;

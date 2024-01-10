@@ -2,16 +2,18 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import formatHour from "../../functions/formatHour";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
 import { Box, Button, MenuItem, Select } from "@mui/material";
+import AlertModal from "../interfazMUI/alertModal";
+import AlertModal2 from "../interfazMUI/alertModal2";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const OpeningAndClosing = () => {
   const [schedule, setSchedule] = useState({});
-  const days = ["Lun", "Mar", "Mie", "Jue", "Vie", "Sab", "Dom"];
   const [showEdit, setShowEdit] = useState(false);
+  const [showAlert, setShowAlert] = useState({});
+
+  const days = ["Lun", "Mar", "Mie", "Jue", "Vie", "Sab", "Dom"];
   const timeArray = [
     0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360, 390, 420, 450,
     480, 510, 540, 570, 600, 630, 660, 690, 720, 750, 780, 810, 840, 870, 900,
@@ -24,8 +26,9 @@ const OpeningAndClosing = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${VITE_BACKEND_URL}/schedule/`);
+        const response = await axios.get(`${VITE_BACKEND_URL}/schedule`);
         const { data } = response;
+        console.log(data.businessSchedule);
         setSchedule(data.businessSchedule);
         setTimeEdit(data.businessSchedule);
       } catch (error) {
@@ -39,11 +42,34 @@ const OpeningAndClosing = () => {
   const handleEdit = () => {
     setShowEdit(true);
   };
+
   const handleCancel = () => {
     setShowEdit(false);
     setTimeEdit(schedule);
   };
+
   const handleSubmit = async () => {
+    console.log(timeEdit);
+    // Validar que open no sea mayor que close
+    for (const key in timeEdit) {
+      const { open, close } = timeEdit[key];
+      if (open > close) {
+        setShowAlert({
+          isOpen: true,
+          message:
+            "La hora de apertura no puede ser mayor que la hora de cierre",
+          button1: {
+            text: "",
+            action: "",
+          },
+          buttonClose: {
+            text: "Entendido",
+          },
+        });
+        return; // Detener el proceso si la validación falla
+      }
+    }
+
     try {
       const response = await axios.put(`${VITE_BACKEND_URL}/schedule/update`, {
         newSchedule: timeEdit,
@@ -65,8 +91,17 @@ const OpeningAndClosing = () => {
       },
     }));
   };
+  console.log("pase por el opening", showAlert);
   return (
-    <div>
+    <div style={{ position: "relative" }}>
+      <hr
+        style={{
+          marginBottom: "15px",
+          border: "none",
+          height: "2px",
+          backgroundColor: "#2196f3",
+        }}
+      />
       {Object.keys(schedule).length > 0 &&
         days.map((day, index) => (
           <div
@@ -78,13 +113,16 @@ const OpeningAndClosing = () => {
               marginBottom: "10px",
             }}
           >
-            <h3>{day}</h3>
-            {schedule[index] && (
+            <h3>{schedule[index] ? day : "------"}</h3>
+            {schedule[index] ? (
               <div style={{ display: "flex", alignItems: "center" }}>
+                <h4 style={{ color: "red" }}>
+                  {schedule[index].open === "" ? "Pendiente" : null}
+                </h4>
                 <Select
-                  style={{ height: "40px" }}
+                  style={{ height: "40px", marginLeft: "5px" }}
                   disabled={showEdit ? false : true}
-                  value={timeEdit[index]?.open}
+                  value={timeEdit[index]?.open ? timeEdit[index]?.open : 0}
                   onChange={(event) => handleSelectChange(event, index, "open")}
                 >
                   {timeArray.map((minute, index) => (
@@ -94,9 +132,9 @@ const OpeningAndClosing = () => {
                   ))}
                 </Select>
                 <Select
-                  style={{ height: "40px", width: "" }}
+                  style={{ height: "40px", marginLeft: "5px" }}
                   disabled={showEdit ? false : true}
-                  value={timeEdit[index]?.close}
+                  value={timeEdit[index]?.close ? timeEdit[index]?.close : 1440}
                   onChange={(event) =>
                     handleSelectChange(event, index, "close")
                   }
@@ -108,6 +146,10 @@ const OpeningAndClosing = () => {
                   ))}
                 </Select>
               </div>
+            ) : (
+              <h4 style={{ color: "#2196f3", marginRight: "50px" }}>
+                No laborable
+              </h4>
             )}
           </div>
         ))}
@@ -138,18 +180,9 @@ const OpeningAndClosing = () => {
           </Box>
         )}
       </Box>
+      <AlertModal2 showAlert={showAlert} setShowAlert={setShowAlert} />
     </div>
   );
 };
 
 export default OpeningAndClosing;
-
-//  <Box style={{ display: "flex" }}>
-//    <Button onClick={handleCancel}>
-//      <AddIcon />
-//    </Button>
-//    <hr />
-//    <Button onClick={handleSubmit}>
-//      <RemoveIcon />
-//    </Button>
-//  </Box>;

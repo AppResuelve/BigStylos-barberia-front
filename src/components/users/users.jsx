@@ -36,57 +36,68 @@ const Users = () => {
   }, [add]);
 
   return (
-    <div style={{ display: "flex" }}>
-      <Box style={{ width: "50%" }}>
-        <h2>Profesionales</h2>
-        {allUsers.map(
-          (user, index) =>
-            allUsers.length > 0 &&
-            user &&
-            user.worker == true && (
-              <Box key={index}>
-                <h4>{user.name}</h4>
-                <h4>{user.email}</h4>
-                <Box
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <Button style={{ color: "red", borderRadius: "50px" }}>
-                    <DeleteOutlineIcon />
-                  </Button>
-                  <Button onClick={() => handleUpdateUser(user.email)}>
-                    <KeyboardDoubleArrowRightIcon />
-                  </Button>
+    <div>
+      <hr
+        style={{
+          width: "100%",
+          marginBottom: "15px",
+          border: "none",
+          height: "2px",
+          backgroundColor: "#2196f3",
+        }}
+      />
+      <Box style={{ display: "flex" }}>
+        <Box style={{ width: "50%" }}>
+          <h2>Profesionales</h2>
+          {allUsers.map(
+            (user, index) =>
+              allUsers.length > 0 &&
+              user &&
+              user.worker == true && (
+                <Box key={index}>
+                  <h4>{user.name}</h4>
+                  <h4>{user.email}</h4>
+                  <Box
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Button style={{ color: "red", borderRadius: "50px" }}>
+                      <DeleteOutlineIcon />
+                    </Button>
+                    <Button onClick={() => handleUpdateUser(user.email)}>
+                      <KeyboardDoubleArrowRightIcon />
+                    </Button>
+                  </Box>
+                  <hr />
                 </Box>
-                <hr />
-              </Box>
-            )
-        )}
-      </Box>
-      <Box style={{ width: "50%" }}>
-        <h2>Clientes</h2>
-        {allUsers.map(
-          (user, index) =>
-            allUsers.length > 0 &&
-            user &&
-            user.worker == false && (
-              <Box key={index}>
-                <h4>{user.name}</h4>
-                <h4>{user.email}</h4>
-                <Box
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <Button onClick={() => handleUpdateUser(user.email)}>
-                    <KeyboardDoubleArrowLeftIcon />
-                  </Button>
-                  <Button style={{ color: "red", borderRadius: "50px" }}>
-                    <DeleteOutlineIcon />
-                  </Button>
-                </Box>
+              )
+          )}
+        </Box>
+        <Box style={{ width: "50%" }}>
+          <h2>Clientes</h2>
+          {allUsers.map(
+            (user, index) =>
+              allUsers.length > 0 &&
+              user &&
+              user.worker == false && (
+                <Box key={index}>
+                  <h4>{user.name}</h4>
+                  <h4>{user.email}</h4>
+                  <Box
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Button onClick={() => handleUpdateUser(user.email)}>
+                      <KeyboardDoubleArrowLeftIcon />
+                    </Button>
+                    <Button style={{ color: "red", borderRadius: "50px" }}>
+                      <DeleteOutlineIcon />
+                    </Button>
+                  </Box>
 
-                <hr />
-              </Box>
-            )
-        )}
+                  <hr />
+                </Box>
+              )
+          )}
+        </Box>
       </Box>
     </div>
   );

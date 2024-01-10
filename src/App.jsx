@@ -15,6 +15,7 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 function App() {
   const [userData, setUserData] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
   const location = useLocation();
   const { user } = useAuth0();
 
@@ -45,17 +46,44 @@ function App() {
     postUser(user);
   }, [user]);
 
+  // Lee la configuración del modo desde localStorage al cargar la página
+  useEffect(() => {
+    const savedMode = JSON.parse(localStorage.getItem("darkMode"));
+    if (savedMode) {
+      setDarkMode(savedMode);
+    }
+  }, []);
+  // Almacena la configuración del modo en localStorage para persistencia
+  useEffect(() => {
+    localStorage.setItem("darkMode", JSON.stringify(darkMode));
+  }, [darkMode]);
+
   return (
     <div>
-      <Nav user={userData} />
+      <Nav user={userData} darkMode={darkMode} setDarkMode={setDarkMode} />
       <Routes>
-        <Route path="/" element={<Home user={userData} />} />
-        <Route path="/turns" element={<Turns user={userData} />} />
-        <Route path="/admin" element={<Admin user={userData} />} />
-        <Route path="/worker" element={<Worker user={userData} />} />
-        <Route path="/requestDenied401" element={<NotFound user={userData} />} />
+        <Route
+          path="/"
+          element={<Home user={userData} darkMode={darkMode} />}
+        />
+        <Route
+          path="/turns"
+          element={<Turns user={userData} darkMode={darkMode} />}
+        />
+        <Route
+          path="/admin"
+          element={<Admin user={userData} darkMode={darkMode} />}
+        />
+        <Route
+          path="/worker"
+          element={<Worker user={userData} darkMode={darkMode} />}
+        />
+        <Route
+          path="/requestDenied401"
+          element={<NotFound user={userData} />}
+        />
       </Routes>
-      {location.pathname === "/" && <Footer />}
+      {location.pathname === "/" && <Footer darkMode={darkMode} />}
     </div>
   );
 }

@@ -22,6 +22,7 @@ const ModalMUI = ({
   isAuthenticated,
   googleImage,
   userData,
+  darkMode,
 }) => {
   const theme = createTheme({
     breakpoints: {
@@ -41,7 +42,7 @@ const ModalMUI = ({
   const handleClose = () => setIsOpen(false);
 
   return (
-    <div>
+    <div style={{ backgroundColor: "red" }}>
       <Dialog
         style={{
           display: "flex",
@@ -61,9 +62,9 @@ const ModalMUI = ({
       >
         <Box
           sx={{
-            width:!lg ? "30vw": "70vw",
+            width: !lg ? "30vw" : "70vw",
             height: "100vh",
-            bgcolor: "background.paper",
+            bgcolor: darkMode ? "#28292c" : "white",
             p: 3,
           }}
         >
@@ -71,11 +72,11 @@ const ModalMUI = ({
             style={{
               display: "flex",
               alignItems: "center",
-              justifyContent:"space-between",
+              justifyContent: "space-between",
               marginBottom: "15px",
             }}
           >
-            <h2>
+            <h2 style={{ color: darkMode ? "white" : "#28292c" }}>
               {userData && (userData.worker || userData.admin)
                 ? userData.name
                 : "Inicia sesión"}
@@ -88,7 +89,7 @@ const ModalMUI = ({
                 style={{
                   borderRadius: "50px",
                   width: "70px",
-                  border: "solid 4px black",
+                  border: `solid 4px ${darkMode ? "transparent": "black"}`,
                   marginLeft: "70px",
                 }}
               />
@@ -98,7 +99,7 @@ const ModalMUI = ({
             style={{
               border: "none",
               height: "2px", // Altura de la línea
-              backgroundColor: "black", // Color de la línea
+              backgroundColor: darkMode ? "white" : "#28292c",
               marginBottom: "20px",
             }}
           />
@@ -113,7 +114,8 @@ const ModalMUI = ({
                     border: "none",
                     fontFamily: "Jost, sans-serif",
                     fontSize: "18px",
-                    backgroundColor: "white",
+                    backgroundColor: "transparent",
+                    color: darkMode ? "white" : "#28292c",
                     fontWeight: "bold",
                     cursor: "pointer",
                   }}
@@ -126,7 +128,7 @@ const ModalMUI = ({
                 style={{
                   border: "none",
                   height: "1px", // Altura de la línea
-                  backgroundColor: "black", // Color de la línea
+                  backgroundColor: darkMode ? "white" : "#28292c",
                   marginBottom: "15px",
                   marginTop: "20px",
                 }}
@@ -145,7 +147,8 @@ const ModalMUI = ({
                     border: "none",
                     fontFamily: "Jost, sans-serif",
                     fontSize: "18px",
-                    backgroundColor: "white",
+                    backgroundColor: "transparent",
+                    color: darkMode ? "white" : "#28292c",
                     fontWeight: "bold",
                     cursor: "pointer",
                   }}
@@ -158,7 +161,7 @@ const ModalMUI = ({
                 style={{
                   border: "none",
                   height: "1px", // Altura de la línea
-                  backgroundColor: "black", // Color de la línea
+                  backgroundColor: darkMode ? "white" : "#28292c",
                   marginBottom: "15px",
                   marginTop: "20px",
                 }}

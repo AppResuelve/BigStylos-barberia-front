@@ -7,12 +7,14 @@ import Slide from "@mui/material/Slide";
 import { Dialog, useMediaQuery, createTheme } from "@mui/material";
 import { useAuth0 } from "@auth0/auth0-react";
 
-
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction={"up"} ref={ref} {...props} />;
 });
-const ModalMUI = ({ isOpen, setIsOpen }) => {
-  const { loginWithRedirect } = useAuth0()
+
+const AlertModal = ({ showAlert, setShowAlert }) => {
+  const { loginWithRedirect } = useAuth0();
+
+  console.log(showAlert);
   const theme = createTheme({
     breakpoints: {
       values: {
@@ -22,55 +24,71 @@ const ModalMUI = ({ isOpen, setIsOpen }) => {
   });
 
   const fullScreen = useMediaQuery(theme.breakpoints.down("size"));
-  const handleClose = () => setIsOpen(false);
+  const handleClose = () => {
+    setShowAlert((prevAlert) => ({
+      ...prevAlert,
+      isOpen: false,
+    }));
+  };
+
+
+  let action;
+  if (
+    Object.keys(showAlert).length > 0 &&
+    showAlert.button1.action === "login"
+  ) {
+    action = loginWithRedirect;
+  }
 
   return (
     <div>
-      <Dialog
-        style={{
-          top: "65%",
-          height: "220px",
-          // minWidth: "100wh",
-        }}
-        fullScreen={fullScreen}
-        TransitionComponent={Transition}
-        open={isOpen}
-        onClose={handleClose}
-        slots={{ backdrop: Backdrop }}
-        slotProps={{
-          backdrop: {
-            timeout: 500,
-          },
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            bgcolor: "background.paper",
-            p: 3,
+      {Object.keys(showAlert).length > 0 && (
+        <Dialog
+          style={{
+            top: "65%",
+            height: "180px",
+            borderRadius: "50px",
+            // minWidth: "100wh",
+          }}
+          fullScreen={fullScreen}
+          TransitionComponent={Transition}
+          open={showAlert.isOpen}
+          onClose={handleClose}
+          slots={{ backdrop: Backdrop }}
+          slotProps={{
+            backdrop: {
+              timeout: 500,
+            },
           }}
         >
-          <Typography>Para agendar un turno debes loggearte</Typography>
-          <Button
-            onClick={() => {
-              loginWithRedirect(), handleClose();
+          <Box
+            sx={{
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-around",
+              alignItems: "center",
+              p: 3,
             }}
           >
-            Ahora
-          </Button>
-          <Button
-            onClick={() => {
-            handleClose();
-            }}
-          >
-            Más tarde
-          </Button>
-        </Box>
-      </Dialog>
+            <Typography>{showAlert.message}</Typography>
+            {showAlert.button1.text !== "" && (
+              <Button onClick={() => action()}>{showAlert.button1.text}</Button>
+            )}
+            {showAlert.buttonClose.text !== "" && (
+              <Button
+                onClick={() => {
+                  handleClose();
+                }}
+              >
+                {showAlert.buttonClose.text}
+              </Button>
+            )}
+          </Box>
+        </Dialog>
+      )}
     </div>
   );
 };
 
-export default ModalMUI;
+export default AlertModal;

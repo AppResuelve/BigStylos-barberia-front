@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Box, Button, Grid, Input } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import { InputOutlined, InputRounded, InputTwoTone } from "@mui/icons-material";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -60,14 +59,22 @@ const Services = () => {
 
   return (
     <div
-      style={{ display: "flex", flexDirection: "column", alignItems: "end" }}
+      style={{ display: "flex", flexDirection: "column" }}
     >
+     <hr
+        style={{
+          marginBottom: "15px",
+          border: "none",
+          height: "2px",
+          backgroundColor: "#2196f3",
+        }}
+      />
       <Box
         style={{
           width: "100%",
           maxWidth: "500px",
           display: "flex",
-          justifyContent: "end",
+          alignSelf: "end",
           marginBottom: "15px",
         }}
       >
@@ -84,7 +91,7 @@ const Services = () => {
         <Button
           onClick={handleAddService}
           variant="contained"
-          style={{ width: "40%" }}
+          style={{ width: "40%",borderRadius:"50px" }}
         >
           <h4 style={{ fontFamily: "Jost, sans-serif" }}>Agregar</h4>
         </Button>

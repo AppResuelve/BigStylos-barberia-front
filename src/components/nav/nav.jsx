@@ -1,9 +1,11 @@
 import { NavLink } from "react-router-dom";
 import Profile from "../userProfile/userProfile";
-import toHome from "../../assets/icons/home2.png";
+import toHome from "../../assets/icons/homeBlack.png";
+import toHome2 from "../../assets/icons/homeWhite.png";
 import { Button } from "@mui/material";
+import DarkMode from "../interfazUiverse.io/darkMode";
 
-const Nav = ({ user }) => {
+const Nav = ({ user, darkMode, setDarkMode }) => {
   return (
     <div
       style={{
@@ -13,6 +15,7 @@ const Nav = ({ user }) => {
         alignItems: " center",
         position: "fixed",
         width: "100%",
+        backgroundColor: "transparent",
       }}
     >
       <div style={{ paddingLeft: "10px" }}>
@@ -23,16 +26,23 @@ const Nav = ({ user }) => {
               width: "0px",
             }}
           >
-            <img src={toHome} alt="inicio" style={{ width: "45px" }} />
+            <img
+              src={darkMode ? toHome2 : toHome}
+              alt="inicio"
+              style={{ width: "45px" }}
+            />
           </Button>
         </NavLink>
       </div>
       <div
         style={{
           paddingRight: "10px",
+          display: "flex",
+          alignItems: "center",
         }}
       >
-        <Profile userData={user} />
+        <DarkMode darkMode={darkMode} setDarkMode={setDarkMode} />
+        <Profile userData={user} darkMode={darkMode} />
       </div>
     </div>
   );

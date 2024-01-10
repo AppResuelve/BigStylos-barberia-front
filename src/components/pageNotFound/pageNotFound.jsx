@@ -1,5 +1,5 @@
 import React from "react";
-import toHome from "../../assets/icons/home2.png";
+import toHome from "../../assets/icons/homeBlack.png";
 import cilindroBlanco from "../../assets/images/cilindro-blanco.jpg";
 import { NavLink } from "react-router-dom";
 import { Box, Button } from "@mui/material";

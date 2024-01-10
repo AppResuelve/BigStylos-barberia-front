@@ -3,16 +3,17 @@ import { useNavigate } from "react-router-dom";
 import AdminAcordeon from "../interfazMUI/adminAcordeon";
 import { Skeleton, Stack } from "@mui/material";
 
-const Admin = ({ user }) => {
+const Admin = ({ user, darkMode }) => {
   const navigate = useNavigate();
+  console.log(user);
   const [isAdmin, setIsAdmin] = useState(1);
   useEffect(() => {
     if (user.admin) {
       setIsAdmin(true);
-    } else if (user) {
+    } else if (!user) {
       const timeoutId = setTimeout(() => {
         navigate("/requestDenied401");
-      }, 1000);
+      }, 500);
 
       // Limpiamos el timeout en el caso de que el componente se desmonte antes de que se cumpla el tiempo
       return () => clearTimeout(timeoutId);
@@ -26,6 +27,7 @@ const Admin = ({ user }) => {
       style={{
         display: "flex",
         flexDirection: "column",
+        backgroundColor: darkMode ? "#28292c" : "white",
         alignItems: "center",
         height: "100vh",
         paddingTop: "70px",
@@ -64,7 +66,13 @@ const Admin = ({ user }) => {
         </Stack>
       ) : isAdmin === true ? ( // Puedes mostrar un componente de carga o un mensaje mientras se determina el estado de isAdmin
         <div>
-          <h1 style={{ display: "flex", justifyContent: "center" }}>
+          <h1
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              color: darkMode ? "white" : "#28292c",
+            }}
+          >
             Administración del local
           </h1>
           <AdminAcordeon />

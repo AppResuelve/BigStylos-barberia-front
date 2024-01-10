@@ -2,17 +2,18 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import CustomCalendarTurns from "../customCalendar/customCalendarTurns";
 import SelectedDayTurns from "../selectedDay/selectedDayTurns";
-import ModalMUI from "../interfazMUI/alertModal";
 import Button from "@mui/material/Button";
 import { Grid } from "@mui/material";
 import corteDePelo from "../../assets/images/corte-pelo-masculino.jpg";
 import pancho from "../../assets/images/pancho.avif";
 import peinado from "../../assets/images/peinados.jpg";
+// import AlertModal from "../interfazMUI/alertModal";
+import AlertModal2 from "../interfazMUI/alertModal2";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Turns = ({ user }) => {
   const [toggle, setToggle] = useState(0);
-  const [isOpen, setIsOpen] = useState(false);
+  const [showAlert, setShowAlert] = useState({});
   const [workDays, setWorkDays] = useState([]);
   const [arrOfServices, setArrOfServices] = useState([]);
   const [dayIsSelected, setDayIsSelected] = useState(false);
@@ -179,7 +180,17 @@ const Turns = ({ user }) => {
                 {
                   userIsLogged
                     ? (handleSelectService(service), setToggle(index + 1))
-                    : setIsOpen(true);
+                    : setShowAlert({
+                        isOpen: true,
+                        message: "Inicia sesíon para reservar",
+                        button1: {
+                          text: "Login",
+                          action: "login",
+                        },
+                        buttonClose: {
+                          text: "Más tarde",
+                        },
+                      });
                 }
               }}
               style={{
@@ -193,27 +204,6 @@ const Turns = ({ user }) => {
                 overflow: "hidden",
               }}
             >
-              {/* <Button
-                variant="contained"
-                onClick={() => {
-                  {
-                    userIsLogged
-                      ? (handleSelectService(service), setToggle(index + 1))
-                      : setIsOpen(true);
-                  }
-                }}
-                style={{
-                  borderRadius: "100%",
-                  width: "155px",
-                  height: "155px",
-                  backgroundColor: "black",
-                  boxShadow: "0px 45px 22px -34px rgba(0,0,0,0.57)", // Propiedades de la sombra
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  
-                }}
-              > */}
               <img
                 src={arrOfServicesImg[index]}
                 style={{
@@ -237,7 +227,8 @@ const Turns = ({ user }) => {
       {Object.keys(justWorkerWithTime).length > 1 && (
         <SelectedDayTurns justWorkerWithTime={justWorkerWithTime} />
       )}
-      <ModalMUI isOpen={isOpen} setIsOpen={setIsOpen} />
+      {/* <AlertModal showAlert={showAlert} setShowAlert={setShowAlert} /> */}
+      <AlertModal2 showAlert={showAlert} setShowAlert={setShowAlert} />
     </div>
   );
 };

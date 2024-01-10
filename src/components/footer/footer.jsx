@@ -1,12 +1,12 @@
 import { Grid } from "@mui/material";
 
-const Footer = () => {
+const Footer = ({darkMode}) => {
   return (
     <Grid
       container
       style={{
         height: "80px",
-        backgroundColor: "black",
+        backgroundColor: darkMode ? "white" : "#28292c",
         color: "white",
         display: "flex",
         alignContent: "center",
@@ -19,6 +19,7 @@ const Footer = () => {
         style={{
           display: "flex",
           justifyContent: "center",
+          color: darkMode ? "#28292c" : "white",
         }}
       >
         Dirección: Alberdi 1034, Bs As, Argentina.
@@ -27,7 +28,11 @@ const Footer = () => {
         item
         xs={12}
         md={6}
-        style={{ display: "flex", justifyContent: "center" }}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          color: darkMode ? "#28292c" : "white",
+        }}
       >
         All rights reserved 2023.
       </Grid>

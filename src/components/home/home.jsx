@@ -1,9 +1,8 @@
 import { NavLink } from "react-router-dom";
-import "./home.css";
 import fondoCentral from "../../assets/images/fondo-peluqueria-1.avif";
 import { Button } from "@mui/material";
 
-const Home = ({user}) => {
+const Home = ({user, darkMode}) => {
   return (
     <div
       style={{
@@ -13,6 +12,7 @@ const Home = ({user}) => {
         alignItems: "center",
         height: "100vh",
         paddingTop: "70px",
+        backgroundColor: darkMode ? "#252627" : "white",
       }}
     >
       <img
@@ -35,7 +35,8 @@ const Home = ({user}) => {
             height: "60px",
             fontFamily: "Jost, sans-serif",
             fontSize: "23px",
-            backgroundColor: "black",
+            backgroundColor: darkMode ? "white" : "#252627",
+            color: darkMode ? "#252627" : "white",
           }}
         >
           Reservar
