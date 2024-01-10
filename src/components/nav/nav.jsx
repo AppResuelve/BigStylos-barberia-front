@@ -1,23 +1,49 @@
 import { NavLink } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
-import LoginButton from "../login/login";
-import LogoutButton from "../logout/logout";
 import Profile from "../userProfile/userProfile";
-import toHome from "../../assets/home.png";
-import toTurns from "../../assets/calendar.png";
-import "./nav.css";
+import toHome from "../../assets/icons/homeBlack.png";
+import toHome2 from "../../assets/icons/homeWhite.png";
+import { Button } from "@mui/material";
+import DarkMode from "../interfazUiverse.io/darkMode";
 
-const Nav = () => {
-  const { isAuthenticated } = useAuth0();
-
+const Nav = ({ user, darkMode, setDarkMode }) => {
   return (
-    <div className="div_container_nav">
-      <NavLink to="/">
-        Inicio
-        <img src={toHome} alt="inicio" width={"50px"} />
-      </NavLink>
-      {isAuthenticated ? <LogoutButton /> : <LoginButton />}
-      <Profile />
+    <div
+      style={{
+        height: "70px",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: " center",
+        position: "fixed",
+        width: "100%",
+        backgroundColor: "transparent",
+      }}
+    >
+      <div style={{ paddingLeft: "10px" }}>
+        <NavLink to="/">
+          <Button
+            style={{
+              borderRadius: "50px",
+              width: "0px",
+            }}
+          >
+            <img
+              src={darkMode ? toHome2 : toHome}
+              alt="inicio"
+              style={{ width: "45px" }}
+            />
+          </Button>
+        </NavLink>
+      </div>
+      <div
+        style={{
+          paddingRight: "10px",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <DarkMode darkMode={darkMode} setDarkMode={setDarkMode} />
+        <Profile userData={user} darkMode={darkMode} />
+      </div>
     </div>
   );
 };

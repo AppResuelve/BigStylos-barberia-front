@@ -27,7 +27,14 @@ function daysMonthCalendarCustom(totalDays, boolean) {
 
   if (remaining.length > totalDays) {
     const resultMonth1 = remaining.slice(0, totalDays);
-    const result1 = { month1: resultMonth1, month2: [] };
+    const result1 = {
+      month1: resultMonth1,
+      month2: [],
+      currentMonth: currentMonth,
+      nextMonth: currentMonth === 12 ? 1 : currentMonth + 1,
+      currentYear: currentYear,
+      nextYear: currentMonth === 12 ? currentYear + 1 : currentYear,
+    };
     return result1;
   }
 
@@ -42,6 +49,8 @@ function daysMonthCalendarCustom(totalDays, boolean) {
     month2: remainingNext,
     currentMonth: currentMonth,
     nextMonth: currentMonth === 12 ? 1 : currentMonth + 1,
+    currentYear: currentYear,
+    nextYear: currentMonth === 12 ? currentYear + 1 : currentYear,
   };
 
   //la funcion devuelve un objeto con 2 arrays

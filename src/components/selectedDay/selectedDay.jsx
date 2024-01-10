@@ -1,54 +1,41 @@
-import React, { useState } from "react";
-import './selectedDay.css'
+import formatHour from "../../functions/formatHour";
 
-const SelectedDay = () => {
-  const totalSlots = 18;    // debo ajustar con el valor que viene por workDay
-  const [selectedSlots, setSelectedSlots] = useState([]);  // contiene los valores seleccionados
-  const [isMouseDown, setIsMouseDown] = useState(false);  
-
-  console.log(selectedSlots)
-
-  const handleMouseDown = (index) => {
-    setIsMouseDown(true);
-    updateSelectedSlots(index);
-  };
-
-  const handleMouseEnter = (index) => {
-    if (isMouseDown) {
-      updateSelectedSlots(index);
-    }
-  };
-
-  const handleMouseUp = () => {
-    setIsMouseDown(false);
-  };
-
-  const updateSelectedSlots = (index) => {
-    setSelectedSlots((prevSelection) => {
-      if (prevSelection.includes(index)) {
-        return prevSelection.filter((value) => value !== index);
-      } else {
-        return [...prevSelection, index];
-      }
-    });
+const SelectedDay = ({ firstMonth, firstDay, days }) => {
+  const newTime = Array(1441).fill(null);
+  const open = {
+    first: {
+      open: 480,
+      close: 720,
+    },
+    second: {
+      open: 900,
+      close: 1200,
+    },
   };
 
   return (
     <div>
-      <div onMouseUp={handleMouseUp}>
-        {Array.from({ length: totalSlots }, (_, index) => (
-          <button
-            key={index}
-            className={`slot ${
-              selectedSlots.includes(index) ? "selected" : ""
-            }`}
-            onMouseDown={() => handleMouseDown(index)}
-            onMouseEnter={() => handleMouseEnter(index)}
-          >
-            {index}
-          </button>
-        ))}
-      </div>
+      <h2>Esto es SelectedDay</h2>
+      {days[firstMonth][firstDay] ? (
+        <h2>Existe</h2>
+      ) : (
+        (() => {
+          let counter = 0;
+          return newTime.map((element, index) => {
+            if (
+              (index > open.first.open && index < open.first.close) ||
+              (index > open.second.open && open.second.close)
+            )
+              if (counter === 30) {
+                counter = 0; // Reiniciar el contador si llega a 30
+                return <div key={index}>{index}</div>;
+              } else {
+                counter++;
+                return null; // Renderizar null en este caso
+              }
+          });
+        })()
+      )}
     </div>
   );
 };

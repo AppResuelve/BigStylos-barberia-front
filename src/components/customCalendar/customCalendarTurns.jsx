@@ -1,36 +1,20 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import daysMonthCalendarCustom from "../../functions/daysMonthCalendarCustom";
-import { useAuth0 } from "@auth0/auth0-react";
 import getToday from "../../functions/getToday";
-import axios from "axios";
 import "./customCalendar.css";
 
-const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const CustomCalendarTurns = ({
   daysForCalendar,
   setDayIsSelected,
   amountOfDays,
 }) => {
-  const daysCalendarCustom = daysMonthCalendarCustom(amountOfDays, true);
-  // const { user } = useAuth0(); // Obtener el usuario actual
+  const daysCalendarCustom = daysMonthCalendarCustom(amountOfDays, false);
   const { currentMonth, nextMonth } = daysCalendarCustom;
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
   const getDayPosition = getToday(); // devuelve número que representa qué día de la semana es (lunes, martes, etc)
   useEffect(() => {
-    //     const fetchData = async () => {
-    //       try {
-    //         const response = await axios.get(
-    //           `${VITE_BACKEND_URL}/workdays/getdays`
-    //         );
-    //         const { data } = response;
-    //         setTypeOfDays(data);
-    //       } catch (error) {
-    //         console.error("Error al obtener los dias:", error);
-    //         alert("Error al obtener los dias");
-    //       }
-    //     };
-    //     fetchData();
+  
   }, []);
 
   const handleDay = (day) => {
@@ -39,7 +23,6 @@ const CustomCalendarTurns = ({
      currentDay: day,
    }));
   };
-  /* console.log(daysForCalendar); */
   return (
     <div>
       <h1>Calendario de turnos</h1>

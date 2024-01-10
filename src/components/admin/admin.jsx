@@ -1,31 +1,83 @@
 import { useEffect, useState } from "react";
-import Services from "../services/services";
-import NotFound from "../page_not_found/not_found";
-import Users from "../users/users";
+import { useNavigate } from "react-router-dom";
+import AdminAcordeon from "../interfazMUI/adminAcordeon";
+import { Skeleton, Stack } from "@mui/material";
 
-const Admin = ({ user }) => {
-  const [isAdmin, setIsAdmin] = useState(false);
-
+const Admin = ({ user, darkMode }) => {
+  const navigate = useNavigate();
+  console.log(user);
+  const [isAdmin, setIsAdmin] = useState(1);
   useEffect(() => {
     if (user.admin) {
       setIsAdmin(true);
+    } else if (!user) {
+      const timeoutId = setTimeout(() => {
+        navigate("/requestDenied401");
+      }, 500);
+
+      // Limpiamos el timeout en el caso de que el componente se desmonte antes de que se cumpla el tiempo
+      return () => clearTimeout(timeoutId);
+    } else {
+      return;
     }
   }, [user]);
 
   return (
-    <div>
-      {isAdmin === true && isAdmin ? (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: darkMode ? "#28292c" : "white",
+        alignItems: "center",
+        height: "100vh",
+        paddingTop: "70px",
+      }}
+    >
+      {isAdmin === 1 ? (
+        <Stack spacing={4} style={{ display: "flex", alignItems: "center" }}>
+          <Skeleton
+            variant="text"
+            height={70}
+            style={{
+              width: "80vw",
+              maxWidth: "340px",
+            }}
+          />
+          <Skeleton
+            variant="rounded"
+            height={70}
+            style={{ width: "90vw", maxWidth: "900px" }}
+          />
+          <Skeleton
+            variant="rounded"
+            height={70}
+            style={{ width: "90vw", maxWidth: "900px" }}
+          />
+          <Skeleton
+            variant="rounded"
+            height={70}
+            style={{ width: "90vw", maxWidth: "900px" }}
+          />
+          <Skeleton
+            variant="rounded"
+            height={70}
+            style={{ width: "90vw", maxWidth: "900px" }}
+          />
+        </Stack>
+      ) : isAdmin === true ? ( // Puedes mostrar un componente de carga o un mensaje mientras se determina el estado de isAdmin
         <div>
-          <h1>Administracion del admin</h1>
-          <hr />
-          <Services />
-          <hr />
-          <Users />
-          <hr />
+          <h1
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              color: darkMode ? "white" : "#28292c",
+            }}
+          >
+            Administración del local
+          </h1>
+          <AdminAcordeon />
         </div>
-      ) : (
-        <NotFound />
-      )}
+      ) : null}
     </div>
   );
 };

@@ -1,0 +1,131 @@
+.toggle-switch {
+      position: relative;
+      width: 70px;
+      height: 30px;
+      margin-right: 10px;
+      --dark: #081a50;
+      --moon: #9ca5f9;
+}
+
+.switch-label {
+      position: absolute;
+      width: 100%;
+      height: 30px;
+      background-color: var(--dark);
+      border-radius: 25px;
+      cursor: pointer;
+      border: 2px solid var(--dark);
+}
+
+.checkbox {
+      position: absolute;
+      display: none;
+}
+
+.slider {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 25px;
+      -webkit-transition: 0.3s;
+      transition: 0.3s;
+}
+
+.checkbox:checked~.slider {
+      background-color: var(--dark);
+}
+
+.slider::before {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 2px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      -webkit-box-shadow: inset 12px -4px 0px 0px var(--moon);
+      box-shadow: inset 12px -4px 0px 0px var(--moon);
+      background-color: var(--moon);
+      -webkit-transition: 0.3s;
+      transition: 0.3s;
+}
+
+.checkbox:checked~.slider::before {
+      -webkit-transform: translateX(40px);
+      -ms-transform: translateX(40px);
+      transform: translateX(0px);
+      background-color: var(--moon);
+      -webkit-box-shadow: none;
+      box-shadow: none;
+}
+
+
+
+
+/* classNames para la recarga del darkMode */
+
+
+
+
+.toggle-switch-dark {
+      position: relative;
+      width: 70px;
+      height: 30px;
+      margin-right: 10px;
+      --light: #c6d9f8;
+      --sun: #fad82d;
+}
+
+.switch-label-dark {
+      position: absolute;
+      width: 100%;
+      height: 30px;
+      background-color: var(--light);
+      border-radius: 25px;
+      cursor: pointer;
+      border: 2px solid var(--light);
+}
+
+.checkbox-dark {
+      position: absolute;
+      display: none;
+}
+
+.slider-dark {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 25px;
+      -webkit-transition: .3s;
+      transition: .3s;
+}
+
+.checkbox-dark:checked~.slider-dark {
+      background-color: var(--light);
+}
+
+.slider-dark::before {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 42px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      -webkit-box-shadow: inset 12px -4px 0px 0px var(--sun);
+      box-shadow: inset 12px -4px 0px 0px var(--sun);
+      background-color: var(--sun);
+      -webkit-transition: .3s;
+      transition: .3s;
+}
+
+.checkbox-dark:checked~.slider-dark::before {
+      -webkit-transform: translateX(40px);
+      -ms-transform: translateX(40px);
+      transform: translateX(0px);
+      background-color: var(--sun);
+      -webkit-box-shadow: none;
+      box-shadow: none;
+}
+
+            /* background-color: var(--sun); */
