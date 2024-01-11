@@ -16,7 +16,6 @@ const CustomCalendar = ({
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
   const getDayPosition = getToday() + 1;
   const [exist50, setExist50] = useState(false);
-  console.log(dayIsSelected);
   const workDays = [2, 3, 4, 5, 6, 7];
 
   const handleDay = (day, month) => {

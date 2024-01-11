@@ -5,15 +5,14 @@ import { Skeleton, Stack } from "@mui/material";
 
 const Admin = ({ user, darkMode }) => {
   const navigate = useNavigate();
-  console.log(user);
   const [isAdmin, setIsAdmin] = useState(1);
   useEffect(() => {
-    if (user.admin) {
+    if (user && user.admin) {
       setIsAdmin(true);
     } else if (!user) {
       const timeoutId = setTimeout(() => {
         navigate("/requestDenied401");
-      }, 500);
+      }, 1000);
 
       // Limpiamos el timeout en el caso de que el componente se desmonte antes de que se cumpla el tiempo
       return () => clearTimeout(timeoutId);
