@@ -9,6 +9,7 @@ const SelectedDay = ({ firstMonth, firstDay, days }) => {
     const [schedule, setSchedule] = useState({})
     const [openClose, setOpenClose] = useState([])
     const [selected, setSelected] = useState([])
+    const [isMouseDown, setIsMouseDown] = useState(false);
     console.log(selected)
     
     useEffect(() => {
@@ -34,15 +35,27 @@ const SelectedDay = ({ firstMonth, firstDay, days }) => {
         fetchSchedule()
     }, [])
 
-    const handleSelected = (event) => {
-        const value = Number(event.target.value);
-        setSelected((prevSelected) => {
-          if (prevSelected.includes(value)) {
-            // Si ya está seleccionado, quitarlo
-            return prevSelected.filter((selected) => selected !== value);
+    const handleMouseDown = (index) => {
+        setIsMouseDown(true);
+        updateSelected(index);
+      };
+    
+      const handleMouseEnter = (index) => {
+        if (isMouseDown) {
+          updateSelected(index);
+        }
+      };
+    
+      const handleMouseUp = () => {
+        setIsMouseDown(false);
+      };
+
+    const updateSelected = (index) => {
+        setSelected((prevSelection) => {
+          if (prevSelection.includes(index)) {
+            return prevSelection.filter((value) => value !== index);
           } else {
-            // Si no está seleccionado, agregarlo
-            return [...prevSelected, value];
+            return [...prevSelection, index];
           }
         });
       };
@@ -52,7 +65,7 @@ const SelectedDay = ({ firstMonth, firstDay, days }) => {
       };
 
     return (
-        <div style= {{display: "flex",flexDirection: "column"}}>
+        <div onMouseUp={handleMouseUp} style= {{display: "flex",flexDirection: "column"}}>
             <h2>Esto es SelectedDay</h2>
             {days[firstMonth][firstDay] ? (
                 <h2>Existe</h2>
@@ -68,12 +81,11 @@ const SelectedDay = ({ firstMonth, firstDay, days }) => {
                             if (counter === 30) {
                                 counter = 1; // Reiniciar el contador si llega a 30
                                 return <button 
-                                value={index} 
-                                onClick={handleSelected} 
+                                onMouseDown={() => handleMouseDown(index)}
+                                onMouseEnter={() => handleMouseEnter(index)}
                                 key={index}
                                 style={{
                                     backgroundColor: isSelected(index) ? "blue" : "white",
-                                    border: isSelected(index) ? "1px solid blue" : "1px solid black",
                                   }}
                                 >{formatHour(firstValue)} - {formatHour(index)}
                                 </button>;
