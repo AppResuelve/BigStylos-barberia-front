@@ -4,7 +4,7 @@ import axios from "axios";
 import SelectedDay from "../selectedDay/selectedDay";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const CreateWorkDays = ({ user }) => {
+const CreateWorkDays = ({ user, onMouseUp, isMouseDown, setIsMouseDown }) => {
   const [dayIsSelected, setDayIsSelected] = useState({});
   const [days, setDays] = useState({});
   const [firstMonth, setFirstMonth] = useState({});
@@ -68,6 +68,9 @@ const CreateWorkDays = ({ user }) => {
             firstMonth={firstMonth}
             firstDay={firstDay}
             days={days}
+            onMouseUp={onMouseUp}
+            isMouseDown={isMouseDown}
+            setIsMouseDown={setIsMouseDown}
           />
         )}
     </div>

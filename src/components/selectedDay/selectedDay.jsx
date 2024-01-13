@@ -4,12 +4,12 @@ import axios from "axios";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 
-const SelectedDay = ({ firstMonth, firstDay, days }) => {
+const SelectedDay = ({ firstMonth, firstDay, days, onMouseUp, isMouseDown, setIsMouseDown}) => {
     const newTime = Array(1441).fill(null);
     const [schedule, setSchedule] = useState({})
     const [openClose, setOpenClose] = useState([])
     const [selected, setSelected] = useState([])
-    const [isMouseDown, setIsMouseDown] = useState(false);
+
     console.log(selected)
     
     useEffect(() => {
@@ -46,9 +46,7 @@ const SelectedDay = ({ firstMonth, firstDay, days }) => {
         }
       };
     
-      const handleMouseUp = () => {
-        setIsMouseDown(false);
-      };
+
 
     const updateSelected = (index) => {
         setSelected((prevSelection) => {
@@ -65,7 +63,7 @@ const SelectedDay = ({ firstMonth, firstDay, days }) => {
       };
 
     return (
-        <div onMouseUp={handleMouseUp} style= {{display: "flex",flexDirection: "column"}}>
+        <div /* onMouseUp={handleMouseUp} */ style= {{display: "flex",flexDirection: "column"}}>
             <h2>Esto es SelectedDay</h2>
             {days[firstMonth][firstDay] ? (
                 <h2>Existe</h2>

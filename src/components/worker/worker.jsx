@@ -7,6 +7,11 @@ import { useNavigate } from "react-router-dom";
 const Worker = ({ user }) => {
   const [isWorker, setIsWorker] = useState(1);
   const navigate = useNavigate();
+  const [isMouseDown, setIsMouseDown] = useState(false);
+
+  const handleMouseUp = () => {
+    setIsMouseDown(false);
+  };
 
   useEffect(() => {
     if (user.worker) {
@@ -24,7 +29,7 @@ const Worker = ({ user }) => {
   }, [user]);
   
   return (
-    <div
+    <div onMouseUp={handleMouseUp}
       style={{
         display: "flex",
         flexDirection: "column",
@@ -43,7 +48,7 @@ const Worker = ({ user }) => {
       ) : isWorker === true ? (
         <div>
           <h1>Administracion del worker</h1>
-          <CreateWorkDays user={user} />
+          <CreateWorkDays user={user} onMouseUp={handleMouseUp} isMouseDown={isMouseDown} setIsMouseDown={setIsMouseDown}/>
         </div>
       ) : null}
     </div>
