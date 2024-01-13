@@ -7,45 +7,21 @@ import { Box, Button } from "@mui/material";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const WeekDaysAndExceptions = () => {
-  const [schedule, setSchedule] = useState({});
+const WorkDays = ({ schedule, setSchedule, refresh, setRefresh }) => {
   const [showEdit, setShowEdit] = useState(false);
   const [showAdd, setShowAdd] = useState(null);
   const [showRemove, setShowRemove] = useState(null);
   const [toggle, setToggle] = useState(null);
   const [timeEdit, setTimeEdit] = useState({});
-  const [refresh, setRefresh] = useState(false);
 
-  const days = [
-    ["Lun", 0],
-    ["Mar", 1],
-    ["Mie", 2],
-    ["Jue", 3],
-    ["Vie", 4],
-    ["Sab", 5],
-    ["Dom", 6],
-  ];
+  const days = ["Lun", "Mar", "Mie", "Jue", "Vie", "Sab", "Dom"];
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${VITE_BACKEND_URL}/schedule`);
-        const { data } = response;
-        console.log(data.businessSchedule, "pase por el useEffect");
-        setSchedule(data.businessSchedule);
-        setTimeEdit(data.businessSchedule);
-      } catch (error) {
-        console.error("Error al obtener los horarios", error);
-        alert("Error al obtener los horarios");
-      }
-    };
-    fetchData();
-  }, [refresh]);
-
+    setTimeEdit(schedule);
+  }, [schedule]);
   const handleEdit = () => {
     setShowEdit(true);
   };
-
   const handleCancel = () => {
     setShowEdit(false);
     setTimeEdit(schedule);
@@ -55,37 +31,35 @@ const WeekDaysAndExceptions = () => {
   };
 
   const handleShowAddRemove = (value) => {
-    console.log(value);
     value === "add"
       ? (setShowAdd(true), setToggle(true), setShowRemove(false))
       : (setShowRemove(true), setToggle(false), setShowAdd(false));
   };
 
-  const handleChange = (value, day) => {
-    console.log("pase handle change");
-    console.log(value, day);
+  const handleChange = (value, index) => {
     if (value === "add") {
       setTimeEdit((prevState) => ({
         ...prevState,
-        [day]: {
-          open: "",
-          close: "",
+        [index]: {
+          open: 0,
+          close: 1440,
         },
       }));
     } else {
+      if (Object.keys(timeEdit).length < 2) {
+        return
+      }
       const updatedTimeEdit = { ...timeEdit };
-      delete updatedTimeEdit[day];
+      delete updatedTimeEdit[index];
       setTimeEdit(updatedTimeEdit);
     }
   };
 
   const handleSubmit = async () => {
-    console.log(timeEdit, "pase por el submit");
     try {
       const response = await axios.put(`${VITE_BACKEND_URL}/schedule/update`, {
         newSchedule: timeEdit,
       });
-      console.log(response);
       setRefresh(!refresh);
     } catch (error) {
       console.error("Error al obtener los horarios", error);
@@ -96,8 +70,6 @@ const WeekDaysAndExceptions = () => {
     setShowAdd(null);
     setShowRemove(null);
   };
-  console.log(timeEdit);
-  //averiguar como entrar en la propiedad dia en base al numero
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       <hr
@@ -109,7 +81,7 @@ const WeekDaysAndExceptions = () => {
         }}
       />
       <Box style={{ display: "flex", height: "70px", marginBottom: "12px" }}>
-        {Object.keys(schedule).length > 0 &&
+        {Object.keys(timeEdit).length > 0 &&
           days.map((day, index) => {
             return (
               <Box
@@ -121,7 +93,22 @@ const WeekDaysAndExceptions = () => {
                   width: "100%",
                 }}
               >
-                <h3>{timeEdit[index] ? day[0] : "--"}</h3>
+                {timeEdit[index] ? (
+                  <h3
+                    style={{
+                      color:
+                        timeEdit[index] &&
+                        timeEdit[index].open === 0 &&
+                        timeEdit[index].close === 1440
+                          ? "red"
+                          : "black",
+                    }}
+                  >
+                    {day}
+                  </h3>
+                ) : (
+                  <h3 style={{ color: "black" }}>--</h3>
+                )}
                 {showRemove && timeEdit[index] && (
                   <button
                     style={{
@@ -131,9 +118,9 @@ const WeekDaysAndExceptions = () => {
                       border: "none",
                       backgroundColor: "transparent",
                     }}
-                    onClick={() => handleChange("remove", day[1])}
+                    onClick={() => handleChange("remove", index)}
                   >
-                    <DeleteOutlineIcon style={{ color: "red" }} />
+                    <DeleteOutlineIcon style={{ color: "black" }} />
                   </button>
                 )}
                 {showAdd && !timeEdit[index] && (
@@ -145,9 +132,9 @@ const WeekDaysAndExceptions = () => {
                       border: "none",
                       backgroundColor: "transparent",
                     }}
-                    onClick={() => handleChange("add", day[1])}
+                    onClick={() => handleChange("add", index)}
                   >
-                    <AddIcon style={{ color: "#2196f3" }} />
+                    <AddIcon style={{ color: "black" }} />
                   </button>
                 )}
               </Box>
@@ -156,7 +143,7 @@ const WeekDaysAndExceptions = () => {
       </Box>
       <Box>
         {showEdit === false && (
-          <Button onClick={handleEdit} style={{ marginBottom: "12px" }}>
+          <Button onClick={handleEdit} style={{ marginBottom: "5px" }}>
             <BorderColorIcon />
           </Button>
         )}
@@ -165,7 +152,7 @@ const WeekDaysAndExceptions = () => {
             style={{
               display: "flex",
               justifyContent: "space-between",
-              marginBottom: "12px",
+              marginBottom: "3px",
             }}
           >
             <Button
@@ -187,7 +174,7 @@ const WeekDaysAndExceptions = () => {
                 <AddIcon />
               </Button>
               <Button
-                style={{ color: "red" }}
+                color="error"
                 disabled={toggle === false ? true : false}
                 onClick={() => handleShowAddRemove("remove")}
               >
@@ -200,16 +187,8 @@ const WeekDaysAndExceptions = () => {
           </Box>
         )}
       </Box>
-      <hr
-        style={{
-          marginBottom: "15px",
-          border: "none",
-          height: "2px",
-          backgroundColor: "#2196f3",
-        }}
-      />
     </div>
   );
 };
 
-export default WeekDaysAndExceptions;
+export default WorkDays;

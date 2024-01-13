@@ -1,93 +1,96 @@
-import React from "react";
-import Backdrop from "@mui/material/Backdrop";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Slide from "@mui/material/Slide";
-import { Dialog, useMediaQuery, createTheme } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box, Button } from "@mui/material";
+import Alert from "@mui/material/Alert";
 import { useAuth0 } from "@auth0/auth0-react";
+import "./alertModal.css";
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction={"up"} ref={ref} {...props} />;
-});
-
-const AlertModal = ({ showAlert, setShowAlert }) => {
+const AlertModal = ({ showAlert, setShowAlert, handleActionProp }) => {
+  const [moveDown, setMoveDown] = useState(false);
   const { loginWithRedirect } = useAuth0();
 
-  console.log(showAlert);
-  const theme = createTheme({
-    breakpoints: {
-      values: {
-        size: 600,
-      },
-    },
-  });
+  useEffect(() => {
+    if (moveDown) {
+      const timeoutId = setTimeout(() => {
+        setShowAlert({});
+        setMoveDown(false);
+        // Remover la clase alert-open cuando se cierra el alerta
+        document.body.classList.remove("alert-open");
+      }, 300);
 
-  const fullScreen = useMediaQuery(theme.breakpoints.down("size"));
-  const handleClose = () => {
-    setShowAlert((prevAlert) => ({
-      ...prevAlert,
-      isOpen: false,
-    }));
-  };
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    }
+  }, [moveDown]);
 
+  useEffect(() => {
+    // Agregar la clase alert-open cuando se monta el componente y el alerta está presente
+    if (Object.keys(showAlert).length > 0) {
+      document.body.classList.add("alert-open");
+    } else {
+      // Remover la clase alert-open cuando se desmonta el componente o el alerta se cierra
+      document.body.classList.remove("alert-open");
+    }
+  }, [showAlert]);
 
   let action;
-  if (
-    Object.keys(showAlert).length > 0 &&
-    showAlert.button1.action === "login"
-  ) {
-    action = loginWithRedirect;
+  let type = [];
+
+  if (Object.keys(showAlert).length > 0) {
+    if (showAlert.button1.action === "login") {
+      action = loginWithRedirect;
+    } else if (showAlert.button1.action === "handleActionProp") {
+      console.log("pase por aca");
+      action = () => {
+        handleActionProp("confirm");
+        setMoveDown(true);
+      };
+    }
+  }
+
+  if (showAlert.type === "warning") {
+    type = ["warning", "yellow"];
+  } else if (showAlert.type === "success") {
+    type = ["success", "green"];
+  } else if (showAlert.type === "error") {
+    type = ["error", "red"];
   }
 
   return (
-    <div>
+    <>
       {Object.keys(showAlert).length > 0 && (
-        <Dialog
+        <Alert
+          className={`alert-container ${moveDown ? "exit" : ""}`}
+          severity={type[0]}
           style={{
-            top: "65%",
-            height: "180px",
-            borderRadius: "50px",
-            // minWidth: "100wh",
-          }}
-          fullScreen={fullScreen}
-          TransitionComponent={Transition}
-          open={showAlert.isOpen}
-          onClose={handleClose}
-          slots={{ backdrop: Backdrop }}
-          slotProps={{
-            backdrop: {
-              timeout: 500,
-            },
+            borderRadius: "10px",
+            boxShadow: "0px 45px 22px -34px rgba(0, 0, 0, 0.57)",
+            fontFamily: "Jost, sans-serif",
+            border: `2px solid ${type[1]}`,
           }}
         >
-          <Box
-            sx={{
-              height: "100%",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-around",
-              alignItems: "center",
-              p: 3,
-            }}
-          >
-            <Typography>{showAlert.message}</Typography>
-            {showAlert.button1.text !== "" && (
-              <Button onClick={() => action()}>{showAlert.button1.text}</Button>
-            )}
+          <h2>{showAlert.message}</h2>
+          <Box style={{ display: "flex", justifyContent: "space-around" }}>
             {showAlert.buttonClose.text !== "" && (
               <Button
-                onClick={() => {
-                  handleClose();
-                }}
+                onClick={() => setMoveDown(true)}
+                style={{ fontFamily: "Jost, sans-serif" }}
               >
                 {showAlert.buttonClose.text}
               </Button>
             )}
+            {showAlert.button1.text !== "" && (
+              <Button
+                onClick={() => action()}
+                style={{ fontFamily: "Jost, sans-serif" }}
+              >
+                {showAlert.button1.text}
+              </Button>
+            )}
           </Box>
-        </Dialog>
+        </Alert>
       )}
-    </div>
+    </>
   );
 };
 

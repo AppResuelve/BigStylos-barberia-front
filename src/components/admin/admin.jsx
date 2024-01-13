@@ -3,23 +3,20 @@ import { useNavigate } from "react-router-dom";
 import AdminAcordeon from "../interfazMUI/adminAcordeon";
 import { Skeleton, Stack } from "@mui/material";
 
-const Admin = ({ user, darkMode }) => {
+const Admin = ({ userData, userAuth, darkMode }) => {
   const navigate = useNavigate();
-  const [isAdmin, setIsAdmin] = useState(1);
+  
   useEffect(() => {
-    if (user && user.admin) {
-      setIsAdmin(true);
-    } else if (!user) {
-      const timeoutId = setTimeout(() => {
+    if (userData !== 1) {
+      if (!userData.admin) {
         navigate("/requestDenied401");
-      }, 1000);
-
-      // Limpiamos el timeout en el caso de que el componente se desmonte antes de que se cumpla el tiempo
-      return () => clearTimeout(timeoutId);
+      }
+    } else if (userAuth) {
+      navigate("/requestDenied401");
     } else {
       return;
     }
-  }, [user]);
+  }, [userData, userAuth]);
 
   return (
     <div
@@ -32,7 +29,7 @@ const Admin = ({ user, darkMode }) => {
         paddingTop: "70px",
       }}
     >
-      {isAdmin === 1 ? (
+      {userData === 1 ? (
         <Stack spacing={4} style={{ display: "flex", alignItems: "center" }}>
           <Skeleton
             variant="text"
@@ -63,7 +60,7 @@ const Admin = ({ user, darkMode }) => {
             style={{ width: "90vw", maxWidth: "900px" }}
           />
         </Stack>
-      ) : isAdmin === true ? ( // Puedes mostrar un componente de carga o un mensaje mientras se determina el estado de isAdmin
+      ) : userData.admin ? ( // Puedes mostrar un componente de carga o un mensaje mientras se determina el estado de isAdmin
         <div>
           <h1
             style={{

@@ -1,34 +1,105 @@
+.div-container-calendar{
+display: flex;
+flex-direction: column;
+align-items: center;
+/* width: 100%; */
+}
+
+
 .line7day {
   display: grid;
   grid-template-columns: repeat(7, 40px);
   text-align: center;
+  gap: 2px;
+  margin-bottom: 5px;
+  font-weight: bold;
 }
+
 .line7 {
   display: grid;
   grid-template-columns: repeat(7, 40px);
-  grid-template-rows: repeat(6, 40px)
+  grid-template-rows: repeat(6, 40px);
+  gap: 2px;
 
 }
+
 .month1 {
+  font-family: 'Jost', sans-serif;
+  font-weight: bold;
+  font-size: 15px;
+  color: black;
   border: none;
   background-color: transparent;
-  cursor: pointer;
-  border-radius: 50%
-
+  border-radius: 10px;
+  transition: .3s;
 }
+
 .month1:hover {
-  background-color: #e0e0e0;
-  border-radius: 50%;
+  border-radius: 15px;
 }
+
+.month1:active {
+
+  border-radius: 5px;
+}
+
 .month2 {
-  color: #c9c9c9;
+  font-family: 'Jost', sans-serif;
+  font-weight: bold;
+  font-size: 15px;
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 10px;
+  transition: .3s;
+}
+
+.month2:hover {
+  border-radius: 15px;
+}
+
+.month2:active {
+  border-radius: 5px;
+}
+
+
+/* //////////estilos aplicables para cuando show edit es false/////////// */
+
+
+.month1-false {
+  font-family: 'Jost', sans-serif;
+  font-weight: bold;
+  font-size: 15px;
+  color: black;
   border: none;
   background-color: transparent;
-  cursor: pointer;
-  border-radius: 50%
-
+  border-radius: 10px;
+  transition: .3s;
 }
-.month2:hover {
-  background-color: #e0e0e0;
-  border-radius: 50%;
+
+.month2-false {
+  font-family: 'Jost', sans-serif;
+  font-weight: bold;
+  font-size: 15px;
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 10px;
+  transition: .3s;
+}
+
+/* //////////estilos aplicables para query600px/////////// */
+
+.line7day-query600px {
+  display: grid;
+  grid-template-columns: repeat(7, 50px);
+  text-align: center;
+  gap: 3px;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.line7-query600px {
+  display: grid;
+  grid-template-columns: repeat(7, 50px);
+  grid-template-rows: repeat(6, 50px);
+  gap: 2px;
 }

@@ -14,30 +14,39 @@ import NotFound from "./components/pageNotFound/pageNotFound";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 function App() {
-  const [userData, setUserData] = useState(false);
+  const [userData, setUserData] = useState(1);
   const [darkMode, setDarkMode] = useState(false);
+  const [userAuth, setUserAuth] = useState(false);
   const location = useLocation();
   const { user } = useAuth0();
 
-  let sendUser;
-  if (user) {
-    sendUser = {
-      name: user.name,
-      email: user.email,
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (user === undefined) {
+        setUserAuth(true);
+      }
+    }, 8000);
+
+    return () => {
+      // Limpia el timeout si el componente se desmonta antes de que se complete
+      clearTimeout(timeoutId);
     };
-  }
+  }, [user]);
 
   useEffect(() => {
     const postUser = async () => {
+      let sendUser;
       if (user) {
+        sendUser = {
+          name: user.name,
+          email: user.email,
+        };
         try {
           const response = await axios.post(
             `${VITE_BACKEND_URL}/users/create`,
             sendUser
           );
-          if (response.data) {
-            setUserData(response.data);
-          }
+          setUserData(response.data);
         } catch (error) {
           console.log(error);
         }
@@ -72,11 +81,23 @@ function App() {
         />
         <Route
           path="/admin"
-          element={<Admin user={userData} darkMode={darkMode} />}
+          element={
+            <Admin
+              userData={userData}
+              userAuth={userAuth}
+              darkMode={darkMode}
+            />
+          }
         />
         <Route
           path="/worker"
-          element={<Worker user={userData} darkMode={darkMode} />}
+          element={
+            <Worker
+              userData={userData}
+              userAuth={userAuth}
+              darkMode={darkMode}
+            />
+          }
         />
         <Route
           path="/requestDenied401"
