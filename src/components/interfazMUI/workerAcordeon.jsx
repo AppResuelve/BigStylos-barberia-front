@@ -3,13 +3,10 @@ import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Services from "../services/services";
-import PublicAttention from "../opening&Closing/opening&Closing";
-import Users from "../users/users";
-import bgImgLocal from "../../assets/bg-img-local.png";
 import { Box } from "@mui/material";
+import CreateWorkDays from "../createWorkDays/createWorkDays";
 
-const AdminWorkerAcordeonModal = () => {
+const WorkerAcordeon = ({user}) => {
   const [expanded, setExpanded] = useState(false);
 
   const handleChange = (panel) => (event, isExpanded) => {
@@ -27,15 +24,6 @@ const AdminWorkerAcordeonModal = () => {
       }}
     >
       <Box style={{ position: "relative" }}>
-        <img
-          src={bgImgLocal}
-          style={{
-            width: "350px",
-            position: "absolute",
-            top: "30vh",
-            left: "10vw",
-          }}
-        />
         <Accordion
           style={{
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
@@ -48,11 +36,9 @@ const AdminWorkerAcordeonModal = () => {
             aria-controls="panel1bh-content"
             id="panel1bh-header"
           >
-            <h2>Servicios</h2>
+            <h2>Dias de trabajo</h2>
           </AccordionSummary>
-          <AccordionDetails>
-            <Services />
-          </AccordionDetails>
+          <AccordionDetails><CreateWorkDays/></AccordionDetails>
         </Accordion>
         <Accordion
           style={{
@@ -66,11 +52,9 @@ const AdminWorkerAcordeonModal = () => {
             aria-controls="panel2bh-content"
             id="panel2bh-header"
           >
-            <h2>Apertura y cierre</h2>
+            <h2>bla bla</h2>
           </AccordionSummary>
-          <AccordionDetails>
-            <PublicAttention />
-          </AccordionDetails>
+          <AccordionDetails>{/* dfsdfsdfffsdf */}</AccordionDetails>
         </Accordion>
         <Accordion
           style={{
@@ -84,11 +68,9 @@ const AdminWorkerAcordeonModal = () => {
             aria-controls="panel3bh-content"
             id="panel3bh-header"
           >
-            <h2>Usuarios</h2>
+            <h2>bla bla</h2>
           </AccordionSummary>
-          <AccordionDetails>
-            <Users />
-          </AccordionDetails>
+          <AccordionDetails>{/* dfsdfsdfffsdf */}</AccordionDetails>
         </Accordion>
         <Accordion
           style={{
@@ -104,10 +86,10 @@ const AdminWorkerAcordeonModal = () => {
           >
             <h2 sx={{ width: "33%", flexShrink: 0 }}>Otro</h2>
           </AccordionSummary>
-          <AccordionDetails>///////</AccordionDetails>
+          <AccordionDetails>{/* dfsdfsdfffsdf */}</AccordionDetails>
         </Accordion>
       </Box>
     </div>
   );
 };
-export default AdminWorkerAcordeonModal;
+export default WorkerAcordeon;

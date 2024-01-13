@@ -7,8 +7,7 @@ import { Grid } from "@mui/material";
 import corteDePelo from "../../assets/images/corte-pelo-masculino.jpg";
 import pancho from "../../assets/images/pancho.avif";
 import peinado from "../../assets/images/peinados.jpg";
-// import AlertModal from "../interfazMUI/alertModal";
-import AlertModal2 from "../interfazMUI/alertModal2";
+import AlertModal from "../interfazMUI/alertModal";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Turns = ({ user }) => {
@@ -228,7 +227,7 @@ const Turns = ({ user }) => {
         <SelectedDayTurns justWorkerWithTime={justWorkerWithTime} />
       )}
       {/* <AlertModal showAlert={showAlert} setShowAlert={setShowAlert} /> */}
-      <AlertModal2 showAlert={showAlert} setShowAlert={setShowAlert} />
+      <AlertModal showAlert={showAlert} setShowAlert={setShowAlert} />
     </div>
   );
 };

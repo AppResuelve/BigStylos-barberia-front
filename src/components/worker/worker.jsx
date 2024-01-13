@@ -1,28 +1,23 @@
-import { useEffect, useState } from "react";
-import CreateWorkDays from "../createWorkDays/createWorkDays";
-import NotFound from "../pageNotFound/pageNotFound";
+import { useEffect } from "react";
 import { Skeleton, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import WorkerAcordeon from "../interfazMUI/workerAcordeon";
 
-const Worker = ({ user }) => {
-  const [isWorker, setIsWorker] = useState(1);
+const Worker = ({ userData, userAuth }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user.worker) {
-      setIsWorker(true);
-    } else if (user) {
-      // Configuramos un setTimeout para cambiar isWorker a false después de 1000ms (1 segundo)
-      const timeoutId = setTimeout(() => {
+    if (userData !== 1) {
+      if (!userData.worker) {
         navigate("/requestDenied401");
-      }, 1000);
-      // Limpiamos el timeout en el caso de que el componente se desmonte antes de que se cumpla el tiempo
-      return () => clearTimeout(timeoutId);
+      }
+    } else if (userAuth) {
+      navigate("/requestDenied401");
     } else {
       return;
     }
-  }, [user]);
-  
+  }, [userData, userAuth]);
+
   return (
     <div
       style={{
@@ -34,16 +29,16 @@ const Worker = ({ user }) => {
         paddingTop: "70px",
       }}
     >
-      {isWorker === 1 ? (
+      {userData === 1 ? (
         <Stack spacing={5}>
           <Skeleton variant="rounded" width={340} height={100} />
           <Skeleton variant="rounded" width={340} height={100} />
           <Skeleton variant="rounded" width={340} height={100} />
         </Stack>
-      ) : isWorker === true ? (
+      ) : userData.worker ? (
         <div>
           <h1>Administracion del worker</h1>
-          <CreateWorkDays user={user} />
+          <WorkerAcordeon user={userData} />
         </div>
       ) : null}
     </div>

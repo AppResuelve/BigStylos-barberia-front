@@ -4,14 +4,13 @@ import formatHour from "../../functions/formatHour";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { Box, Button, MenuItem, Select } from "@mui/material";
 import AlertModal from "../interfazMUI/alertModal";
-import AlertModal2 from "../interfazMUI/alertModal2";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const OpeningAndClosing = () => {
-  const [schedule, setSchedule] = useState({});
+const OpeningAndClosing = ({ schedule, setSchedule, refresh, setRefresh }) => {
   const [showEdit, setShowEdit] = useState(false);
   const [showAlert, setShowAlert] = useState({});
+  const [timeEdit, setTimeEdit] = useState({});
 
   const days = ["Lun", "Mar", "Mie", "Jue", "Vie", "Sab", "Dom"];
   const timeArray = [
@@ -20,24 +19,10 @@ const OpeningAndClosing = () => {
     930, 960, 990, 1020, 1050, 1080, 1110, 1140, 1170, 1200, 1230, 1260, 1290,
     1320, 1350, 1380, 1410, 1440,
   ];
-  const [timeEdit, setTimeEdit] = useState({});
-  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${VITE_BACKEND_URL}/schedule`);
-        const { data } = response;
-        console.log(data.businessSchedule);
-        setSchedule(data.businessSchedule);
-        setTimeEdit(data.businessSchedule);
-      } catch (error) {
-        console.error("Error al obtener los horarios", error);
-        alert("Error al obtener los horarios");
-      }
-    };
-    fetchData();
-  }, [refresh]);
+    setTimeEdit(schedule);
+  }, [schedule]);
 
   const handleEdit = () => {
     setShowEdit(true);
@@ -49,7 +34,6 @@ const OpeningAndClosing = () => {
   };
 
   const handleSubmit = async () => {
-    console.log(timeEdit);
     // Validar que open no sea mayor que close
     for (const key in timeEdit) {
       const { open, close } = timeEdit[key];
@@ -58,6 +42,7 @@ const OpeningAndClosing = () => {
           isOpen: true,
           message:
             "La hora de apertura no puede ser mayor que la hora de cierre",
+          type: "warning",
           button1: {
             text: "",
             action: "",
@@ -91,7 +76,6 @@ const OpeningAndClosing = () => {
       },
     }));
   };
-  console.log("pase por el opening", showAlert);
   return (
     <div style={{ position: "relative" }}>
       <hr
@@ -102,7 +86,7 @@ const OpeningAndClosing = () => {
           backgroundColor: "#2196f3",
         }}
       />
-      {Object.keys(schedule).length > 0 &&
+      {Object.keys(timeEdit).length > 0 &&
         days.map((day, index) => (
           <div
             key={index}
@@ -113,11 +97,13 @@ const OpeningAndClosing = () => {
               marginBottom: "10px",
             }}
           >
-            <h3>{schedule[index] ? day : "------"}</h3>
-            {schedule[index] ? (
+            <h3>{timeEdit[index] ? day : "------"}</h3>
+            {timeEdit[index] ? (
               <div style={{ display: "flex", alignItems: "center" }}>
                 <h4 style={{ color: "red" }}>
-                  {schedule[index].open === "" ? "Pendiente" : null}
+                  {timeEdit[index].open === 0 && timeEdit[index].close === 1440
+                    ? "Pendiente"
+                    : null}
                 </h4>
                 <Select
                   style={{ height: "40px", marginLeft: "5px" }}
@@ -180,7 +166,7 @@ const OpeningAndClosing = () => {
           </Box>
         )}
       </Box>
-      <AlertModal2 showAlert={showAlert} setShowAlert={setShowAlert} />
+      <AlertModal showAlert={showAlert} setShowAlert={setShowAlert} />
     </div>
   );
 };
