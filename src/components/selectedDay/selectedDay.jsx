@@ -3,100 +3,49 @@ import formatHour from "../../functions/formatHour";
 import axios from "axios";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
+const SelectedDay = ({ firstMonth, firstDay, days, dayIsSelected, setDayIsSelected, schedule, showSlider, setShowSlider }) => {
+  const [renderedStructure, setRenderedStructure] = useState([]);
 
-const SelectedDay = ({ firstMonth, firstDay, days, onMouseUp, isMouseDown, setIsMouseDown}) => {
-    const newTime = Array(1441).fill(null);
-    const [schedule, setSchedule] = useState({})
-    const [openClose, setOpenClose] = useState([])
-    const [selected, setSelected] = useState([])
+  useEffect(() => {
+    if (dayIsSelected && Object.keys(dayIsSelected).length > 0) {
+      const recorrerEstructura = (obj, ruta = '') => {
+        const result = [];
+        for (const prop in obj) {
+          const nuevaRuta = ruta ? `${prop}/${ruta}` : prop;
 
-    console.log(selected)
-    
-    useEffect(() => {
-        if (Object.keys(schedule).length > 0) {
-            const openValues = Object.values(schedule).map(item => item.open);
-            const closeValues = Object.values(schedule).map(item => item.close);
-            const minOpen = Math.min(...openValues);
-            const maxClose = Math.max(...closeValues)
-            setOpenClose([minOpen, maxClose]);
-        }
-    }, [schedule]);
-    
-
-    useEffect(() => {
-        const fetchSchedule = async () => {
-            try {
-                const response = await axios.get(`${VITE_BACKEND_URL}/schedule`)
-                setSchedule(response.data.businessSchedule)
-            } catch (error) {
-                console.error(error)
-            }
-        }
-        fetchSchedule()
-    }, [])
-
-    const handleMouseDown = (index) => {
-        setIsMouseDown(true);
-        updateSelected(index);
-      };
-    
-      const handleMouseEnter = (index) => {
-        if (isMouseDown) {
-          updateSelected(index);
-        }
-      };
-    
-
-
-    const updateSelected = (index) => {
-        setSelected((prevSelection) => {
-          if (prevSelection.includes(index)) {
-            return prevSelection.filter((value) => value !== index);
+          if (typeof obj[prop] === 'object' && Object.keys(obj[prop]).length > 0) {
+            result.push(...recorrerEstructura(obj[prop], nuevaRuta));
           } else {
-            return [...prevSelection, index];
+            result.push(nuevaRuta);
           }
-        });
-      };
-    
-      const isSelected = (index) => {
-        return selected.includes(index);
+        }
+        return result;
       };
 
-    return (
-        <div /* onMouseUp={handleMouseUp} */ style= {{display: "flex",flexDirection: "column"}}>
-            <h2>Esto es SelectedDay</h2>
-            {days[firstMonth][firstDay] ? (
-                <h2>Existe</h2>
-            ) : (
-                (() => {
-                    let counter = 1;
-                    let firstValue = 0
-                    return newTime.map((element, index) => {
-                        if (counter == 1) {
-                            firstValue = index
-                        }
-                        if (index >= openClose[0] && index <= openClose[1]) {
-                            if (counter === 30) {
-                                counter = 1; // Reiniciar el contador si llega a 30
-                                return <button 
-                                onMouseDown={() => handleMouseDown(index)}
-                                onMouseEnter={() => handleMouseEnter(index)}
-                                key={index}
-                                style={{
-                                    backgroundColor: isSelected(index) ? "blue" : "white",
-                                  }}
-                                >{formatHour(firstValue)} - {formatHour(index)}
-                                </button>;
-                            } else {
-                                counter++;
-                                return null; // Renderizar null en este caso
-                            }
-                        }
-                    });
-                })()
-            )}
-        </div>
-    );
+      const result = recorrerEstructura(dayIsSelected);
+      setRenderedStructure(result);
+    }
+  }, [dayIsSelected]);
+
+  console.log(days)
+
+  const handleEdit = () => {
+    console.log("hola")
+    if(days && days[firstMonth] && days[firstMonth][firstDay] && days[firstMonth][firstDay].turn == true) {
+        alert("el dia posee algun turno agendado con un cliente")
+    }
+    setShowSlider(true)
+  }
+
+  return (
+    <div style={{ backgroundColor: "yellow" }}>
+      {/* Renderizamos cada elemento del resultado */}
+      {renderedStructure.map((item, index) => (
+        <div key={index}>{item}</div>
+      ))}
+      {days && days[firstMonth] && days[firstMonth][firstDay] ? <button onClick={handleEdit}>editar horarios</button> : <button onClick={handleEdit}>asignar horarios</button>}
+    </div>
+  );
 };
 
 export default SelectedDay;

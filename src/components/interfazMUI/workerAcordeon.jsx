@@ -1,13 +1,30 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Box } from "@mui/material";
 import CreateWorkDays from "../createWorkDays/createWorkDays";
+import axios from "axios";
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const WorkerAcordeon = ({user}) => {
+const WorkerAcordeon = ({ user }) => {
   const [expanded, setExpanded] = useState(false);
+  const [schedule, setSchedule] = useState({})
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${VITE_BACKEND_URL}/schedule`);
+        const { data } = response;
+        setSchedule(data);
+      } catch (error) {
+        console.error("Error al obtener los horarios", error);
+        alert("Error al obtener los horarios");
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -38,7 +55,9 @@ const WorkerAcordeon = ({user}) => {
           >
             <h2>Dias de trabajo</h2>
           </AccordionSummary>
-          <AccordionDetails><CreateWorkDays/></AccordionDetails>
+          <AccordionDetails>
+            <CreateWorkDays user={user} schedule={schedule}/>
+            </AccordionDetails>
         </Accordion>
         <Accordion
           style={{
