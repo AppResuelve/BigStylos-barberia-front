@@ -14,6 +14,7 @@ const WorkDays = ({ schedule, setSchedule, refresh, setRefresh }) => {
   const [toggle, setToggle] = useState(null);
   const [timeEdit, setTimeEdit] = useState({});
 
+
   const days = ["Lun", "Mar", "Mie", "Jue", "Vie", "Sab", "Dom"];
 
   useEffect(() => {

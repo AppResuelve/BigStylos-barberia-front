@@ -14,6 +14,8 @@ const PlannedClosure = ({ schedule }) => {
   const [refresh, setRefresh] = useState(false);
   const [days, setDays] = useState({});
   const [daysWithTurns, setDaysWithTurns] = useState({});
+  const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -98,7 +100,6 @@ const PlannedClosure = ({ schedule }) => {
       }
     
   };
-  console.log(days);
   return (
     <div>
       <hr

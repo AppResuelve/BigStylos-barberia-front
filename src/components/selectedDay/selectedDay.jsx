@@ -1,42 +1,82 @@
+import { useEffect, useState } from "react";
 import formatHour from "../../functions/formatHour";
+import axios from "axios";
+import { Grid } from "@mui/material";
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const SelectedDay = ({ firstMonth, firstDay, days }) => {
-  const newTime = Array(1441).fill(null);
-  const open = {
-    first: {
-      open: 480,
-      close: 720,
-    },
-    second: {
-      open: 900,
-      close: 1200,
-    },
-  };
+const SelectedDay = ({
+  firstMonth,
+  firstDay,
+  days,
+  dayIsSelected,
+  setDayIsSelected,
+  schedule,
+}) => {
+  const [renderedStructure, setRenderedStructure] = useState([]);
+
+  useEffect(() => {
+    if (dayIsSelected && Object.keys(dayIsSelected).length > 0) {
+      const recorrerEstructura = (obj, ruta = "") => {
+        const result = [];
+        for (const prop in obj) {
+          const nuevaRuta = ruta ? `${prop}/${ruta}` : prop;
+
+          if (
+            typeof obj[prop] === "object" &&
+            Object.keys(obj[prop]).length > 0
+          ) {
+            result.push(...recorrerEstructura(obj[prop], nuevaRuta));
+          } else {
+            result.push(nuevaRuta);
+          }
+        }
+        return result;
+      };
+
+      const result = recorrerEstructura(dayIsSelected);
+      setRenderedStructure(result);
+    }
+  }, [dayIsSelected]);
+
 
   return (
-    <div>
-      <h2>Esto es SelectedDay</h2>
-      {days[firstMonth][firstDay] ? (
-        <h2>Existe</h2>
+    <Grid
+      container
+      style={{
+        display: "flex",
+        // paddingLeft: "0px",
+      }}
+    >
+      <h2 style={{ width: "100%", marginBottom: "12px" }}>
+        Días seleccionados :
+        {renderedStructure.length > 0 ? renderedStructure.length : 0}
+      </h2>
+      {/* Renderizamos cada elemento del resultado */}
+      {renderedStructure.map((item, index) => (
+        <Grid
+          item
+          xs={3}
+          sm={3}
+          md={3}
+          key={index}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Grid item key={index}>
+            <h2>{item}</h2>
+          </Grid>
+          <hr style={{ width: "100%", marginBottom: "10px" }} />
+        </Grid>
+      ))}
+      {/* {days && days[firstMonth] && days[firstMonth][firstDay] ? (
+        <button onClick={handleEdit}>editar horarios</button>
       ) : (
-        (() => {
-          let counter = 0;
-          return newTime.map((element, index) => {
-            if (
-              (index > open.first.open && index < open.first.close) ||
-              (index > open.second.open && open.second.close)
-            )
-              if (counter === 30) {
-                counter = 0; // Reiniciar el contador si llega a 30
-                return <div key={index}>{index}</div>;
-              } else {
-                counter++;
-                return null; // Renderizar null en este caso
-              }
-          });
-        })()
-      )}
-    </div>
+        <button onClick={handleEdit}>asignar horarios</button>
+      )} */}
+    </Grid>
   );
 };
 

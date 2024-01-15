@@ -42,18 +42,18 @@ const AlertModal = ({ showAlert, setShowAlert, handleActionProp }) => {
     } else if (showAlert.button1.action === "handleActionProp") {
       console.log("pase por aca");
       action = () => {
-        handleActionProp("confirm");
+        handleActionProp(true);
         setMoveDown(true);
       };
     }
   }
 
   if (showAlert.type === "warning") {
-    type = ["warning", "yellow"];
+    type = ["warning", "#ffe1ab", "#db9718"];
   } else if (showAlert.type === "success") {
-    type = ["success", "green"];
+    type = ["success", "#aaff97"];
   } else if (showAlert.type === "error") {
-    type = ["error", "red"];
+    type = ["error", "#fdb9b9", "#ff0000fa"];
   }
 
   return (
@@ -63,26 +63,29 @@ const AlertModal = ({ showAlert, setShowAlert, handleActionProp }) => {
           className={`alert-container ${moveDown ? "exit" : ""}`}
           severity={type[0]}
           style={{
+            backgroundColor: type[1],
             borderRadius: "10px",
             boxShadow: "0px 45px 22px -34px rgba(0, 0, 0, 0.57)",
             fontFamily: "Jost, sans-serif",
-            border: `2px solid ${type[1]}`,
+            border: `2px solid ${type[2]}`,
           }}
         >
-          <h2>{showAlert.message}</h2>
-          <Box style={{ display: "flex", justifyContent: "space-around" }}>
+          <h2 style={{ color: type[2] }}>{showAlert.message}</h2>
+          <Box sx={{ display: "flex", justifyContent: "space-around", marginTop:"12px" }}>
             {showAlert.buttonClose.text !== "" && (
               <Button
+                variant="outlined"
                 onClick={() => setMoveDown(true)}
-                style={{ fontFamily: "Jost, sans-serif" }}
+                style={{ fontFamily: "Jost, sans-serif", fontWeight:"bold" }}
               >
                 {showAlert.buttonClose.text}
               </Button>
             )}
             {showAlert.button1.text !== "" && (
               <Button
+                variant="contained"
                 onClick={() => action()}
-                style={{ fontFamily: "Jost, sans-serif" }}
+                style={{ fontFamily: "Jost, sans-serif", fontWeight:"bold" }}
               >
                 {showAlert.button1.text}
               </Button>

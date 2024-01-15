@@ -5,12 +5,8 @@ import Button from "@mui/material/Button";
 import Slide from "@mui/material/Slide";
 import LoginButton from "../login/login";
 import LogoutButton from "../logout/logout";
-import {
-  Dialog,
-  DialogContent,
-  useMediaQuery,
-  createTheme,
-} from "@mui/material";
+import { Dialog } from "@mui/material";
+import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { NavLink } from "react-router-dom";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -24,20 +20,7 @@ const ModalMUI = ({
   userData,
   darkMode,
 }) => {
-  const theme = createTheme({
-    breakpoints: {
-      values: {
-        xs: 0,
-        sm: 600,
-        md: 900,
-        lg: 1200,
-        xl: 2000,
-      },
-    },
-  });
-  const lg = useMediaQuery(theme.breakpoints.down("lg"));
-
-  const xl = useMediaQuery(theme.breakpoints.down("xl"));
+  const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
   const handleClose = () => setIsOpen(false);
 
@@ -89,7 +72,7 @@ const ModalMUI = ({
                 style={{
                   borderRadius: "50px",
                   width: "70px",
-                  border: `solid 4px ${darkMode ? "transparent": "black"}`,
+                  border: `solid 4px ${darkMode ? "transparent" : "black"}`,
                   marginLeft: "70px",
                 }}
               />

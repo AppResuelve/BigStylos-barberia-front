@@ -1,15 +1,42 @@
 import { useEffect, useState } from "react";
 import CustomCalendar from "../customCalendar/customCalendar";
 import axios from "axios";
+import SliderCustom from "../slider/slider";
 import SelectedDay from "../selectedDay/selectedDay";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
+import {
+  Grid,
+  Box,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
+import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
+import AlertModal from "../interfazMUI/alertModal";
+import SliderModal from "../interfazMUI/sliderModal";
+
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const CreateWorkDays = ({ user }) => {
+const CreateWorkDays = ({ user, schedule }) => {
+  const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [dayIsSelected, setDayIsSelected] = useState({});
   const [days, setDays] = useState({});
   const [firstMonth, setFirstMonth] = useState({});
   const [firstDay, setFirstDay] = useState({});
   const [timeSelected, setTimeSelected] = useState([]); //estado de la rama fac, no se para que es aun.
+  const [isOpen, setIsOpen] = useState(false);
+  const [openClose, setOpenClose] = useState([]);
+  const [showEdit, setShowEdit] = useState(false);
+  const [showAlert, setShowAlert] = useState({});
+
+  useEffect(() => {
+    const openValues = Object.values(schedule).map((item) => item.open);
+    const closeValues = Object.values(schedule).map((item) => item.close);
+    const minOpen = Math.min(...openValues);
+    const maxClose = Math.max(...closeValues);
+    setOpenClose([minOpen, maxClose]);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,32 +72,171 @@ const CreateWorkDays = ({ user }) => {
     }
   }, [dayIsSelected]);
 
+  const handleEdit = () => {
+    setShowEdit(true);
+  };
+
+  const handleShowSlider = () => {
+    console.log("hola");
+    if (
+      days &&
+      days[firstMonth] &&
+      days[firstMonth][firstDay] &&
+      days[firstMonth][firstDay].turn == true
+    ) {
+      setShowAlert({
+        isOpen: true,
+        message: "Has seleccionado un día con reserva/s, deseas continuar?",
+        type: "error",
+        button1: {
+          text: "Continuar",
+          action: "handleActionProp",
+        },
+        buttonClose: {
+          text: "Volver",
+        },
+      });
+    } else {
+      setIsOpen(true);
+    }
+  };
+
+  const handleCancel = () => {
+    setShowEdit(false);
+    setDayIsSelected({});
+  };
+  console.log(dayIsSelected);
   return (
-    <div>
-      <CustomCalendar
-        setDayIsSelected={setDayIsSelected}
-        amountOfDays={21}
-        dayIsSelected={dayIsSelected}
-        days={days}
-        setDays={setDays}
-      />
-      <div>
-        {Object.keys(firstMonth).length > 0 ? (
-          <p>Primer mes seleccionado: {firstMonth}</p>
-        ) : null}
-        {Object.keys(firstDay).length > 0 ? (
-          <p>Primer dia seleccionado: {firstDay}</p>
-        ) : null}
-      </div>
-      {Object.keys(firstMonth).length > 0 &&
-        Object.keys(firstDay).length > 0 && (
-          <SelectedDay
+    <Grid container>
+      <Grid item xs={12} sm={12} md={showEdit && !md ? 6 : 12}>
+        <CustomCalendar
+          setDayIsSelected={setDayIsSelected}
+          amountOfDays={30}
+          dayIsSelected={dayIsSelected}
+          days={days}
+          setDays={setDays}
+          schedule={schedule}
+          showEdit={showEdit}
+        />
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        sm={12}
+        md={6}
+        sx={{ display: "flex", flexDirection: "column" }}
+      >
+        {showEdit && (
+          /*  Object.keys(firstMonth).length > 0 &&
+          Object.keys(firstDay).length > 0 && */ <SelectedDay
             firstMonth={firstMonth}
             firstDay={firstDay}
             days={days}
+            dayIsSelected={dayIsSelected}
+            setDayIsSelected={setDayIsSelected}
+            schedule={schedule}
           />
         )}
-    </div>
+        {Object.keys(days).length > 0 &&
+          days[firstMonth] &&
+          days[firstMonth][firstDay] &&
+          days[firstMonth][firstDay].turn && (
+            <h3
+              style={{
+                display: "flex",
+                width: "100%",
+                justifyContent: "center",
+                marginTop: "12px",
+                color: "red",
+              }}
+            >
+              Día con turno reservado
+            </h3>
+          )}
+      </Grid>
+      {/* area de los botones */}
+      <Grid xs={12} sm={12} md={12} item>
+        {showEdit === false && (
+          <Button onClick={handleEdit}>
+            <BorderColorIcon />
+          </Button>
+        )}
+        {showEdit === true && (
+          <Box
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Button
+              onClick={handleCancel}
+              variant="outlined"
+              style={{ borderRadius: "50px", border: "2px solid " }}
+            >
+              <h4 style={{ fontFamily: "Jost, sans-serif" }}>Volver</h4>
+            </Button>
+            <Button
+              variant="contained"
+              disabled={
+                dayIsSelected && Object.keys(dayIsSelected).length > 0
+                  ? false
+                  : true
+              }
+              onClick={handleShowSlider}
+            >
+              <h4 style={{ fontFamily: "Jost, sans-serif" }}>
+                Asignar horarios
+              </h4>
+            </Button>
+            {/* <Button onClick={handleSubmit} variant="contained">
+              <h4 style={{ fontFamily: "Jost, sans-serif" }}>Guardar</h4>
+            </Button> */}
+          </Box>
+        )}
+        {/* sección del slider */}
+      </Grid>
+      <SliderModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      {/* {showSlider && (
+        <Dialog
+          open={showSlider}
+          onClose={() => setShowSlider(false)}
+          PaperProps={{
+            style: {
+              display: "flex",
+              alignItems: "center",
+              // width: isSmallScreen ? "50vw" : "90vw",
+              // height: isSmallScreen ? "90vh" : "50vh",
+            },
+          }}
+        >
+          <DialogTitle>Slider Personalizado</DialogTitle>
+          <DialogContent
+            PaperProps={{
+              style: {
+                display: "flex",
+                alignItems: "center",
+                // width: isSmallScreen ? "50vw" : "90vw",
+                // height: isSmallScreen ? "90vh" : "50vh",
+              },
+            }}
+          >
+            <SliderCustom />
+            <Button onClick={() => setShowSlider(false)} color="primary">
+              Cerrar
+            </Button>
+            <Button onClick={() => setShowSlider(false)} color="primary">
+              Aceptar
+            </Button>
+          </DialogContent>
+        </Dialog>
+      )} */}
+      <AlertModal
+        showAlert={showAlert}
+        setShowAlert={setShowAlert}
+        handleActionProp={setIsOpen}
+      />
+    </Grid>
   );
 };
 

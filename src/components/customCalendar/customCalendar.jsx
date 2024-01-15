@@ -2,22 +2,25 @@ import { useState } from "react";
 import daysMonthCalendarCustom from "../../functions/daysMonthCalendarCustom";
 import getToday from "../../functions/getToday";
 import obtainDayName from "../../functions/obtainDayName";
+import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import "./customCalendar.css";
+import { Box } from "@mui/material";
 
 const CustomCalendar = ({
   setDayIsSelected,
   amountOfDays,
   dayIsSelected,
   days,
+  showEdit,
   setDays,
+  schedule,
 }) => {
   const daysCalendarCustom = daysMonthCalendarCustom(amountOfDays, false);
   let { currentMonth, nextMonth, currentYear, nextYear } = daysCalendarCustom;
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
-  const getDayPosition = getToday() + 1;
+  const getDayPosition = getToday();
+  const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [exist50, setExist50] = useState(false);
-  console.log(dayIsSelected);
-  const workDays = [2, 3, 4, 5, 6, 7];
 
   const handleDay = (day, month) => {
     if (dayIsSelected[month] && dayIsSelected[month][day]) {
@@ -62,24 +65,28 @@ const CustomCalendar = ({
       }
     }
   };
+ 
 
   return (
-    <div>
-      <h1>calendario</h1>
-      <div className="line7day">
+    <div className="div-container-calendar">
+      <Box className={!sm ? "line7day-query600px" : "line7day"}>
         {daysOfWeek.map((day) => (
-          <div key={day}>{day}</div>
+          <h4 key={day}>{day}</h4>
         ))}
-      </div>
+      </Box>
 
-      <div className="line7">
+      <Box className={!sm ? "line7-query600px" : "line7"}>
         {daysCalendarCustom.month1.map((day, index) => {
           let dayName = obtainDayName(day, currentMonth, currentYear);
           let disabled = false;
-          if (!workDays.includes(dayName)) {
-            disabled = true;
-          }
           let colorDay = "#e0e0e0d2";
+          if (
+            !schedule[dayName] ||
+            (schedule[dayName].open === 0 && schedule[dayName].close === 1440)
+          ) {
+            disabled = true;
+            colorDay = "gray";
+          }
           if (days && days[currentMonth] && days[currentMonth][day]) {
             colorDay = "#5bfd33d0";
           }
@@ -95,17 +102,21 @@ const CustomCalendar = ({
           return (
             <button
               key={index}
-              className="month1"
-              disabled={disabled}
+              disabled={!showEdit ? true : disabled}
+              className={showEdit ? "month1" : "month1-false"}
               onClick={() => handleDay(day, currentMonth)}
               style={{
                 gridColumnStart: index === 0 ? getDayPosition : "auto",
-                backgroundColor: colorDay,
-                ...(dayIsSelected[currentMonth] &&
-                dayIsSelected[currentMonth][day]
-                  ? { backgroundColor: "blue" }
-                  : {}),
-                cursor: disabled ? "auto" : "pointer",
+                backgroundColor:
+                  dayIsSelected[currentMonth] &&
+                  dayIsSelected[currentMonth][day]
+                    ? "#2196f3"
+                    : colorDay,
+                cursor: !showEdit
+                  ? "not-allowed"
+                  : disabled
+                  ? "auto"
+                  : "pointer",
               }}
             >
               {day}
@@ -116,9 +127,6 @@ const CustomCalendar = ({
         {daysCalendarCustom.month2.map((day, index) => {
           let dayName = obtainDayName(day, nextMonth, nextYear);
           let disabled = false;
-          if (!workDays.includes(dayName)) {
-            disabled = true;
-          }
           let colorDay = "#e0e0e0d2";
           if (days && days[nextMonth] && days[nextMonth][day]) {
             colorDay = "#5bfd33d0";
@@ -131,26 +139,37 @@ const CustomCalendar = ({
           ) {
             colorDay = "#e6b226d0";
           }
+          if (
+            !schedule[dayName] ||
+            (schedule[dayName].open === 0 && schedule[dayName].close === 1440)
+          ) {
+            disabled = true;
+            colorDay = "gray";
+          }
 
           return (
             <button
               key={index + 100}
-              className="month2"
-              disabled={disabled}
+              className={showEdit ? "month2" : "month2-false"}
+              disabled={!showEdit ? true : disabled}
               onClick={() => handleDay(day, nextMonth)}
               style={{
                 backgroundColor: colorDay,
                 ...(dayIsSelected[nextMonth] && dayIsSelected[nextMonth][day]
-                  ? { backgroundColor: "blue" }
+                  ? { backgroundColor: "#2196f3" }
                   : {}),
-                cursor: disabled ? "auto" : "pointer",
+                cursor: !showEdit
+                  ? "not-allowed"
+                  : disabled
+                  ? "auto"
+                  : "pointer",
               }}
             >
               {day}
             </button>
           );
         })}
-      </div>
+      </Box>
     </div>
   );
 };
