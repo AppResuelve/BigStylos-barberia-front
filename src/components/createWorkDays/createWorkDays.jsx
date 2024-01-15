@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import CustomCalendar from "../customCalendar/customCalendar";
 import axios from "axios";
-import SliderCustom from "../slider/slider";
 import SelectedDay from "../selectedDay/selectedDay";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import {
@@ -29,6 +28,7 @@ const CreateWorkDays = ({ user, schedule }) => {
   const [openClose, setOpenClose] = useState([]);
   const [showEdit, setShowEdit] = useState(false);
   const [showAlert, setShowAlert] = useState({});
+  const [submit, setSubmit] = useState(false);
 
   useEffect(() => {
     const openValues = Object.values(schedule).map((item) => item.open);
@@ -72,42 +72,51 @@ const CreateWorkDays = ({ user, schedule }) => {
     }
   }, [dayIsSelected]);
 
+  useEffect(() => {
+    handleSubmit()
+  }, [submit]);
+  
   const handleEdit = () => {
     setShowEdit(true);
   };
-
+  
+  const handleCancel = () => {
+    setShowEdit(false);
+    setDayIsSelected({});
+  };
+  
   const handleShowSlider = () => {
-    console.log("hola");
     if (
       days &&
       days[firstMonth] &&
       days[firstMonth][firstDay] &&
       days[firstMonth][firstDay].turn == true
-    ) {
-      setShowAlert({
-        isOpen: true,
-        message: "Has seleccionado un día con reserva/s, deseas continuar?",
-        type: "error",
-        button1: {
-          text: "Continuar",
-          action: "handleActionProp",
-        },
-        buttonClose: {
-          text: "Volver",
-        },
-      });
-    } else {
-      setIsOpen(true);
-    }
+      ) {
+        setShowAlert({
+          isOpen: true,
+          message: "Has seleccionado un día con reserva/s, deseas continuar?",
+          type: "error",
+          button1: {
+            text: "Continuar",
+            action: "handleActionProp",
+          },
+          buttonClose: {
+            text: "Volver",
+          },
+        });
+      } else {
+        setIsOpen(true);
+      }
   };
-
-  const handleCancel = () => {
-    setShowEdit(false);
-    setDayIsSelected({});
+  
+    const handleSubmit = () => {
+      console.log("pase por el submit");
+      setSubmit(false)
   };
-  console.log(dayIsSelected);
-  return (
-    <Grid container>
+  
+    console.log(submit);
+    return (
+      <Grid container>
       <Grid item xs={12} sm={12} md={showEdit && !md ? 6 : 12}>
         <CustomCalendar
           setDayIsSelected={setDayIsSelected}
@@ -196,41 +205,11 @@ const CreateWorkDays = ({ user, schedule }) => {
         )}
         {/* sección del slider */}
       </Grid>
-      <SliderModal isOpen={isOpen} setIsOpen={setIsOpen} />
-      {/* {showSlider && (
-        <Dialog
-          open={showSlider}
-          onClose={() => setShowSlider(false)}
-          PaperProps={{
-            style: {
-              display: "flex",
-              alignItems: "center",
-              // width: isSmallScreen ? "50vw" : "90vw",
-              // height: isSmallScreen ? "90vh" : "50vh",
-            },
-          }}
-        >
-          <DialogTitle>Slider Personalizado</DialogTitle>
-          <DialogContent
-            PaperProps={{
-              style: {
-                display: "flex",
-                alignItems: "center",
-                // width: isSmallScreen ? "50vw" : "90vw",
-                // height: isSmallScreen ? "90vh" : "50vh",
-              },
-            }}
-          >
-            <SliderCustom />
-            <Button onClick={() => setShowSlider(false)} color="primary">
-              Cerrar
-            </Button>
-            <Button onClick={() => setShowSlider(false)} color="primary">
-              Aceptar
-            </Button>
-          </DialogContent>
-        </Dialog>
-      )} */}
+      <SliderModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        setSubmit={setSubmit}
+      />
       <AlertModal
         showAlert={showAlert}
         setShowAlert={setShowAlert}

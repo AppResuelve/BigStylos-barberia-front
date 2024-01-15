@@ -11,7 +11,7 @@ import HelpIcon from "@mui/icons-material/Help";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction={"up"} ref={ref} {...props} />;
 });
-const SliderModal = ({ isOpen, setIsOpen, darkMode }) => {
+const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit }) => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
   const handleClose = () => setIsOpen(false);
@@ -29,7 +29,6 @@ const SliderModal = ({ isOpen, setIsOpen, darkMode }) => {
     setValues(newValues);
   };
 
-  console.log(values);
   return (
     <div>
       <Dialog
@@ -165,10 +164,18 @@ const SliderModal = ({ isOpen, setIsOpen, darkMode }) => {
               justifyContent: "space-between",
             }}
           >
-            <Button sx={{ fontFamily: "Jost, sans-serif", fontWeight: "bold" }}>
+            <Button
+              variant="outlined"
+              sx={{ fontFamily: "Jost, sans-serif", fontWeight: "bold" }}
+              onClick={handleClose}
+            >
               Volver
             </Button>
-            <Button sx={{ fontFamily: "Jost, sans-serif", fontWeight: "bold" }}>
+            <Button
+              variant="contained"
+              sx={{ fontFamily: "Jost, sans-serif", fontWeight: "bold" }}
+              onClick={()=>{setSubmit(true),handleClose()}}
+            >
               Confirmar
             </Button>
           </Box>
