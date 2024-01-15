@@ -7,11 +7,7 @@ import { Dialog, Grid, Slider } from "@mui/material";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import time from "../../helpers/arrayTime";
 import HelpIcon from "@mui/icons-material/Help";
-<<<<<<< HEAD
-=======
 import formatHour from "../../functions/formatHour";
-import { left } from "@popperjs/core";
->>>>>>> 413caf2dc35d472e647e4d048c46fc3599468a0f
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction={"up"} ref={ref} {...props} />;
