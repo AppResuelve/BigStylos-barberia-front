@@ -69,7 +69,7 @@ const Worker = ({ userData, userAuth, darkMode }) => {
               color: darkMode ? "white" : "#28292c",
             }}
           >
-            Administracion del worker
+            Administracion del Profesional
           </h1>
           <WorkerAcordeon user={userData} />
         </div>

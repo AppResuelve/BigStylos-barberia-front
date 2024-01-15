@@ -14,6 +14,7 @@ const CustomCalendar = ({
   showEdit,
   setDays,
   schedule,
+  loading,
 }) => {
   const daysCalendarCustom = daysMonthCalendarCustom(amountOfDays, false);
   let { currentMonth, nextMonth, currentYear, nextYear } = daysCalendarCustom;
@@ -65,7 +66,6 @@ const CustomCalendar = ({
       }
     }
   };
- 
 
   return (
     <div className="div-container-calendar">
@@ -112,7 +112,9 @@ const CustomCalendar = ({
                   dayIsSelected[currentMonth][day]
                     ? "#2196f3"
                     : colorDay,
-                cursor: !showEdit
+                cursor: loading
+                  ? "not-allowed"
+                  : !showEdit
                   ? "not-allowed"
                   : disabled
                   ? "auto"
@@ -158,7 +160,9 @@ const CustomCalendar = ({
                 ...(dayIsSelected[nextMonth] && dayIsSelected[nextMonth][day]
                   ? { backgroundColor: "#2196f3" }
                   : {}),
-                cursor: !showEdit
+                cursor: loading
+                  ? "not-allowed"
+                  : !showEdit
                   ? "not-allowed"
                   : disabled
                   ? "auto"

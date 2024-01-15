@@ -7,6 +7,7 @@ import { Dialog, Grid, Slider } from "@mui/material";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import time from "../../helpers/arrayTime";
 import HelpIcon from "@mui/icons-material/Help";
+import formatHour from "../../functions/formatHour";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction={"up"} ref={ref} {...props} />;
@@ -17,15 +18,24 @@ const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit }) => {
   const handleClose = () => setIsOpen(false);
 
   const [values, setValues] = useState([
-    [0, 10],
-    [30, 37],
+    [420, 480],
+    [1380, 1440],
   ]); // Solo 2 rangos
 
   const marks = time;
 
-  const handleChange = (event, newValue, index) => {
+  const handleChange = (event, newValue, index, stop) => {
     const newValues = [...values];
     newValues[index] = newValue;
+
+    if (stop) {
+      if (index === 0 && newValues[0][1] >= newValues[1][0]) {
+        newValues[0][1] = newValues[1][0] - 1;
+      } else if (index === 1 && newValues[1][0] <= newValues[0][1]) {
+        newValues[1][0] = newValues[0][1] + 1;
+      }
+    }
+
     setValues(newValues);
   };
 
@@ -85,6 +95,17 @@ const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit }) => {
             }}
           >
             {values.map((value, index) => {
+              let stopSlider = false;
+              console.log(value[1]);
+              if (value[1] >= values[1][0]) {
+                console.log("stop");
+
+                stopSlider = true;
+              } else if (value[0] <= values[0][1]) {
+                stopSlider = true;
+              } else {
+                stopSlider = false;
+              }
               return (
                 <Slider
                   sx={{
@@ -93,11 +114,15 @@ const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit }) => {
                   }}
                   key={index}
                   value={value}
-                  onChange={(event, newValue) =>
-                    handleChange(event, newValue, index)
+                  onChange={
+                    stopSlider
+                      ? (event, newValue) =>
+                          handleChange(event, newValue, index, true)
+                      : (event, newValue) =>
+                          handleChange(event, newValue, index)
                   }
                   valueLabelDisplay="off" // Configura para que se muestre solo cuando se selecciona
-                  min={0}
+                  min={420}
                   max={1440}
                   step={30}
                   orientation={sm ? "vertical" : "horizontal"}
@@ -118,19 +143,22 @@ const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit }) => {
                 md={6}
                 sx={{
                   display: "flex",
+                  alignItems: "center",
                   justifyContent: "space-around",
                   borderRadius: "5px 0px 0px 5px",
                   border: "2px solid #2196f3",
                   padding: "10px",
                 }}
               >
-                <Box>
-                  <h2>{values[0][0]} hs</h2>
-                </Box>
-                <h2>a</h2>
+                <h3>de</h3>
 
                 <Box>
-                  <h2>{values[0][1]} hs</h2>
+                  <h2>{formatHour(values[0][0])}hs</h2>
+                </Box>
+                <h3>a</h3>
+
+                <Box>
+                  <h2>{formatHour(values[0][1])}hs</h2>
                 </Box>
               </Grid>
               <Grid
@@ -140,18 +168,21 @@ const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit }) => {
                 md={6}
                 sx={{
                   display: "flex",
+                  alignItems: "center",
                   justifyContent: "space-around",
                   borderRadius: "0px 5px 5px 0px",
                   border: "2px solid #2196f3",
                   padding: "10px",
                 }}
               >
+                <h3>de</h3>
+
                 <Box>
-                  <h2>{values[1][0]} hs</h2>
+                  <h2>{formatHour(values[1][0])}hs</h2>
                 </Box>
-                <h2>a</h2>
+                <h3>a</h3>
                 <Box>
-                  <h2>{values[1][1]} hs</h2>
+                  <h2>{formatHour(values[1][1])}hs</h2>
                 </Box>
               </Grid>
             </Grid>
@@ -167,14 +198,22 @@ const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit }) => {
             <Button
               variant="outlined"
               sx={{ fontFamily: "Jost, sans-serif", fontWeight: "bold" }}
-              onClick={handleClose}
+              onClick={() => {
+                handleClose();
+                setValues([
+                  [420, 480],
+                  [1380, 1440],
+                ]);
+              }}
             >
               Volver
             </Button>
             <Button
               variant="contained"
               sx={{ fontFamily: "Jost, sans-serif", fontWeight: "bold" }}
-              onClick={()=>{setSubmit(true),handleClose()}}
+              onClick={() => {
+                setSubmit(true), handleClose();
+              }}
             >
               Confirmar
             </Button>
