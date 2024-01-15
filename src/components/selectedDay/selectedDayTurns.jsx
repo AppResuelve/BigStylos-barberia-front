@@ -1,36 +1,51 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 
-const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+const SelectedDayTurns = ({ justWorkerWithTime }) => {
+  // const [indexChange, setIndexChange] = useState([] /* como se trae??? */);
+  // setIndexChange([480, 720, 960, 1220]);
+  console.log(justWorkerWithTime);
+  let indexChange = [480, 720, 960, 1220];
+  useEffect(() => {}, []);
 
-const SelectedDayTurns = ({ dayIsSelected, workdays }) => {
-      const [timeAvailable, setTimeAvailable] = useState(/* como se trae??? */);
-      console.log(workdays);
-      console.log(dayIsSelected);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `${VITE_BACKEND_URL}/workdays/getdays`,
-              dayIsSelected, 
-          
-          
-        );
-        const { data } = response;
-        setTimeAvailable(data);
-      } catch (error) {
-        console.error("Error al obtener los dias:", error);
-        alert("Error al obtener los dias");
+  for (const worker in justWorkerWithTime) {
+    let workerArray = justWorkerWithTime[worker][0];
+    let durationService = justWorkerWithTime[worker][1];
+    let index = indexChange[0];
+    let consecutiveMinutes = [];
+
+    for (let i = index; i < workerArray.length; i++) {
+      let k = 0;
+      console.log(i);
+      if (i === indexChange) {
+        return
       }
-    };
-    fetchData();
-  }, []);
-
-      return (
-        <div>
-          <h1>Selecciona el horario</h1>
-        </div>
-      );
+        if (indexChange[k] === i && k !== 0) {
+          console.log(indexChange[k]);
+          index = indexChange[k + 1];
+        } else {
+          if (workerArray[i] === "free") {
+            for (let j = 0; j < Number(durationService); j++) {
+              console.log(j);
+              if (workerArray[i + j] !== "free") {
+                // Si algún minuto no es "free", no es consecutivo
+                index = i + j;
+                break;
+              }
+              consecutiveMinutes.push(i + j);
+              if (j <= Number(durationService)) {
+                index = i + j;
+              }
+            }
+          }
+        }
+    }
+    console.log(consecutiveMinutes);
+  }
+  return (
+    <div>
+      <h1>Selecciona el horario</h1>
+    </div>
+  );
 };
 
 export default SelectedDayTurns;

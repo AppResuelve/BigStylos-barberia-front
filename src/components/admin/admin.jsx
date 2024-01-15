@@ -1,53 +1,79 @@
 import { useEffect, useState } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
-import Services from "../services/services";
-import NotFound from "../page_not_found/not_found";
-import axios from "axios";
-import Users from "../users/users";
+import { useNavigate } from "react-router-dom";
+import AdminAcordeon from "../interfazMUI/adminAcordeon";
+import { Skeleton, Stack } from "@mui/material";
 
-const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-
-const Admin = () => {
-  const [isAdmin, setIsAdmin] = useState(false);
-  const { user } = useAuth0();
-
+const Admin = ({ userData, userAuth, darkMode }) => {
+  const navigate = useNavigate();
+  
   useEffect(() => {
-    if (user) {
-      const email = user.email;
-      const fetchData = async () => {
-        try {
-          const response = await axios.post(
-            `${VITE_BACKEND_URL}/users/getadmin`,
-            { email: email }
-          );
-          const { data } = response;
-          setIsAdmin(data.isadmin);
-        } catch (error) {
-          console.error("Error al obtener la credencial:", error);
-          alert("Error al obtener la credencial");
-        }
-      };
-      fetchData();
+    if (userData !== 1) {
+      if (!userData.admin) {
+        navigate("/requestDenied401");
+      }
+    } else if (userAuth) {
+      navigate("/requestDenied401");
     } else {
-      setIsAdmin(false);
+      return;
     }
-  }, [user]);
-
+  }, [userData, userAuth]);
 
   return (
-    <div>
-      {isAdmin === true && isAdmin ? (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: darkMode ? "#28292c" : "white",
+        alignItems: "center",
+        height: "100vh",
+        paddingTop: "70px",
+      }}
+    >
+      {userData === 1 ? (
+        <Stack spacing={4} style={{ display: "flex", alignItems: "center" }}>
+          <Skeleton
+            variant="text"
+            height={70}
+            style={{
+              width: "80vw",
+              maxWidth: "340px",
+            }}
+          />
+          <Skeleton
+            variant="rounded"
+            height={70}
+            style={{ width: "90vw", maxWidth: "900px" }}
+          />
+          <Skeleton
+            variant="rounded"
+            height={70}
+            style={{ width: "90vw", maxWidth: "900px" }}
+          />
+          <Skeleton
+            variant="rounded"
+            height={70}
+            style={{ width: "90vw", maxWidth: "900px" }}
+          />
+          <Skeleton
+            variant="rounded"
+            height={70}
+            style={{ width: "90vw", maxWidth: "900px" }}
+          />
+        </Stack>
+      ) : userData.admin ? ( // Puedes mostrar un componente de carga o un mensaje mientras se determina el estado de isAdmin
         <div>
-          <h1>Administracion del admin</h1>
-          <hr />
-          <Services />
-          <hr />
-          <Users />
-          <hr />
+          <h1
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              color: darkMode ? "white" : "#28292c",
+            }}
+          >
+            Administración del local
+          </h1>
+          <AdminAcordeon />
         </div>
-      ) : (
-        <NotFound />
-      )}
+      ) : null}
     </div>
   );
 };

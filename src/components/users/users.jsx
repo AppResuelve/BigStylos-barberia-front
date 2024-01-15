@@ -1,121 +1,218 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-
+import { Box, Button, LinearProgress } from "@mui/material";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
+import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Users = () => {
   const [allUsers, setAllUsers] = useState([]);
-  const [sendAdd, setSendAdd] = useState(false);
+  const { xs, sm, md, lg, xl } = useMediaQueryHook();
+  const [add, setAdd] = useState(false);
+  const [typeUser, setTypeUser] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/users/all`);
         const { data } = response;
-        setAllUsers(data.allUsers);
+        setAllUsers(data);
+        setLoading(false);
       } catch (error) {
         console.error("Error al obtener los usuarios", error);
         alert("Error al obtener los usuarios");
       }
     };
     fetchData();
-  }, [sendAdd]);
+  }, [add]);
 
-  const workers = [];
-  const users = [];
-  // Recorre el array de objetos
-  if (allUsers.length > 0) {
-    for (const obj of allUsers) {
-      if (obj.worker) {
-        // Si la propiedad "worker" es true, agrega al array "workers"
-        workers.push(obj);
-      } else {
-        // Si la propiedad "worker" es false, agrega al array "users"
-        users.push(obj);
-      }
-    }
-  }
-
-  const addWorkerHandler = async (email) => {
+  
+  const handleUpdateUser = async (email) => {
     try {
-      const result = await axios.put(`${VITE_BACKEND_URL}/users/workerstatus`, {
-        email: email,
-        status: true,
+      const response = await axios.put(`${VITE_BACKEND_URL}/users/update`, {
+        email,
       });
-
-      // Refresca la lista de servicios después de agregar uno nuevo
-      setSendAdd(!sendAdd);
-    } catch (error) {
-      console.error("Error al actualizar al usuario", error);
-      alert("Error al actualizar al usuario");
-    }
-  };
-
-  const deleteWorkerHandler = async (email) => {
-    try {
-      // Lógica para eliminar el worker por su email
-      const result = await axios.put(`${VITE_BACKEND_URL}/users/workerstatus`, {
-        email: email,
-        status: false,
-      });
-
-      // Refresca la lista de servicios después de eliminar uno
-      setSendAdd(!sendAdd);
-    } catch (error) {
-      console.error("Error borrar al usuario", error);
-      alert("Error al borrar el usuario");
-    }
-  };
-
-  const deleteUserHandler = async (email) => {
-    try {
-      // Lógica para eliminar el worker por su email
-      const result = await axios.delete(`${VITE_BACKEND_URL}/users/delete`, {
-        data: { email: email },
-      });
-
-      // Refresca la lista de servicios después de eliminar uno
-      setSendAdd(!sendAdd);
-    } catch (error) {
-      console.error("Error borrar al usuario", error);
-      alert("Error al borrar el usuario");
+      setAdd(!add);
+    } catch {
+      console.error("Error al updatear usuario", error);
     }
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        backgroundColor: "green",
-        justifyContent: "space-between",
-      }}
-    >
-      <div>
-        {users.length > 0 &&
-          users.map((element, index) => (
-            <div key={index}>
-              <h2>{element.name}</h2>
-              <button onClick={() => addWorkerHandler(element.email)}>
-                asignar trabajador
-              </button>
-              <button onClick={() => deleteUserHandler(element.email)}>
-                eliminar usuario
-              </button>
-            </div>
-          ))}
-      </div>
-      <div style={{ backgroundColor: "red" }}>
-        {workers.length > 0 &&
-          workers.map((element, index) => (
-            <div key={index}>
-              <h2>{element.name}</h2>
-              <button onClick={() => deleteWorkerHandler(element.email)}>
-                eliminar trabajador
-              </button>
-            </div>
-          ))}
-      </div>
+    <div>
+      {loading ? (
+        <LinearProgress sx={{ height: "2px", marginBottom: "15px" }} />
+      ) : (
+        <hr
+          style={{
+            marginBottom: "15px",
+            border: "none",
+            height: "2px",
+            backgroundColor: "#2196f3",
+          }}
+        />
+      )}
+      {!sm ? (
+        <Box style={{ display: "flex" }}>
+          <Box style={{ width: "50%" }}>
+            <h2>Profesionales</h2>
+            {allUsers.map(
+              (user, index) =>
+                allUsers.length > 0 &&
+                user &&
+                user.worker == true && (
+                  <Box key={index}>
+                    <h4>{user.name}</h4>
+                    <h4>{user.email}</h4>
+                    <Box
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Button style={{ color: "red", borderRadius: "50px" }}>
+                        <DeleteOutlineIcon />
+                      </Button>
+                      <Button onClick={() => handleUpdateUser(user.email)}>
+                        <KeyboardDoubleArrowRightIcon />
+                      </Button>
+                    </Box>
+                    <hr />
+                  </Box>
+                )
+            )}
+          </Box>
+          <Box style={{ width: "50%" }}>
+            <h2>Clientes</h2>
+            {allUsers.map(
+              (user, index) =>
+                allUsers.length > 0 &&
+                user &&
+                user.worker == false && (
+                  <Box key={index}>
+                    <h4>{user.name}</h4>
+                    <h4>{user.email}</h4>
+                    <Box
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Button onClick={() => handleUpdateUser(user.email)}>
+                        <KeyboardDoubleArrowLeftIcon />
+                      </Button>
+                      <Button style={{ color: "red", borderRadius: "50px" }}>
+                        <DeleteOutlineIcon />
+                      </Button>
+                    </Box>
+
+                    <hr />
+                  </Box>
+                )
+            )}
+          </Box>
+        </Box>
+      ) : (
+        /* ///// sección users para mobile ///// */
+        <Box>
+          <Box style={{ width: "100%" }}>
+            <Button
+              variant={typeUser ? "contained" : "outlined"}
+              style={{
+                width: "50%",
+                fontFamily: "jost, sans-serif",
+                fontWeight: "bold",
+                border: "none",
+                borderBottom: !typeUser ? "3px solid" : "3px solid #2196f3",
+                borderRadius: typeUser
+                  ? "20px 20px 0px 0px"
+                  : "5px 5px 0px 0px",
+              }}
+              onClick={() => setTypeUser(true)}
+            >
+              Profesionales
+            </Button>
+            <Button
+              variant={!typeUser ? "contained" : "outlined"}
+              style={{
+                width: "50%",
+                fontFamily: "jost, sans-serif",
+                fontWeight: "bold",
+                border: "none",
+                borderBottom: typeUser ? "3px solid" : "3px solid #2196f3",
+                borderRadius: !typeUser
+                  ? "20px 20px 0px 0px"
+                  : "5px 5px 0px 0px",
+              }}
+              onClick={() => setTypeUser(false)}
+            >
+              Clientes
+            </Button>
+          </Box>
+          <Box style={{ width: "100%" }}>
+            {typeUser
+              ? allUsers.length > 0 &&
+                allUsers.map((user, index) => {
+                  if (user.worker) {
+                    return (
+                      <Box key={index} style={{ marginTop: "18px" }}>
+                        <h4>{user.name}</h4>
+                        <h4>{user.email}</h4>
+                        <Box
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <Button onClick={() => handleUpdateUser(user.email)}>
+                            <KeyboardDoubleArrowRightIcon />
+                          </Button>
+                          <Button
+                            style={{ color: "red", borderRadius: "50px" }}
+                          >
+                            <DeleteOutlineIcon />
+                          </Button>
+                        </Box>
+                        <hr />
+                      </Box>
+                    );
+                  }
+                })
+              : allUsers.length > 0 &&
+                allUsers.map((user, index) => {
+                  if (!user.worker) {
+                    return (
+                      <Box key={index} style={{ marginTop: "18px" }}>
+                        <h4>{user.name}</h4>
+                        <h4>{user.email}</h4>
+                        <Box
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <Button onClick={() => handleUpdateUser(user.email)}>
+                            <KeyboardDoubleArrowRightIcon />
+                          </Button>
+                          <Button
+                            style={{ color: "red", borderRadius: "50px" }}
+                          >
+                            <DeleteOutlineIcon />
+                          </Button>
+                        </Box>
+                        <hr />
+                      </Box>
+                    );
+                  }
+                })}
+          </Box>
+        </Box>
+      )}
     </div>
   );
 };
+
 export default Users;
