@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Skeleton, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import WorkerAcordeon from "../interfazMUI/workerAcordeon";

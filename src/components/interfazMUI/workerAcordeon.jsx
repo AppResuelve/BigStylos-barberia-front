@@ -6,10 +6,9 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Box } from "@mui/material";
 import CreateWorkDays from "../createWorkDays/createWorkDays";
 import axios from "axios";
-
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const WorkerAcordeon = ({user}) => {
+const WorkerAcordeon = ({ user }) => {
   const [expanded, setExpanded] = useState(false);
   const [schedule, setSchedule] = useState({});
 

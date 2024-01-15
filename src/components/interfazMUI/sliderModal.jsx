@@ -85,18 +85,45 @@ const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit }) => {
               return (
                 <Slider
                   sx={{
-                    height: sm ? "80vh" : "20px",  // grosor del slider---------------------
+                    height: sm ? "80vh" : "10px",  // grosor del slider---------------------
                     width: sm ? "10px" : "95%",
                   }}
                   key={index}
                   value={value}
                   onChange={(event, newValue) => handleChange(event, newValue, index)}
                   valueLabelDisplay="auto" // Configura para que se muestre solo cuando se selecciona
+                  valueLabelFormat={(value) => formatHour(value)}
                   min={420}
                   max={1440}
-                  step={1}
-                  marks={marks}
+                  step={30}
                   orientation={sm ? "vertical" : "horizontal"}
+                  marks={marks.map((mark) => {
+        if (index === 0 && mark.value % 60 === 0) { // Solo renderiza los markLabels para el primer slider y si es divisible por 60
+          return {
+            ...mark,
+            label: (
+              <span
+                key={mark.value}
+                style={{
+                  fontSize: "11px",
+                  borderRadius: "5px",
+                  padding: "3px",
+                  color: values.some(([start, end]) => mark.value >= start && mark.value <= end) ? "white" : "",
+                  /* writingMode: sm ? "horizontal" : "vertical-lr", */
+                  backgroundColor: values.some(([start, end]) => mark.value >= start && mark.value <= end) ? "#232bd16e" : "",
+                }}
+              >
+                {formatHour(mark.label)}
+              </span>
+            ),
+          };
+        } else {
+          return {
+            ...mark,
+            label: null, // Si no es el primer slider o no es divisible por 60, no renderiza markLabels
+          };
+        }
+      })}
                 />
               );
             })}

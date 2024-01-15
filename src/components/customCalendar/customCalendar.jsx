@@ -24,6 +24,7 @@ const CustomCalendar = ({
   const [exist50, setExist50] = useState(false);
 
   const handleDay = (day, month) => {
+    
     if (dayIsSelected[month] && dayIsSelected[month][day]) {
       // Si ya existe en dayIsSelected, lo quitamos
       const { [day]: _, ...rest } = dayIsSelected[month];
@@ -130,6 +131,13 @@ const CustomCalendar = ({
           let dayName = obtainDayName(day, nextMonth, nextYear);
           let disabled = false;
           let colorDay = "#e0e0e0d2";
+          if (
+            !schedule[dayName] ||
+            (schedule[dayName].open === 0 && schedule[dayName].close === 1440)
+          ) {
+            disabled = true;
+            colorDay = "gray";
+          }
           if (days && days[nextMonth] && days[nextMonth][day]) {
             colorDay = "#5bfd33d0";
           }
