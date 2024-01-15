@@ -14,6 +14,8 @@ const SelectedDay = ({
 }) => {
   const [renderedStructure, setRenderedStructure] = useState([]);
 
+  console.log(days)
+
   useEffect(() => {
     if (dayIsSelected && Object.keys(dayIsSelected).length > 0) {
       const recorrerEstructura = (obj, ruta = "") => {
@@ -69,7 +71,7 @@ const SelectedDay = ({
             display: "flex",
           }}>
             <h2 style={{marginRight: "10px"}}>{item}</h2> 
-            <h2>hola</h2>
+            {days && days[firstMonth] && days[firstMonth][firstDay] ? <h2>traer time</h2> : null}
  
           </Box>
           <hr style={{ width: "100%", marginBottom: "10px" }} />
