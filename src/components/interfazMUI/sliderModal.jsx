@@ -1,9 +1,6 @@
 import React, { useState } from "react";
-import Backdrop from "@mui/material/Backdrop";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Slide from "@mui/material/Slide";
-import { Dialog, Grid, Slider } from "@mui/material";
+import { Dialog, Grid, Slider, Box, Button, Backdrop } from "@mui/material";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import time from "../../helpers/arrayTime";
 import HelpIcon from "@mui/icons-material/Help";
@@ -34,7 +31,7 @@ const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit }) => {
     <div>
       <Dialog
         sx={{
-          height: sm ? "100vh" : "600px",
+          height: sm ? "100vh" : "800px",
         }}
         fullScreen={sm}
         TransitionComponent={Transition}
