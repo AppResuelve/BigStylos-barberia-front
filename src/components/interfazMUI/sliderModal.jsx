@@ -7,6 +7,11 @@ import { Dialog, Grid, Slider } from "@mui/material";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import time from "../../helpers/arrayTime";
 import HelpIcon from "@mui/icons-material/Help";
+<<<<<<< HEAD
+=======
+import formatHour from "../../functions/formatHour";
+import { left } from "@popperjs/core";
+>>>>>>> 413caf2dc35d472e647e4d048c46fc3599468a0f
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction={"up"} ref={ref} {...props} />;
@@ -33,7 +38,7 @@ const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit }) => {
     <div>
       <Dialog
         sx={{
-          height: sm ? "100vh" : "1000px",
+          height: sm ? "100vh" : "600px",
         }}
         fullScreen={sm}
         TransitionComponent={Transition}
@@ -87,18 +92,17 @@ const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit }) => {
               return (
                 <Slider
                   sx={{
-                    height: sm ? "80vh" : "20px",
-                    width: sm ? "30px" : "95%",
+                    height: sm ? "80vh" : "20px",  // grosor del slider---------------------
+                    width: sm ? "10px" : "95%",
                   }}
                   key={index}
                   value={value}
-                  onChange={(event, newValue) =>
-                    handleChange(event, newValue, index)
-                  }
-                  valueLabelDisplay="off" // Configura para que se muestre solo cuando se selecciona
-                  min={0}
+                  onChange={(event, newValue) => handleChange(event, newValue, index)}
+                  valueLabelDisplay="auto" // Configura para que se muestre solo cuando se selecciona
+                  min={420}
                   max={1440}
-                  step={30}
+                  step={1}
+                  marks={marks}
                   orientation={sm ? "vertical" : "horizontal"}
                 />
               );
@@ -132,6 +136,7 @@ const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit }) => {
                   <h2>{values[0][1]} hs</h2>
                 </Box>
               </Grid>
+{/*---------------------  mostrar condicionalmente el segundo grid si hay 2 valores para mostrar -----------*/}
               <Grid
                 item
                 xs={6}
