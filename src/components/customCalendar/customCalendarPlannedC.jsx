@@ -3,7 +3,8 @@ import daysMonthCalendarCustom from "../../functions/daysMonthCalendarCustom";
 import getToday from "../../functions/getToday";
 import obtainDayName from "../../functions/obtainDayName";
 import "./customCalendar.css";
-import { Box, createTheme, useMediaQuery } from "@mui/material";
+import { Box } from "@mui/material";
+import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 
 const CustomCalendarPlannedC = ({
   schedule,
@@ -17,32 +18,21 @@ const CustomCalendarPlannedC = ({
   const daysCalendarCustom = daysMonthCalendarCustom(amountOfDays, false);
   let { currentMonth, nextMonth, currentYear, nextYear } = daysCalendarCustom;
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
-  const getDayPosition = getToday() + 1;
-  const theme = createTheme({
-    breakpoints: {
-      values: {
-        xs: 0,
-        sm: 600,
-        md: 900,
-        lg: 1200,
-        xl: 2000,
-      },
-    },
-  });
-  const sm = useMediaQuery(theme.breakpoints.down("sm"));
-
+  const getDayPosition = getToday();
+  const { xs, sm, md, lg, xl } = useMediaQueryHook();
+  
   const handleDay = (day, month, hasTurn) => {
-//     if (hasTurn) {
-//       console.log("setee en true el turns");
-//       setDaysWithTurns(true);
-//     }
+    //     if (hasTurn) {
+    //       console.log("setee en true el turns");
+    //       setDaysWithTurns(true);
+    //     }
 
     setDayIsSelected((prevState) => {
       const newState = { ...prevState };
 
       if (newState[month] && newState[month][day]) {
         // Si ya existe en dayIsSelected, lo quitamos
-       
+
         const { [day]: _, ...rest } = newState[month];
 
         if (Object.keys(rest).length < 1) {
@@ -60,8 +50,8 @@ const CustomCalendarPlannedC = ({
 
       return newState;
     });
-      };
-      
+  };
+  
   return (
     <div className="div-container-calendar">
       <Box className={!sm ? "line7day-query600px" : "line7day"}>
@@ -124,7 +114,7 @@ const CustomCalendarPlannedC = ({
         {daysCalendarCustom.month2.map((day, index) => {
           let dayName = obtainDayName(day, nextMonth, nextYear);
           let disabled = false;
-          let colorDay = "green";
+          let colorDay = "#e0e0e0d2";
           let hasTurn;
           if (
             days &&
@@ -133,7 +123,7 @@ const CustomCalendarPlannedC = ({
             days[nextMonth][day].turn
           ) {
             hasTurn = true;
-            colorDay = "lightgreen";
+            colorDay = "#e6b226d0";
           } else {
             hasTurn = false;
           }

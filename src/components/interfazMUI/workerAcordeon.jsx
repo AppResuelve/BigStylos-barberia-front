@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -10,7 +10,7 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const WorkerAcordeon = ({ user }) => {
   const [expanded, setExpanded] = useState(false);
-  const [schedule, setSchedule] = useState({})
+  const [schedule, setSchedule] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,8 +36,8 @@ const WorkerAcordeon = ({ user }) => {
         display: "flex",
         flexDirection: "column",
         paddingTop: "70px",
-        width: "90vw",
-        maxWidth: "900px",
+        width: "95vw",
+        maxWidth: "900px", //revisar maxWidth
       }}
     >
       <Box style={{ position: "relative" }}>
@@ -49,15 +49,23 @@ const WorkerAcordeon = ({ user }) => {
           onChange={handleChange("panel1")}
         >
           <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
+            sx={{
+              backgroundColor: expanded === "panel1" ? "#d6d6d5" : "",
+              borderRadius: "2px",
+            }}
+            expandIcon={
+              <ExpandMoreIcon
+                sx={{ color: expanded === "panel1" ? "" : "#2196f3" }}
+              />
+            }
             aria-controls="panel1bh-content"
             id="panel1bh-header"
           >
             <h2>Dias de trabajo</h2>
           </AccordionSummary>
           <AccordionDetails>
-            <CreateWorkDays user={user} schedule={schedule}/>
-            </AccordionDetails>
+            <CreateWorkDays user={user} schedule={schedule} />
+          </AccordionDetails>
         </Accordion>
         <Accordion
           style={{
@@ -67,7 +75,15 @@ const WorkerAcordeon = ({ user }) => {
           onChange={handleChange("panel2")}
         >
           <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
+            sx={{
+              backgroundColor: expanded === "panel2" ? "#d6d6d5" : "",
+              borderRadius: "2px",
+            }}
+            expandIcon={
+              <ExpandMoreIcon
+                sx={{ color: expanded === "panel2" ? "" : "#2196f3" }}
+              />
+            }
             aria-controls="panel2bh-content"
             id="panel2bh-header"
           >
@@ -83,7 +99,15 @@ const WorkerAcordeon = ({ user }) => {
           onChange={handleChange("panel3")}
         >
           <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
+            sx={{
+              backgroundColor: expanded === "panel3" ? "#d6d6d5" : "",
+              borderRadius: "2px",
+            }}
+            expandIcon={
+              <ExpandMoreIcon
+                sx={{ color: expanded === "panel3" ? "" : "#2196f3" }}
+              />
+            }
             aria-controls="panel3bh-content"
             id="panel3bh-header"
           >
@@ -99,7 +123,15 @@ const WorkerAcordeon = ({ user }) => {
           onChange={handleChange("panel4")}
         >
           <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
+            sx={{
+              backgroundColor: expanded === "panel4" ? "#d6d6d5" : "",
+              borderRadius: "2px",
+            }}
+            expandIcon={
+              <ExpandMoreIcon
+                sx={{ color: expanded === "panel4" ? "" : "#2196f3" }}
+              />
+            }
             aria-controls="panel4bh-content"
             id="panel4bh-header"
           >

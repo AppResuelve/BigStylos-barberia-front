@@ -1,0 +1,27 @@
+@keyframes moverComponenteIzq {
+  from {
+    transform: translateX(50%);
+  }
+
+  to {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes moverComponenteDer {
+  from {
+    transform: translateX(-25%);
+  }
+
+  to {
+    transform: translateX(0%);
+  }
+}
+
+.mover-izquierda {
+  animation: moverComponenteIzq .3s ease-in-out;
+}
+
+.mover-derecha {
+  animation: moverComponenteDer .3s ease-in-out;
+}

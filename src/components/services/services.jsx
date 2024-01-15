@@ -2,13 +2,16 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Box, Button, Grid, Input } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import LinearProgress from "@mui/material/LinearProgress";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Services = () => {
   const [services, setServices] = useState([]);
   const [newService, setNewService] = useState("");
-  const [sendAdd, setSendAdd] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+  const [refresh, setRefresh] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,13 +19,23 @@ const Services = () => {
         const response = await axios.get(`${VITE_BACKEND_URL}/services`);
         const { data } = response;
         setServices(data);
+        setLoading(false);
       } catch (error) {
         console.error("Error al obtener los servicios:", error);
         alert("Error al obtener los servicios");
       }
     };
+
     fetchData();
-  }, [sendAdd]);
+  }, [refresh]);
+
+  const handleKeyDown = (e) => {
+    // Manejar el evento cuando se presiona Enter
+    if (e.keyCode === 13) {
+      e.preventDefault(); // Evitar que se agregue un salto de línea en el Input
+      handleAddService();
+    }
+  };
 
   const handleAddService = async () => {
     try {
@@ -34,7 +47,8 @@ const Services = () => {
 
         // Refresca la lista de servicios después de agregar uno nuevo
         setNewService("");
-        setSendAdd(!sendAdd);
+        setSearchValue("");
+        setRefresh(!refresh);
       }
     } catch (error) {
       console.error("Error al agregar el servicio:", error);
@@ -42,7 +56,7 @@ const Services = () => {
     }
   };
 
-  const deleteHandler = async (serviceName) => {
+  const handleDeleteService = async (serviceName) => {
     try {
       // Lógica para eliminar el servicio por su nombre
       await axios.delete(`${VITE_BACKEND_URL}/services/delete`, {
@@ -50,29 +64,37 @@ const Services = () => {
       });
 
       // Refresca la lista de servicios después de eliminar uno
-      setSendAdd(!sendAdd);
+      setRefresh(!refresh);
     } catch (error) {
       console.error("Error al borrar el servicio:", error);
       alert("Error al borrar el servicio");
     }
   };
 
+  console.log(loading);
   return (
     <div
-      style={{ display: "flex", flexDirection: "column" }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+      }}
     >
-     <hr
-        style={{
-          marginBottom: "15px",
-          border: "none",
-          height: "2px",
-          backgroundColor: "#2196f3",
-        }}
-      />
+      {loading ? (
+        <LinearProgress sx={{ height: "2px", marginBottom: "15px" }} />
+      ) : (
+        <hr
+          style={{
+            marginBottom: "15px",
+            border: "none",
+            height: "2px",
+            backgroundColor: "#2196f3",
+          }}
+        />
+      )}
       <Box
         style={{
           width: "100%",
-          maxWidth: "500px",
+          maxWidth: "600px",
           display: "flex",
           alignSelf: "end",
           marginBottom: "15px",
@@ -81,7 +103,11 @@ const Services = () => {
         <Input
           type="text"
           value={newService}
-          onChange={(e) => setNewService(e.target.value)}
+          placeholder="Puedes buscar"
+          onChange={(e) => {
+            setNewService(e.target.value), setSearchValue(e.target.value);
+          }}
+          onKeyDown={handleKeyDown} // Manejar el evento onKeyDown
           style={{
             fontFamily: "Jost, sans-serif",
             fontSize: "20px",
@@ -91,37 +117,65 @@ const Services = () => {
         <Button
           onClick={handleAddService}
           variant="contained"
-          style={{ width: "40%",borderRadius:"50px" }}
+          style={{ width: "40%", borderRadius: "5px 5px 5px 0px" }}
         >
           <h4 style={{ fontFamily: "Jost, sans-serif" }}>Agregar</h4>
         </Button>
       </Box>
-      <Grid container spacing={2}>
-        {services.length > 0 &&
-          services.map((element, index) => (
-            <Grid
-              item
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-              xs={6}
-              md={3}
-              key={index}
-            >
-              <h2>{element}</h2>
-              <Box style={{ display: "flex" }}>
-                <Button
-                  onClick={() => deleteHandler(element)}
-                  style={{ color: "red", borderRadius: "50px" }}
-                >
-                  <DeleteOutlineIcon />
-                </Button>
-                <hr />
-              </Box>
-            </Grid>
-          ))}
+      <Grid
+        container
+        spacing={2}
+        style={{
+          width: "100%",
+          display: "flex",
+          alignSelf: "end",
+        }}
+      >
+        {services.length > 0 ? (
+          services
+            .filter((service) =>
+              service.toLowerCase().includes(searchValue.toLowerCase())
+            )
+            .map((element, index) => (
+              <Grid
+                item
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+                xs={12}
+                sm={6}
+                md={3}
+                key={index}
+              >
+                <h3>{element}</h3>
+                <Box style={{ display: "flex" }}>
+                  <Button
+                    onClick={() => handleDeleteService(element)}
+                    style={{ color: "red", borderRadius: "50px" }}
+                  >
+                    <DeleteOutlineIcon />
+                  </Button>
+                  <hr />
+                </Box>
+              </Grid>
+            ))
+        ) : (
+          <Grid
+            sx={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              paddingTop: "15px",
+            }}
+          >
+            <h2>
+              {loading ? "Cargando servicios" : "No hay servicios todavía"}
+            </h2>
+          </Grid>
+        )}
       </Grid>
     </div>
   );

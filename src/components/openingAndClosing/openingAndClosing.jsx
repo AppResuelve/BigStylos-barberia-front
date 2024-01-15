@@ -11,6 +11,8 @@ const OpeningAndClosing = ({ schedule, setSchedule, refresh, setRefresh }) => {
   const [showEdit, setShowEdit] = useState(false);
   const [showAlert, setShowAlert] = useState({});
   const [timeEdit, setTimeEdit] = useState({});
+  const [loading, setLoading] = useState(true);
+
 
   const days = ["Lun", "Mar", "Mie", "Jue", "Vie", "Sab", "Dom"];
   const timeArray = [

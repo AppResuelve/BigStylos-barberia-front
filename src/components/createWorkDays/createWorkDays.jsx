@@ -2,36 +2,36 @@ import { useEffect, useState } from "react";
 import CustomCalendar from "../customCalendar/customCalendar";
 import axios from "axios";
 import SelectedDay from "../selectedDay/selectedDay";
-import { Dialog, DialogContent, DialogTitle } from "@mui/material";
-import SliderCustom from "../slider/slider";
-import { Button } from '@mui/material';
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { width } from "@mui/system";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
+import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
+import AlertModal from "../interfazMUI/alertModal";
+import SliderModal from "../interfazMUI/sliderModal";
+import { Grid, Box, Button, LinearProgress } from "@mui/material";
+import "./CreateWorkDays.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-
 const CreateWorkDays = ({ user, schedule }) => {
-  const theme = createTheme();
-
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
-
+  const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [dayIsSelected, setDayIsSelected] = useState({});
   const [days, setDays] = useState({});
   const [firstMonth, setFirstMonth] = useState({});
   const [firstDay, setFirstDay] = useState({});
   const [timeSelected, setTimeSelected] = useState([]); //estado de la rama fac, no se para que es aun.
-  const [showSlider, setShowSlider] = useState(false)
-  const [openClose, setOpenClose] = useState([])
+  const [isOpen, setIsOpen] = useState(false);
+  const [openClose, setOpenClose] = useState([]);
+  const [showEdit, setShowEdit] = useState(false);
+  const [showAlert, setShowAlert] = useState({});
+  const [submit, setSubmit] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const openValues = Object.values(schedule).map(item => item.open);
-    const closeValues = Object.values(schedule).map(item => item.close);
+    const openValues = Object.values(schedule).map((item) => item.open);
+    const closeValues = Object.values(schedule).map((item) => item.close);
     const minOpen = Math.min(...openValues);
     const maxClose = Math.max(...closeValues);
-    setOpenClose([minOpen, maxClose])
-  }, [])
+    setOpenClose([minOpen, maxClose]);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,57 +67,189 @@ const CreateWorkDays = ({ user, schedule }) => {
     }
   }, [dayIsSelected]);
 
+  useEffect(() => {
+    // Agregar la clase alert-open cuando se monta el componente y el alerta está presente
+    if (showEdit) {
+      document.body.classList.add("alert-open");
+    } else {
+      // Remover la clase alert-open cuando se desmonta el componente o el alerta se cierra
+      setTimeout(() => {
+        document.body.classList.remove("alert-open");
+      }, 400); // 400 milisegundos = .4 s
+    }
+  }, [showEdit]);
+
+  useEffect(() => {
+    if (showEdit) {
+      handleSubmit();
+    }
+  }, [submit]);
+
+  const handleEdit = () => {
+    setShowEdit(true);
+  };
+
+  const handleCancel = () => {
+    setShowEdit(false);
+    setDayIsSelected({});
+  };
+
+  const handleShowSlider = () => {
+    if (
+      days &&
+      days[firstMonth] &&
+      days[firstMonth][firstDay] &&
+      days[firstMonth][firstDay].turn == true
+    ) {
+      setShowAlert({
+        isOpen: true,
+        message: "Has seleccionado un día con reserva/s, deseas continuar?",
+        type: "error",
+        button1: {
+          text: "Continuar",
+          action: "handleActionProp",
+        },
+        buttonClose: {
+          text: "Volver",
+        },
+      });
+    } else {
+      setIsOpen(true);
+    }
+  };
+
+  const handleSubmit = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setSubmit(false);
+      setLoading(false);
+      setDayIsSelected({});
+      setShowEdit(false);
+    }, 3000); // 3000 milisegundos = 3 segundos
+  };
+
   return (
-    <ThemeProvider theme={theme}>
-    <div style={{ display: "flex", flexDirection: "row" }}>
-      <CustomCalendar
-        setDayIsSelected={setDayIsSelected}
-        amountOfDays={21}
-        dayIsSelected={dayIsSelected}
-        days={days}
-        setDays={setDays}
-        schedule={schedule}
-      />
-      {/*     <div>
-        {Object.keys(firstMonth).length > 0 ? (
-          <p>Primer mes seleccionado: {firstMonth}</p>
-        ) : null}
-        {Object.keys(firstDay).length > 0 ? (
-          <p>Primer dia seleccionado: {firstDay}</p>
-        ) : null}
-      </div> */}
-      {Object.keys(firstMonth).length > 0 &&
-        Object.keys(firstDay).length > 0 && (
-          <SelectedDay
-            firstMonth={firstMonth}
-            firstDay={firstDay}
-            days={days}
-            dayIsSelected={dayIsSelected}
+    <div style={{cursor:loading?"wait":""}} >
+      {loading ? (
+        <LinearProgress sx={{ height: "2px", marginBottom: "15px" }} />
+      ) : (
+        <hr
+          style={{
+            marginBottom: "15px",
+            border: "none",
+            height: "2px",
+            backgroundColor: "#2196f3",
+          }}
+        />
+      )}
+      <Grid container>
+        <Grid
+          item
+          xs={12}
+          sm={12}
+          md={showEdit && !md ? 6 : 12}
+          className={md ? "" : showEdit ? "mover-izquierda" : "mover-derecha"}
+        >
+          <CustomCalendar
             setDayIsSelected={setDayIsSelected}
+            amountOfDays={30}
+            dayIsSelected={dayIsSelected}
+            days={days}
+            setDays={setDays}
             schedule={schedule}
-            showSlider={showSlider}
-            setShowSlider={setShowSlider}
+            showEdit={showEdit}
+            loading={loading}
           />
-        )}
-      {showSlider && <Dialog open={showSlider} onClose={() => setShowSlider(false)} PaperProps={{
-        style: { display: "flex", alignItems: "center", width: isSmallScreen ? "50vw" : "90vw", height: isSmallScreen ? "90vh" : "50vh"}
-      }}>
-        <DialogTitle>Slider Personalizado</DialogTitle>
-        <DialogContent PaperProps={{
-        style: { display: "flex", alignItems: "center", width: isSmallScreen ? "50vw" : "90vw", height: isSmallScreen ? "90vh" : "50vh"}
-      }}>
-          <SliderCustom />
-          <Button onClick={() => setShowSlider(false)} color="primary">
-            Cerrar
-          </Button>
-          <Button onClick={() => setShowSlider(false)} color="primary">
-            Aceptar
-          </Button>
-        </DialogContent>
-      </Dialog>
-      }
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sm={12}
+          md={6}
+          sx={{ display: "flex", flexDirection: "column" }}
+          className={md ? "" : showEdit ? "mover-izquierda" : "mover-derecha"}
+        >
+          {showEdit && (
+            <SelectedDay
+              firstMonth={firstMonth}
+              firstDay={firstDay}
+              days={days}
+              dayIsSelected={dayIsSelected}
+              setDayIsSelected={setDayIsSelected}
+              schedule={schedule}
+            />
+          )}
+          {Object.keys(days).length > 0 &&
+            days[firstMonth] &&
+            days[firstMonth][firstDay] &&
+            days[firstMonth][firstDay].turn && (
+              <h3
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "center",
+                  marginTop: "12px",
+                  color: "red",
+                }}
+              >
+                Día con turno reservado
+              </h3>
+            )}
+        </Grid>
+        {/* area de los botones */}
+        <Grid xs={12} sm={12} md={12} item>
+          {showEdit === false && (
+            <Button onClick={handleEdit}>
+              <BorderColorIcon />
+            </Button>
+          )}
+          {showEdit === true && (
+            <Box
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Button
+                variant="outlined"
+                disabled={submit ? true : false}
+                style={{ borderRadius: "50px", border: "2px solid " }}
+                onClick={handleCancel}
+              >
+                <h4 style={{ fontFamily: "Jost, sans-serif" }}>Volver</h4>
+              </Button>
+              <Button
+                variant="contained"
+                disabled={
+                  submit
+                    ? true
+                    : dayIsSelected && Object.keys(dayIsSelected).length > 0
+                    ? false
+                    : true
+                }
+                onClick={handleShowSlider}
+              >
+                <h4 style={{ fontFamily: "Jost, sans-serif" }}>
+                  Asignar horarios
+                </h4>
+              </Button>
+            </Box>
+          )}
+          {/* sección del slider */}
+        </Grid>
+        <SliderModal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          setSubmit={setSubmit}
+        />
+        <AlertModal
+          showAlert={showAlert}
+          setShowAlert={setShowAlert}
+          handleActionProp={setIsOpen}
+        />
+      </Grid>
     </div>
-    </ThemeProvider>
   );
 };
 
