@@ -8,6 +8,7 @@ import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import time from "../../helpers/arrayTime";
 import HelpIcon from "@mui/icons-material/Help";
 import formatHour from "../../functions/formatHour";
+import { left } from "@popperjs/core";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction={"up"} ref={ref} {...props} />;
@@ -28,14 +29,6 @@ const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit }) => {
     const newValues = [...values];
     newValues[index] = newValue;
 
-    if (stop) {
-      if (index === 0 && newValues[0][1] >= newValues[1][0]) {
-        newValues[0][1] = newValues[1][0] - 1;
-      } else if (index === 1 && newValues[1][0] <= newValues[0][1]) {
-        newValues[1][0] = newValues[0][1] + 1;
-      }
-    }
-
     setValues(newValues);
   };
 
@@ -43,8 +36,8 @@ const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit }) => {
     <div>
       <Dialog
         sx={{
-          height: sm ? "90vh" : "1000px",
-          top: "70px",
+          height: sm ? "100vh" : "600px",
+         /*  top: "70px", */
         }}
         fullScreen={sm}
         TransitionComponent={Transition}
@@ -95,36 +88,20 @@ const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit }) => {
             }}
           >
             {values.map((value, index) => {
-              let stopSlider = false;
-              console.log(value[1]);
-              if (value[1] >= values[1][0]) {
-                console.log("stop");
-
-                stopSlider = true;
-              } else if (value[0] <= values[0][1]) {
-                stopSlider = true;
-              } else {
-                stopSlider = false;
-              }
               return (
                 <Slider
                   sx={{
-                    height: sm ? "80vh" : "20px",
-                    width: sm ? "30px" : "95%",
+                    height: sm ? "80vh" : "20px",  // grosor del slider---------------------
+                    width: sm ? "10px" : "95%",
                   }}
                   key={index}
                   value={value}
-                  onChange={
-                    stopSlider
-                      ? (event, newValue) =>
-                          handleChange(event, newValue, index, true)
-                      : (event, newValue) =>
-                          handleChange(event, newValue, index)
-                  }
-                  valueLabelDisplay="off" // Configura para que se muestre solo cuando se selecciona
+                  onChange={(event, newValue) => handleChange(event, newValue, index)}
+                  valueLabelDisplay="auto" // Configura para que se muestre solo cuando se selecciona
                   min={420}
                   max={1440}
-                  step={30}
+                  step={1}
+                  marks={marks}
                   orientation={sm ? "vertical" : "horizontal"}
                 />
               );
@@ -161,6 +138,7 @@ const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit }) => {
                   <h2>{formatHour(values[0][1])}hs</h2>
                 </Box>
               </Grid>
+{/*---------------------  mostrar condicionalmente el segundo grid si hay 2 valores para mostrar -----------*/}
               <Grid
                 item
                 xs={6}

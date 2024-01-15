@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import formatHour from "../../functions/formatHour";
 import axios from "axios";
-import { Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const SelectedDay = ({
@@ -55,27 +55,26 @@ const SelectedDay = ({
       {renderedStructure.map((item, index) => (
         <Grid
           item
-          xs={3}
-          sm={3}
-          md={3}
+          xs={12}
+          sm={12}
+          md={12}
           key={index}
           sx={{
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
+           /*  alignItems: "center", */
           }}
         >
-          <Grid item key={index}>
-            <h2>{item}</h2>
-          </Grid>
+          <Box sx={{
+            display: "flex",
+          }}>
+            <h2 style={{marginRight: "10px"}}>{item}</h2> 
+            <h2>hola</h2>
+ 
+          </Box>
           <hr style={{ width: "100%", marginBottom: "10px" }} />
         </Grid>
       ))}
-      {/* {days && days[firstMonth] && days[firstMonth][firstDay] ? (
-        <button onClick={handleEdit}>editar horarios</button>
-      ) : (
-        <button onClick={handleEdit}>asignar horarios</button>
-      )} */}
     </Grid>
   );
 };
