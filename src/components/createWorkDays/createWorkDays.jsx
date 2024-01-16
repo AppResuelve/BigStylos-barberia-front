@@ -28,7 +28,6 @@ const CreateWorkDays = ({ user, schedule }) => {
   const [timeSelected, setTimeSelected] = useState([]); // horario seleccionado en slider
   const [refreshDays, setRefreshDays] = useState(false)
 
-  console.log(dayIsSelected)
 
   useEffect(() => {
     const openValues = Object.values(schedule).map((item) => item.open);
