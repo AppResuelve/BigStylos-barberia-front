@@ -8,6 +8,8 @@ import AlertModal from "../interfazMUI/alertModal";
 import SliderModal from "../interfazMUI/sliderModal";
 import { Grid, Box, Button, LinearProgress } from "@mui/material";
 import "./CreateWorkDays.css";
+import getCurrentMonth from "../../functions/getCurrentMonth";
+
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -17,13 +19,14 @@ const CreateWorkDays = ({ user, schedule }) => {
   const [days, setDays] = useState({});
   const [firstMonth, setFirstMonth] = useState({});
   const [firstDay, setFirstDay] = useState({});
-  const [timeSelected, setTimeSelected] = useState([]); //estado de la rama fac, no se para que es aun.
   const [isOpen, setIsOpen] = useState(false);
   const [openClose, setOpenClose] = useState([]);
   const [showEdit, setShowEdit] = useState(false);
   const [showAlert, setShowAlert] = useState({});
   const [submit, setSubmit] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [timeSelected, setTimeSelected] = useState([]); //estado de la rama fac, no se para que es aun.
+  const [refreshDays, setRefreshDays] = useState(false);
 
   useEffect(() => {
     const openValues = Object.values(schedule).map((item) => item.open);
@@ -48,7 +51,8 @@ const CreateWorkDays = ({ user, schedule }) => {
       }
     };
     fetchData();
-  }, []);
+    setRefreshDays(false);
+  }, [refreshDays]);
 
   // Lógica para obtener el primer valor de month y day
   useEffect(() => {
@@ -81,11 +85,11 @@ const CreateWorkDays = ({ user, schedule }) => {
     }
   }, [showEdit]);
 
-  useEffect(() => {
-    if (showEdit) {
-      handleSubmit();
-    }
-  }, [submit]);
+  // useEffect(() => {
+  //   if (showEdit) {
+  //     handleSubmit();
+  //   }
+  // }, [submit]);
 
   const handleEdit = () => {
     setShowEdit(true);
@@ -120,15 +124,69 @@ const CreateWorkDays = ({ user, schedule }) => {
     }
   };
 
-  const handleSubmit = () => {
-    setLoading(true);
+   const handleSubmit = async (time) => {
+     /* setLoading(true);
     setTimeout(() => {
       setSubmit(false);
       setLoading(false);
       setDayIsSelected({});
       setShowEdit(false);
-    }, 3000); // 3000 milisegundos = 3 segundos
-  };
+    }, 3000) */
+     const currentMonth = getCurrentMonth();
+     const currentMonth2 = currentMonth == 12 ? 1 : currentMonth + 1;
+     let submitArray = [];
+     if (dayIsSelected[1]) {
+       const first = Object.keys(dayIsSelected[1]);
+       first.forEach((element) => {
+         submitArray.push({
+           month: currentMonth,
+           day: Number(element),
+           email: user.email,
+           time,
+           services: { probando: "el create" },
+         });
+       });
+     }
+     if (dayIsSelected[2]) {
+       const second = Object.keys(dayIsSelected[2]);
+       second.forEach((element) => {
+         submitArray.push({
+           month: currentMonth2,
+           day: Number(element),
+           email: user.email,
+           time,
+           services: { probando: "el create" },
+         });
+       });
+     }
+     for (let i = 0; i < submitArray.length; i++) {
+       try {
+         const response = await axios.post(
+           `${VITE_BACKEND_URL}/workdays/create`,
+           submitArray[i]
+         );
+         const { data } = response;
+         setDayIsSelected((prevState) => {
+           let newState = { ...prevState };
+           delete newState[submitArray[i].month][submitArray[i].day];
+           if (Object.keys(newState[submitArray[i].month]).length === 0) {
+             delete newState[submitArray[i].month];
+           }
+           return newState;
+         });
+         console.log(
+           `el dia ${submitArray[i].day}/${submitArray[i].month} se creo exitosamente`
+         );
+       } catch (error) {
+         console.error(
+           `Error al crear el dia ${submitArray[i].day}/${submitArray[i].month}`,
+           error
+         );
+       }
+     }
+     setShowEdit(false);
+     setRefreshDays(true);
+   };
 
   return (
     <div style={{ cursor: loading ? "wait" : "" }}>
@@ -242,6 +300,9 @@ const CreateWorkDays = ({ user, schedule }) => {
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           setSubmit={setSubmit}
+          timeSelected={timeSelected}
+          setTimeSelected={setTimeSelected}
+          handleSubmit={handleSubmit}
         />
         <AlertModal
           showAlert={showAlert}

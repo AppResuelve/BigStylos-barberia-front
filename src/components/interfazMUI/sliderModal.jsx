@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Slide from "@mui/material/Slide";
 import { Dialog, Grid, Slider, Box, Button, Backdrop } from "@mui/material";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
@@ -9,21 +9,51 @@ import formatHour from "../../functions/formatHour";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction={"up"} ref={ref} {...props} />;
 });
-const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit }) => {
+const SliderModal = ({
+  isOpen,
+  setIsOpen,
+  darkMode,
+  setSubmit,
+  timeSelected,
+  setTimeSelected,
+  handleSubmit,
+}) => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-
+  const [timeResult, setTimeResult] = useState([]); // aca estaran los values convertidos a time de back
   const handleClose = () => setIsOpen(false);
 
   const [values, setValues] = useState([
-    [0, 10],
-    [30, 37],
+    [420, 480],
+    [1380, 1440],
   ]); // Solo 2 rangos
+
+  useEffect(() => {
+    let array = new Array(1441).fill(null);
+    let contador = 0;
+    for (let i = array.length; i > 0; i--) {
+      if ((contador = 0)) {
+        contador++;
+      }
+      if (
+        (i <= values[1][1] && i >= values[1][0]) ||
+        (i <= values[0][1] && i >= values[0][0])
+      ) {
+        array[i] = "free";
+        contador = 0;
+      }
+      if (contador > 0 && contador <= 30) {
+        array[i] = "free";
+      }
+    }
+    setTimeSelected(array);
+  }, [values]);
 
   const marks = time;
 
-  const handleChange = (event, newValue, index) => {
+  const handleChange = (event, newValue, index, stop) => {
     const newValues = [...values];
     newValues[index] = newValue;
+
     setValues(newValues);
   };
 
@@ -242,7 +272,7 @@ const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit }) => {
                   marginBottom: sm ? "25px" : "",
                 }}
                 onClick={() => {
-                  setSubmit(true), handleClose();
+                  handleSubmit(timeSelected), handleClose();
                 }}
               >
                 Confirmar
@@ -254,7 +284,13 @@ const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit }) => {
                   fontWeight: "bold",
                   marginBottom: sm ? "25px" : "",
                 }}
-                onClick={handleClose}
+                onClick={() => {
+                  handleClose();
+                  setValues([
+                    [420, 480],
+                    [1380, 1440],
+                  ]);
+                }}
               >
                 Volver
               </Button>
