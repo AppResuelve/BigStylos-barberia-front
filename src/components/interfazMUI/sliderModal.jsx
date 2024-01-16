@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -12,8 +12,10 @@ import formatHour from "../../functions/formatHour";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction={"up"} ref={ref} {...props} />;
 });
-const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit }) => {
+const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit, timeSelected, setTimeSelected }) => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
+
+  const [timeResult, setTimeResult] = useState([])   // aca estaran los values convertidos a time de back
 
   const handleClose = () => setIsOpen(false);
 
@@ -21,6 +23,25 @@ const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit }) => {
     [420, 480],
     [1380, 1440],
   ]); // Solo 2 rangos
+
+  useEffect(() => {
+    let array = new Array(1441).fill(null);
+    let contador = 0
+    for (let i = array.length; i > 0; i--) {
+      if (contador = 0) {
+        contador ++
+      }
+      if(i <= values[1][1] && i >=values[1][0] || i <= values[0][1] && i >= values[0][0]){
+        array[i] = 'free'
+        contador = 0
+      }
+      if(contador > 0 && contador <= 30) {
+        array[i] = 'free'
+      }
+    }
+      setTimeSelected(array)
+
+  },[values])
 
   const marks = time;
 

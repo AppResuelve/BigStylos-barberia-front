@@ -17,13 +17,16 @@ const CreateWorkDays = ({ user, schedule }) => {
   const [days, setDays] = useState({});
   const [firstMonth, setFirstMonth] = useState({});
   const [firstDay, setFirstDay] = useState({});
-  const [timeSelected, setTimeSelected] = useState([]); //estado de la rama fac, no se para que es aun.
   const [isOpen, setIsOpen] = useState(false);
   const [openClose, setOpenClose] = useState([]);
   const [showEdit, setShowEdit] = useState(false);
   const [showAlert, setShowAlert] = useState({});
   const [submit, setSubmit] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [timeSelected, setTimeSelected] = useState([]); // horario seleccionado en slider
+
+  console.log(timeSelected)
+  
 
   useEffect(() => {
     const openValues = Object.values(schedule).map((item) => item.open);
@@ -242,6 +245,8 @@ const CreateWorkDays = ({ user, schedule }) => {
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           setSubmit={setSubmit}
+          timeSelected={timeSelected}
+          setTimeSelected={setTimeSelected}
         />
         <AlertModal
           showAlert={showAlert}
