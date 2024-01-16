@@ -12,7 +12,7 @@ import formatHour from "../../functions/formatHour";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction={"up"} ref={ref} {...props} />;
 });
-const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit, timeSelected, setTimeSelected }) => {
+const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit, timeSelected, setTimeSelected, handleSubmit }) => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
   const [timeResult, setTimeResult] = useState([])   // aca estaran los values convertidos a time de back
@@ -237,7 +237,7 @@ const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit, timeSelected, set
               variant="contained"
               sx={{ fontFamily: "Jost, sans-serif", fontWeight: "bold" }}
               onClick={() => {
-                setSubmit(true), handleClose();
+                handleSubmit(timeSelected), handleClose();
               }}
             >
               Confirmar

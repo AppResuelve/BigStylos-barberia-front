@@ -64,7 +64,7 @@ const WorkerAcordeon = ({ user }) => {
             <h2>Dias de trabajo</h2>
           </AccordionSummary>
           <AccordionDetails>
-            <CreateWorkDays user={user} schedule={schedule} />
+          {expanded === "panel1" && <CreateWorkDays user={user} schedule={schedule} />}
           </AccordionDetails>
         </Accordion>
         <Accordion

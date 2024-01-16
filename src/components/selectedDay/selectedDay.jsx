@@ -35,6 +35,8 @@ const SelectedDay = ({
 
       const result = recorrerEstructura(dayIsSelected);
       setRenderedStructure(result);
+    } else {
+      setRenderedStructure([])
     }
   }, [dayIsSelected]);
 
