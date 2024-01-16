@@ -154,7 +154,7 @@ const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit }) => {
               height: sm ? "100%" : "40%",
             }}
           >
-            {sm && (
+            {sm /* render de una copia del titulo para reoganizar mobile */ && (
               <Box
                 sx={{
                   display: "flex",
