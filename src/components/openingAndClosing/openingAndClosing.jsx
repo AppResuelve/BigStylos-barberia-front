@@ -141,7 +141,7 @@ const OpeningAndClosing = ({ schedule, setSchedule, refresh, setRefresh }) => {
             )}
           </div>
         ))}
-      <Box>
+      <Box sx={{marginTop:"12px"}}>
         {showEdit === false && (
           <Button onClick={handleEdit}>
             <BorderColorIcon />

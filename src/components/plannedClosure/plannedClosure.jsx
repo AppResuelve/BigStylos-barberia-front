@@ -120,7 +120,7 @@ const PlannedClosure = ({ schedule }) => {
         showEdit={showEdit}
         setDaysWithTurns={setDaysWithTurns}
       />
-      <Box>
+      <Box sx={{marginTop:"12px"}}>
         {showEdit === false && (
           <Button onClick={handleEdit}>
             <BorderColorIcon />

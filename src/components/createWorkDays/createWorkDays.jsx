@@ -69,13 +69,15 @@ const CreateWorkDays = ({ user, schedule }) => {
 
   useEffect(() => {
     // Agregar la clase alert-open cuando se monta el componente y el alerta está presente
-    if (showEdit) {
+    if (!md && showEdit) {
+      console.log("add class");
       document.body.classList.add("alert-open");
-    } else {
+    } else if (!md && !showEdit) {
+      console.log("remove class");
       // Remover la clase alert-open cuando se desmonta el componente o el alerta se cierra
       setTimeout(() => {
         document.body.classList.remove("alert-open");
-      }, 400); // 400 milisegundos = .4 s
+      }, 300); // 400 milisegundos = .4 s
     }
   }, [showEdit]);
 
@@ -129,7 +131,7 @@ const CreateWorkDays = ({ user, schedule }) => {
   };
 
   return (
-    <div style={{cursor:loading?"wait":""}} >
+    <div style={{ cursor: loading ? "wait" : "" }}>
       {loading ? (
         <LinearProgress sx={{ height: "2px", marginBottom: "15px" }} />
       ) : (
@@ -148,7 +150,7 @@ const CreateWorkDays = ({ user, schedule }) => {
           xs={12}
           sm={12}
           md={showEdit && !md ? 6 : 12}
-          className={md ? "" : showEdit ? "mover-izquierda" : "mover-derecha"}
+          className={!md && showEdit ? "mover-izquierda" : "mover-derecha"}
         >
           <CustomCalendar
             setDayIsSelected={setDayIsSelected}
@@ -179,22 +181,6 @@ const CreateWorkDays = ({ user, schedule }) => {
               schedule={schedule}
             />
           )}
-          {Object.keys(days).length > 0 &&
-            days[firstMonth] &&
-            days[firstMonth][firstDay] &&
-            days[firstMonth][firstDay].turn && (
-              <h3
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  justifyContent: "center",
-                  marginTop: "12px",
-                  color: "red",
-                }}
-              >
-                Día con turno reservado
-              </h3>
-            )}
         </Grid>
         {/* area de los botones */}
         <Grid xs={12} sm={12} md={12} item>
@@ -219,6 +205,20 @@ const CreateWorkDays = ({ user, schedule }) => {
               >
                 <h4 style={{ fontFamily: "Jost, sans-serif" }}>Volver</h4>
               </Button>
+              {Object.keys(days).length > 0 &&
+                days[firstMonth] &&
+                days[firstMonth][firstDay] &&
+                days[firstMonth][firstDay].turn && (
+                  <h3
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      color: "red",
+                    }}
+                  >
+                    {sm ? "Turno reservado" : "Día con turno reservado"}
+                  </h3>
+                )}
               <Button
                 variant="contained"
                 disabled={
@@ -231,7 +231,7 @@ const CreateWorkDays = ({ user, schedule }) => {
                 onClick={handleShowSlider}
               >
                 <h4 style={{ fontFamily: "Jost, sans-serif" }}>
-                  Asignar horarios
+                  {sm ? "Asignar" : "Asignar turnos"}
                 </h4>
               </Button>
             </Box>

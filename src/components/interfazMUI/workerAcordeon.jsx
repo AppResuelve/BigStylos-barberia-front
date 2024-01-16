@@ -6,11 +6,13 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Box } from "@mui/material";
 import CreateWorkDays from "../createWorkDays/createWorkDays";
 import axios from "axios";
+import { useMediaQueryHook } from "./useMediaQuery";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const WorkerAcordeon = ({ user }) => {
   const [expanded, setExpanded] = useState(false);
   const [schedule, setSchedule] = useState({});
+  const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,7 +37,7 @@ const WorkerAcordeon = ({ user }) => {
       style={{
         display: "flex",
         flexDirection: "column",
-        paddingTop: "70px",
+        paddingTop: sm ? "30px" : "70px",
         width: "95vw",
         maxWidth: "900px", //revisar maxWidth
       }}
@@ -117,6 +119,7 @@ const WorkerAcordeon = ({ user }) => {
         </Accordion>
         <Accordion
           style={{
+            marginBottom: "30px",
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
           }}
           expanded={expanded === "panel4"}
