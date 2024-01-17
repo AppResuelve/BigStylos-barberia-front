@@ -15,7 +15,8 @@ const Nav = ({ user, darkMode, setDarkMode }) => {
         alignItems: " center",
         position: "fixed",
         width: "100%",
-        backgroundColor: "transparent",
+        backgroundColor: darkMode ? "#252627" : "white",
+        zIndex: "100",
       }}
     >
       <div style={{ paddingLeft: "10px" }}>

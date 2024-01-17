@@ -20,7 +20,7 @@ const CustomCalendarPlannedC = ({
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
   const getDayPosition = getToday();
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-  
+
   const handleDay = (day, month, hasTurn) => {
     //     if (hasTurn) {
     //       console.log("setee en true el turns");
@@ -51,7 +51,7 @@ const CustomCalendarPlannedC = ({
       return newState;
     });
   };
-  
+
   return (
     <div className="div-container-calendar">
       <Box className={!sm ? "line7day-query600px" : "line7day"}>
@@ -65,21 +65,15 @@ const CustomCalendarPlannedC = ({
           daysCalendarCustom.month1.map((day, index) => {
             let dayName = obtainDayName(day, currentMonth, currentYear);
             let disabled = false;
-            let colorDay = "green";
-            let hasTurn = false;
-
+            let colorDay = "#e0e0e0d2";
             if (
               days &&
               days[currentMonth] &&
               days[currentMonth][day] &&
               days[currentMonth][day].turn
             ) {
-              hasTurn = true;
-              colorDay = "lightgreen";
-            } else {
-              hasTurn = false;
+              colorDay = "#e6b226d0";
             }
-
             if (
               !schedule[dayName] ||
               (schedule[dayName].open === 0 && schedule[dayName].close === 1440)
@@ -91,8 +85,8 @@ const CustomCalendarPlannedC = ({
               <button
                 key={index}
                 disabled={!showEdit ? true : disabled}
-                className={showEdit ? "month1" : "month1-false"}
-                onClick={() => handleDay(day, currentMonth, hasTurn)}
+                className={!showEdit || disabled ? "month1-false" : "month1"}
+                onClick={() => handleDay(day, currentMonth)}
                 style={{
                   gridColumnStart: index === 0 ? getDayPosition : "auto",
                   backgroundColor:
@@ -105,6 +99,14 @@ const CustomCalendarPlannedC = ({
                     : disabled
                     ? "auto"
                     : "pointer",
+                  color: disabled
+                    ? "#e0e0e0d2"
+                    : !showEdit
+                    ? "white"
+                    : dayIsSelected[currentMonth] &&
+                      dayIsSelected[currentMonth][day]
+                    ? "white"
+                    : "#000000",
                 }}
               >
                 {day}
@@ -115,19 +117,14 @@ const CustomCalendarPlannedC = ({
           let dayName = obtainDayName(day, nextMonth, nextYear);
           let disabled = false;
           let colorDay = "#e0e0e0d2";
-          let hasTurn;
           if (
             days &&
             days[nextMonth] &&
             days[nextMonth][day] &&
             days[nextMonth][day].turn
           ) {
-            hasTurn = true;
             colorDay = "#e6b226d0";
-          } else {
-            hasTurn = false;
           }
-
           if (
             !schedule[dayName] ||
             (schedule[dayName].open === 0 && schedule[dayName].close === 1440)
@@ -138,9 +135,9 @@ const CustomCalendarPlannedC = ({
           return (
             <button
               key={index + 100}
-              className={showEdit ? "month2" : "month2-false"}
               disabled={!showEdit ? true : disabled}
-              onClick={() => handleDay(day, nextMonth, hasTurn)}
+              className={!showEdit || disabled ? "month2-false" : "month2"}
+              onClick={() => handleDay(day, nextMonth)}
               style={{
                 backgroundColor: colorDay,
                 ...(dayIsSelected[nextMonth] && dayIsSelected[nextMonth][day]
@@ -151,6 +148,13 @@ const CustomCalendarPlannedC = ({
                   : disabled
                   ? "auto"
                   : "pointer",
+                color: disabled
+                  ? "#e0e0e0d2"
+                  : !showEdit
+                  ? "white"
+                  : dayIsSelected[nextMonth] && dayIsSelected[nextMonth][day]
+                  ? "white"
+                  : "#2231a3",
               }}
             >
               {day}
@@ -158,43 +162,47 @@ const CustomCalendarPlannedC = ({
           );
         })}
       </Box>
-      <Box>
-        <div
-          style={{
-            height: "14px",
-            width: "14px",
-            backgroundColor: "gray",
-            borderRadius: "25px",
-          }}
-        ></div>
-        <h4>No laborable</h4>
-        <div
-          style={{
-            height: "14px",
-            width: "14px",
-            backgroundColor: "lightgreen",
-            borderRadius: "25px",
-          }}
-        ></div>
-        <h4>Día con reserva/s</h4>
-        <div
-          style={{
-            height: "14px",
-            width: "14px",
-            backgroundColor: "red",
-            borderRadius: "25px",
-          }}
-        ></div>
-        <h4>Día seleccionado</h4>
-        <div
-          style={{
-            height: "14px",
-            width: "14px",
-            backgroundColor: "blue",
-            borderRadius: "25px",
-          }}
-        ></div>
-        <h4>Día eliminado</h4>
+      <Box
+        sx={{
+          display: "flex",
+          width: "100%",
+          justifyContent: "center",
+          marginTop: "12px",
+        }}
+      >
+        <Box sx={{ display: "flex", alignItems: "center", margin: "5px" }}>
+          <div
+            style={{
+              height: "14px",
+              width: "14px",
+              backgroundColor: "#e6b226d0",
+              borderRadius: "25px",
+            }}
+          ></div>
+          <h4>Con reserva/s</h4>
+        </Box>
+        <Box sx={{ display: "flex", alignItems: "center", margin: "5px" }}>
+          <div
+            style={{
+              height: "14px",
+              width: "14px",
+              backgroundColor: "gray",
+              borderRadius: "25px",
+            }}
+          ></div>
+          <h4>No laborable</h4>
+        </Box>
+        <Box sx={{ display: "flex", alignItems: "center", margin: "5px" }}>
+          <div
+            style={{
+              height: "14px",
+              width: "14px",
+              backgroundColor: "#e0e0e0d2",
+              borderRadius: "25px",
+            }}
+          ></div>
+          <h4>Día hábil</h4>
+        </Box>
       </Box>
     </div>
   );

@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import noUser from "../../assets/icons/noUser.png";
 import Slide from "@mui/material/Slide";
 import LoginButton from "../login/login";
 import LogoutButton from "../logout/logout";
 import { Dialog } from "@mui/material";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { NavLink } from "react-router-dom";
+import Footer from "../footer/footer";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction={"left"} ref={ref} {...props} />;
@@ -21,11 +23,11 @@ const ModalMUI = ({
   darkMode,
 }) => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-
+console.log(userData);
   const handleClose = () => setIsOpen(false);
 
   return (
-    <div style={{ backgroundColor: "red" }}>
+    <div>
       <Dialog
         style={{
           display: "flex",
@@ -45,115 +47,147 @@ const ModalMUI = ({
       >
         <Box
           sx={{
-            width: !lg ? "30vw" : "70vw",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            width: sm ? "80vw" : md ? "60vw" : lg ? "50vw" : xl ? "30vw" : "",
             height: "100vh",
             bgcolor: darkMode ? "#28292c" : "white",
             p: 3,
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: "15px",
-            }}
-          >
-            <h2 style={{ color: darkMode ? "white" : "#28292c" }}>
-              {userData && (userData.worker || userData.admin)
-                ? userData.name
-                : "Inicia sesión"}
-            </h2>
-
-            {userData ? (
-              <img
-                src={googleImage}
-                alt="mi perfil"
+          <Box>
+            <Box>
+              <div
                 style={{
-                  borderRadius: "50px",
-                  width: "70px",
-                  border: `solid 4px ${darkMode ? "transparent" : "black"}`,
-                  marginLeft: "70px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginBottom: "15px",
                 }}
-              />
-            ) : null}
-          </div>
-          <hr
-            style={{
-              border: "none",
-              height: "2px", // Altura de la línea
-              backgroundColor: darkMode ? "white" : "#28292c",
-              marginBottom: "20px",
-            }}
-          />
-          {userData && userData.admin && (
-            <div>
-              <NavLink
-                to="/admin"
-                style={{ textDecoration: "none", color: "black" }}
               >
-                <button
-                  style={{
-                    border: "none",
-                    fontFamily: "Jost, sans-serif",
-                    fontSize: "18px",
-                    backgroundColor: "transparent",
-                    color: darkMode ? "white" : "#28292c",
-                    fontWeight: "bold",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => setIsOpen(false)}
-                >
-                  Administración del local
-                </button>
-              </NavLink>
+                <h2 style={{ color: darkMode ? "white" : "#28292c" }}>
+                  {userData !== 1 && (userData.worker || userData.admin)
+                    ? userData.name
+                    : "Inicia sesión"}
+                </h2>
+
+                {userData !== 1 ? (
+                  <img
+                    src={googleImage}
+                    alt="mi perfil"
+                    style={{
+                      borderRadius: "50px",
+                      width:sm? "50px":"60px",
+                      border: `solid 3px ${darkMode ? "transparent" : "black"}`,
+                      marginLeft: "70px",
+                    }}
+                  />
+                ) : (
+                  <img
+                    src={noUser}
+                    alt="mi perfil"
+                    style={{
+                      borderRadius: "50px",
+                      width: "50px",
+                      border: "solid 3px black",
+                      marginLeft: "70px",
+                    }}
+                  />
+                )}
+              </div>
               <hr
                 style={{
                   border: "none",
-                  height: "1px", // Altura de la línea
+                  height: "2px", // Altura de la línea
                   backgroundColor: darkMode ? "white" : "#28292c",
-                  marginBottom: "15px",
-                  marginTop: "20px",
+                  marginBottom: "20px",
                 }}
               />
-            </div>
-          )}
+            </Box>
+            <Box>
+              {userData !== 1 && userData.admin && (
+                <div>
+                  <NavLink
+                    to="/admin"
+                    style={{ textDecoration: "none", color: "black" }}
+                  >
+                    <button
+                      style={{
+                        border: "none",
+                        fontFamily: "Jost, sans-serif",
+                        fontSize: "18px",
+                        backgroundColor: "transparent",
+                        color: darkMode ? "white" : "#28292c",
+                        fontWeight: "bold",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Administración del local
+                    </button>
+                  </NavLink>
+                  <hr
+                    style={{
+                      border: "none",
+                      height: "1px", // Altura de la línea
+                      backgroundColor: darkMode ? "white" : "#28292c",
+                      marginBottom: "15px",
+                      marginTop: "20px",
+                    }}
+                  />
+                </div>
+              )}
 
-          {userData && userData.worker && (
-            <div>
-              <NavLink
-                to="/worker"
-                style={{ textDecoration: "none", color: "black" }}
-              >
-                <button
-                  style={{
-                    border: "none",
-                    fontFamily: "Jost, sans-serif",
-                    fontSize: "18px",
-                    backgroundColor: "transparent",
-                    color: darkMode ? "white" : "#28292c",
-                    fontWeight: "bold",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => setIsOpen(false)}
-                >
-                  Administracíon del profesional
-                </button>
-              </NavLink>
-              <hr
-                style={{
-                  border: "none",
-                  height: "1px", // Altura de la línea
-                  backgroundColor: darkMode ? "white" : "#28292c",
-                  marginBottom: "15px",
-                  marginTop: "20px",
-                }}
-              />
+              {userData !== 1 && userData.worker && (
+                <div>
+                  <NavLink
+                    to="/worker"
+                    style={{ textDecoration: "none", color: "black" }}
+                  >
+                    <button
+                      style={{
+                        border: "none",
+                        fontFamily: "Jost, sans-serif",
+                        fontSize: "18px",
+                        backgroundColor: "transparent",
+                        color: darkMode ? "white" : "#28292c",
+                        fontWeight: "bold",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Administracíon del profesional
+                    </button>
+                  </NavLink>
+                  <hr
+                    style={{
+                      border: "none",
+                      height: "1px", // Altura de la línea
+                      backgroundColor: darkMode ? "white" : "#28292c",
+                      marginBottom: "15px",
+                      marginTop: "20px",
+                    }}
+                  />
+                </div>
+              )}
+            </Box>
+          </Box>
+          <Box sx={{ position: "relative" }}>
+            <div
+              style={{
+                position: "absolute",
+                top: "-20%",
+                left: "20%",
+                right:"20%",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              {isAuthenticated ? <LogoutButton /> : <LoginButton />}
             </div>
-          )}
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            {isAuthenticated ? <LogoutButton /> : <LoginButton />}
-          </div>
+            <Footer darkMode={darkMode} />
+          </Box>
         </Box>
       </Dialog>
     </div>

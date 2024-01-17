@@ -124,11 +124,13 @@ const Services = () => {
       </Box>
       <Grid
         container
-        spacing={2}
+        spacing={1}
         style={{
           width: "100%",
           display: "flex",
+          overflow: "scroll",
           alignSelf: "end",
+          maxHeight: "300px",
         }}
       >
         {services.length > 0 ? (
@@ -142,12 +144,13 @@ const Services = () => {
                 style={{
                   width: "100%",
                   display: "flex",
+                  overflow: "auto",
                   justifyContent: "space-between",
                   alignItems: "center",
                 }}
                 xs={12}
                 sm={6}
-                md={3}
+                md={4}
                 key={index}
               >
                 <h3>{element}</h3>
@@ -156,9 +159,9 @@ const Services = () => {
                     onClick={() => handleDeleteService(element)}
                     style={{ color: "red", borderRadius: "50px" }}
                   >
+                  
                     <DeleteOutlineIcon />
                   </Button>
-                  <hr />
                 </Box>
               </Grid>
             ))

@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { Skeleton, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import WorkerAcordeon from "../interfazMUI/workerAcordeon";
+import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 
 const Worker = ({ userData, userAuth, darkMode }) => {
   const navigate = useNavigate();
+  const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
   useEffect(() => {
     if (userData !== 1) {
@@ -21,6 +23,7 @@ const Worker = ({ userData, userAuth, darkMode }) => {
   return (
     <div
       style={{
+        overflow: "auto",
         display: "flex",
         flexDirection: "column",
         backgroundColor: darkMode ? "#28292c" : "white",
@@ -67,9 +70,10 @@ const Worker = ({ userData, userAuth, darkMode }) => {
               display: "flex",
               justifyContent: "center",
               color: darkMode ? "white" : "#28292c",
+              fontSize: sm ? "28px" : "",
             }}
           >
-            Administracion del Profesional
+            Administración del profesional
           </h1>
           <WorkerAcordeon user={userData} />
         </div>

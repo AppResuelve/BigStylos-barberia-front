@@ -66,7 +66,7 @@ function App() {
   useEffect(() => {
     localStorage.setItem("darkMode", JSON.stringify(darkMode));
   }, [darkMode]);
-
+  
   return (
     <div>
       <Nav user={userData} darkMode={darkMode} setDarkMode={setDarkMode} />
@@ -104,7 +104,6 @@ function App() {
           element={<NotFound user={userData} />}
         />
       </Routes>
-      {location.pathname === "/" && <Footer darkMode={darkMode} />}
     </div>
   );
 }

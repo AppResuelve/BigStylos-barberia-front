@@ -5,7 +5,8 @@ const Footer = ({darkMode}) => {
     <Grid
       container
       style={{
-        height: "80px",
+        width:"100%",
+        height: "150px",borderRadius:"3px",
         backgroundColor: darkMode ? "white" : "#28292c",
         color: "white",
         display: "flex",
@@ -22,7 +23,7 @@ const Footer = ({darkMode}) => {
           color: darkMode ? "#28292c" : "white",
         }}
       >
-        Dirección: Alberdi 1034, Bs As, Argentina.
+        Alberdi 1034, Bs As, Argentina.
       </Grid>
       <Grid
         item
@@ -30,6 +31,7 @@ const Footer = ({darkMode}) => {
         md={6}
         style={{
           display: "flex",
+          marginTop:"10px",
           justifyContent: "center",
           color: darkMode ? "#28292c" : "white",
         }}
