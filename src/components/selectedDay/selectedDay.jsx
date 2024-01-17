@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import formatHour from "../../functions/formatHour";
 import axios from "axios";
-import { Box, Grid } from "@mui/material";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const SelectedDay = ({
@@ -40,13 +39,12 @@ const SelectedDay = ({
     }
   }, [dayIsSelected]);
 
-
   return (
-    <Grid
-      container
+    <div
       style={{
         display: "flex",
-        // paddingLeft: "0px",
+        flexDirection: "column",
+        maxHeight: "350px",
       }}
     >
       <h2 style={{ width: "100%", marginBottom: "12px" }}>
@@ -54,30 +52,32 @@ const SelectedDay = ({
         {renderedStructure.length > 0 ? renderedStructure.length : 0}
       </h2>
       {/* Renderizamos cada elemento del resultado */}
-      {renderedStructure.map((item, index) => (
-        <Grid
-          item
-          xs={12}
-          sm={12}
-          md={12}
-          key={index}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-           /*  alignItems: "center", */
-          }}
-        >
-          <Box sx={{
-            display: "flex",
-          }}>
-            <h2 style={{marginRight: "10px"}}>{item}</h2> 
-            {days && days[firstMonth] && days[firstMonth][firstDay] ? <h2>traer time</h2> : null}
- 
-          </Box>
-          <hr style={{ width: "100%", marginBottom: "10px" }} />
-        </Grid>
-      ))}
-    </Grid>
+      <div style={{ overflow: "scroll" }}>
+        {renderedStructure.map((item, index) => (
+          <div
+            key={index}
+            sx={{
+              display: "flex",
+              width: "100%",
+              flexDirection: "column",
+              // alignItems: "center",
+            }}
+          >
+            <div
+              sx={{
+                display: "flex",
+              }}
+            >
+              <h2 style={{ marginRight: "10px" }}>{item}</h2>
+              {days && days[firstMonth] && days[firstMonth][firstDay] ? (
+                <h2>traer time</h2>
+              ) : null}
+            </div>
+            <hr style={{ width: "100%", marginBottom: "10px" }} />
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
 

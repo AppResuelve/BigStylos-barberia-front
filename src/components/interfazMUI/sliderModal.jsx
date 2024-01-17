@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Backdrop from "@mui/material/Backdrop";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Slide from "@mui/material/Slide";
-import { Dialog, Grid, Slider } from "@mui/material";
+import { Dialog, Grid, Slider, Box, Button, Backdrop } from "@mui/material";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import time from "../../helpers/arrayTime";
 import HelpIcon from "@mui/icons-material/Help";
@@ -12,11 +9,17 @@ import formatHour from "../../functions/formatHour";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction={"up"} ref={ref} {...props} />;
 });
-const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit, timeSelected, setTimeSelected, handleSubmit }) => {
+const SliderModal = ({
+  isOpen,
+  setIsOpen,
+  darkMode,
+  setSubmit,
+  timeSelected,
+  setTimeSelected,
+  handleSubmit,
+}) => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-
-  const [timeResult, setTimeResult] = useState([])   // aca estaran los values convertidos a time de back
-
+  const [timeResult, setTimeResult] = useState([]); // aca estaran los values convertidos a time de back
   const handleClose = () => setIsOpen(false);
 
   const [values, setValues] = useState([
@@ -26,22 +29,24 @@ const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit, timeSelected, set
 
   useEffect(() => {
     let array = new Array(1441).fill(null);
-    let contador = 0
+    let contador = 0;
     for (let i = array.length; i > 0; i--) {
-      if (contador = 0) {
-        contador ++
+      if ((contador = 0)) {
+        contador++;
       }
-      if(i <= values[1][1] && i >=values[1][0] || i <= values[0][1] && i >= values[0][0]){
-        array[i] = 'free'
-        contador = 0
+      if (
+        (i <= values[1][1] && i >= values[1][0]) ||
+        (i <= values[0][1] && i >= values[0][0])
+      ) {
+        array[i] = "free";
+        contador = 0;
       }
-      if(contador > 0 && contador <= 30) {
-        array[i] = 'free'
+      if (contador > 0 && contador <= 30) {
+        array[i] = "free";
       }
     }
-      setTimeSelected(array)
-
-  },[values])
+    setTimeSelected(array);
+  }, [values]);
 
   const marks = time;
 
@@ -56,8 +61,7 @@ const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit, timeSelected, set
     <div>
       <Dialog
         sx={{
-          height: sm ? "100vh" : "600px",
-         /*  top: "70px", */
+          height: sm ? "100vh" : "800px",
         }}
         fullScreen={sm}
         TransitionComponent={Transition}
@@ -72,51 +76,56 @@ const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit, timeSelected, set
           },
         }}
       >
-        <Box
+        <Box /* container */
           sx={{
-            height: "500px",
+            height: sm ? "100vh" : "500px",
             backgroundColor: darkMode ? "#28292c" : "white",
             p: 3,
             display: "flex",
-            flexDirection: "column",
+            flexDirection: sm ? "row" : "column",
             justifyContent: "space-between",
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              width: "100%",
-              marginBottom: "15px",
-              borderBottom: "2px solid #2196f3",
-            }}
-          >
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <h2>Selección de horarios por rango</h2>
-              <Button /* onClick={} */>
-                <HelpIcon />
-              </Button>
+          {!sm && (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                width: "100%",
+                marginBottom: "15px",
+                borderBottom: "2px solid #2196f3",
+              }}
+            >
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <h2>Selección de horarios por rango</h2>
+                <Button>
+                  <HelpIcon />
+                </Button>
+              </Box>
             </Box>
-          </Box>
+          )}
           {/* ///// sección del Slider de materialUI /////  */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
               flexDirection: sm ? "row" : "column",
-              marginBottom: "45px",
+              justifyContent: sm ? "center" : "",
+              width: sm ? "40%" : "",
             }}
           >
             {values.map((value, index) => {
               return (
                 <Slider
                   sx={{
-                    height: sm ? "80vh" : "10px",  // grosor del slider---------------------
+                    height: sm ? "90vh" : "10px", // grosor del slider---------------------
                     width: sm ? "10px" : "95%",
                   }}
                   key={index}
                   value={value}
-                  onChange={(event, newValue) => handleChange(event, newValue, index)}
+                  onChange={(event, newValue) =>
+                    handleChange(event, newValue, index)
+                  }
                   valueLabelDisplay="auto" // Configura para que se muestre solo cuando se selecciona
                   valueLabelFormat={(value) => formatHour(value)}
                   min={420}
@@ -124,125 +133,169 @@ const SliderModal = ({ isOpen, setIsOpen, darkMode, setSubmit, timeSelected, set
                   step={30}
                   orientation={sm ? "vertical" : "horizontal"}
                   marks={marks.map((mark) => {
-        if (index === 0 && mark.value % 60 === 0) { // Solo renderiza los markLabels para el primer slider y si es divisible por 60
-          return {
-            ...mark,
-            label: (
-              <span
-                key={mark.value}
-                style={{
-                  fontSize: "11px",
-                  borderRadius: "5px",
-                  padding: "3px",
-                  color: values.some(([start, end]) => mark.value >= start && mark.value <= end) ? "white" : "",
-                  /* writingMode: sm ? "horizontal" : "vertical-lr", */
-                  backgroundColor: values.some(([start, end]) => mark.value >= start && mark.value <= end) ? "#232bd16e" : "",
-                }}
-              >
-                {formatHour(mark.label)}
-              </span>
-            ),
-          };
-        } else {
-          return {
-            ...mark,
-            label: null, // Si no es el primer slider o no es divisible por 60, no renderiza markLabels
-          };
-        }
-      })}
+                    if (index === 0 && mark.value % 60 === 0) {
+                      // Solo renderiza los markLabels para el primer slider y si es divisible por 60
+                      return {
+                        ...mark,
+                        label: (
+                          <span
+                            key={mark.value}
+                            style={{
+                              fontSize: "11px",
+                              borderRadius: "5px",
+                              padding: "3px",
+                              color: values.some(
+                                ([start, end]) =>
+                                  mark.value >= start && mark.value <= end
+                              )
+                                ? "white"
+                                : "",
+                              /* writingMode: sm ? "horizontal" : "vertical-lr", */
+                              backgroundColor: values.some(
+                                ([start, end]) =>
+                                  mark.value >= start && mark.value <= end
+                              )
+                                ? "#232bd16e"
+                                : "",
+                            }}
+                          >
+                            {formatHour(mark.label)}
+                          </span>
+                        ),
+                      };
+                    } else {
+                      return {
+                        ...mark,
+                        label: null, // Si no es el primer slider o no es divisible por 60, no renderiza markLabels
+                      };
+                    }
+                  })}
                 />
               );
             })}
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: sm ? "60%" : "100%",
+              height: sm ? "100%" : "40%",
+            }}
+          >
+            {sm /* render de una copia del titulo para reoganizar mobile */ && (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  width: "100%",
+                  marginBottom: "15px",
+                  borderBottom: "2px solid #2196f3",
+                }}
+              >
+                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                  <h2>Selecciona el horario</h2>
+                  <Button>
+                    <HelpIcon />
+                  </Button>
+                </Box>
+              </Box>
+            )}
             <Grid
               container
+              gap={sm ? 5 : 0}
               sx={{
-                marginTop: "35px",
-                borderRadius: "5px",
+                height: sm ? "200px" : "",
               }}
             >
               <Grid
                 item
-                xs={6}
+                xs={12}
                 sm={6}
                 md={6}
                 sx={{
                   display: "flex",
-                  alignItems: "center",
                   justifyContent: "space-around",
-                  borderRadius: "5px 0px 0px 5px",
+                  alignItems: "center",
+                  borderRadius: "5px",
                   border: "2px solid #2196f3",
                   padding: "10px",
                 }}
               >
-                <h3>de</h3>
-
                 <Box>
-                  <h2>{formatHour(values[0][0])}hs</h2>
+                  <h2>{values[0][0]} hs</h2>
                 </Box>
-                <h3>a</h3>
+                <h2>a</h2>
 
                 <Box>
-                  <h2>{formatHour(values[0][1])}hs</h2>
+                  <h2>{values[0][1]} hs</h2>
                 </Box>
               </Grid>
-{/*---------------------  mostrar condicionalmente el segundo grid si hay 2 valores para mostrar -----------*/}
+              {/*---------------------  mostrar condicionalmente el segundo grid si hay 2 valores para mostrar -----------*/}
               <Grid
                 item
-                xs={6}
+                xs={12}
                 sm={6}
                 md={6}
                 sx={{
                   display: "flex",
-                  alignItems: "center",
                   justifyContent: "space-around",
-                  borderRadius: "0px 5px 5px 0px",
+                  alignItems: "center",
+                  borderRadius: "5px",
                   border: "2px solid #2196f3",
                   padding: "10px",
                 }}
               >
-                <h3>de</h3>
-
                 <Box>
-                  <h2>{formatHour(values[1][0])}hs</h2>
+                  <h2>{values[1][0]} hs</h2>
                 </Box>
-                <h3>a</h3>
+                <h2>a</h2>
                 <Box>
-                  <h2>{formatHour(values[1][1])}hs</h2>
+                  <h2>{values[1][1]} hs</h2>
                 </Box>
               </Grid>
             </Grid>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: sm ? "column" : "row-reverse",
+                width: sm ? "80%" : "100%",
+                justifyContent: "space-between",
+              }}
+            >
+              <Button
+                variant="contained"
+                sx={{
+                  fontFamily: "Jost, sans-serif",
+                  fontWeight: "bold",
+                  marginBottom: sm ? "25px" : "",
+                }}
+                onClick={() => {
+                  handleSubmit(timeSelected), handleClose();
+                }}
+              >
+                Confirmar
+              </Button>
+              <Button
+                variant="outlined"
+                sx={{
+                  fontFamily: "Jost, sans-serif",
+                  fontWeight: "bold",
+                  marginBottom: sm ? "25px" : "",
+                }}
+                onClick={() => {
+                  handleClose();
+                  setValues([
+                    [420, 480],
+                    [1380, 1440],
+                  ]);
+                }}
+              >
+                Volver
+              </Button>
+            </Box>
           </div>
-          <Box
-            sx={{
-              display: "flex",
-              alignSelf: "end",
-              width: "100%",
-              justifyContent: "space-between",
-            }}
-          >
-            <Button
-              variant="outlined"
-              sx={{ fontFamily: "Jost, sans-serif", fontWeight: "bold" }}
-              onClick={() => {
-                handleClose();
-                setValues([
-                  [420, 480],
-                  [1380, 1440],
-                ]);
-              }}
-            >
-              Volver
-            </Button>
-            <Button
-              variant="contained"
-              sx={{ fontFamily: "Jost, sans-serif", fontWeight: "bold" }}
-              onClick={() => {
-                handleSubmit(timeSelected), handleClose();
-              }}
-            >
-              Confirmar
-            </Button>
-          </Box>
         </Box>
       </Dialog>
     </div>

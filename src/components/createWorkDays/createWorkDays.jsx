@@ -28,7 +28,6 @@ const CreateWorkDays = ({ user, schedule }) => {
   const [timeSelected, setTimeSelected] = useState([]); // horario seleccionado en slider
   const [refreshDays, setRefreshDays] = useState(false)
 
-  console.log(dayIsSelected)
 
   useEffect(() => {
     const openValues = Object.values(schedule).map((item) => item.open);
@@ -85,12 +84,6 @@ const CreateWorkDays = ({ user, schedule }) => {
     }
   }, [showEdit]);
 
-  useEffect(() => {
-    if (showEdit) {
-      handleSubmit();
-    }
-  }, [submit]);
-
   const handleEdit = () => {
     setShowEdit(true);
   };
@@ -125,13 +118,6 @@ const CreateWorkDays = ({ user, schedule }) => {
   };
 
   const handleSubmit = async (time) => {
-    /* setLoading(true);
-    setTimeout(() => {
-      setSubmit(false);
-      setLoading(false);
-      setDayIsSelected({});
-      setShowEdit(false);
-    }, 3000) */
     const currentMonth = getCurrentMonth()
     const currentMonth2 = currentMonth == 12 ? 1 : currentMonth + 1
     let submitArray = []

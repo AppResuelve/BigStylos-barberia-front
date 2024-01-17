@@ -9,16 +9,17 @@ const LogoutButton = () => {
     <Button
       variant="contained"
       style={{
+        width: "130px",
+        height: "50px",
         borderRadius: "50px",
         fontFamily: "Jost, sans-serif",
-        fontSize: "15px",
-        marginTop:"100px"
+        fontSize: "22px",
       }}
       onClick={() =>
         logout({ logoutParams: { returnTo: window.location.origin } })
       }
     >
-      Log Out
+      Salir
     </Button>
   );
 };

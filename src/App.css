@@ -1,21 +1,41 @@
  #root {
-  height: 100%;
-  /* max-width: 1920px;  VER SI INFLUIRIA NEGATIVO EN EL CASO DE SER MAS GRANDE */ 
-}
-*{
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
+   height: 100%;
+   /* max-width: 1920px;  VER SI INFLUIRIA NEGATIVO EN EL CASO DE SER MAS GRANDE */
+ }
 
-@font-face {
-  font-family: 'Jost';
-  src: url('./assets/fonts/Jost-Light.ttf') format('woff');
-}
+ * {
+   padding: 0;
+   margin: 0;
+   box-sizing: border-box;
+ }
 
-body {
-  font-family: 'Jost', sans-serif;
-}
-body.alert-open {
-  overflow: hidden;
-}
+ @font-face {
+   font-family: 'Jost';
+   src: url('./assets/fonts/Jost-Light.ttf') format('woff');
+ }
+
+ body {
+   font-family: 'Jost', sans-serif;
+ }
+
+ body.alert-open {
+   overflow: hidden;
+ }
+
+ /* Estilos para motores Webkit y blink (Chrome, Safari, Opera...) */
+ *::-webkit-scrollbar {
+   width: 2px;
+ }
+
+ *::-webkit-scrollbar-thumb {
+   background-color: #797979;
+   border-radius: 10px;
+ }
+
+ *::-webkit-scrollbar-thumb:hover {
+   background-color: #afafaf;
+ }
+
+ *::-webkit-scrollbar-track {
+   border-radius: 10px;
+ }

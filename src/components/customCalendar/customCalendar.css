@@ -24,10 +24,8 @@
 .month1 {
   font-family: 'Jost', sans-serif;
   font-weight: bold;
-  font-size: 15px;
-  color: black;
+  font-size: 17px;
   border: none;
-  background-color: transparent;
   border-radius: 10px;
   transition: .3s;
 }
@@ -44,8 +42,7 @@
 .month2 {
   font-family: 'Jost', sans-serif;
   font-weight: bold;
-  font-size: 15px;
-  color: rgb(255, 255, 255);
+  font-size: 17px;
   border: none;
   border-radius: 10px;
   transition: .3s;
@@ -67,9 +64,8 @@
   font-family: 'Jost', sans-serif;
   font-weight: bold;
   font-size: 15px;
-  color: black;
+  color: #ffffff;
   border: none;
-  background-color: transparent;
   border-radius: 10px;
   transition: .3s;
 }
@@ -78,7 +74,7 @@
   font-family: 'Jost', sans-serif;
   font-weight: bold;
   font-size: 15px;
-  color: rgb(255, 255, 255);
+  color: #ffffff;
   border: none;
   border-radius: 10px;
   transition: .3s;

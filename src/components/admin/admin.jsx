@@ -21,6 +21,7 @@ const Admin = ({ userData, userAuth, darkMode }) => {
   return (
     <div
       style={{
+        overflow: "auto",
         display: "flex",
         flexDirection: "column",
         backgroundColor: darkMode ? "#28292c" : "white",

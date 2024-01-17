@@ -10,7 +10,7 @@ import WorkDays from "../workDays/workDays";
 import Users from "../users/users";
 import PlannedClosure from "../plannedClosure/plannedClosure";
 import axios from "axios";
-
+import { useMediaQueryHook } from "./useMediaQuery";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const AdminAcordeon = () => {
@@ -19,6 +19,7 @@ const AdminAcordeon = () => {
   const [refresh, setRefresh] = useState(false);
   const [remaining, setRemaining] = useState(false);
   const [loading, setLoading] = useState(true);
+  const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,12 +57,12 @@ const AdminAcordeon = () => {
       style={{
         display: "flex",
         flexDirection: "column",
-        paddingTop: "70px",
+        paddingTop: sm ? "30px" : "70px",
         width: "95vw",
         maxWidth: "900px", //revisar maxWidth
       }}
     >
-      <Box style={{ position: "relative" }}>
+      <Box style={{ /* position: "relative" */ }}>
         <Accordion
           style={{
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
