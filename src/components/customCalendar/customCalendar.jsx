@@ -24,7 +24,6 @@ const CustomCalendar = ({
   const [exist50, setExist50] = useState(false);
 
   const handleDay = (day, month) => {
-    
     if (dayIsSelected[month] && dayIsSelected[month][day]) {
       // Si ya existe en dayIsSelected, lo quitamos
       const { [day]: _, ...rest } = dayIsSelected[month];
@@ -104,7 +103,7 @@ const CustomCalendar = ({
             <button
               key={index}
               disabled={!showEdit ? true : disabled}
-              className={showEdit ? "month1" : "month1-false"}
+              className={!showEdit || disabled ? "month1-false" : "month1"}
               onClick={() => handleDay(day, currentMonth)}
               style={{
                 gridColumnStart: index === 0 ? getDayPosition : "auto",
@@ -120,6 +119,14 @@ const CustomCalendar = ({
                   : disabled
                   ? "auto"
                   : "pointer",
+                color: disabled
+                  ? "#e0e0e0d2"
+                  : !showEdit
+                  ? "white"
+                  : dayIsSelected[currentMonth] &&
+                    dayIsSelected[currentMonth][day]
+                  ? "white"
+                  : "#000000",
               }}
             >
               {day}
@@ -160,7 +167,7 @@ const CustomCalendar = ({
           return (
             <button
               key={index + 100}
-              className={showEdit ? "month2" : "month2-false"}
+              className={!showEdit || disabled ? "month2-false" : "month2"}
               disabled={!showEdit ? true : disabled}
               onClick={() => handleDay(day, nextMonth)}
               style={{
@@ -175,6 +182,13 @@ const CustomCalendar = ({
                   : disabled
                   ? "auto"
                   : "pointer",
+                color: disabled
+                  ? "#e0e0e0d2"
+                  : !showEdit
+                  ? "white"
+                  : dayIsSelected[nextMonth] && dayIsSelected[nextMonth][day]
+                  ? "white"
+                  : "#2231a3",
               }}
             >
               {day}

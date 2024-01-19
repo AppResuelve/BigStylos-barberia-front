@@ -66,7 +66,6 @@ function App() {
     localStorage.setItem("darkMode", JSON.stringify(darkMode));
   }, [darkMode]);
 
-  console.log(user);
   
   return (
     <div>

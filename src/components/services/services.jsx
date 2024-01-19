@@ -7,7 +7,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Services = () => {
-  const [services, setServices] = useState({});
+  const [services, setServices] = useState([]);
   const [newService, setNewService] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const [refresh, setRefresh] = useState(false);
@@ -81,7 +81,7 @@ console.log(services)
     >
       {loading ? (
         <LinearProgress sx={{ height: "2px", marginBottom: "15px" }} />
-      ) : (
+      ) :(
         <hr
           style={{
             marginBottom: "15px",
