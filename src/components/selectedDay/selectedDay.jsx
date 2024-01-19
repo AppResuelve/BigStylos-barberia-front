@@ -10,7 +10,6 @@ const SelectedDay = ({
 }) => {
   const [renderedStructure, setRenderedStructure] = useState([]);
 
-
   useEffect(() => {
     if (dayIsSelected && Object.keys(dayIsSelected).length > 0) {
       const recorrerEstructura = (obj, ruta = "") => {
