@@ -35,7 +35,7 @@ const AdminAcordeon = () => {
     };
     fetchData();
   }, [refresh]);
-
+console.log(schedule);
   useEffect(() => {
     let aux = false;
     for (const index in schedule) {

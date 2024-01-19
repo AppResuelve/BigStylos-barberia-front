@@ -61,7 +61,7 @@ const SliderModal = ({
     <div>
       <Dialog
         sx={{
-          height: sm ? "100vh" : "800px",
+          height: "100vh",
         }}
         fullScreen={sm}
         TransitionComponent={Transition}
@@ -224,12 +224,12 @@ const SliderModal = ({
                 }}
               >
                 <Box>
-                  <h2>{values[0][0]} hs</h2>
+                  <h2>{formatHour(values[0][0])} hs</h2>
                 </Box>
                 <h2>a</h2>
 
                 <Box>
-                  <h2>{values[0][1]} hs</h2>
+                  <h2>{formatHour(values[0][1])} hs</h2>
                 </Box>
               </Grid>
               {/*---------------------  mostrar condicionalmente el segundo grid si hay 2 valores para mostrar -----------*/}
@@ -248,11 +248,11 @@ const SliderModal = ({
                 }}
               >
                 <Box>
-                  <h2>{values[1][0]} hs</h2>
+                  <h2>{formatHour(values[1][0])} hs</h2>
                 </Box>
                 <h2>a</h2>
                 <Box>
-                  <h2>{values[1][1]} hs</h2>
+                  <h2>{formatHour(values[1][1])} hs</h2>
                 </Box>
               </Grid>
             </Grid>

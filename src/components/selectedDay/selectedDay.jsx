@@ -1,7 +1,4 @@
 import { useEffect, useState } from "react";
-import formatHour from "../../functions/formatHour";
-import axios from "axios";
-const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const SelectedDay = ({
   firstMonth,

@@ -31,7 +31,7 @@ const WorkerAcordeon = ({ user }) => {
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
-
+console.log(xl, sm);
   return (
     <div
       style={{
@@ -39,7 +39,7 @@ const WorkerAcordeon = ({ user }) => {
         flexDirection: "column",
         paddingTop: sm ? "30px" : "70px",
         width: "95vw",
-        maxWidth: "900px", //revisar maxWidth
+        maxWidth: xl ? "900px" : "1200px", //cuando la pantalla es mayor a 2000px agrandamos maxWidth (+ full hd )
       }}
     >
       <Box style={{ position: "relative" }}>

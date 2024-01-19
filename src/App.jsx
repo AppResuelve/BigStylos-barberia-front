@@ -17,9 +17,8 @@ function App() {
   const [userData, setUserData] = useState(1);
   const [darkMode, setDarkMode] = useState(false);
   const [userAuth, setUserAuth] = useState(false);
-  const location = useLocation();
   const { user } = useAuth0();
-
+  const location = useLocation();
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (user === undefined) {
@@ -66,10 +65,14 @@ function App() {
   useEffect(() => {
     localStorage.setItem("darkMode", JSON.stringify(darkMode));
   }, [darkMode]);
+
+  console.log(user);
   
   return (
     <div>
-      <Nav user={userData} darkMode={darkMode} setDarkMode={setDarkMode} />
+      {location.pathname !== "/requestDenied401" && (
+        <Nav user={userData} darkMode={darkMode} setDarkMode={setDarkMode} />
+      )}
       <Routes>
         <Route
           path="/"

@@ -7,7 +7,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Services = () => {
-  const [services, setServices] = useState([]);
+  const [services, setServices] = useState({});
   const [newService, setNewService] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const [refresh, setRefresh] = useState(false);
@@ -18,6 +18,7 @@ const Services = () => {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/services`);
         const { data } = response;
+        console.log(data);
         setServices(data);
         setLoading(false);
       } catch (error) {
@@ -28,7 +29,7 @@ const Services = () => {
 
     fetchData();
   }, [refresh]);
-
+console.log(services)
   const handleKeyDown = (e) => {
     // Manejar el evento cuando se presiona Enter
     if (e.keyCode === 13) {
@@ -71,7 +72,6 @@ const Services = () => {
     }
   };
 
-  console.log(loading);
   return (
     <div
       style={{

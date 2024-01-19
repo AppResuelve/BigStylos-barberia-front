@@ -23,7 +23,6 @@ const ModalMUI = ({
   darkMode,
 }) => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-console.log(userData);
   const handleClose = () => setIsOpen(false);
 
   return (
