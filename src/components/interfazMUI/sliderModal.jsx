@@ -272,7 +272,7 @@ const SliderModal = ({
                   marginBottom: sm ? "25px" : "",
                 }}
                 onClick={() => {
-                  handleSubmit(timeSelected), handleClose();
+                  handleSubmit(timeSelected, values), handleClose();
                 }}
               >
                 Confirmar

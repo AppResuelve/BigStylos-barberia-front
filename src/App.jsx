@@ -77,7 +77,7 @@ function App() {
         />
         <Route
           path="/turns"
-          element={<Turns user={userData} darkMode={darkMode} />}
+          element={<Turns user={userData} /* darkMode={darkMode} */ />}
         />
         <Route
           path="/admin"

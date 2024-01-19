@@ -71,7 +71,6 @@ const Services = () => {
     }
   };
 
-  console.log(loading);
   return (
     <div
       style={{

@@ -9,6 +9,7 @@ import SliderModal from "../interfazMUI/sliderModal";
 import { Grid, Box, Button, LinearProgress } from "@mui/material";
 import "./CreateWorkDays.css";
 import getCurrentMonth from "../../functions/getCurrentMonth";
+import durationMax from "../../helpers/durationMax";
 
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -35,6 +36,7 @@ const CreateWorkDays = ({ user, schedule }) => {
     const maxClose = Math.max(...closeValues);
     setOpenClose([minOpen, maxClose]);
   }, []);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -124,7 +126,7 @@ const CreateWorkDays = ({ user, schedule }) => {
     }
   };
 
-   const handleSubmit = async (time) => {
+   const handleSubmit = async (time, values) => {
      /* setLoading(true);
     setTimeout(() => {
       setSubmit(false);
@@ -134,58 +136,84 @@ const CreateWorkDays = ({ user, schedule }) => {
     }, 3000) */
      const currentMonth = getCurrentMonth();
      const currentMonth2 = currentMonth == 12 ? 1 : currentMonth + 1;
-     let submitArray = [];
-     if (dayIsSelected[1]) {
-       const first = Object.keys(dayIsSelected[1]);
-       first.forEach((element) => {
-         submitArray.push({
-           month: currentMonth,
-           day: Number(element),
-           email: user.email,
-           time,
-           services: { probando: "el create" },
-         });
-       });
+     const resultDuration = durationMax(user.services, values)
+     if (resultDuration) {
+            const arrayServices = Object.keys(user.services)
+            let objServices = {}
+            arrayServices.forEach(element => {
+              if (user.services[element].duration != null && user.services[element].duration != 0){
+                objServices[element] = {duration: user.services[element].duration, available: true}
+              } else {
+                objServices[element] = {duration: user.services[element].duration, available: false}
+              }
+            })
+
+            let submitArray = [];
+            if (dayIsSelected[1]) {
+              const first = Object.keys(dayIsSelected[1]);
+              first.forEach((element) => {
+                submitArray.push({
+                  month: currentMonth,
+                  day: Number(element),
+                  email: user.email,
+                  time,
+                  services: objServices,
+                });
+              });
+            }
+            if (dayIsSelected[2]) {
+              const second = Object.keys(dayIsSelected[2]);
+              second.forEach((element) => {
+                submitArray.push({
+                  month: currentMonth2,
+                  day: Number(element),
+                  email: user.email,
+                  time,
+                  services: objServices,
+                });
+              });
+            }
+            for (let i = 0; i < submitArray.length; i++) {
+              try {
+                const response = await axios.post(
+                  `${VITE_BACKEND_URL}/workdays/create`,
+                  submitArray[i]
+                );
+                const { data } = response;
+                setDayIsSelected((prevState) => {
+                  let newState = { ...prevState };
+                  delete newState[submitArray[i].month][submitArray[i].day];
+                  if (Object.keys(newState[submitArray[i].month]).length === 0) {
+                    delete newState[submitArray[i].month];
+                  }
+                  return newState;
+                });
+                console.log(
+                  `el dia ${submitArray[i].day}/${submitArray[i].month} se creo exitosamente`
+                );
+              } catch (error) {
+                console.error(
+                  `Error al crear el dia ${submitArray[i].day}/${submitArray[i].month}`,
+                  error
+                );
+              }
+            }
+            setShowEdit(false);
+            setRefreshDays(true);
+     } else {
+      setShowAlert({
+        isOpen: true,
+        message: "El rango horario debe ser mayor a la tardanza de tus servicios",
+        type: "warning",
+        button1: {
+          text: "",
+          action: "handleActionProp",
+        },
+        buttonClose: {
+          text: "OK",
+        },
+      });
      }
-     if (dayIsSelected[2]) {
-       const second = Object.keys(dayIsSelected[2]);
-       second.forEach((element) => {
-         submitArray.push({
-           month: currentMonth2,
-           day: Number(element),
-           email: user.email,
-           time,
-           services: { probando: "el create" },
-         });
-       });
-     }
-     for (let i = 0; i < submitArray.length; i++) {
-       try {
-         const response = await axios.post(
-           `${VITE_BACKEND_URL}/workdays/create`,
-           submitArray[i]
-         );
-         const { data } = response;
-         setDayIsSelected((prevState) => {
-           let newState = { ...prevState };
-           delete newState[submitArray[i].month][submitArray[i].day];
-           if (Object.keys(newState[submitArray[i].month]).length === 0) {
-             delete newState[submitArray[i].month];
-           }
-           return newState;
-         });
-         console.log(
-           `el dia ${submitArray[i].day}/${submitArray[i].month} se creo exitosamente`
-         );
-       } catch (error) {
-         console.error(
-           `Error al crear el dia ${submitArray[i].day}/${submitArray[i].month}`,
-           error
-         );
-       }
-     }
-     setShowEdit(false);
-     setRefreshDays(true);
    };
 
   return (
