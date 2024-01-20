@@ -36,7 +36,7 @@ const CreateWorkDays = ({ user, schedule, pendingServices, setRedirectToMyServic
     const maxClose = Math.max(...closeValues);
     setOpenClose([minOpen, maxClose]);
   }, []);
-
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -352,9 +352,11 @@ const CreateWorkDays = ({ user, schedule, pendingServices, setRedirectToMyServic
           {/* sección del slider */}
         </Grid>
         <SliderModal
+          user={user}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           setSubmit={setSubmit}
+          openClose={openClose}
           timeSelected={timeSelected}
           setTimeSelected={setTimeSelected}
           handleSubmit={handleSubmit}

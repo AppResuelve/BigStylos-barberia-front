@@ -1,9 +1,10 @@
-import { useEffect } from "react";
 import daysMonthCalendarCustom from "../../functions/daysMonthCalendarCustom";
 import getToday from "../../functions/getToday";
+import { Box } from "@mui/material";
 import "./customCalendar.css";
 
 const CustomCalendarTurns = ({
+  sm,
   days,
   dayIsSelected,
   setDayIsSelected,
@@ -29,31 +30,29 @@ const CustomCalendarTurns = ({
     });
   };
   return (
-    <div>
-      <h1>Calendario de turnos</h1>
-      <div className="line7day">
+    <div className="div-container-calendar">
+      <Box className={!sm ? "line7day-query600px" : "line7day"}>
         {daysOfWeek.map((day) => (
           <div key={day}>{day}</div>
         ))}
-      </div>
-      <div className="line7">
+      </Box>
+      <Box className={!sm ? "line7-query600px" : "line7"}>
         {daysCalendarCustom.month1.map((day, index) => {
           let colorDay = "white"; // Inicializar colorDay fuera del mapeo
+          let disable = true;
+          if (days[currentMonth] && days[currentMonth][day]) {
+            disable = false;
+          }
           if (days[currentMonth] && days[currentMonth][day]) {
             colorDay = "#5bfd33d0";
           }
-          /* if (serviceSelected &&
-              Object.keys(serviceSelected) > 0 &&
-              days[currentMonth] == serviceSelected[1] &&
-              days[currentMonth][day] == serviceSelected[0] &&
-              colorDay = 
-            ) */
 
           return (
             <button
               key={index}
               className="month1"
               onClick={() => handleDay(day, currentMonth)}
+              disabled={disable}
               style={{
                 gridColumnStart: index === 0 ? getDayPosition : "auto",
                 backgroundColor:
@@ -71,6 +70,10 @@ const CustomCalendarTurns = ({
 
         {daysCalendarCustom.month2.map((day, index) => {
           let colorDay = "white"; // Inicializar colorDay fuera del mapeo
+          let disable = true;
+          if (days[currentMonth] && days[currentMonth][day]) {
+            disable = false;
+          }
           if (days[nextMonth] && days[nextMonth][day]) {
             colorDay = "#5bfd33d0";
           }
@@ -80,6 +83,7 @@ const CustomCalendarTurns = ({
               key={index + 100}
               className="month2"
               onClick={() => handleDay(day, nextMonth)}
+              disabled={disable}
               style={{
                 backgroundColor:
                   dayIsSelected.length > 0 &&
@@ -93,7 +97,7 @@ const CustomCalendarTurns = ({
             </button>
           );
         })}
-      </div>
+      </Box>
     </div>
   );
 };

@@ -18,7 +18,6 @@ const Services = () => {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/services`);
         const { data } = response;
-        console.log(data);
         setServices(data);
         setLoading(false);
       } catch (error) {
@@ -29,7 +28,7 @@ const Services = () => {
 
     fetchData();
   }, [refresh]);
-console.log(services)
+
   const handleKeyDown = (e) => {
     // Manejar el evento cuando se presiona Enter
     if (e.keyCode === 13) {

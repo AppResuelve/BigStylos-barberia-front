@@ -31,10 +31,24 @@ const MyServices = ({
   ];
 
   useEffect(() => {
-    if (workerData && Object.keys(workerData).length > 0) {
-      setTimeEdit(workerData);
-    }
+    const fetchServices = async () => {
+      try {
+        const response = await axios.get(`${VITE_BACKEND_URL}/services/`);
+        const { data } = response;
+        setServices(data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error al obtener los servicios:", error);
+        alert("Error al obtener los servicios");
+      }
+    };
+    fetchServices();
+  }, []);
+
+  useEffect(() => {
+    setTimeEdit(workerData);
   }, [workerData]);
+
   useEffect(() => {
     let objNewServicies = {};
     if (services && services.length > 0) {
@@ -56,29 +70,32 @@ const MyServices = ({
   }, [services, workerData, showEdit]);
 
   useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const response = await axios.get(`${VITE_BACKEND_URL}/services/`);
-        const { data } = response;
-        setServices(data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error al obtener los servicios:", error);
-        alert("Error al obtener los servicios");
+    if (timeEdit && Object.keys(timeEdit).length > 0) {
+
+      if (services && services.length > 0) {
+        let aux = false;
+        for (const prop in timeEdit) {
+          if (services.includes(prop)) {
+            console.log(services.includes(prop));
+            if (timeEdit[prop].duration === null) {
+              console.log("entre en el null");
+              aux = true;
+              setPendingServices(aux);
+              return;
+            } else {
+              aux = false;
+            }
+            setPendingServices(aux);
+          }
+        }
       }
-    };
-    fetchServices();
-  }, []);
-
- useEffect(() => {
-   // Verificar si hay alguna propiedad con duration en null
-   const hasNullDuration = Object.values(timeEdit).some(
-     (service) => service.duration === null
-   );
-   // Establecer el estado de pendingServices
-   setPendingServices(hasNullDuration);
- }, [timeEdit]);
-
+    }
+    // // Verificar si hay alguna propiedad con duration en null
+    // const hasNullDuration = Object.values(timeEdit).some(
+    //   (service) => service.duration === null
+    // );
+    // // Establecer el estado de pendingServices
+  }, [timeEdit, services]);
   useEffect(() => {
     if (serviceStatus[auxState[0]] && auxState !== false) {
       setTimeEdit((prevState) => ({

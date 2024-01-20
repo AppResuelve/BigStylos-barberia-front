@@ -142,7 +142,7 @@ const WorkerAcordeon = ({ user }) => {
                     color: "red",
                   }}
                 >
-                  (Pendiente)
+                  Pendiente
                 </h4>
               )}
             </Box>
