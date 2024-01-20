@@ -4,7 +4,7 @@ import formatHour from "../../functions/formatHour";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const ShowTurns = ({ dayIsSelected, serviceSelected }) => {
+const ShowTurns = ({ dayIsSelected, serviceSelected, user }) => {
   const [dayForTurns, setDayForTurns] = useState([]);
   const [buttons, setButtons] = useState([])
 

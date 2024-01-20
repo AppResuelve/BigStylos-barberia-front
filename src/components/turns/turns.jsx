@@ -14,6 +14,10 @@ const Turns = ({ user }) => {
   const [showTurns, setShowTurns] = useState([])
 
   useEffect(() => {
+    setDayIsSelected([])
+  },[serviceSelected])
+
+  useEffect(() => {
     const fetchDays = async () => {
       try {
         const response = await axios.post(
@@ -59,7 +63,7 @@ const Turns = ({ user }) => {
           <button key={index} style={{backgroundColor: element == serviceSelected ? "green" : "white"}} onClick={() => handleSelectService(element)}>{element}</button>
         ))}
         {serviceSelected.length > 0 && <CustomCalendarTurns amountOfDays={25} dayIsSelected={dayIsSelected} setDayIsSelected={setDayIsSelected} serviceSelected={serviceSelected} days={days} />}
-        {dayIsSelected.length > 0 && <ShowTurns dayIsSelected={dayIsSelected} serviceSelected={serviceSelected}/>}
+        {dayIsSelected.length > 0 && <ShowTurns dayIsSelected={dayIsSelected} serviceSelected={serviceSelected} user={user}/>}
       </div>
     </div>
   )

@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import daysMonthCalendarCustom from "../../functions/daysMonthCalendarCustom";
 import getToday from "../../functions/getToday";
 import "./customCalendar.css";
@@ -42,24 +41,24 @@ const CustomCalendarTurns = ({
       <div className="line7">
         {daysCalendarCustom.month1.map((day, index) => {
           let colorDay = "white"; // Inicializar colorDay fuera del mapeo
+          let disable = true
+          if (days[currentMonth] &&
+            days[currentMonth][day]) {
+              disable = false
+            }
           if (
             days[currentMonth] &&
             days[currentMonth][day]
           ) {
             colorDay = "#5bfd33d0";
           }
-          /* if (serviceSelected &&
-              Object.keys(serviceSelected) > 0 &&
-              days[currentMonth] == serviceSelected[1] &&
-              days[currentMonth][day] == serviceSelected[0] &&
-              colorDay = 
-            ) */
 
           return (
             <button
               key={index}
               className="month1"
               onClick={() => handleDay(day, currentMonth)}
+              disabled={disable}
               style={{
                 gridColumnStart: index === 0 ? getDayPosition : "auto",
                 backgroundColor:
@@ -77,6 +76,11 @@ const CustomCalendarTurns = ({
 
         {daysCalendarCustom.month2.map((day, index) => {
           let colorDay = "white"; // Inicializar colorDay fuera del mapeo
+          let disable = true
+          if (days[currentMonth] &&
+            days[currentMonth][day]) {
+              disable = false
+            }
           if (
             days[nextMonth] &&
             days[nextMonth][day]
@@ -89,6 +93,7 @@ const CustomCalendarTurns = ({
               key={index + 100}
               className="month2"
               onClick={() => handleDay(day, nextMonth)}
+              disabled={disable}
               style={{
                 backgroundColor:
                   dayIsSelected.length > 0 &&
