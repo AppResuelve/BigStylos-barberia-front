@@ -172,6 +172,7 @@ const AdminAcordeon = () => {
                 setSchedule={setSchedule}
                 refresh={refresh}
                 setRefresh={setRefresh}
+                setRemaining={setRemaining}
               />
             ) : (
               <LinearProgress sx={{ height: "2px", marginBottom: "15px" }} />
