@@ -40,7 +40,6 @@ const AlertModal = ({ showAlert, setShowAlert, handleActionProp }) => {
     if (showAlert.button1.action === "login") {
       action = loginWithRedirect;
     } else if (showAlert.button1.action === "handleActionProp") {
-      console.log("pase por aca");
       action = () => {
         handleActionProp(true);
         setMoveDown(true);

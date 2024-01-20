@@ -19,6 +19,7 @@ function App() {
   const [userAuth, setUserAuth] = useState(false);
   const { user } = useAuth0();
   const location = useLocation();
+
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (user === undefined) {

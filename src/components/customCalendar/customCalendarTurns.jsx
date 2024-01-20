@@ -3,13 +3,12 @@ import daysMonthCalendarCustom from "../../functions/daysMonthCalendarCustom";
 import getToday from "../../functions/getToday";
 import "./customCalendar.css";
 
-
 const CustomCalendarTurns = ({
   days,
   dayIsSelected,
   setDayIsSelected,
   amountOfDays,
-  serviceSelected
+  serviceSelected,
 }) => {
   const daysCalendarCustom = daysMonthCalendarCustom(amountOfDays, true);
   const { currentMonth, nextMonth } = daysCalendarCustom;
@@ -18,18 +17,16 @@ const CustomCalendarTurns = ({
 
   /* console.log(days) */
 
-
-
   const handleDay = (day, month) => {
     setDayIsSelected((prevState) => {
       let newState = { ...prevState };
       if (prevState[1] == month && prevState[0] == day) {
         newState = [];
       } else {
-        newState = [day, month]
+        newState = [day, month];
       }
       return newState;
-    })
+    });
   };
   return (
     <div>
@@ -42,10 +39,7 @@ const CustomCalendarTurns = ({
       <div className="line7">
         {daysCalendarCustom.month1.map((day, index) => {
           let colorDay = "white"; // Inicializar colorDay fuera del mapeo
-          if (
-            days[currentMonth] &&
-            days[currentMonth][day]
-          ) {
+          if (days[currentMonth] && days[currentMonth][day]) {
             colorDay = "#5bfd33d0";
           }
           /* if (serviceSelected &&
@@ -67,7 +61,7 @@ const CustomCalendarTurns = ({
                   dayIsSelected[0] == day &&
                   dayIsSelected[1] == currentMonth
                     ? "#2196f3"
-                    : colorDay
+                    : colorDay,
               }}
             >
               {day}
@@ -77,10 +71,7 @@ const CustomCalendarTurns = ({
 
         {daysCalendarCustom.month2.map((day, index) => {
           let colorDay = "white"; // Inicializar colorDay fuera del mapeo
-          if (
-            days[nextMonth] &&
-            days[nextMonth][day]
-          ) {
+          if (days[nextMonth] && days[nextMonth][day]) {
             colorDay = "#5bfd33d0";
           }
 
@@ -95,7 +86,7 @@ const CustomCalendarTurns = ({
                   dayIsSelected[0] == day &&
                   dayIsSelected[1] == nextMonth
                     ? "#2196f3"
-                    : colorDay
+                    : colorDay,
               }}
             >
               {day}
