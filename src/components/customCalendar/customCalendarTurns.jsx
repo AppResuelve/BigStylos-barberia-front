@@ -15,7 +15,6 @@ const CustomCalendarTurns = ({
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
   const getDayPosition = getToday(); // devuelve número que representa qué día de la semana es (lunes, martes, etc)
 
-  /* console.log(days) */
 
 
 

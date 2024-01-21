@@ -13,7 +13,6 @@ const SliderModal = ({
   isOpen,
   setIsOpen,
   darkMode,
-  setSubmit,
   timeSelected,
   setTimeSelected,
   handleSubmit,
