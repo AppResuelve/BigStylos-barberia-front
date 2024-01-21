@@ -1,0 +1,21 @@
+.box-to-scroll {
+      display: flex;
+      overflow: scroll;
+}
+
+.box-to-scroll::-webkit-scrollbar {
+      height: 5px;
+}
+
+.box-to-scroll::-webkit-scrollbar-thumb {
+      background-color: #797979;
+      border-radius: 10px;
+}
+
+.box-to-scroll::-webkit-scrollbar-thumb:hover {
+      background-color: #afafaf;
+}
+
+.box-to-scroll::-webkit-scrollbar-track {
+      border-radius: 10px;
+}

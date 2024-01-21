@@ -69,13 +69,13 @@ const CustomCalendar = ({
 
   return (
     <div className="div-container-calendar">
-      <Box className={!sm ? "line7day-query600px" : "line7day"}>
+      <Box className={"line7day-query600px"}>
         {daysOfWeek.map((day) => (
           <h4 key={day}>{day}</h4>
         ))}
       </Box>
 
-      <Box className={!sm ? "line7-query600px" : "line7"}>
+      <Box className={"line7-query600px"}>
         {daysCalendarCustom.month1.map((day, index) => {
           let dayName = obtainDayName(day, currentMonth, currentYear);
           let disabled = false;
@@ -119,13 +119,15 @@ const CustomCalendar = ({
                   : disabled
                   ? "auto"
                   : "pointer",
-                color: disabled
-                  ? "#e0e0e0d2"
-                  : !showEdit
+                color: !showEdit
                   ? "white"
                   : dayIsSelected[currentMonth] &&
                     dayIsSelected[currentMonth][day]
                   ? "white"
+                  : days && days[currentMonth] && days[currentMonth][day]
+                  ? "black"
+                  : disabled
+                  ? "#e0e0e0d2"
                   : "#000000",
               }}
             >
@@ -182,12 +184,14 @@ const CustomCalendar = ({
                   : disabled
                   ? "auto"
                   : "pointer",
-                color: disabled
-                  ? "#e0e0e0d2"
-                  : !showEdit
+                color: !showEdit
                   ? "white"
                   : dayIsSelected[nextMonth] && dayIsSelected[nextMonth][day]
                   ? "white"
+                  : days && days[nextMonth] && days[nextMonth][day]
+                  ? "black"
+                  : disabled
+                  ? "#e0e0e0d2"
                   : "#2231a3",
               }}
             >
