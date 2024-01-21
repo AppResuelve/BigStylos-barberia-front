@@ -71,7 +71,7 @@ const CustomCalendarTurns = ({
         {daysCalendarCustom.month2.map((day, index) => {
           let colorDay = "white"; // Inicializar colorDay fuera del mapeo
           let disable = true;
-          if (days[currentMonth] && days[currentMonth][day]) {
+          if (days[nextMonth] && days[nextMonth][day]) {
             disable = false;
           }
           if (days[nextMonth] && days[nextMonth][day]) {

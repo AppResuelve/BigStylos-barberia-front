@@ -120,7 +120,7 @@ const Turns = ({ user }) => {
               </Box>
             ))}
           </Box>
-          <Box sx={{ backgroundColor: "blue", marginTop: "20px" }}>
+          <Box sx={{ marginTop: "20px" }}>
             {serviceSelected.length > 0 && (
               <CustomCalendarTurns
                 sm={sm}

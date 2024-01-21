@@ -44,7 +44,7 @@ const WorkerAcordeon = ({ user }) => {
         });
         const { data } = response;
         setLoading(false);
-        setWorkerData(data[0]);
+        setWorkerData(data);
       } catch (error) {
         console.error("Error al obtener los dias:", error);
         alert("Error al obtener los dias");
@@ -97,7 +97,7 @@ const WorkerAcordeon = ({ user }) => {
           <AccordionDetails>
             {expanded === "panel1" && (
               <CreateWorkDays
-                user={user}
+                user={workerData}
                 schedule={schedule}
                 pendingServices={pendingServices}
                 setRedirectToMyServices={setRedirectToMyServices}
