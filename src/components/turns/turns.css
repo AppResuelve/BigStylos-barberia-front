@@ -1,0 +1,61 @@
+.h1-turns {
+      backdrop-filter: blur(5px);
+      border-radius: 25px;
+      padding-left: 5px;
+      padding-right: 5px;
+}
+
+.h1-turns-md {
+      margin-top: 45px;
+      background-color: white;
+      /* backdrop-filter: blur(15px); */
+      border-radius: 7px;
+      padding-left: 5px;
+      padding-right: 5px;
+      color: black;
+}
+
+.btn-services {
+      word-wrap: break-word;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      width: 160px;
+      border-radius: 7px;
+      border: none;
+      font-family: "Jost", sans-serif;
+      font-weight: bold;
+      font-size: 15px;
+      height: 45px;
+      letter-spacing: 1.5px;
+      color: white;
+      background-color: #2196F3;
+      transition: .3s;
+      box-shadow: 0px 5px 14px -5px rgba(0, 0, 0, 0.75);
+}
+
+.btn-services-selected {
+      font-weight: bold;
+      width: 170px;
+      border-radius: 7px;
+      border: none;
+      font-family: "Jost", sans-serif;
+      font-weight: bold;
+      font-size: 15px;
+      height: 45px;
+      letter-spacing: 1.5px;
+      color: white;
+      background-color: #134772;
+      transition: .3s;
+      box-shadow: 0px 10px 14px 0px rgba(0, 0, 0, 0.75);
+}
+
+.btn-services:hover {
+      transform: scale(1.05);
+}
+
+.btn-services-selected:hover {
+      transform: scale(1.05);
+
+}

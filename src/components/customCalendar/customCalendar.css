@@ -27,7 +27,7 @@
   font-size: 17px;
   border: none;
   border-radius: 10px;
-  transition: .3s;
+  transition: .2s;
 }
 
 .month1:hover {
@@ -45,7 +45,7 @@
   font-size: 17px;
   border: none;
   border-radius: 10px;
-  transition: .3s;
+  transition: .2s;
 }
 
 .month2:hover {

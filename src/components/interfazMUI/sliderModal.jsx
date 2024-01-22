@@ -27,7 +27,6 @@ const SliderModal = ({
 
   const obtenerDuracionMaxima = (obj) => {
     let duracionMaxima = 0;
-    console.log(user);
     for (const key in obj.services) {
       const servicio = obj.services[key];
 

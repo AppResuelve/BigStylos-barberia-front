@@ -153,13 +153,17 @@ const ShowTurns = ({
                   if (buttonIndex === 0) {
                     return (
                       <Box
+                        key={buttonIndex}
                         sx={{
                           display: "flex",
                           justifyContent: "space-between",
                           marginBottom: "10px",
                         }}
                       >
-                        <h2 key={button} style={{overflow:"hidden"}}>{button}</h2>;
+                        <h2 key={button} style={{ overflow: "hidden" }}>
+                          {button}
+                        </h2>
+                        ;
                         <img
                           src={NoUser}
                           alt="Profesional"

@@ -76,9 +76,7 @@ const MyServices = ({
         let aux = false;
         for (const prop in timeEdit) {
           if (services.includes(prop)) {
-            console.log(services.includes(prop));
             if (timeEdit[prop].duration === null) {
-              console.log("entre en el null");
               aux = true;
               setPendingServices(aux);
               return;

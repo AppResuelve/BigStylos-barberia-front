@@ -5,7 +5,9 @@ import ShowTurns from "../showTurns/showTurns";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { Box, Button } from "@mui/material";
 import calendar from "../../assets/images/calendar2.png";
-
+import imgService from "../../assets/images/corte-de-pelo.jpg";
+import "./turns.css";
+// import style from "./turns.css";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Turns = ({ user }) => {
@@ -63,72 +65,64 @@ const Turns = ({ user }) => {
       style={{
         display: "flex",
         justifyContent: "center",
-        paddingTop: sm ? "70px" : "100px",
+        // paddingTop: sm ? "70px" : "70px",
         height: "100vh",
       }}
     >
-      <div
+      <div //container
         style={{
           display: "flex",
           flexDirection: "column",
-          width: "95%",
+          width: "100%",
           maxWidth: "900px", //revisar maxWidth
         }}
       >
-        <Box sx={{ height: "12vh" }}>
-          <h1
-            style={{
+        <Box sx={{ position: "relative" }}>
+          <Box
+            sx={{
+              height: "20vh",
               display: "flex",
               justifyContent: "center",
-              // color: darkMode ? "white" : "#28292c",
+              alignItems: "center",
             }}
           >
-            Selecciona un servicio
-          </h1>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            // justifyContent:"space-around",
-            alignItems: "center",
-            marginTop: "18px",
-            height: "100%",
-          }}
-        >
+            <h1 className={!md ? "h1-turns-md" : "h1-turns"}>
+              Selecciona un servicio
+            </h1>
+          </Box>
           <Box
             sx={{
               display: "grid",
               gridTemplateColumns: sm
                 ? "1fr 1fr"
                 : md
-                ? "1fr 1fr 1fr"
-                : "1fr 1fr 1fr 1fr",
-              gap: "5px",
+                ? "1fr 1fr 1fr 1fr"
+                : "1fr 1fr 1fr 1fr 1fr",
+              gap: "3px",
               width: "100%",
               height: "25vh",
               maxHeight: "210px",
-              overflow: "scroll",
-              // boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // Ajusta según sea necesario
+              overflow: "auto",
+              borderBottom: "2px solid #2196f3",
               alignItems: "center",
               justifyItems: "center",
             }}
           >
             {services.map((element, index) => (
-              <Box sx={{ margin: "5px" }} key={index}>
+              <Box sx={{ marginTop: "1px" }} key={index}>
                 <Button
                   variant={
                     element == serviceSelected ? "contained" : "outlined"
                   }
-                  sx={{
-                    width: "150px",
-                    fontFamily: "Jost, sans-serif",
-                    fontWeight: "bold",
-                    height: "45px",
-                    letterSpacing: "1.5px",
-                    backgroundColor:
-                      element == serviceSelected ? "" : "#e8e8e8",
-                  }}
+                  class={
+                    element == serviceSelected
+                      ? "btn-services-selected"
+                      : "btn-services"
+                  }
+                  // sx={{
+                  //   width: "130px",
+
+                  // }}
                   key={index}
                   style={{}}
                   onClick={() => handleSelectService(element)}
@@ -140,12 +134,41 @@ const Turns = ({ user }) => {
           </Box>
           <Box
             sx={{
+              background:
+                "linear-gradient(180deg, rgba(255,0,0,0) 70%, rgba(0,0,0,0.34) 100%)",
+            }}
+          >
+            <img
+              src={imgService}
+              alt="img servicio"
+              style={{
+                position: "absolute",
+                top: "0",
+                left: "0",
+                width: "100%",
+                height: "100%",
+                zIndex: "-1",
+                objectFit: "cover",
+              }}
+            />
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-around",
+            alignContent: "center",
+            // marginTop: "18px",
+            // height: "100%",
+          }}
+        >
+          <Box
+            sx={{
               marginTop: "30px",
               width: "100%",
               maxWidth: "900px",
-              height: "45vh",
-              // display: "flex",
-              // justifyContent:"center"
+              height: "50vh",
             }}
           >
             {serviceSelected.length > 0 ? (
@@ -159,7 +182,22 @@ const Turns = ({ user }) => {
                 setIsOpen={setIsOpen}
               />
             ) : (
-              <img src={calendar} style={{ width: "300px", height: "300px" }} />
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "20px",
+                }}
+              >
+                <img
+                  src={calendar}
+                  style={{
+                    filter: " grayscale(100%)",
+                    width: sm ? "250px" : "300px",
+                    height: sm ? "250px" : "300px",
+                  }}
+                />
+              </Box>
             )}
           </Box>
         </Box>
