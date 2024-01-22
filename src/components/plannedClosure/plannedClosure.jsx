@@ -16,7 +16,6 @@ const PlannedClosure = ({ schedule }) => {
   const [daysWithTurns, setDaysWithTurns] = useState({});
   const [loading, setLoading] = useState(true);
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -52,53 +51,52 @@ const PlannedClosure = ({ schedule }) => {
   };
 
   const handleSubmit = async (confirm) => {
-//     if (confirm === "confirm") {
-//       console.log("hago peticion put con daysturn");
-//       try {
-//         const response = await axios.put(
-//           `${VITE_BACKEND_URL}/schedule/updatenowork`,
-//           {
-//             noWorkDays: dayIsSelected,
-//           }
-//         );
-//         const { data } = response;
-//         setRefresh(!refresh);
-//       } catch (error) {
-//         console.error("Error al obtener los dias:", error);
-//         alert("Error al obtener los dias");
-//       }
-//     } else if (daysWithTurns) {
-//       console.log("pase por el true del daysWithTurns, muestro la alerta");
-//       setShowAlert({
-//         isOpen: true,
-//         message:
-//           "Has seleccionado días con turnos reservados, deseas continuar?",
-//         type: "warning",
-//         button1: {
-//           text: "Si",
-//           action: "handleActionProp",
-//         },
-//         buttonClose: {
-//           text: "Volver",
-//         },
-//       });
-//     } else {
-      try {
-        console.log("hice el put con dias sin turno");
-        const response = await axios.put(
-          `${VITE_BACKEND_URL}/schedule/updateNoWork`,
-          {
-            noWorkDays: dayIsSelected,
-          }
-        );
-        const { data } = response;
-        setShowEdit(false);
-        setRefresh(!refresh);
-      } catch (error) {
-        console.error("Error al obtener los dias:", error);
-        alert("Error al obtener los dias");
-      }
-    
+    //     if (confirm === "confirm") {
+    //       console.log("hago peticion put con daysturn");
+    //       try {
+    //         const response = await axios.put(
+    //           `${VITE_BACKEND_URL}/schedule/updatenowork`,
+    //           {
+    //             noWorkDays: dayIsSelected,
+    //           }
+    //         );
+    //         const { data } = response;
+    //         setRefresh(!refresh);
+    //       } catch (error) {
+    //         console.error("Error al obtener los dias:", error);
+    //         alert("Error al obtener los dias");
+    //       }
+    //     } else if (daysWithTurns) {
+    //       console.log("pase por el true del daysWithTurns, muestro la alerta");
+    //       setShowAlert({
+    //         isOpen: true,
+    //         message:
+    //           "Has seleccionado días con turnos reservados, deseas continuar?",
+    //         type: "warning",
+    //         button1: {
+    //           text: "Si",
+    //           action: "handleActionProp",
+    //         },
+    //         buttonClose: {
+    //           text: "Volver",
+    //         },
+    //       });
+    //     } else {
+    try {
+      console.log("hice el put con dias sin turno");
+      const response = await axios.put(
+        `${VITE_BACKEND_URL}/schedule/updateNoWork`,
+        {
+          noWorkDays: dayIsSelected,
+        }
+      );
+      const { data } = response;
+      setShowEdit(false);
+      setRefresh(!refresh);
+    } catch (error) {
+      console.error("Error al obtener los dias:", error);
+      alert("Error al obtener los dias");
+    }
   };
   return (
     <div>
@@ -111,6 +109,7 @@ const PlannedClosure = ({ schedule }) => {
           backgroundColor: "#2196f3",
         }}
       />
+
       <CustomCalendarPlannedC
         schedule={schedule}
         amountOfDays={36}
@@ -120,7 +119,7 @@ const PlannedClosure = ({ schedule }) => {
         showEdit={showEdit}
         setDaysWithTurns={setDaysWithTurns}
       />
-      <Box sx={{marginTop:"12px"}}>
+      <Box sx={{ marginTop: "12px" }}>
         {showEdit === false && (
           <Button onClick={handleEdit}>
             <BorderColorIcon />

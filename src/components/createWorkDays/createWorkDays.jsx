@@ -11,10 +11,9 @@ import "./CreateWorkDays.css";
 import getCurrentMonth from "../../functions/getCurrentMonth";
 import durationMax from "../../helpers/durationMax";
 
-
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const CreateWorkDays = ({ user, schedule }) => {
+const CreateWorkDays = ({ user, schedule, pendingServices, setRedirectToMyServices }) => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [dayIsSelected, setDayIsSelected] = useState({});
   const [days, setDays] = useState({});
@@ -29,6 +28,7 @@ const CreateWorkDays = ({ user, schedule }) => {
   const [timeSelected, setTimeSelected] = useState([]); //estado de la rama fac, no se para que es aun.
   const [refreshDays, setRefreshDays] = useState(false);
 
+
   useEffect(() => {
     const openValues = Object.values(schedule).map((item) => item.open);
     const closeValues = Object.values(schedule).map((item) => item.close);
@@ -36,8 +36,7 @@ const CreateWorkDays = ({ user, schedule }) => {
     const maxClose = Math.max(...closeValues);
     setOpenClose([minOpen, maxClose]);
   }, []);
-
-
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -75,26 +74,35 @@ const CreateWorkDays = ({ user, schedule }) => {
 
   useEffect(() => {
     // Agregar la clase alert-open cuando se monta el componente y el alerta está presente
-    if (!md && showEdit) {
-      console.log("add class");
+    if (showEdit) {
       document.body.classList.add("alert-open");
-    } else if (!md && !showEdit) {
-      console.log("remove class");
+    } else {
       // Remover la clase alert-open cuando se desmonta el componente o el alerta se cierra
-       setTimeout(() => {
+      setTimeout(() => {
         document.body.classList.remove("alert-open");
       }, 300); // 400 milisegundos = .4 s
     }
   }, [showEdit]);
 
-  // useEffect(() => {
-  //   if (showEdit) {
-  //     handleSubmit();
-  //   }
-  // }, [submit]);
-
   const handleEdit = () => {
-    setShowEdit(true);
+    if (pendingServices) {
+       setShowAlert({
+         isOpen: true,
+         message:
+           "Para crear un día de trabajo no debes tener servicios pendientes de asignación.",
+         type: "warning",
+         button1: {
+           text: "Mis servicios",
+           action: "handleActionProp",
+         },
+         buttonClose: {
+           text: "VOLVER",
+         },
+        alertNumber:2,
+       });
+    } else {
+      setShowEdit(true);
+    }
   };
 
   const handleCancel = () => {
@@ -120,83 +128,94 @@ const CreateWorkDays = ({ user, schedule }) => {
         buttonClose: {
           text: "Volver",
         },
+        alertNumber:1,
       });
     } else {
       setIsOpen(true);
     }
   };
 
-   const handleSubmit = async (time, values) => {
-     const currentMonth = getCurrentMonth();
-     const currentMonth2 = currentMonth == 12 ? 1 : currentMonth + 1;
-     const resultDuration = durationMax(user.services, values)
-     if (resultDuration) {
-            const arrayServices = Object.keys(user.services)
-            let objServices = {}
-            arrayServices.forEach(element => {
-              if (user.services[element].duration != null && user.services[element].duration != 0){
-                objServices[element] = {duration: user.services[element].duration, available: true}
-              } else {
-                objServices[element] = {duration: user.services[element].duration, available: false}
-              }
-            })
+  const handleSubmit = async (time, values) => {
+    const currentMonth = getCurrentMonth();
+    const currentMonth2 = currentMonth == 12 ? 1 : currentMonth + 1;
+    const resultDuration = durationMax(user.services, values);
+    if (resultDuration) {
+      const arrayServices = Object.keys(user.services);
+      let objServices = {};
+      arrayServices.forEach((element) => {
+        if (
+          user.services[element].duration != null &&
+          user.services[element].duration != 0
+        ) {
+          objServices[element] = {
+            duration: user.services[element].duration,
+            available: true,
+          };
+        } else {
+          objServices[element] = {
+            duration: user.services[element].duration,
+            available: false,
+          };
+        }
+      });
 
-            let submitArray = [];
-            if (dayIsSelected[1]) {
-              const first = Object.keys(dayIsSelected[1]);
-              first.forEach((element) => {
-                submitArray.push({
-                  month: currentMonth,
-                  day: Number(element),
-                  email: user.email,
-                  time,
-                  services: objServices,
-                });
-              });
+      let submitArray = [];
+      if (dayIsSelected[1]) {
+        const first = Object.keys(dayIsSelected[1]);
+        first.forEach((element) => {
+          submitArray.push({
+            month: currentMonth,
+            day: Number(element),
+            email: user.email,
+            time,
+            services: objServices,
+          });
+        });
+      }
+      if (dayIsSelected[2]) {
+        const second = Object.keys(dayIsSelected[2]);
+        second.forEach((element) => {
+          submitArray.push({
+            month: currentMonth2,
+            day: Number(element),
+            email: user.email,
+            time,
+            services: objServices,
+          });
+        });
+      }
+      for (let i = 0; i < submitArray.length; i++) {
+        try {
+          const response = await axios.post(
+            `${VITE_BACKEND_URL}/workdays/create`,
+            submitArray[i]
+          );
+          const { data } = response;
+          setDayIsSelected((prevState) => {
+            let newState = { ...prevState };
+            delete newState[submitArray[i].month][submitArray[i].day];
+            if (Object.keys(newState[submitArray[i].month]).length === 0) {
+              delete newState[submitArray[i].month];
             }
-            if (dayIsSelected[2]) {
-              const second = Object.keys(dayIsSelected[2]);
-              second.forEach((element) => {
-                submitArray.push({
-                  month: currentMonth2,
-                  day: Number(element),
-                  email: user.email,
-                  time,
-                  services: objServices,
-                });
-              });
-            }
-            for (let i = 0; i < submitArray.length; i++) {
-              try {
-                const response = await axios.post(
-                  `${VITE_BACKEND_URL}/workdays/create`,
-                  submitArray[i]
-                );
-                const { data } = response;
-                setDayIsSelected((prevState) => {
-                  let newState = { ...prevState };
-                  delete newState[submitArray[i].month][submitArray[i].day];
-                  if (Object.keys(newState[submitArray[i].month]).length === 0) {
-                    delete newState[submitArray[i].month];
-                  }
-                  return newState;
-                });
-                console.log(
-                  `el dia ${submitArray[i].day}/${submitArray[i].month} se creo exitosamente`
-                );
-              } catch (error) {
-                console.error(
-                  `Error al crear el dia ${submitArray[i].day}/${submitArray[i].month}`,
-                  error
-                );
-              }
-            }
-            setShowEdit(false);
-            setRefreshDays(true);
-     } else {
+            return newState;
+          });
+          console.log(
+            `el dia ${submitArray[i].day}/${submitArray[i].month} se creo exitosamente`
+          );
+        } catch (error) {
+          console.error(
+            `Error al crear el dia ${submitArray[i].day}/${submitArray[i].month}`,
+            error
+          );
+        }
+      }
+      setShowEdit(false);
+      setRefreshDays(true);
+    } else {
       setShowAlert({
         isOpen: true,
-        message: "El rango horario debe ser mayor a la tardanza de tus servicios",
+        message:
+          "El rango horario debe ser mayor a la tardanza de tus servicios",
         type: "warning",
         button1: {
           text: "",
@@ -206,11 +225,11 @@ const CreateWorkDays = ({ user, schedule }) => {
           text: "OK",
         },
       });
-     }
-   };
+    }
+  };
 
   return (
-    <div style={{ cursor: loading ? "wait" : "" }}>
+    <div style={{cursor:loading?"wait":""}} >
       {loading ? (
         <LinearProgress sx={{ height: "2px", marginBottom: "15px" }} />
       ) : (
@@ -229,7 +248,7 @@ const CreateWorkDays = ({ user, schedule }) => {
           xs={12}
           sm={12}
           md={showEdit && !md ? 6 : 12}
-          className={!md && showEdit ? "mover-izquierda" : "mover-derecha"}
+          className={md ? "" : showEdit ? "mover-izquierda" : "mover-derecha"}
         >
           <CustomCalendar
             setDayIsSelected={setDayIsSelected}
@@ -260,6 +279,22 @@ const CreateWorkDays = ({ user, schedule }) => {
               schedule={schedule}
             />
           )}
+          {Object.keys(days).length > 0 &&
+            days[firstMonth] &&
+            days[firstMonth][firstDay] &&
+            days[firstMonth][firstDay].turn && (
+              <h3
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "center",
+                  marginTop: "12px",
+                  color: "red",
+                }}
+              >
+                Día con turno reservado
+              </h3>
+            )}
         </Grid>
         {/* area de los botones */}
         <Grid xs={12} sm={12} md={12} item>
@@ -284,20 +319,6 @@ const CreateWorkDays = ({ user, schedule }) => {
               >
                 <h4 style={{ fontFamily: "Jost, sans-serif" }}>Volver</h4>
               </Button>
-              {Object.keys(days).length > 0 &&
-                days[firstMonth] &&
-                days[firstMonth][firstDay] &&
-                days[firstMonth][firstDay].turn && (
-                  <h3
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      color: "red",
-                    }}
-                  >
-                    {sm ? "Turno reservado" : "Día con turno reservado"}
-                  </h3>
-                )}
               <Button
                 variant="contained"
                 disabled={
@@ -310,7 +331,7 @@ const CreateWorkDays = ({ user, schedule }) => {
                 onClick={handleShowSlider}
               >
                 <h4 style={{ fontFamily: "Jost, sans-serif" }}>
-                  {sm ? "Asignar" : "Asignar turnos"}
+                  Asignar horarios
                 </h4>
               </Button>
             </Box>
@@ -318,18 +339,29 @@ const CreateWorkDays = ({ user, schedule }) => {
           {/* sección del slider */}
         </Grid>
         <SliderModal
+          user={user}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           setSubmit={setSubmit}
+          openClose={openClose}
           timeSelected={timeSelected}
           setTimeSelected={setTimeSelected}
           handleSubmit={handleSubmit}
         />
-        <AlertModal
-          showAlert={showAlert}
-          setShowAlert={setShowAlert}
-          handleActionProp={setIsOpen}
-        />
+        {showAlert.alertNumber === 1 && (
+          <AlertModal
+            showAlert={showAlert}
+            setShowAlert={setShowAlert}
+            handleActionProp={setIsOpen}
+          />
+        )}
+        {showAlert.alertNumber === 2 && (
+          <AlertModal
+            showAlert={showAlert}
+            setShowAlert={setShowAlert}
+            handleActionProp={setRedirectToMyServices}
+          />
+        )}
       </Grid>
     </div>
   );

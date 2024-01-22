@@ -11,6 +11,7 @@ import Users from "../users/users";
 import PlannedClosure from "../plannedClosure/plannedClosure";
 import axios from "axios";
 import { useMediaQueryHook } from "./useMediaQuery";
+import StoreImages from "../storeImages/storeImages";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const AdminAcordeon = () => {
@@ -35,7 +36,6 @@ const AdminAcordeon = () => {
     };
     fetchData();
   }, [refresh]);
-
   useEffect(() => {
     let aux = false;
     for (const index in schedule) {
@@ -62,7 +62,13 @@ const AdminAcordeon = () => {
         maxWidth: "900px", //revisar maxWidth
       }}
     >
-      <Box style={{ /* position: "relative" */ }}>
+      <Box
+        style={
+          {
+            /* position: "relative" */
+          }
+        }
+      >
         <Accordion
           style={{
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
@@ -173,6 +179,7 @@ const AdminAcordeon = () => {
                 setSchedule={setSchedule}
                 refresh={refresh}
                 setRefresh={setRefresh}
+                setRemaining={setRemaining}
               />
             ) : (
               <LinearProgress sx={{ height: "2px", marginBottom: "15px" }} />
@@ -184,21 +191,21 @@ const AdminAcordeon = () => {
           style={{
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
           }}
-          expanded={expanded === "panel5"}
-          onChange={handleChange("panel5")}
+          expanded={expanded === "panel4"}
+          onChange={handleChange("panel4")}
         >
           <AccordionSummary
             sx={{
-              backgroundColor: expanded === "panel5" ? "#d6d6d5" : "",
+              backgroundColor: expanded === "panel4" ? "#d6d6d5" : "",
               borderRadius: "2px",
             }}
             expandIcon={
               <ExpandMoreIcon
-                sx={{ color: expanded === "panel5" ? "" : "#2196f3" }}
+                sx={{ color: expanded === "panel4" ? "" : "#2196f3" }}
               />
             }
-            aria-controls="panel5bh-content"
-            id="panel5bh-header"
+            aria-controls="panel4bh-content"
+            id="panel4bh-header"
           >
             <h2 sx={{ width: "33%", flexShrink: 0 }}>Cierre programado</h2>
           </AccordionSummary>
@@ -218,29 +225,57 @@ const AdminAcordeon = () => {
         {/*  //------------------// */}
         <Accordion
           style={{
-            marginBottom: "30px",
+            // marginBottom: "30px",
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
           }}
-          expanded={expanded === "panel4"}
-          onChange={handleChange("panel4")}
+          expanded={expanded === "panel5"}
+          onChange={handleChange("panel5")}
         >
           <AccordionSummary
             sx={{
-              backgroundColor: expanded === "panel4" ? "#d6d6d5" : "",
+              backgroundColor: expanded === "panel5" ? "#d6d6d5" : "",
               borderRadius: "2px",
             }}
             expandIcon={
               <ExpandMoreIcon
-                sx={{ color: expanded === "panel4" ? "" : "#2196f3" }}
+                sx={{ color: expanded === "panel5" ? "" : "#2196f3" }}
               />
             }
-            aria-controls="panel4bh-content"
-            id="panel4bh-header"
+            aria-controls="panel5bh-content"
+            id="panel5bh-header"
           >
             <h2>Usuarios</h2>
           </AccordionSummary>
           <AccordionDetails>
             <Users />
+          </AccordionDetails>
+        </Accordion>
+        {/*  //------------------// */}
+        <Accordion
+          style={{
+            marginBottom: "30px",
+            boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
+          }}
+          expanded={expanded === "panel6"}
+          onChange={handleChange("panel6")}
+        >
+          <AccordionSummary
+            sx={{
+              backgroundColor: expanded === "panel6" ? "#d6d6d5" : "",
+              borderRadius: "2px",
+            }}
+            expandIcon={
+              <ExpandMoreIcon
+                sx={{ color: expanded === "panel6" ? "" : "#2196f3" }}
+              />
+            }
+            aria-controls="panel6bh-content"
+            id="panel6bh-header"
+          >
+            <h2>Imagenes</h2>
+          </AccordionSummary>
+          <AccordionDetails>
+            <StoreImages />
           </AccordionDetails>
         </Accordion>
       </Box>

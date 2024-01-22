@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import fondoCentral from "../../assets/images/fondo-peluqueria-1.avif";
 import { Button } from "@mui/material";
 
-const Home = ({user, darkMode}) => {
+const Home = ({ user, darkMode }) => {
   return (
     <div
       style={{

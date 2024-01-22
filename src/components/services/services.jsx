@@ -80,7 +80,7 @@ const Services = () => {
     >
       {loading ? (
         <LinearProgress sx={{ height: "2px", marginBottom: "15px" }} />
-      ) : (
+      ) :(
         <hr
           style={{
             marginBottom: "15px",

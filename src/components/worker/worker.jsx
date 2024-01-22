@@ -7,7 +7,6 @@ import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 const Worker = ({ userData, userAuth, darkMode }) => {
   const navigate = useNavigate();
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-
   useEffect(() => {
     if (userData !== 1) {
       if (!userData.worker) {

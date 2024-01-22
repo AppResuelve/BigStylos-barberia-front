@@ -54,13 +54,13 @@ const CustomCalendarPlannedC = ({
 
   return (
     <div className="div-container-calendar">
-      <Box className={!sm ? "line7day-query600px" : "line7day"}>
+      <Box className={"line7day-query600px"}>
         {daysOfWeek.map((day) => (
           <h4 key={day}>{day}</h4>
         ))}
       </Box>
 
-      <Box className={!sm ? "line7-query600px" : "line7"}>
+      <Box className={"line7-query600px"}>
         {Object.keys(days).length > 0 &&
           daysCalendarCustom.month1.map((day, index) => {
             let dayName = obtainDayName(day, currentMonth, currentYear);
@@ -209,3 +209,6 @@ const CustomCalendarPlannedC = ({
 };
 
 export default CustomCalendarPlannedC;
+
+
+

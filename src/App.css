@@ -16,6 +16,7 @@
 
  body {
    font-family: 'Jost', sans-serif;
+   user-select: none;
  }
 
  body.alert-open {

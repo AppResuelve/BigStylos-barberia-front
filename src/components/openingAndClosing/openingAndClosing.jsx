@@ -7,12 +7,17 @@ import AlertModal from "../interfazMUI/alertModal";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const OpeningAndClosing = ({ schedule, setSchedule, refresh, setRefresh }) => {
+const OpeningAndClosing = ({
+  schedule,
+  setSchedule,
+  refresh,
+  setRefresh,
+  setRemaining,
+}) => {
   const [showEdit, setShowEdit] = useState(false);
   const [showAlert, setShowAlert] = useState({});
   const [timeEdit, setTimeEdit] = useState({});
   const [loading, setLoading] = useState(true);
-
 
   const days = ["Lun", "Mar", "Mie", "Jue", "Vie", "Sab", "Dom"];
   const timeArray = [
@@ -25,6 +30,15 @@ const OpeningAndClosing = ({ schedule, setSchedule, refresh, setRefresh }) => {
   useEffect(() => {
     setTimeEdit(schedule);
   }, [schedule]);
+
+  useEffect(() => {
+    // Verificar si hay alguna propiedad con open en 0 y close en 1440
+    const hasOpen0Close1440 = Object.values(timeEdit).some(
+      (service) => service.open === 0 && service.close === 1440
+    );
+    // Establecer el estado de pendingServices
+    setRemaining(hasOpen0Close1440);
+  }, [timeEdit]);
 
   const handleEdit = () => {
     setShowEdit(true);
@@ -141,7 +155,7 @@ const OpeningAndClosing = ({ schedule, setSchedule, refresh, setRefresh }) => {
             )}
           </div>
         ))}
-      <Box sx={{marginTop:"12px"}}>
+      <Box sx={{ marginTop: "12px" }}>
         {showEdit === false && (
           <Button onClick={handleEdit}>
             <BorderColorIcon />
