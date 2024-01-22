@@ -127,7 +127,7 @@ const ShowTurns = ({
                   marginRight: "4px",
                 }}
               >
-                Horarios disponibles para el:
+                Horarios para el:
               </h2>
               <h2 style={{ display: "flex", justifyContent: "center" }}>
                 {`${dayIsSelected[0]}/${dayIsSelected[1]}`}
@@ -159,7 +159,7 @@ const ShowTurns = ({
                           marginBottom: "10px",
                         }}
                       >
-                        <h2 key={button}>{button}</h2>;
+                        <h2 key={button} style={{overflow:"hidden"}}>{button}</h2>;
                         <img
                           src={NoUser}
                           alt="Profesional"

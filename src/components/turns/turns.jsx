@@ -4,6 +4,7 @@ import CustomCalendarTurns from "../customCalendar/customCalendarTurns";
 import ShowTurns from "../showTurns/showTurns";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { Box, Button } from "@mui/material";
+import calendar from "../../assets/images/calendar2.png";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -143,9 +144,11 @@ const Turns = ({ user }) => {
               width: "100%",
               maxWidth: "900px",
               height: "45vh",
+              // display: "flex",
+              // justifyContent:"center"
             }}
           >
-            {serviceSelected.length > 0 && (
+            {serviceSelected.length > 0 ? (
               <CustomCalendarTurns
                 sm={sm}
                 amountOfDays={30}
@@ -155,6 +158,8 @@ const Turns = ({ user }) => {
                 days={days}
                 setIsOpen={setIsOpen}
               />
+            ) : (
+              <img src={calendar} style={{ width: "300px", height: "300px" }} />
             )}
           </Box>
         </Box>
