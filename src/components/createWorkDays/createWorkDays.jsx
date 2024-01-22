@@ -8,12 +8,12 @@ import AlertModal from "../interfazMUI/alertModal";
 import SliderModal from "../interfazMUI/sliderModal";
 import { Grid, Box, Button, LinearProgress } from "@mui/material";
 import "./CreateWorkDays.css";
-import { element } from "prop-types";
 import getCurrentMonth from "../../functions/getCurrentMonth";
+import durationMax from "../../helpers/durationMax";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const CreateWorkDays = ({ user, schedule }) => {
+const CreateWorkDays = ({ user, schedule, pendingServices, setRedirectToMyServices }) => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [dayIsSelected, setDayIsSelected] = useState({});
   const [days, setDays] = useState({});
@@ -25,8 +25,8 @@ const CreateWorkDays = ({ user, schedule }) => {
   const [showAlert, setShowAlert] = useState({});
   const [submit, setSubmit] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [timeSelected, setTimeSelected] = useState([]); // horario seleccionado en slider
-  const [refreshDays, setRefreshDays] = useState(false)
+  const [timeSelected, setTimeSelected] = useState([]); //estado de la rama fac, no se para que es aun.
+  const [refreshDays, setRefreshDays] = useState(false);
 
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const CreateWorkDays = ({ user, schedule }) => {
     const maxClose = Math.max(...closeValues);
     setOpenClose([minOpen, maxClose]);
   }, []);
-
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -52,7 +52,7 @@ const CreateWorkDays = ({ user, schedule }) => {
       }
     };
     fetchData();
-    setRefreshDays(false)
+    setRefreshDays(false);
   }, [refreshDays]);
 
   // Lógica para obtener el primer valor de month y day
@@ -78,14 +78,31 @@ const CreateWorkDays = ({ user, schedule }) => {
       document.body.classList.add("alert-open");
     } else {
       // Remover la clase alert-open cuando se desmonta el componente o el alerta se cierra
-      /* setTimeout(() => {
+      setTimeout(() => {
         document.body.classList.remove("alert-open");
-      }, 400);  */// 400 milisegundos = .4 s
+      }, 300); // 400 milisegundos = .4 s
     }
   }, [showEdit]);
 
   const handleEdit = () => {
-    setShowEdit(true);
+    if (pendingServices) {
+       setShowAlert({
+         isOpen: true,
+         message:
+           "Para crear un día de trabajo no debes tener servicios pendientes de asignación.",
+         type: "warning",
+         button1: {
+           text: "Mis servicios",
+           action: "handleActionProp",
+         },
+         buttonClose: {
+           text: "VOLVER",
+         },
+        alertNumber:2,
+       });
+    } else {
+      setShowEdit(true);
+    }
   };
 
   const handleCancel = () => {
@@ -111,61 +128,112 @@ const CreateWorkDays = ({ user, schedule }) => {
         buttonClose: {
           text: "Volver",
         },
+        alertNumber:1,
       });
     } else {
       setIsOpen(true);
     }
   };
 
-  const handleSubmit = async (time) => {
-    const currentMonth = getCurrentMonth()
-    const currentMonth2 = currentMonth == 12 ? 1 : currentMonth + 1
-    let submitArray = []
-    if (dayIsSelected[1]) {
-      const first = Object.keys(dayIsSelected[1])
-      first.forEach(element => {
-        submitArray.push({
-          month: currentMonth,
-          day: Number(element),
-          email: user.email,
-          time,
-          services: {probando: "el create"}
-        })
-      })
-    }
-    if (dayIsSelected[2]) {
-      const second = Object.keys(dayIsSelected[2])
-      second.forEach(element => {
-        submitArray.push({
-          month: currentMonth2,
-          day: Number(element),
-          email: user.email,
-          time,
-          services: {probando: "el create"}
-        })
-      })
-    }
-    for (let i = 0; i < submitArray.length; i++) {
-      try {
-        const response = await axios.post(`${VITE_BACKEND_URL}/workdays/create`, submitArray[i]);
-        const { data } = response;
-        setDayIsSelected((prevState) => {
-          let newState = { ...prevState };
-          delete newState[submitArray[i].month][submitArray[i].day];
-          if (Object.keys(newState[submitArray[i].month]).length === 0) {
-            delete newState[submitArray[i].month];
-          }
-          return newState;
+  const handleSubmit = async (time, values) => {
+    /* setLoading(true);
+    setTimeout(() => {
+      setSubmit(false);
+      setLoading(false);
+      setDayIsSelected({});
+      setShowEdit(false);
+    }, 3000) */
+    const currentMonth = getCurrentMonth();
+    const currentMonth2 = currentMonth == 12 ? 1 : currentMonth + 1;
+    const resultDuration = durationMax(user.services, values);
+    if (resultDuration) {
+      const arrayServices = Object.keys(user.services);
+      let objServices = {};
+      arrayServices.forEach((element) => {
+        if (
+          user.services[element].duration != null &&
+          user.services[element].duration != 0
+        ) {
+          objServices[element] = {
+            duration: user.services[element].duration,
+            available: true,
+          };
+        } else {
+          objServices[element] = {
+            duration: user.services[element].duration,
+            available: false,
+          };
+        }
+      });
+
+      let submitArray = [];
+      if (dayIsSelected[1]) {
+        const first = Object.keys(dayIsSelected[1]);
+        first.forEach((element) => {
+          submitArray.push({
+            month: currentMonth,
+            day: Number(element),
+            email: user.email,
+            time,
+            services: objServices,
+          });
         });
-        console.log(`el dia ${submitArray[i].day}/${submitArray[i].month} se creo exitosamente`)
-      } catch (error) {
-        console.error(`Error al crear el dia ${submitArray[i].day}/${submitArray[i].month}`, error);
       }
+      if (dayIsSelected[2]) {
+        const second = Object.keys(dayIsSelected[2]);
+        second.forEach((element) => {
+          submitArray.push({
+            month: currentMonth2,
+            day: Number(element),
+            email: user.email,
+            time,
+            services: objServices,
+          });
+        });
+      }
+      for (let i = 0; i < submitArray.length; i++) {
+        try {
+          const response = await axios.post(
+            `${VITE_BACKEND_URL}/workdays/create`,
+            submitArray[i]
+          );
+          const { data } = response;
+          setDayIsSelected((prevState) => {
+            let newState = { ...prevState };
+            delete newState[submitArray[i].month][submitArray[i].day];
+            if (Object.keys(newState[submitArray[i].month]).length === 0) {
+              delete newState[submitArray[i].month];
+            }
+            return newState;
+          });
+          console.log(
+            `el dia ${submitArray[i].day}/${submitArray[i].month} se creo exitosamente`
+          );
+        } catch (error) {
+          console.error(
+            `Error al crear el dia ${submitArray[i].day}/${submitArray[i].month}`,
+            error
+          );
+        }
+      }
+      setShowEdit(false);
+      setRefreshDays(true);
+    } else {
+      setShowAlert({
+        isOpen: true,
+        message:
+          "El rango horario debe ser mayor a la tardanza de tus servicios",
+        type: "warning",
+        button1: {
+          text: "",
+          action: "handleActionProp",
+        },
+        buttonClose: {
+          text: "OK",
+        },
+      });
     }
-    setShowEdit(false)
-    setRefreshDays(true)
-   
-  }
+  };
 
   return (
     <div style={{cursor:loading?"wait":""}} >
@@ -278,18 +346,29 @@ const CreateWorkDays = ({ user, schedule }) => {
           {/* sección del slider */}
         </Grid>
         <SliderModal
+          user={user}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           setSubmit={setSubmit}
+          openClose={openClose}
           timeSelected={timeSelected}
           setTimeSelected={setTimeSelected}
           handleSubmit={handleSubmit}
         />
-        <AlertModal
-          showAlert={showAlert}
-          setShowAlert={setShowAlert}
-          handleActionProp={setIsOpen}
-        />
+        {showAlert.alertNumber === 1 && (
+          <AlertModal
+            showAlert={showAlert}
+            setShowAlert={setShowAlert}
+            handleActionProp={setIsOpen}
+          />
+        )}
+        {showAlert.alertNumber === 2 && (
+          <AlertModal
+            showAlert={showAlert}
+            setShowAlert={setShowAlert}
+            handleActionProp={setRedirectToMyServices}
+          />
+        )}
       </Grid>
     </div>
   );

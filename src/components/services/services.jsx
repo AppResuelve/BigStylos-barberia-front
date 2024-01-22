@@ -71,7 +71,6 @@ const Services = () => {
     }
   };
 
-  console.log(loading);
   return (
     <div
       style={{
@@ -81,7 +80,7 @@ const Services = () => {
     >
       {loading ? (
         <LinearProgress sx={{ height: "2px", marginBottom: "15px" }} />
-      ) : (
+      ) :(
         <hr
           style={{
             marginBottom: "15px",

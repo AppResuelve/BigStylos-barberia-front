@@ -1,7 +1,4 @@
 import { useEffect, useState } from "react";
-import formatHour from "../../functions/formatHour";
-import axios from "axios";
-const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const SelectedDay = ({
   firstMonth,
@@ -35,7 +32,11 @@ const SelectedDay = ({
       const result = recorrerEstructura(dayIsSelected);
       setRenderedStructure(result);
     } else {
+<<<<<<< HEAD
       setRenderedStructure([])
+=======
+      setRenderedStructure([]);
+>>>>>>> 3b9fa8a54fc29b35db111c3ed20e17edd0ec3bc0
     }
   }, [dayIsSelected]);
 

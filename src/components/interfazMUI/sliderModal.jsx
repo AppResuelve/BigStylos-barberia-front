@@ -5,15 +5,18 @@ import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import time from "../../helpers/arrayTime";
 import HelpIcon from "@mui/icons-material/Help";
 import formatHour from "../../functions/formatHour";
+import durationMax from "../../helpers/durationMax";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction={"up"} ref={ref} {...props} />;
 });
 const SliderModal = ({
+  user,
   isOpen,
   setIsOpen,
   darkMode,
   setSubmit,
+  openClose,
   timeSelected,
   setTimeSelected,
   handleSubmit,
@@ -22,11 +25,37 @@ const SliderModal = ({
   const [timeResult, setTimeResult] = useState([]); // aca estaran los values convertidos a time de back
   const handleClose = () => setIsOpen(false);
 
+  const obtenerDuracionMaxima = (obj) => {
+    let duracionMaxima = 0;
+    console.log(user);
+    for (const key in obj.services) {
+      const servicio = obj.services[key];
+
+      if (servicio && typeof servicio.duration === "number") {
+        if (duracionMaxima === 0 || servicio.duration > duracionMaxima) {
+          duracionMaxima = servicio.duration;
+        }
+      }
+    }
+
+    return duracionMaxima;
+  };
+
+  const maxDelay = obtenerDuracionMaxima(user);
+
   const [values, setValues] = useState([
-    [420, 480],
-    [1380, 1440],
+    [660, 840],
+    [660, 840],
   ]); // Solo 2 rangos
 
+  useEffect(() => {
+    setValues([
+      [openClose[0], openClose[0] + maxDelay],
+      [openClose[0], openClose[0] + maxDelay],
+    ]);
+  }, [openClose]);
+
+  console.log(values);
   useEffect(() => {
     let array = new Array(1441).fill(null);
     let contador = 0;
@@ -61,7 +90,7 @@ const SliderModal = ({
     <div>
       <Dialog
         sx={{
-          height: sm ? "100vh" : "800px",
+          height: "100vh",
         }}
         fullScreen={sm}
         TransitionComponent={Transition}
@@ -128,8 +157,8 @@ const SliderModal = ({
                   }
                   valueLabelDisplay="auto" // Configura para que se muestre solo cuando se selecciona
                   valueLabelFormat={(value) => formatHour(value)}
-                  min={420}
-                  max={1440}
+                  min={openClose[0]}
+                  max={openClose[1]}
                   step={30}
                   orientation={sm ? "vertical" : "horizontal"}
                   marks={marks.map((mark) => {
@@ -224,12 +253,12 @@ const SliderModal = ({
                 }}
               >
                 <Box>
-                  <h2>{values[0][0]} hs</h2>
+                  <h2>{formatHour(values[0][0])} hs</h2>
                 </Box>
                 <h2>a</h2>
 
                 <Box>
-                  <h2>{values[0][1]} hs</h2>
+                  <h2>{formatHour(values[0][1])} hs</h2>
                 </Box>
               </Grid>
               {/*---------------------  mostrar condicionalmente el segundo grid si hay 2 valores para mostrar -----------*/}
@@ -248,11 +277,11 @@ const SliderModal = ({
                 }}
               >
                 <Box>
-                  <h2>{values[1][0]} hs</h2>
+                  <h2>{formatHour(values[1][0])} hs</h2>
                 </Box>
                 <h2>a</h2>
                 <Box>
-                  <h2>{values[1][1]} hs</h2>
+                  <h2>{formatHour(values[1][1])} hs</h2>
                 </Box>
               </Grid>
             </Grid>
@@ -272,7 +301,7 @@ const SliderModal = ({
                   marginBottom: sm ? "25px" : "",
                 }}
                 onClick={() => {
-                  handleSubmit(timeSelected), handleClose();
+                  handleSubmit(timeSelected, values), handleClose();
                 }}
               >
                 Confirmar

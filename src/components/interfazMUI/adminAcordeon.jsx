@@ -35,7 +35,6 @@ const AdminAcordeon = () => {
     };
     fetchData();
   }, [refresh]);
-
   useEffect(() => {
     let aux = false;
     for (const index in schedule) {
@@ -173,6 +172,7 @@ const AdminAcordeon = () => {
                 setSchedule={setSchedule}
                 refresh={refresh}
                 setRefresh={setRefresh}
+                setRemaining={setRemaining}
               />
             ) : (
               <LinearProgress sx={{ height: "2px", marginBottom: "15px" }} />

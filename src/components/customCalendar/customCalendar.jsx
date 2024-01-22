@@ -24,7 +24,6 @@ const CustomCalendar = ({
   const [exist50, setExist50] = useState(false);
 
   const handleDay = (day, month) => {
-    
     if (dayIsSelected[month] && dayIsSelected[month][day]) {
       // Si ya existe en dayIsSelected, lo quitamos
       const { [day]: _, ...rest } = dayIsSelected[month];
@@ -75,6 +74,7 @@ const CustomCalendar = ({
           <h4 key={day}>{day}</h4>
         ))}
       </Box>
+
       <Box className={!sm ? "line7-query600px" : "line7"}>
         {daysCalendarCustom.month1.map((day, index) => {
           let dayName = obtainDayName(day, currentMonth, currentYear);
@@ -98,6 +98,7 @@ const CustomCalendar = ({
           ) {
             colorDay = "#e6b226d0";
           }
+
           return (
             <button
               key={index}
@@ -166,13 +167,8 @@ const CustomCalendar = ({
           return (
             <button
               key={index + 100}
+              className={!showEdit || disabled ? "month2-false" : "month2"}
               disabled={!showEdit ? true : disabled}
-              className={
-                !showEdit ||
-               disabled
-                  ? "month2-false"
-                  : "month2"
-              }
               onClick={() => handleDay(day, nextMonth)}
               style={{
                 backgroundColor: colorDay,
@@ -186,8 +182,9 @@ const CustomCalendar = ({
                   : disabled
                   ? "auto"
                   : "pointer",
-                color:disabled
-                    ? "#e0e0e0d2": !showEdit
+                color: disabled
+                  ? "#e0e0e0d2"
+                  : !showEdit
                   ? "white"
                   : dayIsSelected[nextMonth] && dayIsSelected[nextMonth][day]
                   ? "white"

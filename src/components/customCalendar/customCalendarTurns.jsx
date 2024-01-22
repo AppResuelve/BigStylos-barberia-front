@@ -1,65 +1,66 @@
-import { useEffect } from "react";
 import daysMonthCalendarCustom from "../../functions/daysMonthCalendarCustom";
 import getToday from "../../functions/getToday";
+import { Box } from "@mui/material";
 import "./customCalendar.css";
 
-
 const CustomCalendarTurns = ({
-  daysForCalendar,
+  sm,
+  days,
+  dayIsSelected,
   setDayIsSelected,
   amountOfDays,
+  serviceSelected,
 }) => {
-  const daysCalendarCustom = daysMonthCalendarCustom(amountOfDays, false);
+  const daysCalendarCustom = daysMonthCalendarCustom(amountOfDays, true);
   const { currentMonth, nextMonth } = daysCalendarCustom;
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
   const getDayPosition = getToday(); // devuelve número que representa qué día de la semana es (lunes, martes, etc)
-  useEffect(() => {
-  
-  }, []);
 
-  const handleDay = (day) => {
-   setDayIsSelected((prevState) => ({
-     ...prevState,
-     currentDay: day,
-   }));
+  /* console.log(days) */
+
+  const handleDay = (day, month) => {
+    setDayIsSelected((prevState) => {
+      let newState = { ...prevState };
+      if (prevState[1] == month && prevState[0] == day) {
+        newState = [];
+      } else {
+        newState = [day, month];
+      }
+      return newState;
+    });
   };
   return (
-    <div>
-      <h1>Calendario de turnos</h1>
-      <div className="line7day">
+    <div className="div-container-calendar">
+      <Box className={!sm ? "line7day-query600px" : "line7day"}>
         {daysOfWeek.map((day) => (
           <div key={day}>{day}</div>
         ))}
-      </div>
-      <div className="line7">
+      </Box>
+      <Box className={!sm ? "line7-query600px" : "line7"}>
         {daysCalendarCustom.month1.map((day, index) => {
           let colorDay = "white"; // Inicializar colorDay fuera del mapeo
-          let disabled = true;
-          if (
-            daysForCalendar[currentMonth] &&
-            daysForCalendar[currentMonth][day] === "se puede agendar"
-          ) {
-            colorDay = "gray";
-            disabled = false;
-          } else if (
-            daysForCalendar[currentMonth] &&
-            daysForCalendar[currentMonth][day] === "no se puede agendar"
-          ) {
-            colorDay = "white";
-            disabled = true;
+          let disable = true;
+          if (days[currentMonth] && days[currentMonth][day]) {
+            disable = false;
+          }
+          if (days[currentMonth] && days[currentMonth][day]) {
+            colorDay = "#5bfd33d0";
           }
 
           return (
             <button
               key={index}
               className="month1"
-              disabled={disabled}
-              onClick={() => handleDay(day)}
+              onClick={() => handleDay(day, currentMonth)}
+              disabled={disable}
               style={{
                 gridColumnStart: index === 0 ? getDayPosition : "auto",
-                ...(index === 0 ? { backgroundColor: "#e0e0e0" } : {}),
-                backgroundColor: colorDay, // Asignar colorDay al backgroundColor
-                cursor: disabled ? "auto" : "pointer",
+                backgroundColor:
+                  dayIsSelected.length > 0 &&
+                  dayIsSelected[0] == day &&
+                  dayIsSelected[1] == currentMonth
+                    ? "#2196f3"
+                    : colorDay,
               }}
             >
               {day}
@@ -69,38 +70,34 @@ const CustomCalendarTurns = ({
 
         {daysCalendarCustom.month2.map((day, index) => {
           let colorDay = "white"; // Inicializar colorDay fuera del mapeo
-          let disabled = true;
-
-          if (
-            daysForCalendar[nextMonth] &&
-            daysForCalendar[nextMonth][day] === "se puede agendar"
-          ) {
-            colorDay = "gray";
-            disabled = false;
-          } else if (
-            daysForCalendar[nextMonth] &&
-            daysForCalendar[nextMonth][day] === "no se puede agendar"
-          ) {
-            colorDay = "white";
-            disabled = true;
+          let disable = true;
+          if (days[nextMonth] && days[nextMonth][day]) {
+            disable = false;
+          }
+          if (days[nextMonth] && days[nextMonth][day]) {
+            colorDay = "#5bfd33d0";
           }
 
           return (
             <button
               key={index + 100}
               className="month2"
-              disabled={disabled}
-              onClick={() => handleDay(day)}
+              onClick={() => handleDay(day, nextMonth)}
+              disabled={disable}
               style={{
-                backgroundColor: colorDay, // Asignar colorDay al backgroundColor
-                cursor: disabled ? "auto" : "pointer",
+                backgroundColor:
+                  dayIsSelected.length > 0 &&
+                  dayIsSelected[0] == day &&
+                  dayIsSelected[1] == nextMonth
+                    ? "#2196f3"
+                    : colorDay,
               }}
             >
               {day}
             </button>
           );
         })}
-      </div>
+      </Box>
     </div>
   );
 };
