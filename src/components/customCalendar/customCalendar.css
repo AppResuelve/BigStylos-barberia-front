@@ -82,7 +82,7 @@
 
 .line7day-query600px {
   width: 100%;
-  max-width: 550px;
+  max-width: 450px;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   text-align: center;
@@ -94,9 +94,9 @@
 
 .line7-query600px {
   width: 100%;
-  max-width: 550px;
+  max-width: 470px;
   height: 85vw;
-  max-height: 500px;
+  max-height: 450px;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(6, 1fr);

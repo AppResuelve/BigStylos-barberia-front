@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import daysMonthCalendarCustom from "../../functions/daysMonthCalendarCustom";
 import getToday from "../../functions/getToday";
 import obtainDayName from "../../functions/obtainDayName";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import "./customCalendar.css";
 import { Box } from "@mui/material";
+import axios from "axios";
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const CustomCalendar = ({
   setDayIsSelected,
@@ -22,6 +24,23 @@ const CustomCalendar = ({
   const getDayPosition = getToday();
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [exist50, setExist50] = useState(false);
+  const [noWork, setNoWork] = useState({});
+
+  useEffect(() => {
+    const fetchNoWorkDays = async () => {
+      try {
+        const response = await axios.get(
+          `${VITE_BACKEND_URL}/schedule/noworkdays`
+        );
+        const { data } = response;
+        setNoWork(data);
+      } catch (error) {
+        console.error("Error al obtener los dias:", error);
+        alert("Error al obtener los dias");
+      }
+    };
+    fetchNoWorkDays();
+  }, []);
 
   const handleDay = (day, month) => {
     if (dayIsSelected[month] && dayIsSelected[month][day]) {
@@ -90,6 +109,11 @@ const CustomCalendar = ({
           if (days && days[currentMonth] && days[currentMonth][day]) {
             colorDay = "#5bfd33d0";
           }
+
+          if (noWork[currentMonth] && noWork[currentMonth][day]) {
+            disabled = true;
+            colorDay = "gray";
+          }
           if (
             days &&
             days[currentMonth] &&
@@ -149,6 +173,10 @@ const CustomCalendar = ({
           }
           if (days && days[nextMonth] && days[nextMonth][day]) {
             colorDay = "#5bfd33d0";
+          }
+          if (noWork[nextMonth] && noWork[nextMonth][day]) {
+            disabled = true;
+            colorDay = "gray";
           }
           if (
             days &&

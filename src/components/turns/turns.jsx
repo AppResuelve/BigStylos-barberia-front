@@ -80,28 +80,18 @@ const Turns = ({ user }) => {
         <Box sx={{ position: "relative" }}>
           <Box
             sx={{
-              height: "20vh",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <h1 className={!md ? "h1-turns-md" : "h1-turns"}>
-              Selecciona un servicio
-            </h1>
-          </Box>
-          <Box
-            sx={{
               display: "grid",
+              marginTop: "100px",
+              // bgcolor:"blue",
               gridTemplateColumns: sm
                 ? "1fr 1fr"
                 : md
                 ? "1fr 1fr 1fr 1fr"
                 : "1fr 1fr 1fr 1fr 1fr",
               gap: "3px",
-              width: "100%",
-              height: "25vh",
-              maxHeight: "210px",
+              // width: "100%",
+              height: "35vh",
+              maxHeight: "710px",
               overflow: "auto",
               borderBottom: "2px solid #2196f3",
               alignItems: "center",
@@ -112,19 +102,36 @@ const Turns = ({ user }) => {
               <Box sx={{ marginTop: "1px" }} key={index}>
                 <Button
                   variant={
-                    element == serviceSelected ? "contained" : "outlined"
+                    element === serviceSelected ? "contained" : "outlined"
                   }
-                  class={
-                    element == serviceSelected
+                  className={
+                    element === serviceSelected
                       ? "btn-services-selected"
                       : "btn-services"
                   }
-                  // sx={{
-                  //   width: "130px",
-
-                  // }}
-                  key={index}
-                  style={{}}
+                  style={{
+                    wordWrap: "break-word",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    fontWeight: "bold",
+                    width: element === serviceSelected ? "170px" : "160px",
+                    borderRadius: "7px",
+                    border: "none",
+                    fontFamily: "Jost, sans-serif",
+                    fontSize: "15px",
+                    height: "45px",
+                    letterSpacing: "1.5px",
+                    color: "white",
+                    textTransform:"lowercase",
+                    backgroundColor:
+                      element === serviceSelected ? "#134772" : "#2196F3",
+                    transition: "0.3s",
+                    boxShadow:
+                      element === serviceSelected
+                        ? "0px 10px 14px 0px rgba(0, 0, 0, 0.75)"
+                        : "0px 5px 14px -5px rgba(0, 0, 0, 0.75)",
+                  }}
                   onClick={() => handleSelectService(element)}
                 >
                   {element}
@@ -156,11 +163,8 @@ const Turns = ({ user }) => {
         <Box
           sx={{
             display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-around",
-            alignContent: "center",
-            // marginTop: "18px",
-            // height: "100%",
+            alignSelf: "center",
+            width: "95%",
           }}
         >
           <Box
