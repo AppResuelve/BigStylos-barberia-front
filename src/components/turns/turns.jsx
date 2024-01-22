@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import CustomCalendarTurns from "../customCalendar/customCalendarTurns";
 import ShowTurns from "../showTurns/showTurns";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
-import { Box, Button, Grid } from "@mui/material";
+import { Box, Button } from "@mui/material";
+import calendar from "../../assets/images/calendar2.png";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -13,6 +14,7 @@ const Turns = ({ user }) => {
   const [dayIsSelected, setDayIsSelected] = useState([]);
   const [serviceSelected, setServiceSelected] = useState("");
   const [showTurns, setShowTurns] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
   useEffect(() => {
@@ -58,56 +60,72 @@ const Turns = ({ user }) => {
 
   return (
     <div
-      style={{ display: "flex", justifyContent: "center", paddingTop: "70px" }}
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        paddingTop: sm ? "70px" : "100px",
+        height: "100vh",
+      }}
     >
       <div
         style={{
           display: "flex",
           flexDirection: "column",
-          paddingTop: sm ? "30px" : "70px",
-          width: "95vw",
+          width: "95%",
           maxWidth: "900px", //revisar maxWidth
-          // backgroundColor: "red",
         }}
       >
-        <h1
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            // color: darkMode ? "white" : "#28292c",
-          }}
-        >
-          Selecciona un servicio
-        </h1>
+        <Box sx={{ height: "12vh" }}>
+          <h1
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              // color: darkMode ? "white" : "#28292c",
+            }}
+          >
+            Selecciona un servicio
+          </h1>
+        </Box>
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
+            // justifyContent:"space-around",
             alignItems: "center",
             marginTop: "18px",
+            height: "100%",
           }}
         >
           <Box
             sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexWrap: "wrap",
-              maxHeight: "300px",
-              overflow: "scroll",
+              display: "grid",
+              gridTemplateColumns: sm
+                ? "1fr 1fr"
+                : md
+                ? "1fr 1fr 1fr"
+                : "1fr 1fr 1fr 1fr",
+              gap: "5px",
               width: "100%",
+              height: "25vh",
+              maxHeight: "210px",
+              overflow: "scroll",
+              // boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // Ajusta según sea necesario
+              alignItems: "center",
+              justifyItems: "center",
             }}
           >
             {services.map((element, index) => (
-              <Box sx={{ margin: "1px" }} key={index}>
+              <Box sx={{ margin: "5px" }} key={index}>
                 <Button
                   variant={
                     element == serviceSelected ? "contained" : "outlined"
                   }
                   sx={{
+                    width: "150px",
                     fontFamily: "Jost, sans-serif",
                     fontWeight: "bold",
-                    height: "35px",
+                    height: "45px",
+                    letterSpacing: "1.5px",
                     backgroundColor:
                       element == serviceSelected ? "" : "#e8e8e8",
                   }}
@@ -120,16 +138,28 @@ const Turns = ({ user }) => {
               </Box>
             ))}
           </Box>
-          <Box sx={{ marginTop: "20px" }}>
-            {serviceSelected.length > 0 && (
+          <Box
+            sx={{
+              marginTop: "30px",
+              width: "100%",
+              maxWidth: "900px",
+              height: "45vh",
+              // display: "flex",
+              // justifyContent:"center"
+            }}
+          >
+            {serviceSelected.length > 0 ? (
               <CustomCalendarTurns
                 sm={sm}
-                amountOfDays={25}
+                amountOfDays={30}
                 dayIsSelected={dayIsSelected}
                 setDayIsSelected={setDayIsSelected}
                 serviceSelected={serviceSelected}
                 days={days}
+                setIsOpen={setIsOpen}
               />
+            ) : (
+              <img src={calendar} style={{ width: "300px", height: "300px" }} />
             )}
           </Box>
         </Box>
@@ -138,6 +168,8 @@ const Turns = ({ user }) => {
             dayIsSelected={dayIsSelected}
             serviceSelected={serviceSelected}
             user={user}
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
           />
         )}
       </div>

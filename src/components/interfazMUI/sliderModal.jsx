@@ -55,7 +55,6 @@ const SliderModal = ({
     ]);
   }, [openClose]);
 
-  console.log(values);
   useEffect(() => {
     let array = new Array(1441).fill(null);
     let contador = 0;
