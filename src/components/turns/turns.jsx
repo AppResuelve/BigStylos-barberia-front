@@ -65,16 +65,6 @@ const Turns = ({ user }) => {
   };
 
   return (
-<<<<<<< HEAD
-    <div>
-      <div style={{paddingTop: '100px'}}>
-        <h1>hola</h1>
-        {services.map((element, index) => (
-          <button key={index} style={{backgroundColor: element == serviceSelected ? "green" : "white"}} onClick={() => handleSelectService(element)}>{element}</button>
-        ))}
-        {serviceSelected.length > 0 && <CustomCalendarTurns amountOfDays={25} dayIsSelected={dayIsSelected} setDayIsSelected={setDayIsSelected} serviceSelected={serviceSelected} days={days} />}
-        {dayIsSelected.length > 0 && <ShowTurns dayIsSelected={dayIsSelected} serviceSelected={serviceSelected} user={user}/>}
-=======
     <div
       style={{
         display: "flex",
@@ -224,7 +214,6 @@ const Turns = ({ user }) => {
             setIsOpen={setIsOpen}
           />
         )}
->>>>>>> dev
       </div>
     </div>
   );
