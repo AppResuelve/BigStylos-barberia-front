@@ -8,7 +8,6 @@ import Turns from "./components/turns/turns";
 import "./App.css";
 import Admin from "./components/admin/admin";
 import Worker from "./components/worker/worker";
-import Footer from "./components/footer/footer";
 import NotFound from "./components/pageNotFound/pageNotFound";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;

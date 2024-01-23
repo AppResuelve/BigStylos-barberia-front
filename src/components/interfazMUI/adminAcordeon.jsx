@@ -95,7 +95,7 @@ const AdminAcordeon = () => {
             <Services />
           </AccordionDetails>
         </Accordion>
-        {/*  //------------------// */}
+{/* ********************************************************************************************************* */}
         <Accordion
           style={{
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
@@ -131,7 +131,7 @@ const AdminAcordeon = () => {
             )}
           </AccordionDetails>
         </Accordion>
-        {/*  //------------------// */}
+{/* ********************************************************************************************************* */}
         <Accordion
           style={{
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
@@ -186,7 +186,7 @@ const AdminAcordeon = () => {
             )}
           </AccordionDetails>
         </Accordion>
-        {/*  //------------------// */}
+{/* ********************************************************************************************************* */}
         <Accordion
           style={{
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
@@ -222,7 +222,7 @@ const AdminAcordeon = () => {
             )}
           </AccordionDetails>
         </Accordion>
-        {/*  //------------------// */}
+{/* ********************************************************************************************************* */}
         <Accordion
           style={{
             // marginBottom: "30px",
@@ -250,7 +250,7 @@ const AdminAcordeon = () => {
             <Users />
           </AccordionDetails>
         </Accordion>
-        {/*  //------------------// */}
+{/* ********************************************************************************************************* */}
         <Accordion
           style={{
             marginBottom: "30px",
@@ -276,6 +276,33 @@ const AdminAcordeon = () => {
           </AccordionSummary>
           <AccordionDetails>
             <StoreImages />
+          </AccordionDetails>
+        </Accordion>
+{/* ********************************************************************************************************* */}
+        <Accordion
+          style={{
+            boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
+          }}
+          expanded={expanded === "panel7"}
+          onChange={handleChange("panel7")}
+        >
+          <AccordionSummary
+            sx={{
+              backgroundColor: expanded === "panel7" ? "#d6d6d5" : "",
+              borderRadius: "2px",
+            }}
+            expandIcon={
+              <ExpandMoreIcon
+                sx={{ color: expanded === "panel7" ? "" : "#2196f3" }}
+              />
+            }
+            aria-controls="panel1bh-content"
+            id="panel7bh-header"
+          >
+            <h2>Servicios</h2>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Services />
           </AccordionDetails>
         </Accordion>
       </Box>
