@@ -8,6 +8,7 @@ import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 
 const CustomCalendarPlannedC = ({
   schedule,
+  noWork,
   amountOfDays,
   dayIsSelected,
   setDayIsSelected,
@@ -20,7 +21,6 @@ const CustomCalendarPlannedC = ({
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
   const getDayPosition = getToday();
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-
   const handleDay = (day, month, hasTurn) => {
     //     if (hasTurn) {
     //       console.log("setee en true el turns");
@@ -81,6 +81,10 @@ const CustomCalendarPlannedC = ({
               disabled = true;
               colorDay = "gray";
             }
+            if (noWork[currentMonth] && noWork[currentMonth][day]) {
+              disabled = true;
+              colorDay = "gray";
+            }
             return (
               <button
                 key={index}
@@ -129,6 +133,10 @@ const CustomCalendarPlannedC = ({
             !schedule[dayName] ||
             (schedule[dayName].open === 0 && schedule[dayName].close === 1440)
           ) {
+            disabled = true;
+            colorDay = "gray";
+          }
+          if (noWork[nextMonth] && noWork[nextMonth][day]) {
             disabled = true;
             colorDay = "gray";
           }
@@ -209,6 +217,3 @@ const CustomCalendarPlannedC = ({
 };
 
 export default CustomCalendarPlannedC;
-
-
-

@@ -28,7 +28,8 @@ const CustomCalendarTurns = ({
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/schedule`);
         const { data } = response;
-        setSchedule(data);
+        setSchedule(data.businessSchedule);
+        setNoWork(data.noWorkDays);
       } catch (error) {
         console.error("Error al obtener los horarios", error);
         alert("Error al obtener los horarios");
@@ -36,21 +37,7 @@ const CustomCalendarTurns = ({
     };
     fetchData();
   }, []);
-  useEffect(() => {
-    const fetchNoWorkDays = async () => {
-      try {
-        const response = await axios.get(
-          `${VITE_BACKEND_URL}/schedule/noworkdays`
-        );
-        const { data } = response;
-        setNoWork(data);
-      } catch (error) {
-        console.error("Error al obtener los dias:", error);
-        alert("Error al obtener los dias");
-      }
-    };
-    fetchNoWorkDays();
-  }, []);
+
   const handleDay = (day, month) => {
     setIsOpen(true);
     setDayIsSelected((prevState) => {

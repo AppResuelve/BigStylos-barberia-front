@@ -24,6 +24,10 @@ const Turns = ({ user }) => {
   }, [serviceSelected]);
 
   useEffect(() => {
+    setDayIsSelected([])
+  },[serviceSelected])
+
+  useEffect(() => {
     const fetchDays = async () => {
       try {
         const response = await axios.post(

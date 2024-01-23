@@ -28,11 +28,12 @@ const PlannedClosure = ({ schedule }) => {
       }
       try {
         const response = await axios.get(
-          `${VITE_BACKEND_URL}/schedule/noworkdays`
+          `${VITE_BACKEND_URL}/schedule/`
         );
         const { data } = response;
-        setNoWork(data);
-        setDayIsSelected(data);
+        console.log(data);
+        setNoWork(data.noWorkDays);
+        setDayIsSelected(data.noWorkDays);
       } catch (error) {
         console.error("Error al obtener los dias:", error);
         alert("Error al obtener los dias");
@@ -112,6 +113,7 @@ const PlannedClosure = ({ schedule }) => {
 
       <CustomCalendarPlannedC
         schedule={schedule}
+        noWork={noWork}
         amountOfDays={27}
         dayIsSelected={dayIsSelected}
         setDayIsSelected={setDayIsSelected}

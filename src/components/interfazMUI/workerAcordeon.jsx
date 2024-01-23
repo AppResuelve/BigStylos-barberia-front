@@ -27,7 +27,7 @@ const WorkerAcordeon = ({ user }) => {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/schedule`);
         const { data } = response;
-        setSchedule(data);
+        setSchedule(data.businessSchedule);
       } catch (error) {
         console.error("Error al obtener los horarios", error);
         alert("Error al obtener los horarios");

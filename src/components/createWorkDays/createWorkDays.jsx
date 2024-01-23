@@ -136,13 +136,6 @@ const CreateWorkDays = ({ user, schedule, pendingServices, setRedirectToMyServic
   };
 
   const handleSubmit = async (time, values) => {
-    /* setLoading(true);
-    setTimeout(() => {
-      setSubmit(false);
-      setLoading(false);
-      setDayIsSelected({});
-      setShowEdit(false);
-    }, 3000) */
     const currentMonth = getCurrentMonth();
     const currentMonth2 = currentMonth == 12 ? 1 : currentMonth + 1;
     const resultDuration = durationMax(user.services, values);

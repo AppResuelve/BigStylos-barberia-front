@@ -27,7 +27,7 @@ const AdminAcordeon = () => {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/schedule`);
         const { data } = response;
-        setSchedule(data);
+        setSchedule(data.businessSchedule);
         setLoading(false);
       } catch (error) {
         console.error("Error al obtener los horarios", error);

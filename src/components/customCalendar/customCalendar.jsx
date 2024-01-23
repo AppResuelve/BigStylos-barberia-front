@@ -29,11 +29,9 @@ const CustomCalendar = ({
   useEffect(() => {
     const fetchNoWorkDays = async () => {
       try {
-        const response = await axios.get(
-          `${VITE_BACKEND_URL}/schedule/noworkdays`
-        );
+        const response = await axios.get(`${VITE_BACKEND_URL}/schedule/`);
         const { data } = response;
-        setNoWork(data);
+        setNoWork(data.noWorkDays);
       } catch (error) {
         console.error("Error al obtener los dias:", error);
         alert("Error al obtener los dias");
