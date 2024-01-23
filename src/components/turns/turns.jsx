@@ -5,7 +5,7 @@ import ShowTurns from "../showTurns/showTurns";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { Box, Button } from "@mui/material";
 import calendar from "../../assets/images/calendar2.png";
-import imgService from "../../assets/images/corte-de-pelo.jpg";
+import imgService from "../../assets/images/peinado1.jpg";
 import "./turns.css";
 // import style from "./turns.css";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -24,8 +24,8 @@ const Turns = ({ user }) => {
   }, [serviceSelected]);
 
   useEffect(() => {
-    setDayIsSelected([])
-  },[serviceSelected])
+    setDayIsSelected([]);
+  }, [serviceSelected]);
 
   useEffect(() => {
     const fetchDays = async () => {
@@ -81,7 +81,13 @@ const Turns = ({ user }) => {
           maxWidth: "900px", //revisar maxWidth
         }}
       >
-        <Box sx={{ position: "relative", background: "linear-gradient(180deg, rgba(255,0,0,0) 70%, rgba(0,0,0,0.64) 100%)",}}>
+        <Box
+          sx={{
+            position: "relative",
+            background:
+              "linear-gradient(180deg, rgba(255,0,0,0) 70%, rgba(0,0,0,0.64) 100%)",
+          }}
+        >
           <Box
             sx={{
               display: "grid",
