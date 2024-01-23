@@ -259,7 +259,7 @@ const CreateWorkDays = ({ user, schedule, pendingServices, setRedirectToMyServic
         >
           <CustomCalendar
             setDayIsSelected={setDayIsSelected}
-            amountOfDays={30}
+            amountOfDays={27}
             dayIsSelected={dayIsSelected}
             days={days}
             setDays={setDays}

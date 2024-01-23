@@ -77,7 +77,7 @@ const Turns = ({ user }) => {
           maxWidth: "900px", //revisar maxWidth
         }}
       >
-        <Box sx={{ position: "relative" }}>
+        <Box sx={{ position: "relative", background: "linear-gradient(180deg, rgba(255,0,0,0) 70%, rgba(0,0,0,0.64) 100%)",}}>
           <Box
             sx={{
               display: "grid",
@@ -89,11 +89,10 @@ const Turns = ({ user }) => {
                 ? "1fr 1fr 1fr 1fr"
                 : "1fr 1fr 1fr 1fr 1fr",
               gap: "3px",
-              // width: "100%",
-              height: "35vh",
-              maxHeight: "710px",
+              height: "30vh",
+              maxHeight: "500px",
               overflow: "auto",
-              borderBottom: "2px solid #2196f3",
+              borderBottom: "3px solid #134772",
               alignItems: "center",
               justifyItems: "center",
             }}
@@ -123,7 +122,7 @@ const Turns = ({ user }) => {
                     height: "45px",
                     letterSpacing: "1.5px",
                     color: "white",
-                    textTransform:"lowercase",
+                    textTransform: "lowercase",
                     backgroundColor:
                       element === serviceSelected ? "#134772" : "#2196F3",
                     transition: "0.3s",
@@ -178,7 +177,7 @@ const Turns = ({ user }) => {
             {serviceSelected.length > 0 ? (
               <CustomCalendarTurns
                 sm={sm}
-                amountOfDays={30}
+                amountOfDays={27}
                 dayIsSelected={dayIsSelected}
                 setDayIsSelected={setDayIsSelected}
                 serviceSelected={serviceSelected}

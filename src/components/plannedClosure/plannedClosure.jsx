@@ -112,7 +112,7 @@ const PlannedClosure = ({ schedule }) => {
 
       <CustomCalendarPlannedC
         schedule={schedule}
-        amountOfDays={36}
+        amountOfDays={27}
         dayIsSelected={dayIsSelected}
         setDayIsSelected={setDayIsSelected}
         days={days}
