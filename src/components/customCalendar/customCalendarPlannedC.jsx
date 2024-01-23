@@ -9,6 +9,7 @@ import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 const CustomCalendarPlannedC = ({
   schedule,
   noWork,
+  setNoWork,
   amountOfDays,
   dayIsSelected,
   setDayIsSelected,
@@ -26,6 +27,30 @@ const CustomCalendarPlannedC = ({
     //       console.log("setee en true el turns");
     //       setDaysWithTurns(true);
     //     }
+
+    setNoWork((prevState) => {
+      const newState = { ...prevState };
+
+      if (newState[month] && newState[month][day]) {
+        // Si ya existe en dayIsSelected, lo quitamos
+
+        const { [day]: _, ...rest } = newState[month];
+
+        if (Object.keys(rest).length < 1) {
+          delete newState[month];
+        } else {
+          newState[month] = rest;
+        }
+      } else {
+        // Si no existe, lo agregamos
+        newState[month] = {
+          ...newState[month],
+          [day]: {},
+        };
+      }
+
+      return newState;
+    });
 
     setDayIsSelected((prevState) => {
       const newState = { ...prevState };
@@ -82,7 +107,6 @@ const CustomCalendarPlannedC = ({
               colorDay = "gray";
             }
             if (noWork[currentMonth] && noWork[currentMonth][day]) {
-              disabled = true;
               colorDay = "gray";
             }
             return (
@@ -137,7 +161,6 @@ const CustomCalendarPlannedC = ({
             colorDay = "gray";
           }
           if (noWork[nextMonth] && noWork[nextMonth][day]) {
-            disabled = true;
             colorDay = "gray";
           }
           return (

@@ -5,7 +5,7 @@ import ShowTurns from "../showTurns/showTurns";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { Box, Button } from "@mui/material";
 import calendar from "../../assets/images/calendar2.png";
-import imgService from "../../assets/images/peinado1.jpg";
+import defaultServiceImg from "../../assets/images/default-img-services.jpg";
 import "./turns.css";
 // import style from "./turns.css";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -17,6 +17,7 @@ const Turns = ({ user }) => {
   const [serviceSelected, setServiceSelected] = useState("");
   const [showTurns, setShowTurns] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedImg, setSelectedImg] = useState(false);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
   useEffect(() => {
@@ -61,7 +62,8 @@ const Turns = ({ user }) => {
   }, []);
 
   const handleSelectService = (element) => {
-    setServiceSelected(element);
+    setServiceSelected(element[0]);
+    setSelectedImg(element[1]);
   };
 
   return (
@@ -92,7 +94,6 @@ const Turns = ({ user }) => {
             sx={{
               display: "grid",
               marginTop: "100px",
-              // bgcolor:"blue",
               gridTemplateColumns: sm
                 ? "1fr 1fr"
                 : md
@@ -111,10 +112,10 @@ const Turns = ({ user }) => {
               <Box sx={{ marginTop: "1px" }} key={index}>
                 <Button
                   variant={
-                    element === serviceSelected ? "contained" : "outlined"
+                    element[0] === serviceSelected ? "contained" : "outlined"
                   }
                   className={
-                    element === serviceSelected
+                    element[0] === serviceSelected
                       ? "btn-services-selected"
                       : "btn-services"
                   }
@@ -124,7 +125,7 @@ const Turns = ({ user }) => {
                     justifyContent: "center",
                     alignItems: "center",
                     fontWeight: "bold",
-                    width: element === serviceSelected ? "170px" : "160px",
+                    width: element[0] === serviceSelected ? "170px" : "160px",
                     borderRadius: "7px",
                     border: "none",
                     fontFamily: "Jost, sans-serif",
@@ -134,16 +135,16 @@ const Turns = ({ user }) => {
                     color: "white",
                     textTransform: "lowercase",
                     backgroundColor:
-                      element === serviceSelected ? "#134772" : "#2196F3",
+                      element[0] === serviceSelected ? "#134772" : "#2196F3",
                     transition: "0.3s",
                     boxShadow:
-                      element === serviceSelected
+                      element[0] === serviceSelected
                         ? "0px 10px 14px 0px rgba(0, 0, 0, 0.75)"
                         : "0px 5px 14px -5px rgba(0, 0, 0, 0.75)",
                   }}
                   onClick={() => handleSelectService(element)}
                 >
-                  {element}
+                  {element[0]}
                 </Button>
               </Box>
             ))}
@@ -155,7 +156,7 @@ const Turns = ({ user }) => {
             }}
           >
             <img
-              src={imgService}
+              src={selectedImg ? selectedImg : defaultServiceImg}
               alt="img servicio"
               style={{
                 position: "absolute",

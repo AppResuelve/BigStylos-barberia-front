@@ -31,7 +31,6 @@ const PlannedClosure = ({ schedule }) => {
           `${VITE_BACKEND_URL}/schedule/`
         );
         const { data } = response;
-        console.log(data);
         setNoWork(data.noWorkDays);
         setDayIsSelected(data.noWorkDays);
       } catch (error) {
@@ -114,6 +113,7 @@ const PlannedClosure = ({ schedule }) => {
       <CustomCalendarPlannedC
         schedule={schedule}
         noWork={noWork}
+        setNoWork={setNoWork}
         amountOfDays={27}
         dayIsSelected={dayIsSelected}
         setDayIsSelected={setDayIsSelected}

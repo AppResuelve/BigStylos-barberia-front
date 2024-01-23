@@ -53,7 +53,7 @@ const MyServices = ({
     let objNewServicies = {};
     if (services && services.length > 0) {
       for (const prop in workerData) {
-        if (services.includes(prop)) {
+        if (services.some((serviceArr) => serviceArr[0] === prop)) {
           if (workerData[prop].duration === null) {
             objNewServicies[prop] = true;
           } else if (workerData[prop].duration === 0) {
@@ -71,11 +71,10 @@ const MyServices = ({
 
   useEffect(() => {
     if (timeEdit && Object.keys(timeEdit).length > 0) {
-
       if (services && services.length > 0) {
         let aux = false;
         for (const prop in timeEdit) {
-          if (services.includes(prop)) {
+          if (services.some((serviceArr) => serviceArr[0] === prop)) {
             if (timeEdit[prop].duration === null) {
               aux = true;
               setPendingServices(aux);
@@ -215,75 +214,81 @@ const MyServices = ({
         {services && services.length > 0 ? (
           services
             .filter((service) =>
-              service.toLowerCase().includes(searchValue.toLowerCase())
+              service[0].toLowerCase().includes(searchValue.toLowerCase())
             )
-            .map((element, index) => (
-              <Box
-                style={{
-                  width: "100%",
-                  display: sm ? "" : "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginBottom: sm ? "5px" : "10px",
-                }}
-                key={index}
-              >
-                <h3>{element}</h3>
+
+            .map((element, index) => {
+              return (
                 <Box
                   style={{
-                    display: "flex",
+                    width: "100%",
+                    display: sm ? "" : "flex",
                     justifyContent: "space-between",
-                    width: sm ? "100%" : "50%",
+                    alignItems: "center",
+                    marginBottom: sm ? "5px" : "10px",
                   }}
+                  key={index}
                 >
-                  {/* //// IOSSwicth //// */}
-                  <IosSwitch
-                    index={index}
-                    element={element}
-                    timeEdit={timeEdit}
-                    showEdit={showEdit}
-                    serviceStatus={serviceStatus}
-                    setServiceStatus={setServiceStatus}
-                    handleServiceStatus={handleServiceStatus}
-                  />
+                  <h3>{element[0]}</h3>
+                  <Box
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      width: sm ? "100%" : "50%",
+                    }}
+                  >
+                    {/* //// IOSSwicth //// */}
+                    <IosSwitch
+                      index={index}
+                      element={element[0]}
+                      timeEdit={timeEdit}
+                      showEdit={showEdit}
+                      serviceStatus={serviceStatus}
+                      setServiceStatus={setServiceStatus}
+                      handleServiceStatus={handleServiceStatus}
+                    />
 
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    {timeEdit[element].duration === null && serviceStatus && (
-                      <h3 style={{ color: "red" }}>Pendiente</h3>
-                    )}
-                    {timeEdit[element].duration == 0 ? (
-                      <h3 style={{ marginRight: "40px" }}>-----</h3>
-                    ) : (
-                      <Select
-                        sx={{
-                          height: "40px",
-                          width: "100px",
-                          marginLeft: "10px",
-                        }}
-                        disabled={showEdit ? false : true}
-                        value={
-                          timeEdit[element].duration === null
-                            ? 0
-                            : timeEdit[element].duration
-                        }
-                        onChange={(event) => handleSelectChange(event, element)}
-                      >
-                        {timeArray.map((minute, index) => (
-                          <MenuItem
-                            key={index}
-                            value={minute}
-                            disabled={minute === 0 ? true : false}
-                          >
-                            {minute === 0 ? "..." : formatHour(minute)}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    )}
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                      {timeEdit[element[0]].duration === null &&
+                        serviceStatus && (
+                          <h3 style={{ color: "red" }}>Pendiente</h3>
+                        )}
+                      {timeEdit[element[0]].duration == 0 ? (
+                        <h3 style={{ marginRight: "40px" }}>-----</h3>
+                      ) : (
+                        <Select
+                          sx={{
+                            height: "40px",
+                            width: "100px",
+                            marginLeft: "10px",
+                          }}
+                          disabled={showEdit ? false : true}
+                          value={
+                            timeEdit[element[0]].duration === null
+                              ? 0
+                              : timeEdit[element[0]].duration
+                          }
+                          onChange={(event) =>
+                            handleSelectChange(event, element[0])
+                          }
+                        >
+                          {timeArray.map((minute, index) => (
+                            <MenuItem
+                              key={index}
+                              value={minute}
+                              disabled={minute === 0 ? true : false}
+                            >
+                              {minute === 0 ? "..." : formatHour(minute)}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      )}
+                    </Box>
                   </Box>
+                  {sm && <hr style={{ marginTop: "5px" }} />}
                 </Box>
-                {sm && <hr style={{ marginTop: "5px" }} />}
-              </Box>
-            ))
+              );
+            })
         ) : (
           <Box
             sx={{

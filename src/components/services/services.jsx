@@ -18,6 +18,7 @@ const Services = () => {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/services`);
         const { data } = response;
+        console.log(data);
         setServices(data);
         setLoading(false);
       } catch (error) {
@@ -42,7 +43,7 @@ const Services = () => {
       if (newService !== "") {
         // Verifica si el nuevo servicio no está vacío
         await axios.post(`${VITE_BACKEND_URL}/services/create`, {
-          service: newService,
+          service: [newService],
         });
 
         // Refresca la lista de servicios después de agregar uno nuevo
@@ -57,10 +58,11 @@ const Services = () => {
   };
 
   const handleDeleteService = async (serviceName) => {
+    console.log(serviceName);
     try {
       // Lógica para eliminar el servicio por su nombre
-      await axios.delete(`${VITE_BACKEND_URL}/services/delete`, {
-        data: { service: serviceName },
+      await axios.post(`${VITE_BACKEND_URL}/services/delete`, {
+        service: [serviceName],
       });
 
       // Refresca la lista de servicios después de eliminar uno
@@ -70,7 +72,6 @@ const Services = () => {
       alert("Error al borrar el servicio");
     }
   };
-
   return (
     <div
       style={{
@@ -80,7 +81,7 @@ const Services = () => {
     >
       {loading ? (
         <LinearProgress sx={{ height: "2px", marginBottom: "15px" }} />
-      ) :(
+      ) : (
         <hr
           style={{
             marginBottom: "15px",
@@ -135,7 +136,7 @@ const Services = () => {
         {services.length > 0 ? (
           services
             .filter((service) =>
-              service.toLowerCase().includes(searchValue.toLowerCase())
+              service[0].toLowerCase().includes(searchValue.toLowerCase())
             )
             .map((element, index) => (
               <Grid
@@ -152,13 +153,12 @@ const Services = () => {
                 md={4}
                 key={index}
               >
-                <h3>{element}</h3>
+                <h3>{element[0]}</h3>
                 <Box style={{ display: "flex" }}>
                   <Button
-                    onClick={() => handleDeleteService(element)}
+                    onClick={() => handleDeleteService(element[0])}
                     style={{ color: "red", borderRadius: "50px" }}
                   >
-                  
                     <DeleteOutlineIcon />
                   </Button>
                 </Box>
