@@ -6,7 +6,7 @@ const Footer = ({darkMode}) => {
       container
       style={{
         width:"100%",
-        height: "150px",borderRadius:"3px",
+        height: "80px",borderRadius:"3px",
         backgroundColor: darkMode ? "white" : "#28292c",
         color: "white",
         display: "flex",

@@ -111,6 +111,7 @@ const ShowTurns = ({
         >
           <Box>
             <Button
+              onClick={handleClose}
               sx={{
                 fontFamily: "Jost, sans serif",
                 fontWeight: "bold",

@@ -5,6 +5,7 @@ import toHome2 from "../../assets/icons/homeWhite.png";
 import { Button } from "@mui/material";
 import DarkMode from "../interfazUiverse.io/darkMode";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
+import { Box } from "@mui/system";
 
 const Nav = ({ user, darkMode, setDarkMode }) => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
@@ -20,7 +21,7 @@ const Nav = ({ user, darkMode, setDarkMode }) => {
         position: "fixed",
         width: "100%",
         backgroundColor:
-          location.pathname === "/turns" && md
+          (location.pathname === "/turns" && md) || location.pathname === "/"
             ? "transparent"
             : darkMode
             ? "#252627"
@@ -30,18 +31,26 @@ const Nav = ({ user, darkMode, setDarkMode }) => {
     >
       <div style={{ paddingLeft: "10px" }}>
         <NavLink to="/">
-          <Button
-            style={{
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems:"center",
+              backgroundColor: !darkMode ? "white" : "black",
               borderRadius: "50px",
-              width: "0px",
+              width: "54px",
+              height: "54px",
             }}
           >
             <img
               src={darkMode ? toHome2 : toHome}
               alt="inicio"
-              style={{ width: "45px" }}
+              style={{
+                marginBottom:"4px",
+                width: "42px",
+              }}
             />
-          </Button>
+          </Box>
         </NavLink>
       </div>
       <div

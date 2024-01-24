@@ -36,6 +36,7 @@ const AdminAcordeon = () => {
     };
     fetchData();
   }, [refresh]);
+
   useEffect(() => {
     let aux = false;
     for (const index in schedule) {
@@ -62,13 +63,7 @@ const AdminAcordeon = () => {
         maxWidth: "900px", //revisar maxWidth
       }}
     >
-      <Box
-        style={
-          {
-            /* position: "relative" */
-          }
-        }
-      >
+      <Box>
         <Accordion
           style={{
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
