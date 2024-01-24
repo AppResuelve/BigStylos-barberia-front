@@ -1,4 +1,4 @@
-import { useState } from "react";
+
 import daysMonthCalendarCustom from "../../functions/daysMonthCalendarCustom";
 import getToday from "../../functions/getToday";
 import obtainDayName from "../../functions/obtainDayName";
@@ -22,12 +22,13 @@ const CustomCalendarPlannedC = ({
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
   const getDayPosition = getToday();
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
+
   const handleDay = (day, month, hasTurn) => {
     //     if (hasTurn) {
     //       console.log("setee en true el turns");
     //       setDaysWithTurns(true);
     //     }
-
+    
     setNoWork((prevState) => {
       const newState = { ...prevState };
 
@@ -77,17 +78,17 @@ const CustomCalendarPlannedC = ({
     });
   };
 
+
   return (
     <div className="div-container-calendar">
-      <Box className={"line7day-query600px"}>
+      <Box className="line7day-query600px">
         {daysOfWeek.map((day) => (
           <h4 key={day}>{day}</h4>
         ))}
       </Box>
 
-      <Box className={"line7-query600px"}>
-        {Object.keys(days).length > 0 &&
-          daysCalendarCustom.month1.map((day, index) => {
+      <Box className="line7-query600px">
+        {daysCalendarCustom.month1.map((day, index) => {
             let dayName = obtainDayName(day, currentMonth, currentYear);
             let disabled = false;
             let colorDay = "#e0e0e0d2";

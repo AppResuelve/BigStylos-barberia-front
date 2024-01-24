@@ -28,7 +28,6 @@ const CreateWorkDays = ({ user, schedule, pendingServices, setRedirectToMyServic
   const [timeSelected, setTimeSelected] = useState([]); //estado de la rama fac, no se para que es aun.
   const [refreshDays, setRefreshDays] = useState(false);
 
-
   useEffect(() => {
     const openValues = Object.values(schedule).map((item) => item.open);
     const closeValues = Object.values(schedule).map((item) => item.close);

@@ -7,7 +7,8 @@ import { Box, Button } from "@mui/material";
 import calendar from "../../assets/images/calendar2.png";
 import defaultServiceImg from "../../assets/images/default-img-services.jpg";
 import "./turns.css";
-// import style from "./turns.css";
+import AlertModal from "../interfazMUI/alertModal";
+import formatHour from "../../functions/formatHour";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Turns = ({ user }) => {
@@ -19,6 +20,50 @@ const Turns = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImg, setSelectedImg] = useState(false);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
+  const [showAlert, setShowAlert] = useState({});
+  const [detailTurn, setDetailTurn] = useState({})
+  const [validateAlert, setValidateAlert] = useState(false)
+
+
+  useEffect(() => {
+    if(validateAlert === true){
+      submit()
+      setValidateAlert(false)
+    }
+  }, [validateAlert]);
+
+  const submit = async () => {
+    const { dayIsSelected, serviceSelected, selectedTime, workerEmail, userEmail} = detailTurn
+
+    try {
+      const response = await axios.put(
+        `${VITE_BACKEND_URL}/workdays/turn`,
+        { date: dayIsSelected,
+          emailWorker: workerEmail,
+          selectedTime,
+          serviceSelected,
+          user: userEmail
+         }
+      );
+      const { data } = response;
+      setDetailTurn({})
+      setShowAlert({
+        isOpen: true,
+        message:`Su turno ha sido agendado exitosamente!`,
+        type: "success",
+        button1: {
+          text: "",
+          action: "",
+        },
+        buttonClose: {
+          text: "aceptar",
+        },
+        alertNumber: 2
+      });
+    } catch (error) {
+      console.error("Error al tomar turno submit:", error);
+    }
+  }
 
   useEffect(() => {
     setDayIsSelected([]);
@@ -61,6 +106,26 @@ const Turns = ({ user }) => {
     setServiceSelected(element[0]);
     setSelectedImg(element[1]);
   };
+
+  useEffect(() => {
+    if(Object.keys(detailTurn).length > 0) {
+
+      setShowAlert({
+        isOpen: true,
+        message:`Turno para ${detailTurn.serviceSelected} el dia ${detailTurn.dayIsSelected[0]}/${detailTurn.dayIsSelected[1]} a las ${formatHour(detailTurn.selectedTime)}`,
+        type: "warning",
+        button1: {
+          text: "confirmar turno",
+          action: "handleActionProp",
+        },
+        buttonClose: {
+          text: "cancelar",
+        },
+        alertNumber: 1
+      });
+    }
+  },[detailTurn])
+
 
   return (
     <div
@@ -214,13 +279,29 @@ const Turns = ({ user }) => {
         {dayIsSelected.length > 0 && (
           <ShowTurns
             dayIsSelected={dayIsSelected}
+            setDayIsSelected={setDayIsSelected}
             serviceSelected={serviceSelected}
             user={user}
             isOpen={isOpen}
             setIsOpen={setIsOpen}
+            detailTurn={detailTurn}
+            setDetailTurn={setDetailTurn}
           />
         )}
       </div>
+      {showAlert.alertNumber === 1 && (
+          <AlertModal
+            showAlert={showAlert}
+            setShowAlert={setShowAlert}
+            handleActionProp={setValidateAlert}
+          />
+        )}
+        {showAlert.alertNumber === 2 && (
+          <AlertModal
+            showAlert={showAlert}
+            setShowAlert={setShowAlert}
+          />
+        )}
     </div>
   );
 };

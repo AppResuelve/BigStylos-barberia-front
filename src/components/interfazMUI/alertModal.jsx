@@ -45,7 +45,7 @@ const AlertModal = ({ showAlert, setShowAlert, handleActionProp }) => {
         setMoveDown(true);
       };
     }
-  }
+}
 
   if (showAlert.type === "warning") {
     type = ["warning", "#ffe1ab", "#db9718"];
