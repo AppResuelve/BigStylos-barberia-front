@@ -14,7 +14,6 @@ const Home = ({ user, darkMode }) => {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/images`);
         const { data } = response;
-        console.log(data);
         setHomeImages(data);
         //  setLoading(false);
       } catch (error) {
@@ -56,7 +55,7 @@ const Home = ({ user, darkMode }) => {
         }}
       />
       <img
-        src={homeImages[0]}
+        src={homeImages[0] ? homeImages[0] : fondoCentral}
         alt="nombre del lugar"
         style={{
           marginTop: "20px",
