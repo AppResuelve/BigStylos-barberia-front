@@ -2,7 +2,6 @@ import { NavLink, useLocation } from "react-router-dom";
 import Profile from "../userProfile/userProfile";
 import toHome from "../../assets/icons/homeBlack.png";
 import toHome2 from "../../assets/icons/homeWhite.png";
-import { Button } from "@mui/material";
 import DarkMode from "../interfazUiverse.io/darkMode";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { Box } from "@mui/system";
