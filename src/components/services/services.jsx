@@ -18,7 +18,6 @@ const Services = () => {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/services`);
         const { data } = response;
-        console.log(data);
         setServices(data);
         setLoading(false);
       } catch (error) {
@@ -58,11 +57,10 @@ const Services = () => {
   };
 
   const handleDeleteService = async (serviceName) => {
-    console.log(serviceName);
     try {
       // Lógica para eliminar el servicio por su nombre
       await axios.post(`${VITE_BACKEND_URL}/services/delete`, {
-        service: [serviceName],
+        service: serviceName,
       });
 
       // Refresca la lista de servicios después de eliminar uno
