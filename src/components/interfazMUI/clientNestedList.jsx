@@ -16,6 +16,7 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const ClientNestedList = ({ userData, darkMode }) => {
   const [clientData, setClientData] = useState(null);
+  const [currentPhoneNumber, setCurrentPhoneNumber] = useState("");
   const [newPhoneNumber, setNewPhoneNumber] = useState("");
   const [refresh, setRefresh] = useState(false);
   const [error, setError] = useState("");
@@ -49,7 +50,7 @@ const ClientNestedList = ({ userData, darkMode }) => {
       } else if (section === "turnos") {
         updatedSections.telefono = false;
       }
-
+      setNewPhoneNumber(currentPhoneNumber);
       return updatedSections;
     });
   };
@@ -62,7 +63,8 @@ const ClientNestedList = ({ userData, darkMode }) => {
         });
         const { data } = response;
         setClientData(data);
-        setNewPhoneNumber(data.phone);
+        setCurrentPhoneNumber(data.phone);
+        handleSetPhoneState(data.phone);
         //   setLoading(false);
       } catch (error) {
         console.error("Error al obtener los horarios", error);
@@ -125,7 +127,7 @@ const ClientNestedList = ({ userData, darkMode }) => {
       }
     }
   };
-  console.log(openSection);
+
   return (
     <div style={{ position: "relative" }}>
       <AlertSnackBar
