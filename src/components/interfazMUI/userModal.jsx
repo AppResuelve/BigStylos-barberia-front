@@ -65,9 +65,7 @@ const ModalMUI = ({
                 }}
               >
                 <h2 style={{ color: darkMode ? "white" : "#28292c" }}>
-                  {userData !== 1 && (userData.worker || userData.admin)
-                    ? userData.name
-                    : "Inicia sesión"}
+                  {userData !== 1 ? userData.name : "Inicia sesión"}
                 </h2>
 
                 {userData !== 1 ? (
@@ -173,8 +171,8 @@ const ModalMUI = ({
             </Box>
             <Box>
               {/* seccion del cliente */}
-              {userData !== 1 && !userData.worker && !userData.admin && (
-                <ClientNestedList userData={userData} />
+              {userData !== 1 && (
+                <ClientNestedList userData={userData} darkMode={darkMode} />
               )}
             </Box>
           </Box>

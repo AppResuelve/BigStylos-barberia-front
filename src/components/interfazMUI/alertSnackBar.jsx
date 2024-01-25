@@ -3,36 +3,31 @@ import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
-const alertSnackBar = ({ showAlertSnack, setShowAlertSnack }) => {
-  // const handleClick = () => {
-  //   setOpen(true);
-  // };
-
-const handleClose = (event, reason) => {
-  setShowAlertSnack((prevShowAlertSnack) => {
-    return { ...prevShowAlertSnack, open: false };
-  });
-};
-
+const alertSnackBar = ({ showAlertSnack, open, setOpen }) => {
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
-    <div>
-      {/* <Button onClick={handleClick}>Open Snackbar</Button> */}
-      <Snackbar
-        open={showAlertSnack.open}
-        autoHideDuration={3000}
+    <Snackbar
+      open={open}
+      autoHideDuration={2000}
+      onClose={handleClose}
+      sx={{ position: "absolute", top: "-80%" }}
+    >
+      <Alert
         onClose={handleClose}
+        severity={showAlertSnack.type}
+        variant="filled"
+        sx={{
+          width: "100%",
+          fontFamily: "Jost,sans-serif",
+          fontWeight: "bold",
+        }}
       >
-        <Alert
-          onClose={handleClose}
-          severity={showAlertSnack.type}
-          variant="filled"
-          sx={{ width: "100%" }}
-        >
-          {showAlertSnack.message}
-        </Alert>
-      </Snackbar>
-    </div>
+        {showAlertSnack.message}
+      </Alert>
+    </Snackbar>
   );
 };
 
