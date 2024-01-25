@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
 import Collapse from "@mui/material/Collapse";
@@ -11,6 +10,7 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import { Box, Button, Input } from "@mui/material";
 import axios from "axios";
 import AlertSnackBar from "./alertSnackBar";
+import MyTurns from "../myTurns/myTurns";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -262,18 +262,20 @@ const ClientNestedList = ({ userData, darkMode }) => {
           timeout="auto"
           unmountOnExit
         >
-          {/* contenido de seccion mis turnos */}
-          <List component="div" disablePadding></List>
+          <List component="div" disablePadding>
+            <MyTurns userData={userData} />
+          </List>
         </Collapse>
-        <hr
-          style={{
-            border: "none",
-            height: "1px", // Altura de la línea
-            backgroundColor: darkMode ? "white" : "#28292c",
-            marginBottom: "10px",
-            // marginTop: "10px",
-          }}
-        />
+        {!openSection.turnos && (
+          <hr
+            style={{
+              border: "none",
+              height: "1px", // Altura de la línea
+              backgroundColor: darkMode ? "white" : "#28292c",
+              marginBottom: "10px",
+            }}
+          />
+        )}
       </Collapse>
     </div>
   );

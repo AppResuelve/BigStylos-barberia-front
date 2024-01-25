@@ -9,7 +9,6 @@ import "./App.css";
 import Admin from "./components/admin/admin";
 import Worker from "./components/worker/worker";
 import NotFound from "./components/pageNotFound/pageNotFound";
-import MyTurns from "./components/myTurns/myTurns";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -105,10 +104,6 @@ function App() {
         <Route
           path="/requestDenied401"
           element={<NotFound user={userData} />}
-        />
-        <Route
-          path="/misturnos"
-          element={<MyTurns userData={userData}/>}
         />
       </Routes>
     </div>

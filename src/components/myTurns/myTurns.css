@@ -1,0 +1,22 @@
+.ticker-container {
+      /* width: 100%; */
+      overflow: hidden;
+}
+
+.ticker-text {
+      margin-right: 4px;
+      white-space: nowrap;
+      display: inline-block;
+      animation: tickerAnimation 7s linear infinite;
+      /* Ajusta la duración según tus preferencias */
+}
+
+@keyframes tickerAnimation {
+      0% {
+            transform: translateX(50%);
+      }
+
+      100% {
+            transform: translateX(-50%);
+      }
+}
