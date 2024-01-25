@@ -1,29 +1,26 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { Auth0Provider } from '@auth0/auth0-react';
-import App from './App.jsx';
-import './index.css';
-import dotenv from 'dotenv';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import App from "./App.jsx";
+import { Auth0Provider } from "@auth0/auth0-react";
+import "./index.css";
 
-//dotenv.config();
+const domain = import.meta.env.VITE_AUTH0_DOMAIN;
+const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
 
-const onRedirectCallback = (redirectResult) => {
-  // Manejar lógica personalizada después de la redirección
-  console.log(redirectResult);
-};
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+ReactDOM.createRoot(document.getElementById("root")).render(
+
     <Auth0Provider
-      domain="dev-mxntk40w42hj7fze.us.auth0.com"
-      clientId="R8Si6nJwh5Kv1yPl3FEqWaJDV8hHsPyL"
-      /* redirectUri={window.location.origin} */
-      onRedirectCallback={onRedirectCallback}
+      domain={domain}
+      clientId={clientId}
+      authorizationParams={{
+        redirect_uri: window.location.origin,
+      }}
     >
-      <Router>
+      <BrowserRouter>
         <App />
-      </Router>
+      </BrowserRouter>
     </Auth0Provider>
-  </React.StrictMode>,
+
 );
