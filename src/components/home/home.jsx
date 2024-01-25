@@ -14,7 +14,6 @@ const Home = ({ user, darkMode }) => {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/images`);
         const { data } = response;
-        console.log(data);
         setHomeImages(data);
         //  setLoading(false);
       } catch (error) {

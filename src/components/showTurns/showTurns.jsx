@@ -7,6 +7,7 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import NoUser from "../../assets/icons/noUser.png";
 import "./showTurns.css";
+
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -15,17 +16,24 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const ShowTurns = ({
   dayIsSelected,
+  setDayIsSelected,
   serviceSelected,
   user,
   isOpen,
   setIsOpen,
+  detailTurn,
+  setDetailTurn
 }) => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-  const handleClose = () => setIsOpen(false);
+  const handleClose = () => {
+    setDayIsSelected({})
+    setIsOpen(false)}
   const [dayForTurns, setDayForTurns] = useState([]);
   const [buttons, setButtons] = useState([]);
   const [selectedTime, setSelectedTime] = useState("");
   const [selectedWorker, setSelectedWorker] = useState("");
+
+    console.log(selectedTime,selectedWorker)
 
   useEffect(() => {
     const fetchday = async () => {
@@ -71,14 +79,27 @@ const ShowTurns = ({
     const tardanza = dayForTurns.filter(
       (element) => element.email == workerEmail
     );
-    console.log(
+    /* console.log(
       `la duracion del servicio es: ${tardanza[0].services[serviceSelected].duration}`
     );
-    console.log(workerEmail, selectTime, serviceSelected);
+    console.log(workerEmail, selectTime, serviceSelected); */
     setSelectedTime(selectTime);
     setSelectedWorker(workerEmail);
   };
 
+  const handleAsignTurn = () => {
+    const tardanza = dayForTurns.filter(
+      (element) => element.email == selectedWorker
+    );
+    setDetailTurn({
+      workerEmail: selectedWorker, // email del worker
+      userEmail: user.email,  // email del usuario
+      selectedTime: selectedTime, // minutos del turno, los index de los botones de horarios
+      tardanza: tardanza[0].services[serviceSelected].duration,  // cuanto tarda el servicio
+      serviceSelected: serviceSelected, // el servicio deleccionado en string
+      dayIsSelected: dayIsSelected, // [31, 2] array en su 0 dice la fecha, en su 1 dice el mes
+    })
+  }
   
   return (
     <div>
@@ -111,7 +132,7 @@ const ShowTurns = ({
         >
           <Box>
             <Button
-              onClick={handleClose}
+            onClick={handleClose}
               sx={{
                 fontFamily: "Jost, sans serif",
                 fontWeight: "bold",
@@ -185,7 +206,7 @@ const ShowTurns = ({
                           sx={{
                             height: "40px",
                             width: "75px",
-                            margin: "3px",
+                            margin: "3px", 
                             fontFamily: "Jost, sans serif",
                             fontWeight: "bold",
                             letterSpacing: "2px",
@@ -234,6 +255,8 @@ const ShowTurns = ({
                   <h2>{selectedWorker}</h2>
                 </Box>
                 <Button
+                onClick={() => {handleAsignTurn(), handleClose()}}
+                disabled= {selectedTime && selectedTime != "" ? false : true}
                   variant="contained"
                   sx={{
                     maxHeight: "35px",
@@ -242,13 +265,15 @@ const ShowTurns = ({
                     letterSpacing: "2px",
                   }}
                 >
-                  {sm ? "Confirmar" : "Confimar turno"}
+                  aceptar
                 </Button>
               </Box>
             </Box>
           </Box>
         </Box>
+        
       </Dialog>
+      
     </div>
   );
 };
