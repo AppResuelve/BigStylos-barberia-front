@@ -8,13 +8,15 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Home = ({ user, darkMode }) => {
   const [homeImages, setHomeImages] = useState([]); //images del home
+  const [colors, setColors] = useState("#ffffff");
 
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const response = await axios.get(`${VITE_BACKEND_URL}/images`);
+        const response = await axios.get(`${VITE_BACKEND_URL}/personalization`);
         const { data } = response;
-        setHomeImages(data);
+        setHomeImages(data.allImages);
+        setColors(data.allColors);
         //  setLoading(false);
       } catch (error) {
         console.error("Error al obtener los servicios:", error);
@@ -34,7 +36,7 @@ const Home = ({ user, darkMode }) => {
         alignItems: "center",
         height: "100vh",
         paddingTop: "70px",
-        backgroundColor: darkMode ? "#252627" : "white",
+        backgroundColor: darkMode ? "#252627" : colors,
       }}
     >
       <img
