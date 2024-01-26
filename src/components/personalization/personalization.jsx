@@ -4,13 +4,14 @@ import { Box, Button } from "@mui/material";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import noImg from "../../assets/icons/no-image.png";
+import FormatPaintOutlinedIcon from "@mui/icons-material/FormatPaintOutlined";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
-import "./storeImages.css";
+import "./personalization.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const VITE_CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
 
-const StoreImages = () => {
+const Personalization = () => {
   const [services, setServices] = useState([]); //servicios array de array con service name y url img
   const [imgServices, setImgServices] = useState([]); //images de los services basado en el estado services
   const [homeImages, setHomeImages] = useState([]); //images del home
@@ -18,6 +19,8 @@ const StoreImages = () => {
   const [showEdit, setShowEdit] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [toggle, setToggle] = useState(false);
+  const [colors, setColors] = useState("#ffffff");
+  const [colorSelected, setColorSelected] = useState("#ffffff");
 
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
@@ -41,10 +44,12 @@ const StoreImages = () => {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const response = await axios.get(`${VITE_BACKEND_URL}/images`);
+        const response = await axios.get(`${VITE_BACKEND_URL}/personalization`);
         const { data } = response;
-        setHomeImages(data);
-        setAuxHomeImages(data);
+        setHomeImages(data.allImages);
+        setAuxHomeImages(data.allImages);
+        setColors(data.allColors);
+        setColorSelected(data.allColors);
         //  setLoading(false);
       } catch (error) {
         console.error("Error al obtener los servicios:", error);
@@ -122,6 +127,11 @@ const StoreImages = () => {
     }
   };
 
+  // Función para manejar el cambio en el color seleccionado
+  const handleColorSelected = (event) => {
+    setColorSelected(event.target.value);
+  };
+
   const handleEdit = () => {
     setShowEdit(true);
   };
@@ -130,6 +140,7 @@ const StoreImages = () => {
     setShowEdit(false);
     setImgServices(services);
     setAuxHomeImages(homeImages);
+    setColorSelected(colors);
     setRefresh(!refresh);
   };
 
@@ -147,9 +158,13 @@ const StoreImages = () => {
       alert("Error al actulizar los servicios");
     }
     try {
-      const response = await axios.put(`${VITE_BACKEND_URL}/images/update`, {
-        newImages: auxHomeImages,
-      });
+      const response = await axios.put(
+        `${VITE_BACKEND_URL}/personalization/update`,
+        {
+          newImages: auxHomeImages,
+          newColors: colorSelected,
+        }
+      );
       // setRefresh(!refresh);
     } catch (error) {
       console.error("Error al actulizar las imgenes", error);
@@ -169,6 +184,7 @@ const StoreImages = () => {
           backgroundColor: "#2196f3",
         }}
       />
+      {/* ///// SECCION BOTONES IMAGENES Y COLORES ///// */}
       <Box>
         <Box sx={{ width: "100%" }}>
           <Button
@@ -180,7 +196,7 @@ const StoreImages = () => {
               fontWeight: "bold",
             }}
           >
-            Mis servicios
+            Imagenes
           </Button>
           <Button
             variant={toggle ? "contained" : "outlined"}
@@ -191,35 +207,33 @@ const StoreImages = () => {
               fontWeight: "bold",
             }}
           >
-            Inicio
+            Colores
           </Button>
         </Box>
-        {/* /////// SECCION MIS SERVICIOS //////// */}
+        {/* /////// SECCION IMAGENES //////// */}
         {!toggle ? (
-          imgServices.map((service, index) => {
-            return (
+          <Box>
+            {/*///// SUB SECCION FONDO LOGOTIPO Y FONDO DE PANTALLA /////*/}
+            <Box sx={{ marginTop: "15px", marginBottom: "10px" }}>
               <Box
-                key={index}
                 sx={{
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
+                  marginBottom: "10px",
                 }}
               >
                 <Box
                   sx={{
-                    marginTop: "20px",
                     minHeight: "90px",
-                    maxHeight: "150px",
+                    maxHeight: "90px",
                     display: "flex",
                     flexDirection: "column",
+                    justifyContent: "center",
                   }}
                 >
-                  <h3 style={{ marginBottom: "7px" }}>{service[0]}</h3>
-                  <label
-                    htmlFor={`fileInput-${service[0]}`}
-                    style={{ cursor: "pointer" }}
-                  >
+                  <h3 style={{ marginBottom: "7px" }}>fondo logotipo</h3>
+                  <label htmlFor="home" style={{ cursor: "pointer" }}>
                     <span
                       className={
                         showEdit
@@ -227,12 +241,12 @@ const StoreImages = () => {
                           : "span-input-store-images-false"
                       }
                       style={{
+                        display: "flex",
                         marginBottom: "5px",
                         borderRadius: "5px",
                         padding: "5px",
-                        fontWeight: "bold",
                         cursor: showEdit ? "pointer" : "not-allowed",
-                        display: "flex",
+                        fontWeight: "bold",
                       }}
                     >
                       Selecciona una imagen
@@ -240,8 +254,8 @@ const StoreImages = () => {
                     </span>
                     <input
                       type="file"
-                      id={`fileInput-${service[0]}`}
-                      name={service[0]}
+                      id="home"
+                      name="fondo-central"
                       onChange={uploadImage}
                       disabled={!showEdit ? true : false}
                       style={{ display: "none" }}
@@ -250,8 +264,66 @@ const StoreImages = () => {
                 </Box>
                 <Box>
                   <img
-                    src={service.length > 0 && service[1] ? service[1] : noImg}
-                    alt="img-servicio"
+                    src={auxHomeImages.length > 0 ? auxHomeImages[0] : noImg}
+                    alt="img-logo"
+                    style={{
+                      width: sm ? "90px" : "150px",
+                      height: sm ? "90px" : "150px",
+                      borderRadius: "100px",
+                      objectFit: "cover",
+                    }}
+                  />
+                </Box>
+              </Box>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                  }}
+                >
+                  <h3 style={{ marginBottom: "7px" }}>fondo de pantalla</h3>
+                  <label
+                    htmlFor="fondo-de-pantalla"
+                    style={{ cursor: "pointer" }}
+                  >
+                    <span
+                      className={
+                        //PROXIMAMENTE//
+                        /* showEdit
+                          ? "span-input-store-images"
+                          : */ "span-input-store-images-false"
+                      }
+                      style={{
+                        display: "flex",
+                        marginBottom: "5px",
+                        borderRadius: "5px",
+                        padding: "5px",
+                        cursor: showEdit ? "pointer" : "not-allowed",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Proximamente
+                      {/* <AttachFileIcon /> */}
+                    </span>
+                    <input
+                      type="file"
+                      id="fondo-de-pantalla"
+                      name="fondo-de-pantalla"
+                      onChange={uploadImage}
+                      disabled={true} //PROXIMAMENTE//
+                      style={{ display: "none" }}
+                    />
+                  </label>
+                </Box>
+                <Box>
+                  <img
+                    src={
+                      //PROXIMAMENTE//
+                      /* auxHomeImages.length > 0 ? auxHomeImages[1] : */ noImg
+                    }
+                    alt="img-fondo-pantalla"
                     style={{
                       width: sm ? "90px" : "150px",
                       borderRadius: "3px",
@@ -259,30 +331,98 @@ const StoreImages = () => {
                   />
                 </Box>
               </Box>
-            );
-          })
+            </Box>
+            <hr />
+            {imgServices.map((service, index) => {
+              return (
+                <Box
+                  key={index}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginTop: "15px",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      minHeight: "90px",
+                      maxHeight: "150px",
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <h3 style={{ marginBottom: "7px" }}>{service[0]}</h3>
+                    <label
+                      htmlFor={`fileInput-${service[0]}`}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <span
+                        className={
+                          showEdit
+                            ? "span-input-store-images"
+                            : "span-input-store-images-false"
+                        }
+                        style={{
+                          marginBottom: "5px",
+                          borderRadius: "5px",
+                          padding: "5px",
+                          fontWeight: "bold",
+                          cursor: showEdit ? "pointer" : "not-allowed",
+                          display: "flex",
+                        }}
+                      >
+                        Selecciona una imagen
+                        <AttachFileIcon />
+                      </span>
+                      <input
+                        type="file"
+                        id={`fileInput-${service[0]}`}
+                        name={service[0]}
+                        onChange={uploadImage}
+                        disabled={!showEdit ? true : false}
+                        style={{ display: "none" }}
+                      />
+                    </label>
+                  </Box>
+                  <Box>
+                    <img
+                      src={
+                        service.length > 0 && service[1] ? service[1] : noImg
+                      }
+                      alt="img-servicio"
+                      style={{
+                        width: sm ? "90px" : "150px",
+                        borderRadius: "3px",
+                      }}
+                    />
+                  </Box>
+                </Box>
+              );
+            })}
+          </Box>
         ) : (
-          /* /////// SECCION INICIO /////// */
+          /* /////// SECCION COLORES /////// */
           <Box sx={{ display: "flex", flexDirection: "column" }}>
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
+                marginTop: "15px",
                 marginBottom: "15px",
               }}
             >
               <Box
                 sx={{
-                  marginTop: "20px",
                   minHeight: "90px",
                   maxHeight: "90px",
                   display: "flex",
                   flexDirection: "column",
                 }}
               >
-                <h3 style={{ marginBottom: "7px" }}>fondo central</h3>
-                <label htmlFor="home" style={{ cursor: "pointer" }}>
+                <h3 style={{ marginBottom: "7px" }}>fondo</h3>
+                <label htmlFor="color fondo" style={{ cursor: "pointer" }}>
                   <span
                     className={
                       showEdit
@@ -298,80 +438,29 @@ const StoreImages = () => {
                       fontWeight: "bold",
                     }}
                   >
-                    Selecciona una imagen
-                    <AttachFileIcon />
+                    Selecciona un color
+                    <FormatPaintOutlinedIcon />
                   </span>
                   <input
-                    type="file"
-                    id="home"
-                    name="fondo-central"
-                    onChange={uploadImage}
+                    type="color"
+                    id="color fondo"
+                    name="color-fondo"
+                    value={colorSelected}
+                    onChange={(e) => handleColorSelected(e)}
                     disabled={!showEdit ? true : false}
                     style={{ display: "none" }}
                   />
                 </label>
               </Box>
               <Box>
-                <img
-                  src={auxHomeImages.length > 0 ? auxHomeImages[0] : noImg}
-                  alt="img-logo"
+                <Box
                   style={{
-                    width: sm ? "90px" : "150px",
-                    borderRadius: "3px",
+                    width: sm ? "90px" : "130px",
+                    height: sm ? "90px" : "130px",
+                    borderRadius: "100px",
+                    backgroundColor: colorSelected,
                   }}
-                />
-              </Box>
-            </Box>
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Box
-                sx={{
-                  marginTop: "20px",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <h3 style={{ marginBottom: "7px" }}>fondo de pantalla</h3>
-                <label
-                  htmlFor="fondo-de-pantalla"
-                  style={{ cursor: "pointer" }}
-                >
-                  <span
-                    className={
-                      showEdit
-                        ? "span-input-store-images"
-                        : "span-input-store-images-false"
-                    }
-                    style={{
-                      display: "flex",
-                      marginBottom: "5px",
-                      borderRadius: "5px",
-                      padding: "5px",
-                      cursor: showEdit ? "pointer" : "not-allowed",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Selecciona una imagen
-                    <AttachFileIcon />
-                  </span>
-                  <input
-                    type="file"
-                    id="fondo-de-pantalla"
-                    name="fondo-de-pantalla"
-                    onChange={uploadImage}
-                    disabled={!showEdit ? true : false}
-                    style={{ display: "none" }}
-                  />
-                </label>
-              </Box>
-              <Box>
-                <img
-                  src={auxHomeImages.length > 0 ? auxHomeImages[1] : noImg}
-                  alt="img-fondo-pantalla"
-                  style={{
-                    width: sm ? "90px" : "150px",
-                    borderRadius: "3px",
-                  }}
-                />
+                ></Box>
               </Box>
             </Box>
           </Box>
@@ -424,4 +513,4 @@ const StoreImages = () => {
     </div>
   );
 };
-export default StoreImages;
+export default Personalization;

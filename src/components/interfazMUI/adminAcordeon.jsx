@@ -11,7 +11,7 @@ import Users from "../users/users";
 import PlannedClosure from "../plannedClosure/plannedClosure";
 import axios from "axios";
 import { useMediaQueryHook } from "./useMediaQuery";
-import StoreImages from "../storeImages/storeImages";
+import Personalization from "../personalization/personalization";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const AdminAcordeon = () => {
@@ -90,7 +90,7 @@ const AdminAcordeon = () => {
             <Services />
           </AccordionDetails>
         </Accordion>
-{/* ********************************************************************************************************* */}
+        {/* ********************************************************************************************************* */}
         <Accordion
           style={{
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
@@ -126,7 +126,7 @@ const AdminAcordeon = () => {
             )}
           </AccordionDetails>
         </Accordion>
-{/* ********************************************************************************************************* */}
+        {/* ********************************************************************************************************* */}
         <Accordion
           style={{
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
@@ -181,7 +181,7 @@ const AdminAcordeon = () => {
             )}
           </AccordionDetails>
         </Accordion>
-{/* ********************************************************************************************************* */}
+        {/* ********************************************************************************************************* */}
         <Accordion
           style={{
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
@@ -217,7 +217,7 @@ const AdminAcordeon = () => {
             )}
           </AccordionDetails>
         </Accordion>
-{/* ********************************************************************************************************* */}
+        {/* ********************************************************************************************************* */}
         <Accordion
           style={{
             // marginBottom: "30px",
@@ -245,10 +245,9 @@ const AdminAcordeon = () => {
             <Users />
           </AccordionDetails>
         </Accordion>
-{/* ********************************************************************************************************* */}
+        {/* ********************************************************************************************************* */}
         <Accordion
           style={{
-            marginBottom: "30px",
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
           }}
           expanded={expanded === "panel6"}
@@ -267,15 +266,16 @@ const AdminAcordeon = () => {
             aria-controls="panel6bh-content"
             id="panel6bh-header"
           >
-            <h2>Imagenes</h2>
+            <h2>Personalización</h2>
           </AccordionSummary>
           <AccordionDetails>
-            <StoreImages />
+            <Personalization />
           </AccordionDetails>
         </Accordion>
-{/* ********************************************************************************************************* */}
+        {/* ********************************************************************************************************* */}
         <Accordion
           style={{
+            marginBottom: "30px",
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
           }}
           expanded={expanded === "panel7"}
@@ -291,10 +291,10 @@ const AdminAcordeon = () => {
                 sx={{ color: expanded === "panel7" ? "" : "#2196f3" }}
               />
             }
-            aria-controls="panel1bh-content"
+            aria-controls="panel7bh-content"
             id="panel7bh-header"
           >
-            <h2>Servicios</h2>
+            <h2>Turnos cancelados</h2>
           </AccordionSummary>
           <AccordionDetails>
             <Services />
