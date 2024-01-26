@@ -1,4 +1,3 @@
-
 import daysMonthCalendarCustom from "../../functions/daysMonthCalendarCustom";
 import getToday from "../../functions/getToday";
 import obtainDayName from "../../functions/obtainDayName";
@@ -23,12 +22,7 @@ const CustomCalendarPlannedC = ({
   const getDayPosition = getToday();
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
-  const handleDay = (day, month, hasTurn) => {
-    //     if (hasTurn) {
-    //       console.log("setee en true el turns");
-    //       setDaysWithTurns(true);
-    //     }
-    
+  const handleDay = (day, month) => {
     setNoWork((prevState) => {
       const newState = { ...prevState };
 
@@ -78,7 +72,6 @@ const CustomCalendarPlannedC = ({
     });
   };
 
-
   return (
     <div className="div-container-calendar">
       <Box className="line7day-query600px">
@@ -89,59 +82,59 @@ const CustomCalendarPlannedC = ({
 
       <Box className="line7-query600px">
         {daysCalendarCustom.month1.map((day, index) => {
-            let dayName = obtainDayName(day, currentMonth, currentYear);
-            let disabled = false;
-            let colorDay = "#e0e0e0d2";
-            if (
-              days &&
-              days[currentMonth] &&
-              days[currentMonth][day] &&
-              days[currentMonth][day].turn
-            ) {
-              colorDay = "#e6b226d0";
-            }
-            if (
-              !schedule[dayName] ||
-              (schedule[dayName].open === 0 && schedule[dayName].close === 1440)
-            ) {
-              disabled = true;
-              colorDay = "gray";
-            }
-            if (noWork[currentMonth] && noWork[currentMonth][day]) {
-              colorDay = "gray";
-            }
-            return (
-              <button
-                key={index}
-                disabled={!showEdit ? true : disabled}
-                className={!showEdit || disabled ? "month1-false" : "month1"}
-                onClick={() => handleDay(day, currentMonth)}
-                style={{
-                  gridColumnStart: index === 0 ? getDayPosition : "auto",
-                  backgroundColor:
-                    dayIsSelected[currentMonth] &&
+          let dayName = obtainDayName(day, currentMonth, currentYear);
+          let disabled = false;
+          let colorDay = "#e0e0e0d2";
+          if (
+            days &&
+            days[currentMonth] &&
+            days[currentMonth][day] &&
+            days[currentMonth][day].turn
+          ) {
+            colorDay = "#e6b226d0";
+          }
+          if (
+            !schedule[dayName] ||
+            (schedule[dayName].open === 0 && schedule[dayName].close === 1440)
+          ) {
+            disabled = true;
+            colorDay = "gray";
+          }
+          if (noWork[currentMonth] && noWork[currentMonth][day]) {
+            colorDay = "gray";
+          }
+          return (
+            <button
+              key={index}
+              disabled={!showEdit ? true : disabled}
+              className={!showEdit || disabled ? "month1-false" : "month1"}
+              onClick={() => handleDay(day, currentMonth)}
+              style={{
+                gridColumnStart: index === 0 ? getDayPosition : "auto",
+                backgroundColor:
+                  dayIsSelected[currentMonth] &&
+                  dayIsSelected[currentMonth][day]
+                    ? "gray"
+                    : colorDay,
+                cursor: !showEdit
+                  ? "not-allowed"
+                  : disabled
+                  ? "auto"
+                  : "pointer",
+                color: disabled
+                  ? "#e0e0e0d2"
+                  : !showEdit
+                  ? "white"
+                  : dayIsSelected[currentMonth] &&
                     dayIsSelected[currentMonth][day]
-                      ? "gray"
-                      : colorDay,
-                  cursor: !showEdit
-                    ? "not-allowed"
-                    : disabled
-                    ? "auto"
-                    : "pointer",
-                  color: disabled
-                    ? "#e0e0e0d2"
-                    : !showEdit
-                    ? "white"
-                    : dayIsSelected[currentMonth] &&
-                      dayIsSelected[currentMonth][day]
-                    ? "white"
-                    : "#000000",
-                }}
-              >
-                {day}
-              </button>
-            );
-          })}
+                  ? "white"
+                  : "#000000",
+              }}
+            >
+              {day}
+            </button>
+          );
+        })}
         {daysCalendarCustom.month2.map((day, index) => {
           let dayName = obtainDayName(day, nextMonth, nextYear);
           let disabled = false;

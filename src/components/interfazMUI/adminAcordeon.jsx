@@ -18,9 +18,28 @@ const AdminAcordeon = () => {
   const [expanded, setExpanded] = useState(false);
   const [schedule, setSchedule] = useState({});
   const [refresh, setRefresh] = useState(false);
+  const [refreshServices, setRefreshServices] = useState(false);
   const [remaining, setRemaining] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [loadingServices, setLoadingServices] = useState(true);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
+  const [services, setServices] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${VITE_BACKEND_URL}/services`);
+        const { data } = response;
+        setServices(data);
+        setLoadingServices(false);
+      } catch (error) {
+        console.error("Error al obtener los servicios:", error);
+        alert("Error al obtener los servicios");
+      }
+    };
+
+    fetchData();
+  }, [refreshServices]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,6 +72,7 @@ const AdminAcordeon = () => {
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
+
   return (
     <div
       style={{
@@ -87,7 +107,13 @@ const AdminAcordeon = () => {
             <h2>Servicios</h2>
           </AccordionSummary>
           <AccordionDetails>
-            <Services />
+            <Services
+              services={services}
+              refreshServices={refreshServices}
+              setRefreshServices={setRefreshServices}
+              loadingServices={loadingServices}
+              setLoadingServices={setLoadingServices}
+            />
           </AccordionDetails>
         </Accordion>
         {/* ********************************************************************************************************* */}
@@ -269,7 +295,11 @@ const AdminAcordeon = () => {
             <h2>Personalización</h2>
           </AccordionSummary>
           <AccordionDetails>
-            <Personalization />
+            <Personalization
+              services={services}
+              refreshServices={refreshServices}
+              setRefreshServices={setRefreshServices}
+            />
           </AccordionDetails>
         </Accordion>
         {/* ********************************************************************************************************* */}
@@ -296,9 +326,7 @@ const AdminAcordeon = () => {
           >
             <h2>Turnos cancelados</h2>
           </AccordionSummary>
-          <AccordionDetails>
-            <Services />
-          </AccordionDetails>
+          <AccordionDetails></AccordionDetails>
         </Accordion>
       </Box>
     </div>

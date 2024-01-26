@@ -11,8 +11,7 @@ import "./personalization.css";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const VITE_CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
 
-const Personalization = () => {
-  const [services, setServices] = useState([]); //servicios array de array con service name y url img
+const Personalization = ({ services, refreshServices, setRefreshServices }) => {
   const [imgServices, setImgServices] = useState([]); //images de los services basado en el estado services
   const [homeImages, setHomeImages] = useState([]); //images del home
   const [auxHomeImages, setAuxHomeImages] = useState([]); //images del home basado ene le estado homeImages
@@ -21,25 +20,11 @@ const Personalization = () => {
   const [toggle, setToggle] = useState(false);
   const [colors, setColors] = useState("#ffffff");
   const [colorSelected, setColorSelected] = useState("#ffffff");
-
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${VITE_BACKEND_URL}/services`);
-        const { data } = response;
-        setServices(data);
-        setImgServices(data);
-        //  setLoading(false);
-      } catch (error) {
-        console.error("Error al obtener los servicios:", error);
-        alert("Error al obtener los servicios");
-      }
-    };
-
-    fetchData();
-  }, [refresh]);
+    setImgServices(services);
+  }, [services]);
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -141,7 +126,7 @@ const Personalization = () => {
     setImgServices(services);
     setAuxHomeImages(homeImages);
     setColorSelected(colors);
-    setRefresh(!refresh);
+    // setRefresh(!refresh);
   };
 
   const handleSubmit = async () => {
@@ -170,6 +155,7 @@ const Personalization = () => {
       console.error("Error al actulizar las imgenes", error);
       alert("Error al actulizar las imgenes");
     }
+    setRefreshServices(!refreshServices);
     setShowEdit(false);
   };
 
@@ -190,10 +176,12 @@ const Personalization = () => {
           <Button
             variant={!toggle ? "contained" : "outlined"}
             onClick={() => setToggle(false)}
-            sx={{
+            style={{
               width: "50%",
               fontFamily: "Jost, sans-serif",
               fontWeight: "bold",
+              border: "none",
+              borderBottom: toggle ? "" : "3px solid #2196f3",
             }}
           >
             Imagenes
@@ -201,10 +189,12 @@ const Personalization = () => {
           <Button
             variant={toggle ? "contained" : "outlined"}
             onClick={() => setToggle(true)}
-            sx={{
+            style={{
               width: "50%",
               fontFamily: "Jost, sans-serif",
               fontWeight: "bold",
+              border: "none",
+              borderBottom: !toggle ? "" : "3px solid #2196f3",
             }}
           >
             Colores
@@ -333,73 +323,75 @@ const Personalization = () => {
               </Box>
             </Box>
             <hr />
-            {imgServices.map((service, index) => {
-              return (
-                <Box
-                  key={index}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    marginTop: "15px",
-                  }}
-                >
+            <Box sx={{ overflow: "scroll", maxHeight: "350px" }}>
+              {imgServices.map((service, index) => {
+                return (
                   <Box
+                    key={index}
                     sx={{
-                      minHeight: "90px",
-                      maxHeight: "150px",
                       display: "flex",
-                      flexDirection: "column",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginTop: "15px",
                     }}
                   >
-                    <h3 style={{ marginBottom: "7px" }}>{service[0]}</h3>
-                    <label
-                      htmlFor={`fileInput-${service[0]}`}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <span
-                        className={
-                          showEdit
-                            ? "span-input-store-images"
-                            : "span-input-store-images-false"
-                        }
-                        style={{
-                          marginBottom: "5px",
-                          borderRadius: "5px",
-                          padding: "5px",
-                          fontWeight: "bold",
-                          cursor: showEdit ? "pointer" : "not-allowed",
-                          display: "flex",
-                        }}
-                      >
-                        Selecciona una imagen
-                        <AttachFileIcon />
-                      </span>
-                      <input
-                        type="file"
-                        id={`fileInput-${service[0]}`}
-                        name={service[0]}
-                        onChange={uploadImage}
-                        disabled={!showEdit ? true : false}
-                        style={{ display: "none" }}
-                      />
-                    </label>
-                  </Box>
-                  <Box>
-                    <img
-                      src={
-                        service.length > 0 && service[1] ? service[1] : noImg
-                      }
-                      alt="img-servicio"
-                      style={{
-                        width: sm ? "90px" : "150px",
-                        borderRadius: "3px",
+                    <Box
+                      sx={{
+                        minHeight: "90px",
+                        maxHeight: "150px",
+                        display: "flex",
+                        flexDirection: "column",
                       }}
-                    />
+                    >
+                      <h3 style={{ marginBottom: "7px" }}>{service[0]}</h3>
+                      <label
+                        htmlFor={`fileInput-${service[0]}`}
+                        style={{ cursor: "pointer" }}
+                      >
+                        <span
+                          className={
+                            showEdit
+                              ? "span-input-store-images"
+                              : "span-input-store-images-false"
+                          }
+                          style={{
+                            marginBottom: "5px",
+                            borderRadius: "5px",
+                            padding: "5px",
+                            fontWeight: "bold",
+                            cursor: showEdit ? "pointer" : "not-allowed",
+                            display: "flex",
+                          }}
+                        >
+                          Selecciona una imagen
+                          <AttachFileIcon />
+                        </span>
+                        <input
+                          type="file"
+                          id={`fileInput-${service[0]}`}
+                          name={service[0]}
+                          onChange={uploadImage}
+                          disabled={!showEdit ? true : false}
+                          style={{ display: "none" }}
+                        />
+                      </label>
+                    </Box>
+                    <Box>
+                      <img
+                        src={
+                          service.length > 0 && service[1] ? service[1] : noImg
+                        }
+                        alt="img-servicio"
+                        style={{
+                          width: sm ? "90px" : "150px",
+                          borderRadius: "3px",
+                        }}
+                      />
+                    </Box>
                   </Box>
-                </Box>
-              );
-            })}
+                );
+              })}
+            </Box>
           </Box>
         ) : (
           /* /////// SECCION COLORES /////// */

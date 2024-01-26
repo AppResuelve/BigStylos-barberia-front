@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import fondoCentral from "../../assets/images/fondo-peluqueria-1.avif";
 import { Button } from "@mui/material";
 import axios from "axios";
 
@@ -19,8 +18,8 @@ const Home = ({ user, darkMode }) => {
         setColors(data.allColors);
         //  setLoading(false);
       } catch (error) {
-        console.error("Error al obtener los servicios:", error);
-        alert("Error al obtener los servicios");
+        console.error("Error al obtener los datos de personalizacion:", error);
+        alert("Error al obtener los datos de personalizacion");
       }
     };
 

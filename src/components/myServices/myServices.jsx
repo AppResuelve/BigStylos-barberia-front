@@ -87,11 +87,6 @@ const MyServices = ({
         }
       }
     }
-    // // Verificar si hay alguna propiedad con duration en null
-    // const hasNullDuration = Object.values(timeEdit).some(
-    //   (service) => service.duration === null
-    // );
-    // // Establecer el estado de pendingServices
   }, [timeEdit, services]);
   useEffect(() => {
     if (serviceStatus[auxState[0]] && auxState !== false) {
@@ -113,12 +108,7 @@ const MyServices = ({
     }
   }, [auxState]);
 
-  const handleKeyDown = (e) => {
-    // Manejar el evento cuando se presiona Enter
-    if (e.keyCode === 13) {
-      e.preventDefault(); // Evitar que se agregue un salto de línea en el Input
-    }
-  };
+ 
 
   const handleServiceStatus = (element) => {
     setServiceStatus((prevState) => {
@@ -195,7 +185,6 @@ const MyServices = ({
           onChange={(e) => {
             setInputService(e.target.value), setSearchValue(e.target.value);
           }}
-          onKeyDown={handleKeyDown} // Manejar el evento onKeyDown
           style={{
             fontFamily: "Jost, sans-serif",
             fontSize: "20px",
