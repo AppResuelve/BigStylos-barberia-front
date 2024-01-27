@@ -9,15 +9,17 @@ const LoginButton = () => {
     <Button
       variant="contained"
       style={{
-        width: "130px",
-        height: "50px",
+        width: "150px",
+        height: "60px",
+
         borderRadius: "50px",
+        boxShadow: "0px 10px 17px 0px rgba(0,0,0,0.75)",
         fontFamily: "Jost, sans-serif",
         fontSize: "22px",
       }}
       onClick={() => loginWithRedirect()}
     >
-      Log In
+      entrar
     </Button>
   );
 };

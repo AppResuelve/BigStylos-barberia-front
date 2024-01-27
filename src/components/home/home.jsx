@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import fondoCentral from "../../assets/images/fondo-peluqueria-1.avif";
 import { Button } from "@mui/material";
 import axios from "axios";
 import defaultImg from "../../assets/images/fondo-peluqueria-1.avif"
@@ -9,17 +8,19 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Home = ({ user, darkMode }) => {
   const [homeImages, setHomeImages] = useState([]); //images del home
+  const [colors, setColors] = useState("#ffffff");
 
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const response = await axios.get(`${VITE_BACKEND_URL}/images`);
+        const response = await axios.get(`${VITE_BACKEND_URL}/personalization`);
         const { data } = response;
-        setHomeImages(data);
+        setHomeImages(data.allImages);
+        setColors(data.allColors);
         //  setLoading(false);
       } catch (error) {
-        console.error("Error al obtener los servicios:", error);
-        alert("Error al obtener los servicios");
+        console.error("Error al obtener los datos de personalizacion:", error);
+        alert("Error al obtener los datos de personalizacion");
       }
     };
 
@@ -29,34 +30,17 @@ const Home = ({ user, darkMode }) => {
   return (
     <div
       style={{
-        position: "relative",
         display: "flex",
-        width: "100%",
         flexDirection: "column",
         justifyContent: "space-between",
         alignItems: "center",
         height: "100vh",
         paddingTop: "70px",
-        backgroundColor: homeImages[1] ? "" : darkMode ? "#252627" : "white",
+        backgroundColor: darkMode ? "#252627" : colors,
       }}
     >
       <img
-        src={homeImages[1] ? homeImages[1] : defaultImg}
-        alt="nombre del lugar"
-        style={{
-          position: "absolute",
-          zIndex: "-1",
-          top: "0",
-          left: "0",
-          width: "100%",
-          height: "100%", // width: "400px",
-          // height: "400px",
-          objectFit: "cover",
-          boxShadow: "0px 43px 51px -23px rgba(0,0,0,0.57)", // Propiedades de la sombra
-        }}
-      />
-      <img
-        src={homeImages[0] ? homeImages[0] : fondoCentral}
+        src={homeImages[0] ? homeImages[0] : defaultImg}
         alt="nombre del lugar"
         style={{
           marginTop: "20px",

@@ -9,8 +9,7 @@ import LogoutButton from "../logout/logout";
 import { Dialog } from "@mui/material";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { NavLink } from "react-router-dom";
-import Footer from "../footer/footer";
-
+import ClientNestedList from "./clientNestedList";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction={"left"} ref={ref} {...props} />;
 });
@@ -44,7 +43,7 @@ const ModalMUI = ({
           },
         }}
       >
-        <Box
+        <Box //container
           sx={{
             display: "flex",
             flexDirection: "column",
@@ -66,9 +65,7 @@ const ModalMUI = ({
                 }}
               >
                 <h2 style={{ color: darkMode ? "white" : "#28292c" }}>
-                  {userData !== 1 && (userData.worker || userData.admin)
-                    ? userData.name
-                    : "Inicia sesión"}
+                  {userData !== 1 ? userData.name : "Inicia sesión"}
                 </h2>
 
                 {userData !== 1 ? (
@@ -77,7 +74,7 @@ const ModalMUI = ({
                     alt="mi perfil"
                     style={{
                       borderRadius: "50px",
-                      width:sm? "50px":"60px",
+                      width: sm ? "50px" : "60px",
                       border: `solid 3px ${darkMode ? "transparent" : "black"}`,
                       marginLeft: "70px",
                     }}
@@ -105,6 +102,7 @@ const ModalMUI = ({
               />
             </Box>
             <Box>
+              {/* seccion del admin */}
               {userData !== 1 && userData.admin && (
                 <div>
                   <NavLink
@@ -137,7 +135,7 @@ const ModalMUI = ({
                   />
                 </div>
               )}
-
+              {/* seccion del worker */}
               {userData !== 1 && userData.worker && (
                 <div>
                   <NavLink
@@ -171,22 +169,25 @@ const ModalMUI = ({
                 </div>
               )}
             </Box>
+            <Box>
+              {/* seccion del cliente */}
+              {userData !== 1 && (
+                <ClientNestedList userData={userData} darkMode={darkMode} />
+              )}
+            </Box>
           </Box>
-          <Box sx={{ position: "relative" }}>
+          <Box>
             <div
               style={{
-                position: "absolute",
-                top: "-20%",
-                left: "20%",
-                right:"20%",
+                marginBottom: !md ? "50px" : "40px",
                 display: "flex",
                 justifyContent: "center",
               }}
             >
               {isAuthenticated ? <LogoutButton /> : <LoginButton />}
             </div>
-            <Footer darkMode={darkMode} />
           </Box>
+          {/* <Footer darkMode={darkMode} /> */}
         </Box>
       </Dialog>
     </div>

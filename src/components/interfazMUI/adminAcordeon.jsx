@@ -11,16 +11,35 @@ import Users from "../users/users";
 import PlannedClosure from "../plannedClosure/plannedClosure";
 import axios from "axios";
 import { useMediaQueryHook } from "./useMediaQuery";
-import StoreImages from "../storeImages/storeImages";
+import Personalization from "../personalization/personalization";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const AdminAcordeon = () => {
   const [expanded, setExpanded] = useState(false);
   const [schedule, setSchedule] = useState({});
   const [refresh, setRefresh] = useState(false);
+  const [refreshServices, setRefreshServices] = useState(false);
   const [remaining, setRemaining] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [loadingServices, setLoadingServices] = useState(true);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
+  const [services, setServices] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${VITE_BACKEND_URL}/services`);
+        const { data } = response;
+        setServices(data);
+        setLoadingServices(false);
+      } catch (error) {
+        console.error("Error al obtener los servicios:", error);
+        alert("Error al obtener los servicios");
+      }
+    };
+
+    fetchData();
+  }, [refreshServices]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,6 +55,7 @@ const AdminAcordeon = () => {
     };
     fetchData();
   }, [refresh]);
+
   useEffect(() => {
     let aux = false;
     for (const index in schedule) {
@@ -52,6 +72,7 @@ const AdminAcordeon = () => {
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
+
   return (
     <div
       style={{
@@ -62,13 +83,7 @@ const AdminAcordeon = () => {
         maxWidth: "900px", //revisar maxWidth
       }}
     >
-      <Box
-        style={
-          {
-            /* position: "relative" */
-          }
-        }
-      >
+      <Box>
         <Accordion
           style={{
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
@@ -92,10 +107,16 @@ const AdminAcordeon = () => {
             <h2>Servicios</h2>
           </AccordionSummary>
           <AccordionDetails>
-            <Services />
+            <Services
+              services={services}
+              refreshServices={refreshServices}
+              setRefreshServices={setRefreshServices}
+              loadingServices={loadingServices}
+              setLoadingServices={setLoadingServices}
+            />
           </AccordionDetails>
         </Accordion>
-{/* ********************************************************************************************************* */}
+        {/* ********************************************************************************************************* */}
         <Accordion
           style={{
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
@@ -131,7 +152,7 @@ const AdminAcordeon = () => {
             )}
           </AccordionDetails>
         </Accordion>
-{/* ********************************************************************************************************* */}
+        {/* ********************************************************************************************************* */}
         <Accordion
           style={{
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
@@ -186,7 +207,7 @@ const AdminAcordeon = () => {
             )}
           </AccordionDetails>
         </Accordion>
-{/* ********************************************************************************************************* */}
+        {/* ********************************************************************************************************* */}
         <Accordion
           style={{
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
@@ -222,7 +243,7 @@ const AdminAcordeon = () => {
             )}
           </AccordionDetails>
         </Accordion>
-{/* ********************************************************************************************************* */}
+        {/* ********************************************************************************************************* */}
         <Accordion
           style={{
             // marginBottom: "30px",
@@ -250,10 +271,9 @@ const AdminAcordeon = () => {
             <Users />
           </AccordionDetails>
         </Accordion>
-{/* ********************************************************************************************************* */}
+        {/* ********************************************************************************************************* */}
         <Accordion
           style={{
-            marginBottom: "30px",
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
           }}
           expanded={expanded === "panel6"}
@@ -272,15 +292,20 @@ const AdminAcordeon = () => {
             aria-controls="panel6bh-content"
             id="panel6bh-header"
           >
-            <h2>Imagenes</h2>
+            <h2>Personalización</h2>
           </AccordionSummary>
           <AccordionDetails>
-            <StoreImages />
+            <Personalization
+              services={services}
+              refreshServices={refreshServices}
+              setRefreshServices={setRefreshServices}
+            />
           </AccordionDetails>
         </Accordion>
-{/* ********************************************************************************************************* */}
+        {/* ********************************************************************************************************* */}
         <Accordion
           style={{
+            marginBottom: "30px",
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
           }}
           expanded={expanded === "panel7"}
@@ -296,14 +321,12 @@ const AdminAcordeon = () => {
                 sx={{ color: expanded === "panel7" ? "" : "#2196f3" }}
               />
             }
-            aria-controls="panel1bh-content"
+            aria-controls="panel7bh-content"
             id="panel7bh-header"
           >
-            <h2>Servicios</h2>
+            <h2>Turnos cancelados</h2>
           </AccordionSummary>
-          <AccordionDetails>
-            <Services />
-          </AccordionDetails>
+          <AccordionDetails></AccordionDetails>
         </Accordion>
       </Box>
     </div>

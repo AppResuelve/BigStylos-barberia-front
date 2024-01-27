@@ -13,7 +13,12 @@ import durationMax from "../../helpers/durationMax";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const CreateWorkDays = ({ user, schedule, pendingServices, setRedirectToMyServices }) => {
+const CreateWorkDays = ({
+  user,
+  schedule,
+  pendingServices,
+  setRedirectToMyServices,
+}) => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [dayIsSelected, setDayIsSelected] = useState({});
   const [days, setDays] = useState({});
@@ -35,7 +40,7 @@ const CreateWorkDays = ({ user, schedule, pendingServices, setRedirectToMyServic
     const maxClose = Math.max(...closeValues);
     setOpenClose([minOpen, maxClose]);
   }, []);
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -85,20 +90,20 @@ const CreateWorkDays = ({ user, schedule, pendingServices, setRedirectToMyServic
 
   const handleEdit = () => {
     if (pendingServices) {
-       setShowAlert({
-         isOpen: true,
-         message:
-           "Para crear un día de trabajo no debes tener servicios pendientes de asignación.",
-         type: "warning",
-         button1: {
-           text: "Mis servicios",
-           action: "handleActionProp",
-         },
-         buttonClose: {
-           text: "VOLVER",
-         },
-        alertNumber:2,
-       });
+      setShowAlert({
+        isOpen: true,
+        message:
+          "Para crear un día de trabajo no debes tener servicios pendientes de asignación.",
+        type: "warning",
+        button1: {
+          text: "Mis servicios",
+          action: "handleActionProp",
+        },
+        buttonClose: {
+          text: "VOLVER",
+        },
+        alertNumber: 2,
+      });
     } else {
       setShowEdit(true);
     }
@@ -127,7 +132,7 @@ const CreateWorkDays = ({ user, schedule, pendingServices, setRedirectToMyServic
         buttonClose: {
           text: "Volver",
         },
-        alertNumber:1,
+        alertNumber: 1,
       });
     } else {
       setIsOpen(true);
@@ -221,14 +226,15 @@ const CreateWorkDays = ({ user, schedule, pendingServices, setRedirectToMyServic
           action: "handleActionProp",
         },
         buttonClose: {
-          text: "OK",
+          text: "Ok",
         },
+        alertNumber: 3,
       });
     }
   };
 
   return (
-    <div style={{cursor:loading?"wait":""}} >
+    <div style={{ cursor: loading ? "wait" : "" }}>
       {loading ? (
         <LinearProgress sx={{ height: "2px", marginBottom: "15px" }} />
       ) : (
@@ -360,6 +366,9 @@ const CreateWorkDays = ({ user, schedule, pendingServices, setRedirectToMyServic
             setShowAlert={setShowAlert}
             handleActionProp={setRedirectToMyServices}
           />
+        )}
+        {showAlert.alertNumber === 3 && (
+          <AlertModal showAlert={showAlert} setShowAlert={setShowAlert} />
         )}
       </Grid>
     </div>
