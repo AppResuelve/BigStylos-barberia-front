@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import fondoCentral from "../../assets/images/fondo-peluqueria-1.avif";
 import { Button } from "@mui/material";
 import axios from "axios";
+import defaultImg from "../../assets/images/fondo-peluqueria-1.avif"
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -40,7 +41,7 @@ const Home = ({ user, darkMode }) => {
       }}
     >
       <img
-        src={homeImages[1]}
+        src={homeImages[1] ? homeImages[1] : defaultImg}
         alt="nombre del lugar"
         style={{
           position: "absolute",
