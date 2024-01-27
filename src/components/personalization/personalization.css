@@ -1,14 +1,14 @@
-.span-input-store-images {
+.span-input-personalization {
       border: 2px solid #2196F3;
       transition: .3s;
 }
 
-.span-input-store-images:hover {
+.span-input-personalization:hover {
       background-color: #2196F3;
       border: 2px solid #0c66b6;
       color: white;
 }
 
-.span-input-store-images-false {
+.span-input-personalization-false {
       border: 2px solid #d6d6d5;
 }

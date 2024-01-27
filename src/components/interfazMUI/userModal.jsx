@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -19,8 +20,8 @@ const ModalMUI = ({
   isAuthenticated,
   googleImage,
   userData,
-  darkMode,
 }) => {
+  const { darkMode } = useContext(DarkModeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const handleClose = () => setIsOpen(false);
 
@@ -50,7 +51,7 @@ const ModalMUI = ({
             justifyContent: "space-between",
             width: sm ? "80vw" : md ? "60vw" : lg ? "50vw" : xl ? "30vw" : "",
             height: "100vh",
-            bgcolor: darkMode ? "#28292c" : "white",
+            bgcolor: darkMode.on ? darkMode.dark : darkMode.light,
             p: 3,
           }}
         >
@@ -64,7 +65,7 @@ const ModalMUI = ({
                   marginBottom: "15px",
                 }}
               >
-                <h2 style={{ color: darkMode ? "white" : "#28292c" }}>
+                <h2 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
                   {userData !== 1 ? userData.name : "Inicia sesión"}
                 </h2>
 
@@ -75,7 +76,9 @@ const ModalMUI = ({
                     style={{
                       borderRadius: "50px",
                       width: sm ? "50px" : "60px",
-                      border: `solid 3px ${darkMode ? "transparent" : "black"}`,
+                      border: `solid 3px ${
+                        darkMode.on ? "transparent" : darkMode.dark
+                      }`,
                       marginLeft: "70px",
                     }}
                   />
@@ -96,7 +99,7 @@ const ModalMUI = ({
                 style={{
                   border: "none",
                   height: "2px", // Altura de la línea
-                  backgroundColor: darkMode ? "white" : "#28292c",
+                  backgroundColor: darkMode.on ? "white" : darkMode.dark,
                   marginBottom: "20px",
                 }}
               />
@@ -115,7 +118,7 @@ const ModalMUI = ({
                         fontFamily: "Jost, sans-serif",
                         fontSize: "18px",
                         backgroundColor: "transparent",
-                        color: darkMode ? "white" : "#28292c",
+                        color: darkMode.on ? "white" : darkMode.dark,
                         fontWeight: "bold",
                         cursor: "pointer",
                       }}
@@ -128,7 +131,7 @@ const ModalMUI = ({
                     style={{
                       border: "none",
                       height: "1px", // Altura de la línea
-                      backgroundColor: darkMode ? "white" : "#28292c",
+                      backgroundColor: darkMode.on ? "white" : darkMode.dark,
                       marginBottom: "15px",
                       marginTop: "20px",
                     }}
@@ -140,7 +143,7 @@ const ModalMUI = ({
                 <div>
                   <NavLink
                     to="/worker"
-                    style={{ textDecoration: "none", color: "black" }}
+                    style={{ textDecoration: "none", color: darkMode.dark }}
                   >
                     <button
                       style={{
@@ -148,7 +151,7 @@ const ModalMUI = ({
                         fontFamily: "Jost, sans-serif",
                         fontSize: "18px",
                         backgroundColor: "transparent",
-                        color: darkMode ? "white" : "#28292c",
+                        color: darkMode.on ? "white" : darkMode.dark,
                         fontWeight: "bold",
                         cursor: "pointer",
                       }}
@@ -161,7 +164,7 @@ const ModalMUI = ({
                     style={{
                       border: "none",
                       height: "1px", // Altura de la línea
-                      backgroundColor: darkMode ? "white" : "#28292c",
+                      backgroundColor: darkMode.on ? "white" : darkMode.dark,
                       marginBottom: "15px",
                       marginTop: "20px",
                     }}
@@ -171,9 +174,7 @@ const ModalMUI = ({
             </Box>
             <Box>
               {/* seccion del cliente */}
-              {userData !== 1 && (
-                <ClientNestedList userData={userData} darkMode={darkMode} />
-              )}
+              {userData !== 1 && <ClientNestedList userData={userData} />}
             </Box>
           </Box>
           <Box>
@@ -187,7 +188,6 @@ const ModalMUI = ({
               {isAuthenticated ? <LogoutButton /> : <LoginButton />}
             </div>
           </Box>
-          {/* <Footer darkMode={darkMode} /> */}
         </Box>
       </Dialog>
     </div>

@@ -138,9 +138,9 @@ const PlannedClosure = ({ schedule }) => {
             <Button
               onClick={handleCancel}
               variant="outlined"
-              style={{ borderRadius: "50px", border: "2px solid " }}
+              style={{ borderRadius: "50px", border: "2px solid" }}
             >
-              <h4 style={{ fontFamily: "Jost, sans-serif" }}>Volver</h4>
+              <h4 style={{ fontFamily: "Jost, sans-serif",fontWeight:"bold" }}>Volver</h4>
             </Button>
             <Button onClick={handleSubmit} variant="contained">
               <h4 style={{ fontFamily: "Jost, sans-serif" }}>Guardar</h4>

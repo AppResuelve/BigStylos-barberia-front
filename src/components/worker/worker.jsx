@@ -1,12 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import { Skeleton, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import WorkerAcordeon from "../interfazMUI/workerAcordeon";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 
-const Worker = ({ userData, userAuth, darkMode }) => {
+const Worker = ({ userData, userAuth }) => {
   const navigate = useNavigate();
+  const { darkMode } = useContext(DarkModeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
+
   useEffect(() => {
     if (userData !== 1) {
       if (!userData.worker) {
@@ -25,7 +28,7 @@ const Worker = ({ userData, userAuth, darkMode }) => {
         overflow: "auto",
         display: "flex",
         flexDirection: "column",
-        backgroundColor: darkMode ? "#28292c" : "white",
+        backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
         alignItems: "center",
         height: "100vh",
         paddingTop: "70px",
@@ -68,7 +71,7 @@ const Worker = ({ userData, userAuth, darkMode }) => {
             style={{
               display: "flex",
               justifyContent: "center",
-              color: darkMode ? "white" : "#28292c",
+              color: !darkMode.on ? darkMode.dark : "white",
               fontSize: sm ? "28px" : "",
             }}
           >

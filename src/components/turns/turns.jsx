@@ -1,5 +1,6 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import CustomCalendarTurns from "../customCalendar/customCalendarTurns";
 import ShowTurns from "../showTurns/showTurns";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
@@ -12,6 +13,7 @@ import formatHour from "../../functions/formatHour";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Turns = ({ user }) => {
+  const { darkMode } = useContext(DarkModeContext);
   const [days, setDays] = useState([]);
   const [services, setServices] = useState([]);
   const [dayIsSelected, setDayIsSelected] = useState([]);
@@ -132,6 +134,8 @@ const Turns = ({ user }) => {
       style={{
         display: "flex",
         justifyContent: "center",
+        backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
+        zIndex:"0",
         // paddingTop: sm ? "70px" : "70px",
         height: "100vh",
       }}
@@ -202,6 +206,7 @@ const Turns = ({ user }) => {
                       element[0] === serviceSelected
                         ? "0px 10px 14px 0px rgba(0, 0, 0, 0.75)"
                         : "0px 5px 14px -5px rgba(0, 0, 0, 0.75)",
+                    zIndex:"3"
                   }}
                   onClick={() => handleSelectService(element)}
                 >
@@ -214,6 +219,7 @@ const Turns = ({ user }) => {
             sx={{
               background:
                 "linear-gradient(180deg, rgba(255,0,0,0) 70%, rgba(0,0,0,0.34) 100%)",
+              zIndex:"3"
             }}
           >
             <img
@@ -225,7 +231,7 @@ const Turns = ({ user }) => {
                 left: "0",
                 width: "100%",
                 height: "100%",
-                zIndex: "-1",
+                // zIndex: "1",
                 objectFit: "cover",
               }}
             />

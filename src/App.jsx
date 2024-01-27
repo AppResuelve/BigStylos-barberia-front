@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, createContext } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
@@ -12,12 +12,53 @@ import NotFound from "./components/pageNotFound/pageNotFound";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
+export const DarkModeContext = createContext();
+
 function App() {
   const [userData, setUserData] = useState(1);
-  const [darkMode, setDarkMode] = useState(false);
   const [userAuth, setUserAuth] = useState(false);
   const { user } = useAuth0();
   const location = useLocation();
+  const [colors, setColors] = useState("#000000");
+  const [darkMode, setDarkMode] = useState({
+    dark: "#252627",
+    light: colors,
+    on: false,
+  });
+  const [homeImages, setHomeImages] = useState([]); //images del home
+
+  console.log(colors);
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const response = await axios.get(`${VITE_BACKEND_URL}/personalization`);
+        const { data } = response;
+        setHomeImages(data.allImages);
+        setColors(data.allColors);
+        //  setLoading(false);
+      } catch (error) {
+        console.error("Error al obtener los datos de personalizacion:", error);
+        alert("Error al obtener los datos de personalizacion");
+      }
+    };
+
+    fetchImages();
+  }, []);
+  console.log(darkMode);
+  const toggleDarkMode = () => {
+    setDarkMode((prevMode) => ({
+      ...prevMode,
+      on: !prevMode.on,
+    }));
+  };
+
+  useEffect(() => {
+    // Actualizar el estado del modo oscuro después de obtener el color
+    setDarkMode((prevMode) => ({
+      ...prevMode,
+      light: colors,
+    }));
+  }, [colors]);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -66,47 +107,31 @@ function App() {
     localStorage.setItem("darkMode", JSON.stringify(darkMode));
   }, [darkMode]);
 
-  
   return (
-    <div>
-      {location.pathname !== "/requestDenied401" && (
-        <Nav user={userData} darkMode={darkMode} setDarkMode={setDarkMode} />
-      )}
-      <Routes>
-        <Route
-          path="/"
-          element={<Home user={userData} darkMode={darkMode} />}
-        />
-        <Route
-          path="/turns"
-          element={<Turns user={userData} /* darkMode={darkMode} */ />}
-        />
-        <Route
-          path="/admin"
-          element={
-            <Admin
-              userData={userData}
-              userAuth={userAuth}
-              darkMode={darkMode}
-            />
-          }
-        />
-        <Route
-          path="/worker"
-          element={
-            <Worker
-              userData={userData}
-              userAuth={userAuth}
-              darkMode={darkMode}
-            />
-          }
-        />
-        <Route
-          path="/requestDenied401"
-          element={<NotFound user={userData} />}
-        />
-      </Routes>
-    </div>
+    <DarkModeContext.Provider value={{ darkMode, toggleDarkMode }}>
+      <div>
+        {location.pathname !== "/requestDenied401" && <Nav user={userData} />}
+        <Routes>
+          <Route
+            path="/"
+            element={<Home user={userData} homeImages={homeImages} />}
+          />
+          <Route path="/turns" element={<Turns user={userData} />} />
+          <Route
+            path="/admin"
+            element={<Admin userData={userData} userAuth={userAuth} />}
+          />
+          <Route
+            path="/worker"
+            element={<Worker userData={userData} userAuth={userAuth} />}
+          />
+          <Route
+            path="/requestDenied401"
+            element={<NotFound user={userData} />}
+          />
+        </Routes>
+      </div>
+    </DarkModeContext.Provider>
   );
 }
 

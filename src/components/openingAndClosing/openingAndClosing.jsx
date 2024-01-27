@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import axios from "axios";
 import formatHour from "../../functions/formatHour";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
@@ -14,6 +15,7 @@ const OpeningAndClosing = ({
   setRefresh,
   setRemaining,
 }) => {
+  const { darkMode } = useContext(DarkModeContext);
   const [showEdit, setShowEdit] = useState(false);
   const [showAlert, setShowAlert] = useState({});
   const [timeEdit, setTimeEdit] = useState({});
@@ -113,7 +115,9 @@ const OpeningAndClosing = ({
               marginBottom: "10px",
             }}
           >
-            <h3>{timeEdit[index] ? day : "------"}</h3>
+            <h3 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
+              {timeEdit[index] ? day : "------"}
+            </h3>
             {timeEdit[index] ? (
               <div style={{ display: "flex", alignItems: "center" }}>
                 <h4 style={{ color: "red" }}>
@@ -122,19 +126,38 @@ const OpeningAndClosing = ({
                     : null}
                 </h4>
                 <Select
-                  style={{ height: "40px", marginLeft: "5px" }}
+                  style={{
+                    height: "40px",
+                    marginLeft: "5px",
+                    backgroundColor: darkMode.on ? "white" : "#d6d6d5",
+                    fontFamily: "Jost, sans-serif",
+                    fontWeight: "bold",
+                  }}
                   disabled={showEdit ? false : true}
                   value={timeEdit[index]?.open ? timeEdit[index]?.open : 0}
                   onChange={(event) => handleSelectChange(event, index, "open")}
                 >
                   {timeArray.map((minute, index) => (
-                    <MenuItem key={index} value={minute}>
+                    <MenuItem
+                      key={index}
+                      value={minute}
+                      style={{
+                        fontFamily: "Jost, sans-serif",
+                        fontWeight: "bold",
+                      }}
+                    >
                       {formatHour(minute)}
                     </MenuItem>
                   ))}
                 </Select>
                 <Select
-                  style={{ height: "40px", marginLeft: "5px" }}
+                  style={{
+                    height: "40px",
+                    marginLeft: "5px",
+                    backgroundColor: darkMode.on ? "white" : "#d6d6d5",
+                    fontFamily: "Jost, sans-serif",
+                    fontWeight: "bold",
+                  }}
                   disabled={showEdit ? false : true}
                   value={timeEdit[index]?.close ? timeEdit[index]?.close : 1440}
                   onChange={(event) =>
@@ -142,7 +165,14 @@ const OpeningAndClosing = ({
                   }
                 >
                   {timeArray.map((minute, index) => (
-                    <MenuItem key={index + 100} value={minute}>
+                    <MenuItem
+                      key={index + 100}
+                      value={minute}
+                      style={{
+                        fontFamily: "Jost, sans-serif",
+                        fontWeight: "bold",
+                      }}
+                    >
                       {formatHour(minute)}
                     </MenuItem>
                   ))}
@@ -174,7 +204,11 @@ const OpeningAndClosing = ({
               variant="outlined"
               style={{ borderRadius: "50px", border: "2px solid " }}
             >
-              <h4 style={{ fontFamily: "Jost, sans-serif" }}>Volver</h4>
+              <h4
+                style={{ fontFamily: "Jost, sans-serif", fontWeight: "bold" }}
+              >
+                Volver
+              </h4>
             </Button>
             <Button onClick={handleSubmit} variant="contained">
               <h4 style={{ fontFamily: "Jost, sans-serif" }}>Guardar</h4>

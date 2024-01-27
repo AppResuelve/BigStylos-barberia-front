@@ -1,30 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import { NavLink } from "react-router-dom";
 import { Button } from "@mui/material";
-import axios from "axios";
-
-const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-
-const Home = ({ user, darkMode }) => {
-  const [homeImages, setHomeImages] = useState([]); //images del home
-  const [colors, setColors] = useState("#ffffff");
-
-  useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        const response = await axios.get(`${VITE_BACKEND_URL}/personalization`);
-        const { data } = response;
-        setHomeImages(data.allImages);
-        setColors(data.allColors);
-        //  setLoading(false);
-      } catch (error) {
-        console.error("Error al obtener los datos de personalizacion:", error);
-        alert("Error al obtener los datos de personalizacion");
-      }
-    };
-
-    fetchImages();
-  }, []);
+import defaultImg from "../../assets/images/fondo-peluqueria-1.avif";
+const Home = ({ user, homeImages }) => {
+  const { darkMode } = useContext(DarkModeContext);
 
   return (
     <div
@@ -35,11 +15,11 @@ const Home = ({ user, darkMode }) => {
         alignItems: "center",
         height: "100vh",
         paddingTop: "70px",
-        backgroundColor: darkMode ? "#252627" : colors,
+        backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
       }}
     >
       <img
-        src={homeImages[0]}
+        src={homeImages[0] ? homeImages[0] : defaultImg}
         alt="nombre del lugar"
         style={{
           marginTop: "20px",
@@ -59,8 +39,8 @@ const Home = ({ user, darkMode }) => {
             height: "60px",
             fontFamily: "Jost, sans-serif",
             fontSize: "23px",
-            backgroundColor: darkMode ? "white" : "#252627",
-            color: darkMode ? "#252627" : "white",
+            backgroundColor: darkMode.on ? "white" : darkMode.dark,
+            color: darkMode.on ? darkMode.dark : "white",
           }}
         >
           Reservar

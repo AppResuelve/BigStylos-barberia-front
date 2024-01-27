@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import axios from "axios";
 import { Box, Button, Grid, Input } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -13,6 +14,7 @@ const Services = ({
   loadingServices,
   setLoadingServices,
 }) => {
+  const { darkMode } = useContext(DarkModeContext);
   const [newService, setNewService] = useState("");
   const [searchValue, setSearchValue] = useState("");
 
@@ -97,6 +99,10 @@ const Services = ({
             fontFamily: "Jost, sans-serif",
             fontSize: "20px",
             width: "60%",
+            backgroundColor: darkMode.on ? "white" : "#d6d6d5",
+            fontWeight: "bold",
+            paddingLeft: "10px",
+            borderRadius: "5px",
           }}
         />
         <Button
@@ -138,7 +144,9 @@ const Services = ({
                 md={4}
                 key={index}
               >
-                <h3>{element[0]}</h3>
+                <h3 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
+                  {element[0]}
+                </h3>
                 <Box style={{ display: "flex" }}>
                   <Button
                     onClick={() => handleDeleteService(element[0])}
@@ -159,7 +167,9 @@ const Services = ({
             }}
           >
             <h2>
-              {loadingServices ? "Cargando servicios" : "No hay servicios todavía"}
+              {loadingServices
+                ? "Cargando servicios"
+                : "No hay servicios todavía"}
             </h2>
           </Grid>
         )}

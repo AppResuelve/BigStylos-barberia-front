@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import daysMonthCalendarCustom from "../../functions/daysMonthCalendarCustom";
 import getToday from "../../functions/getToday";
 import obtainDayName from "../../functions/obtainDayName";
@@ -18,6 +19,7 @@ const CustomCalendar = ({
   schedule,
   loading,
 }) => {
+  const { darkMode } = useContext(DarkModeContext);
   const daysCalendarCustom = daysMonthCalendarCustom(amountOfDays, false);
   let { currentMonth, nextMonth, currentYear, nextYear } = daysCalendarCustom;
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
@@ -88,7 +90,12 @@ const CustomCalendar = ({
     <div className="div-container-calendar">
       <Box className={"line7day-query600px"}>
         {daysOfWeek.map((day) => (
-          <h4 key={day}>{day}</h4>
+          <h4
+            key={day}
+            style={{ color: darkMode.on ? "white" : darkMode.dark }}
+          >
+            {day}
+          </h4>
         ))}
       </Box>
 
@@ -225,6 +232,95 @@ const CustomCalendar = ({
             </button>
           );
         })}
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          width: "100%",
+          justifyContent: "center",
+          marginTop: "12px",
+        }}
+      >
+        <Box>
+          <Box sx={{ display: "flex", alignItems: "center", margin: "5px" }}>
+            <div
+              style={{
+                height: "18px",
+                width: "18px",
+                backgroundColor: "#e6b226d0",
+                borderRadius: "25px",
+              }}
+            ></div>
+            <h4
+              style={{
+                color: darkMode.on ? "white" : darkMode.dark,
+                marginLeft: "4px",
+                letterSpacing: "1px",
+              }}
+            >
+              Con reserva/s
+            </h4>
+          </Box>
+          <Box sx={{ display: "flex", alignItems: "center", margin: "5px" }}>
+            <div
+              style={{
+                height: "18px",
+                width: "18px",
+                backgroundColor: "gray",
+                borderRadius: "25px",
+              }}
+            ></div>
+            <h4
+              style={{
+                color: darkMode.on ? "white" : darkMode.dark,
+                marginLeft: "4px",
+                letterSpacing: "1px",
+              }}
+            >
+              No laborable
+            </h4>
+          </Box>
+        </Box>
+        <Box>
+          <Box sx={{ display: "flex", alignItems: "center", margin: "5px" }}>
+            <div
+              style={{
+                height: "18px",
+                width: "18px",
+                backgroundColor: "#e0e0e0d2",
+                borderRadius: "25px",
+              }}
+            ></div>
+            <h4
+              style={{
+                color: darkMode.on ? "white" : darkMode.dark,
+                marginLeft: "4px",
+                letterSpacing: "1px",
+              }}
+            >
+              Día hábil
+            </h4>
+          </Box>
+          <Box sx={{ display: "flex", alignItems: "center", margin: "5px" }}>
+            <div
+              style={{
+                height: "18px",
+                width: "18px",
+                backgroundColor: "#2196f3",
+                borderRadius: "25px",
+              }}
+            ></div>
+            <h4
+              style={{
+                color: darkMode.on ? "white" : darkMode.dark,
+                marginLeft: "4px",
+                letterSpacing: "1px",
+              }}
+            >
+              Día seleccionado
+            </h4>
+          </Box>
+        </Box>
       </Box>
     </div>
   );

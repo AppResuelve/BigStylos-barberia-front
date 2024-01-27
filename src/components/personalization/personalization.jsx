@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import axios from "axios";
 import { Box, Button } from "@mui/material";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
@@ -12,6 +13,7 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const VITE_CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
 
 const Personalization = ({ services, refreshServices, setRefreshServices }) => {
+  const { darkMode } = useContext(DarkModeContext);
   const [imgServices, setImgServices] = useState([]); //images de los services basado en el estado services
   const [homeImages, setHomeImages] = useState([]); //images del home
   const [auxHomeImages, setAuxHomeImages] = useState([]); //images del home basado ene le estado homeImages
@@ -222,13 +224,20 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
                     justifyContent: "center",
                   }}
                 >
-                  <h3 style={{ marginBottom: "7px" }}>fondo logotipo</h3>
+                  <h3
+                    style={{
+                      marginBottom: "7px",
+                      color: darkMode.on ? "white" : darkMode.dark,
+                    }}
+                  >
+                    fondo logotipo
+                  </h3>
                   <label htmlFor="home" style={{ cursor: "pointer" }}>
                     <span
                       className={
                         showEdit
-                          ? "span-input-store-images"
-                          : "span-input-store-images-false"
+                          ? "span-input-personalization"
+                          : "span-input-personalization-false"
                       }
                       style={{
                         display: "flex",
@@ -237,6 +246,7 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
                         padding: "5px",
                         cursor: showEdit ? "pointer" : "not-allowed",
                         fontWeight: "bold",
+                        color: darkMode.on ? "white" : darkMode.dark,
                       }}
                     >
                       Selecciona una imagen
@@ -273,7 +283,14 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
                     justifyContent: "center",
                   }}
                 >
-                  <h3 style={{ marginBottom: "7px" }}>fondo de pantalla</h3>
+                  <h3
+                    style={{
+                      marginBottom: "7px",
+                      color: darkMode.on ? "white" : darkMode.dark,
+                    }}
+                  >
+                    fondo de pantalla
+                  </h3>
                   <label
                     htmlFor="fondo-de-pantalla"
                     style={{ cursor: "pointer" }}
@@ -282,8 +299,8 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
                       className={
                         //PROXIMAMENTE//
                         /* showEdit
-                          ? "span-input-store-images"
-                          : */ "span-input-store-images-false"
+                          ? "span-input-personalization"
+                          : */ "span-input-personalization-false"
                       }
                       style={{
                         display: "flex",
@@ -292,6 +309,7 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
                         padding: "5px",
                         cursor: showEdit ? "pointer" : "not-allowed",
                         fontWeight: "bold",
+                        color: darkMode.on ? "white" : darkMode.dark,
                       }}
                     >
                       Proximamente
@@ -322,7 +340,14 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
                 </Box>
               </Box>
             </Box>
-            <hr />
+            <hr
+              style={{
+                width: "100%",
+                border: "none",
+                height: "2px",
+                backgroundColor: "#2196f3",
+              }}
+            />
             <Box sx={{ overflow: "scroll", maxHeight: "350px" }}>
               {imgServices.map((service, index) => {
                 return (
@@ -343,7 +368,14 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
                         flexDirection: "column",
                       }}
                     >
-                      <h3 style={{ marginBottom: "7px" }}>{service[0]}</h3>
+                      <h3
+                        style={{
+                          marginBottom: "7px",
+                          color: darkMode.on ? "white" : darkMode.dark,
+                        }}
+                      >
+                        {service[0]}
+                      </h3>
                       <label
                         htmlFor={`fileInput-${service[0]}`}
                         style={{ cursor: "pointer" }}
@@ -351,8 +383,8 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
                         <span
                           className={
                             showEdit
-                              ? "span-input-store-images"
-                              : "span-input-store-images-false"
+                              ? "span-input-personalization"
+                              : "span-input-personalization-false"
                           }
                           style={{
                             marginBottom: "5px",
@@ -361,6 +393,7 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
                             fontWeight: "bold",
                             cursor: showEdit ? "pointer" : "not-allowed",
                             display: "flex",
+                            color: darkMode.on ? "white" : darkMode.dark,
                           }}
                         >
                           Selecciona una imagen
@@ -413,13 +446,20 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
                   flexDirection: "column",
                 }}
               >
-                <h3 style={{ marginBottom: "7px" }}>fondo</h3>
+                <h3
+                  style={{
+                    marginBottom: "7px",
+                    color: darkMode.on ? "white" : darkMode.dark,
+                  }}
+                >
+                  fondo
+                </h3>
                 <label htmlFor="color fondo" style={{ cursor: "pointer" }}>
                   <span
                     className={
                       showEdit
-                        ? "span-input-store-images"
-                        : "span-input-store-images-false"
+                        ? "span-input-personalization"
+                        : "span-input-personalization-false"
                     }
                     style={{
                       display: "flex",
@@ -428,6 +468,7 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
                       padding: "5px",
                       cursor: showEdit ? "pointer" : "not-allowed",
                       fontWeight: "bold",
+                      color: darkMode.on ? "white" : darkMode.dark,
                     }}
                   >
                     Selecciona un color
@@ -451,6 +492,8 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
                     height: sm ? "90px" : "130px",
                     borderRadius: "100px",
                     backgroundColor: colorSelected,
+                    boxShadow:
+                      "0px 15px 25px -16px rgba(0,0,0,0.57)inset,0px 25px 25px -12px rgba(0,0,0,0.57)", // Propiedades de la sombra
                   }}
                 ></Box>
               </Box>
@@ -494,7 +537,11 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
               variant="outlined"
               style={{ borderRadius: "50px", border: "2px solid " }}
             >
-              <h4 style={{ fontFamily: "Jost, sans-serif" }}>Volver</h4>
+              <h4
+                style={{ fontFamily: "Jost, sans-serif", fontWeight: "bold" }}
+              >
+                Volver
+              </h4>
             </Button>
             <Button onClick={handleSubmit} variant="contained">
               <h4 style={{ fontFamily: "Jost, sans-serif" }}>Guardar</h4>
