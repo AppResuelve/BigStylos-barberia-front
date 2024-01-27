@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Button } from "@mui/material";
 import axios from "axios";
+import defaultImg from "../../assets/images/fondo-peluqueria-1.avif"
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -39,7 +40,7 @@ const Home = ({ user, darkMode }) => {
       }}
     >
       <img
-        src={homeImages[0]}
+        src={homeImages[0] ? homeImages[0] : defaultImg}
         alt="nombre del lugar"
         style={{
           marginTop: "20px",
