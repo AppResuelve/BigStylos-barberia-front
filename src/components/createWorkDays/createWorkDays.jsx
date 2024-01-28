@@ -7,7 +7,7 @@ import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import AlertModal from "../interfazMUI/alertModal";
 import SliderModal from "../interfazMUI/sliderModal";
 import { Grid, Box, Button, LinearProgress } from "@mui/material";
-import "./CreateWorkDays.css";
+import "./createWorkDays.css";
 import getCurrentMonth from "../../functions/getCurrentMonth";
 import durationMax from "../../helpers/durationMax";
 
