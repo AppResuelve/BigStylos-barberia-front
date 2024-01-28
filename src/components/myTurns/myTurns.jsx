@@ -5,7 +5,7 @@ import { Box, Button } from "@mui/material";
 import formatHour from "../../functions/formatHour";
 import AlertModal from "../interfazMUI/alertModal";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
-import "./myturns.css";
+import "./myTurns.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
