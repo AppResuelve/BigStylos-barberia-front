@@ -15,6 +15,8 @@ const MyTurns = ({ userData }) => {
   const [validateAlert, setValidateAlert] = useState(false);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
+  console.log(InfoToSubmit)
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -59,10 +61,14 @@ const MyTurns = ({ userData }) => {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.delete(
-        `${VITE_BACKEND_URL}/workdays/myturns`,
+      const response = await axios.post(
+        `${VITE_BACKEND_URL}/workdays/cancel`,
         {
-          InfoToSubmit,
+          month: InfoToSubmit.month,
+          day: InfoToSubmit.day,
+          time: InfoToSubmit.hourTime,
+          emailWorker: InfoToSubmit.worker,
+          emailClient: userData.email
         }
       );
       const { data } = response;

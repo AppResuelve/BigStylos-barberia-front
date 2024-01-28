@@ -10,6 +10,7 @@ import { Grid, Box, Button, LinearProgress } from "@mui/material";
 import "./CreateWorkDays.css";
 import getCurrentMonth from "../../functions/getCurrentMonth";
 import durationMax from "../../helpers/durationMax";
+import shouldDisableButton from "../../helpers/shouldDisableButton";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -40,6 +41,10 @@ const CreateWorkDays = ({
     const maxClose = Math.max(...closeValues);
     setOpenClose([minOpen, maxClose]);
   }, []);
+  /* console.log(dayIsSelected) */
+  dayIsSelected && Object.keys(dayIsSelected)[0] && console.log(Object.keys(dayIsSelected)[0])
+  dayIsSelected && Object.keys(dayIsSelected)[0] && console.log(Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0])
+  /* Object.keys(dayIsSelected[firstLevelProperty])[0] */
 
   useEffect(() => {
     const fetchData = async () => {
@@ -324,21 +329,32 @@ const CreateWorkDays = ({
               >
                 <h4 style={{ fontFamily: "Jost, sans-serif" }}>Volver</h4>
               </Button>
+              {/* *********************************************** */}
               <Button
                 variant="contained"
                 disabled={
-                  submit
-                    ? true
-                    : dayIsSelected && Object.keys(dayIsSelected).length > 0
-                    ? false
-                    : true
+                  submit ||
+                  (!dayIsSelected || Object.keys(dayIsSelected).length === 0) ||
+                  !shouldDisableButton(dayIsSelected, days)
                 }
                 onClick={handleShowSlider}
               >
-                <h4 style={{ fontFamily: "Jost, sans-serif" }}>
-                  Asignar horarios
-                </h4>
+                <h4 style={{ fontFamily: "Jost, sans-serif" }}>borrar</h4>
               </Button>
+
+              {/* *********************************************** */}
+              <Button
+                variant="contained"
+                disabled={
+                  submit ||
+                  (!dayIsSelected || Object.keys(dayIsSelected).length === 0) ||
+                  shouldDisableButton(dayIsSelected, days)
+                }
+                onClick={handleShowSlider}
+              >
+                <h4 style={{ fontFamily: "Jost, sans-serif" }}>Asignar horarios</h4>
+              </Button>
+
             </Box>
           )}
           {/* sección del slider */}
