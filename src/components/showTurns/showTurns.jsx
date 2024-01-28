@@ -7,6 +7,7 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import NoUser from "../../assets/icons/noUser.png";
 import "./showTurns.css";
+import ShowTimeCarousel from "../interfazMUI/showTimeCarousel";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -22,18 +23,19 @@ const ShowTurns = ({
   isOpen,
   setIsOpen,
   detailTurn,
-  setDetailTurn
+  setDetailTurn,
 }) => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const handleClose = () => {
-    setDayIsSelected({})
-    setIsOpen(false)}
+    setDayIsSelected({});
+    setIsOpen(false);
+  };
   const [dayForTurns, setDayForTurns] = useState([]);
   const [buttons, setButtons] = useState([]);
   const [selectedTime, setSelectedTime] = useState("");
   const [selectedWorker, setSelectedWorker] = useState("");
 
-    console.log(selectedTime,selectedWorker)
+  console.log(selectedTime, selectedWorker);
 
   useEffect(() => {
     const fetchday = async () => {
@@ -79,11 +81,8 @@ const ShowTurns = ({
     const tardanza = dayForTurns.filter(
       (element) => element.email == workerEmail
     );
-    /* console.log(
-      `la duracion del servicio es: ${tardanza[0].services[serviceSelected].duration}`
-    );
-    console.log(workerEmail, selectTime, serviceSelected); */
-    setSelectedTime(selectTime);
+   
+    // setSelectedTime(selectTime);
     setSelectedWorker(workerEmail);
   };
 
@@ -93,14 +92,14 @@ const ShowTurns = ({
     );
     setDetailTurn({
       workerEmail: selectedWorker, // email del worker
-      userEmail: user.email,  // email del usuario
+      userEmail: user.email, // email del usuario
       selectedTime: selectedTime, // minutos del turno, los index de los botones de horarios
-      tardanza: tardanza[0].services[serviceSelected].duration,  // cuanto tarda el servicio
+      tardanza: tardanza[0].services[serviceSelected].duration, // cuanto tarda el servicio
       serviceSelected: serviceSelected, // el servicio deleccionado en string
       dayIsSelected: dayIsSelected, // [31, 2] array en su 0 dice la fecha, en su 1 dice el mes
-    })
-  }
-  
+    });
+  };
+
   return (
     <div>
       <Dialog
@@ -132,7 +131,7 @@ const ShowTurns = ({
         >
           <Box>
             <Button
-            onClick={handleClose}
+              onClick={handleClose}
               sx={{
                 fontFamily: "Jost, sans serif",
                 fontWeight: "bold",
@@ -163,7 +162,7 @@ const ShowTurns = ({
               <Box
                 key={index}
                 sx={{
-                  height: "120px",
+                  height: "160px",
                   border: "2px solid #2196f3",
                   borderRadius: "5px",
                   padding: "4px",
@@ -197,31 +196,13 @@ const ShowTurns = ({
                   }
                 })}
                 <Box className="box-to-scroll">
-                  {buttonGroup.map((button, buttonIndex) => {
-                    if (buttonIndex === 0) {
-                      return null;
-                    } else {
-                      return (
-                        <Button
-                          sx={{
-                            height: "40px",
-                            width: "75px",
-                            margin: "3px", 
-                            fontFamily: "Jost, sans serif",
-                            fontWeight: "bold",
-                            letterSpacing: "2px",
-                          }}
-                          key={buttonIndex}
-                          variant="contained"
-                          onClick={() =>
-                            handleSelectTime(buttonGroup[0], button)
-                          }
-                        >
-                          {formatHour(button)}
-                        </Button>
-                      );
-                    }
-                  })}
+                  <ShowTimeCarousel
+                    buttonGroup={buttonGroup.slice(1)}
+                    selectedTime={selectedTime}
+                    setSelectedTime={setSelectedTime}
+                    handleSelectTime={handleSelectTime}
+                    button0={buttonGroup[0]}
+                  />
                 </Box>
               </Box>
             ))}
@@ -255,8 +236,10 @@ const ShowTurns = ({
                   <h2>{selectedWorker}</h2>
                 </Box>
                 <Button
-                onClick={() => {handleAsignTurn(), handleClose()}}
-                disabled= {selectedTime && selectedTime != "" ? false : true}
+                  onClick={() => {
+                    handleAsignTurn(), handleClose();
+                  }}
+                  disabled={selectedTime && selectedTime != "" ? false : true}
                   variant="contained"
                   sx={{
                     maxHeight: "35px",
@@ -271,9 +254,7 @@ const ShowTurns = ({
             </Box>
           </Box>
         </Box>
-        
       </Dialog>
-      
     </div>
   );
 };

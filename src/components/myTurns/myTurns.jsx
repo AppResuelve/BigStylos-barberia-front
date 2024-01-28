@@ -16,6 +16,16 @@ const MyTurns = ({ userData }) => {
   const [showAlert, setShowAlert] = useState({});
   const [validateAlert, setValidateAlert] = useState(false);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
+  const [turnServices, setTurnServices] = useState([]);
+
+  useEffect(() => {
+    // Recupera la lista de servicios agendados del localStorage
+    const existingTurns =
+      JSON.parse(localStorage.getItem("turnServices")) || [];
+
+    // Establece la lista en el estado
+    setTurnServices(existingTurns);
+  }, []); // Se ejecuta solo una vez al montar el componente
 
   useEffect(() => {
     const fetchData = async () => {
@@ -85,7 +95,7 @@ const MyTurns = ({ userData }) => {
       console.error("Error al cancelar el turno:", error);
     }
   };
-  console.log(listMyTurns);
+
   return (
     <div className="div-container-myturns">
       <Box style={{ overflow: "auto" }}>
@@ -111,6 +121,7 @@ const MyTurns = ({ userData }) => {
                   alignItems: "center",
                 }}
               >
+                <h3>{turnServices}</h3>
                 <h4>
                   El día: {turn.day}/{turn.month} a las{" "}
                   {formatHour(turn.hourTime.ini)}

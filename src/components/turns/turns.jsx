@@ -23,35 +23,45 @@ const Turns = ({ user }) => {
   const [selectedImg, setSelectedImg] = useState(false);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [showAlert, setShowAlert] = useState({});
-  const [detailTurn, setDetailTurn] = useState({})
-  const [validateAlert, setValidateAlert] = useState(false)
-
+  const [detailTurn, setDetailTurn] = useState({});
+  const [validateAlert, setValidateAlert] = useState(false);
 
   useEffect(() => {
-    if(validateAlert === true){
-      submit()
-      setValidateAlert(false)
+    if (validateAlert === true) {
+      submit();
+      setValidateAlert(false);
     }
   }, [validateAlert]);
 
   const submit = async () => {
-    const { dayIsSelected, serviceSelected, selectedTime, workerEmail, userEmail} = detailTurn
+    const {
+      dayIsSelected,
+      serviceSelected,
+      selectedTime,
+      workerEmail,
+      userEmail,
+    } = detailTurn;
 
     try {
-      const response = await axios.put(
-        `${VITE_BACKEND_URL}/workdays/turn`,
-        { date: dayIsSelected,
-          emailWorker: workerEmail,
-          selectedTime,
-          serviceSelected,
-          user: userEmail
-         }
-      );
+      const response = await axios.put(`${VITE_BACKEND_URL}/workdays/turn`, {
+        date: dayIsSelected,
+        emailWorker: workerEmail,
+        selectedTime,
+        serviceSelected,
+        user: userEmail,
+      });
       const { data } = response;
-      setDetailTurn({})
+      // Recuperar datos existentes del localStorage
+      const existingTurns =
+        JSON.parse(localStorage.getItem("turnServices")) || [];
+      // Agregar nuevo dato a la lista
+      existingTurns.push(serviceSelected);
+      // Guardar en el localStorage
+      localStorage.setItem("turnServices", JSON.stringify(existingTurns));
+      setDetailTurn({});
       setShowAlert({
         isOpen: true,
-        message:`Su turno ha sido agendado exitosamente!`,
+        message: `Su turno ha sido agendado exitosamente!`,
         type: "success",
         button1: {
           text: "",
@@ -60,12 +70,12 @@ const Turns = ({ user }) => {
         buttonClose: {
           text: "aceptar",
         },
-        alertNumber: 2
+        alertNumber: 2,
       });
     } catch (error) {
       console.error("Error al tomar turno submit:", error);
     }
-  }
+  };
 
   useEffect(() => {
     setDayIsSelected([]);
@@ -82,7 +92,6 @@ const Turns = ({ user }) => {
         setDays(data);
       } catch (error) {
         console.error("Error al obtener los dias:", error);
-        /* alert("Error al obtener los dias"); */
       }
     };
     if (serviceSelected.length > 0) {
@@ -108,13 +117,16 @@ const Turns = ({ user }) => {
     setServiceSelected(element[0]);
     setSelectedImg(element[1]);
   };
-
+console.log(serviceSelected);
   useEffect(() => {
-    if(Object.keys(detailTurn).length > 0) {
-
+    if (Object.keys(detailTurn).length > 0) {
       setShowAlert({
         isOpen: true,
-        message:`Turno para ${detailTurn.serviceSelected} el dia ${detailTurn.dayIsSelected[0]}/${detailTurn.dayIsSelected[1]} a las ${formatHour(detailTurn.selectedTime)}`,
+        message: `Turno para ${detailTurn.serviceSelected} el dia ${
+          detailTurn.dayIsSelected[0]
+        }/${detailTurn.dayIsSelected[1]} a las ${formatHour(
+          detailTurn.selectedTime
+        )}`,
         type: "warning",
         button1: {
           text: "confirmar turno",
@@ -123,11 +135,10 @@ const Turns = ({ user }) => {
         buttonClose: {
           text: "cancelar",
         },
-        alertNumber: 1
+        alertNumber: 1,
       });
     }
-  },[detailTurn])
-
+  }, [detailTurn]);
 
   return (
     <div
@@ -135,7 +146,7 @@ const Turns = ({ user }) => {
         display: "flex",
         justifyContent: "center",
         backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
-        zIndex:"0",
+        zIndex: "0",
         // paddingTop: sm ? "70px" : "70px",
         height: "100vh",
       }}
@@ -151,8 +162,6 @@ const Turns = ({ user }) => {
         <Box
           sx={{
             position: "relative",
-            background:
-              "linear-gradient(180deg, rgba(255,0,0,0) 70%, rgba(0,0,0,0.64) 100%)",
           }}
         >
           <Box
@@ -171,6 +180,7 @@ const Turns = ({ user }) => {
               borderBottom: "3px solid #134772",
               alignItems: "center",
               justifyItems: "center",
+              // justifyContent: "center",
             }}
           >
             {services.map((element, index) => (
@@ -206,7 +216,7 @@ const Turns = ({ user }) => {
                       element[0] === serviceSelected
                         ? "0px 10px 14px 0px rgba(0, 0, 0, 0.75)"
                         : "0px 5px 14px -5px rgba(0, 0, 0, 0.75)",
-                    zIndex:"3"
+                    zIndex: "30",
                   }}
                   onClick={() => handleSelectService(element)}
                 >
@@ -215,13 +225,7 @@ const Turns = ({ user }) => {
               </Box>
             ))}
           </Box>
-          <Box
-            sx={{
-              background:
-                "linear-gradient(180deg, rgba(255,0,0,0) 70%, rgba(0,0,0,0.34) 100%)",
-              zIndex:"3"
-            }}
-          >
+          <Box>
             <img
               src={selectedImg ? selectedImg : defaultServiceImg}
               alt="img servicio"
@@ -231,11 +235,25 @@ const Turns = ({ user }) => {
                 left: "0",
                 width: "100%",
                 height: "100%",
-                // zIndex: "1",
                 objectFit: "cover",
+                borderBottom: "3px solid #134772",
+
+                zIndex: "1",
               }}
             />
           </Box>
+          <Box
+            style={{
+              width: "100%",
+              height: "100%",
+              backgroundColor: "red",
+              position: "absolute",
+              top: "0",
+              zIndex: "10",
+              background:
+                "linear-gradient(180deg, rgba(255,0,0,0) 70%, rgba(0,0,0,0.64) 100%)",
+            }}
+          ></Box>
         </Box>
         <Box
           sx={{
@@ -296,18 +314,15 @@ const Turns = ({ user }) => {
         )}
       </div>
       {showAlert.alertNumber === 1 && (
-          <AlertModal
-            showAlert={showAlert}
-            setShowAlert={setShowAlert}
-            handleActionProp={setValidateAlert}
-          />
-        )}
-        {showAlert.alertNumber === 2 && (
-          <AlertModal
-            showAlert={showAlert}
-            setShowAlert={setShowAlert}
-          />
-        )}
+        <AlertModal
+          showAlert={showAlert}
+          setShowAlert={setShowAlert}
+          handleActionProp={setValidateAlert}
+        />
+      )}
+      {showAlert.alertNumber === 2 && (
+        <AlertModal showAlert={showAlert} setShowAlert={setShowAlert} />
+      )}
     </div>
   );
 };

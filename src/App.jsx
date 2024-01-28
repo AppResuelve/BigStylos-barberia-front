@@ -27,7 +27,6 @@ function App() {
   });
   const [homeImages, setHomeImages] = useState([]); //images del home
 
-  console.log(colors);
   useEffect(() => {
     const fetchImages = async () => {
       try {
@@ -44,7 +43,7 @@ function App() {
 
     fetchImages();
   }, []);
-  console.log(darkMode);
+
   const toggleDarkMode = () => {
     setDarkMode((prevMode) => ({
       ...prevMode,

@@ -238,7 +238,6 @@ const CustomCalendar = ({
           display: "flex",
           width: "100%",
           justifyContent: "center",
-          marginTop: "12px",
         }}
       >
         <Box>

@@ -128,6 +128,7 @@ const OpeningAndClosing = ({
                 <Select
                   style={{
                     height: "40px",
+                    minWidth: "90px",
                     marginLeft: "5px",
                     backgroundColor: darkMode.on ? "white" : "#d6d6d5",
                     fontFamily: "Jost, sans-serif",
@@ -153,6 +154,7 @@ const OpeningAndClosing = ({
                 <Select
                   style={{
                     height: "40px",
+                    minWidth: "90px",
                     marginLeft: "5px",
                     backgroundColor: darkMode.on ? "white" : "#d6d6d5",
                     fontFamily: "Jost, sans-serif",
