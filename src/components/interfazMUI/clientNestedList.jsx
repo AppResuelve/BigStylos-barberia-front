@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
@@ -14,8 +15,10 @@ import MyTurns from "../myTurns/myTurns";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const ClientNestedList = ({ userData, darkMode }) => {
+const ClientNestedList = ({ userData }) => {
+  const { darkMode } = useContext(DarkModeContext);
   const [clientData, setClientData] = useState(null);
+  const [currentPhoneNumber, setCurrentPhoneNumber] = useState("");
   const [newPhoneNumber, setNewPhoneNumber] = useState("");
   const [refresh, setRefresh] = useState(false);
   const [error, setError] = useState("");
@@ -49,7 +52,7 @@ const ClientNestedList = ({ userData, darkMode }) => {
       } else if (section === "turnos") {
         updatedSections.telefono = false;
       }
-
+      setNewPhoneNumber(currentPhoneNumber);
       return updatedSections;
     });
   };
@@ -62,7 +65,8 @@ const ClientNestedList = ({ userData, darkMode }) => {
         });
         const { data } = response;
         setClientData(data);
-        setNewPhoneNumber(data.phone);
+        setCurrentPhoneNumber(data.phone);
+        handleSetPhoneState(data.phone);
         //   setLoading(false);
       } catch (error) {
         console.error("Error al obtener los horarios", error);
@@ -125,7 +129,7 @@ const ClientNestedList = ({ userData, darkMode }) => {
       }
     }
   };
-  console.log(openSection);
+
   return (
     <div style={{ position: "relative" }}>
       <AlertSnackBar
@@ -145,10 +149,17 @@ const ClientNestedList = ({ userData, darkMode }) => {
         }}
       >
         <Box sx={{ width: "100%" }}>
-          <h3 sx={{ fontFamily: "Jost,sans-serif" }}>Mi perfil</h3>
+          <h3
+            style={{
+              fontFamily: "Jost,sans-serif",
+              color: darkMode.on ? "white" : darkMode.dark,
+            }}
+          >
+            Mi perfil
+          </h3>
         </Box>
         {openSection.miperfil ? (
-          <ExpandLess />
+          <ExpandLess sx={{ color: darkMode.on ? "white" : darkMode.dark }} />
         ) : (
           <ExpandMore sx={{ color: "#2196f3" }} />
         )}
@@ -157,7 +168,7 @@ const ClientNestedList = ({ userData, darkMode }) => {
         style={{
           border: "none",
           height: "1px", // Altura de la línea
-          backgroundColor: darkMode ? "white" : "#28292c",
+          backgroundColor: darkMode.on ? "white" : darkMode.dark,
           marginBottom: "10px",
           marginTop: "10px",
         }}
@@ -178,11 +189,23 @@ const ClientNestedList = ({ userData, darkMode }) => {
           }}
         >
           <Box sx={{ display: "flex" }}>
-            <LocalPhoneIcon sx={{ marginRight: "5px" }} />
-            <h3 sx={{ fontFamily: "Jost,sans-serif" }}>Teléfono</h3>
+            <LocalPhoneIcon
+              sx={{
+                marginRight: "5px",
+                color: darkMode.on ? "white" : darkMode.dark,
+              }}
+            />
+            <h3
+              style={{
+                fontFamily: "Jost,sans-serif",
+                color: darkMode.on ? "white" : darkMode.dark,
+              }}
+            >
+              Teléfono
+            </h3>
           </Box>
           {openSection.telefono ? (
-            <ExpandLess />
+            <ExpandLess sx={{ color: darkMode.on ? "white" : darkMode.dark }} />
           ) : (
             <ExpandMore sx={{ color: "#2196f3" }} />
           )}
@@ -209,10 +232,13 @@ const ClientNestedList = ({ userData, darkMode }) => {
                 onChange={(e) => handleSetPhoneState(e.target.value)}
                 onKeyDown={handleKeyDown} // Manejar el evento onKeyDown
                 sx={{
+                  paddingLeft: "10px",
                   fontFamily: "Jost, sans-serif",
                   fontSize: "20px",
-                  borderRadius: "50px",
                   width: "80%",
+                  borderRadius: "5px",
+                  color: !darkMode.on ? "white" : darkMode.dark,
+                  bgcolor: darkMode.on ? "white" : darkMode.dark,
                 }}
               />
               <Button
@@ -231,7 +257,7 @@ const ClientNestedList = ({ userData, darkMode }) => {
             style={{
               border: "none",
               height: "1px", // Altura de la línea
-              backgroundColor: darkMode ? "white" : "#28292c",
+              backgroundColor: darkMode.on ? "white" : darkMode.dark,
               marginBottom: "10px",
               // marginTop: "10px",
             }}
@@ -248,11 +274,23 @@ const ClientNestedList = ({ userData, darkMode }) => {
           }}
         >
           <Box sx={{ display: "flex" }}>
-            <CalendarMonthIcon sx={{ marginRight: "5px" }} />
-            <h3 sx={{ fontFamily: "Jost,sans-serif" }}>Mis turnos</h3>
+            <CalendarMonthIcon
+              sx={{
+                marginRight: "5px",
+                color: darkMode.on ? "white" : darkMode.dark,
+              }}
+            />
+            <h3
+              style={{
+                fontFamily: "Jost,sans-serif",
+                color: darkMode.on ? "white" : darkMode.dark,
+              }}
+            >
+              Mis turnos
+            </h3>
           </Box>
           {openSection.turnos ? (
-            <ExpandLess />
+            <ExpandLess sx={{ color: darkMode.on ? "white" : darkMode.dark }} />
           ) : (
             <ExpandMore sx={{ color: "#2196f3" }} />
           )}
@@ -271,7 +309,7 @@ const ClientNestedList = ({ userData, darkMode }) => {
             style={{
               border: "none",
               height: "1px", // Altura de la línea
-              backgroundColor: darkMode ? "white" : "#28292c",
+              backgroundColor: darkMode.on ? "white" : darkMode.dark,
               marginBottom: "10px",
             }}
           />

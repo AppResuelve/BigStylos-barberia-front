@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import axios from "axios";
 import { Box, Button, Input, MenuItem, Select } from "@mui/material";
 import formatHour from "../../functions/formatHour";
@@ -15,6 +16,7 @@ const MyServices = ({
   setRefresh,
   setPendingServices,
 }) => {
+  const { darkMode } = useContext(DarkModeContext);
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [inputService, setInputService] = useState("");
@@ -87,11 +89,6 @@ const MyServices = ({
         }
       }
     }
-    // // Verificar si hay alguna propiedad con duration en null
-    // const hasNullDuration = Object.values(timeEdit).some(
-    //   (service) => service.duration === null
-    // );
-    // // Establecer el estado de pendingServices
   }, [timeEdit, services]);
   useEffect(() => {
     if (serviceStatus[auxState[0]] && auxState !== false) {
@@ -112,13 +109,6 @@ const MyServices = ({
       }));
     }
   }, [auxState]);
-
-  const handleKeyDown = (e) => {
-    // Manejar el evento cuando se presiona Enter
-    if (e.keyCode === 13) {
-      e.preventDefault(); // Evitar que se agregue un salto de línea en el Input
-    }
-  };
 
   const handleServiceStatus = (element) => {
     setServiceStatus((prevState) => {
@@ -195,11 +185,14 @@ const MyServices = ({
           onChange={(e) => {
             setInputService(e.target.value), setSearchValue(e.target.value);
           }}
-          onKeyDown={handleKeyDown} // Manejar el evento onKeyDown
           style={{
             fontFamily: "Jost, sans-serif",
+            fontWeight: "bold",
             fontSize: "20px",
             width: "100%",
+            borderRadius: "5px",
+            paddingLeft: "10px",
+            backgroundColor: darkMode.on ? "white" : "#d6d6d5",
           }}
         />
       </Box>
@@ -229,7 +222,9 @@ const MyServices = ({
                   }}
                   key={index}
                 >
-                  <h3>{element[0]}</h3>
+                  <h3 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
+                    {element[0]}
+                  </h3>
                   <Box
                     style={{
                       display: "flex",
@@ -261,6 +256,9 @@ const MyServices = ({
                             height: "40px",
                             width: "100px",
                             marginLeft: "10px",
+                            backgroundColor: darkMode.on ? "white" : "#d6d6d5",
+                            fontFamily: "Jost, sans-serif",
+                            fontWeight: "bold",
                           }}
                           disabled={showEdit ? false : true}
                           value={
@@ -277,6 +275,10 @@ const MyServices = ({
                               key={index}
                               value={minute}
                               disabled={minute === 0 ? true : false}
+                              style={{
+                                fontFamily: "Jost, sans-serif",
+                                fontWeight: "bold",
+                              }}
                             >
                               {minute === 0 ? "..." : formatHour(minute)}
                             </MenuItem>

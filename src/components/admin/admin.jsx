@@ -1,9 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import AdminAcordeon from "../interfazMUI/adminAcordeon";
 import { Skeleton, Stack } from "@mui/material";
 
-const Admin = ({ userData, userAuth, darkMode }) => {
+const Admin = ({ userData, userAuth }) => {
+  const { darkMode } = useContext(DarkModeContext);
+
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -24,7 +27,7 @@ const Admin = ({ userData, userAuth, darkMode }) => {
         overflow: "auto",
         display: "flex",
         flexDirection: "column",
-        backgroundColor: darkMode ? "#28292c" : "white",
+        backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
         alignItems: "center",
         height: "100vh",
         paddingTop: "70px",
@@ -67,7 +70,7 @@ const Admin = ({ userData, userAuth, darkMode }) => {
             style={{
               display: "flex",
               justifyContent: "center",
-              color: darkMode ? "white" : "#28292c",
+              color: darkMode.on ? "white" : darkMode.dark,
             }}
           >
             Administración del local

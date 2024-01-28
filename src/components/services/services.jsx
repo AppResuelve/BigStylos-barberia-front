@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import axios from "axios";
 import { Box, Button, Grid, Input } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -6,28 +7,16 @@ import LinearProgress from "@mui/material/LinearProgress";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const Services = () => {
-  const [services, setServices] = useState([]);
+const Services = ({
+  services,
+  refreshServices,
+  setRefreshServices,
+  loadingServices,
+  setLoadingServices,
+}) => {
+  const { darkMode } = useContext(DarkModeContext);
   const [newService, setNewService] = useState("");
   const [searchValue, setSearchValue] = useState("");
-  const [refresh, setRefresh] = useState(false);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${VITE_BACKEND_URL}/services`);
-        const { data } = response;
-        setServices(data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error al obtener los servicios:", error);
-        alert("Error al obtener los servicios");
-      }
-    };
-
-    fetchData();
-  }, [refresh]);
 
   const handleKeyDown = (e) => {
     // Manejar el evento cuando se presiona Enter
@@ -48,7 +37,7 @@ const Services = () => {
         // Refresca la lista de servicios después de agregar uno nuevo
         setNewService("");
         setSearchValue("");
-        setRefresh(!refresh);
+        setRefreshServices(!refreshServices);
       }
     } catch (error) {
       console.error("Error al agregar el servicio:", error);
@@ -64,7 +53,7 @@ const Services = () => {
       });
 
       // Refresca la lista de servicios después de eliminar uno
-      setRefresh(!refresh);
+      setRefreshServices(!refreshServices);
     } catch (error) {
       console.error("Error al borrar el servicio:", error);
       alert("Error al borrar el servicio");
@@ -77,7 +66,7 @@ const Services = () => {
         flexDirection: "column",
       }}
     >
-      {loading ? (
+      {loadingServices ? (
         <LinearProgress sx={{ height: "2px", marginBottom: "15px" }} />
       ) : (
         <hr
@@ -110,6 +99,10 @@ const Services = () => {
             fontFamily: "Jost, sans-serif",
             fontSize: "20px",
             width: "60%",
+            backgroundColor: darkMode.on ? "white" : "#d6d6d5",
+            fontWeight: "bold",
+            paddingLeft: "10px",
+            borderRadius: "5px",
           }}
         />
         <Button
@@ -151,7 +144,9 @@ const Services = () => {
                 md={4}
                 key={index}
               >
-                <h3>{element[0]}</h3>
+                <h3 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
+                  {element[0]}
+                </h3>
                 <Box style={{ display: "flex" }}>
                   <Button
                     onClick={() => handleDeleteService(element[0])}
@@ -172,7 +167,9 @@ const Services = () => {
             }}
           >
             <h2>
-              {loading ? "Cargando servicios" : "No hay servicios todavía"}
+              {loadingServices
+                ? "Cargando servicios"
+                : "No hay servicios todavía"}
             </h2>
           </Grid>
         )}

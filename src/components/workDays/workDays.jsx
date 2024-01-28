@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import axios from "axios";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import AddIcon from "@mui/icons-material/Add";
@@ -8,12 +9,12 @@ import { Box, Button } from "@mui/material";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const WorkDays = ({ schedule, setSchedule, refresh, setRefresh }) => {
+  const { darkMode } = useContext(DarkModeContext);
   const [showEdit, setShowEdit] = useState(false);
   const [showAdd, setShowAdd] = useState(null);
   const [showRemove, setShowRemove] = useState(null);
   const [toggle, setToggle] = useState(null);
   const [timeEdit, setTimeEdit] = useState({});
-
 
   const days = ["Lun", "Mar", "Mie", "Jue", "Vie", "Sab", "Dom"];
 
@@ -48,7 +49,7 @@ const WorkDays = ({ schedule, setSchedule, refresh, setRefresh }) => {
       }));
     } else {
       if (Object.keys(timeEdit).length < 2) {
-        return
+        return;
       }
       const updatedTimeEdit = { ...timeEdit };
       delete updatedTimeEdit[index];
@@ -102,13 +103,17 @@ const WorkDays = ({ schedule, setSchedule, refresh, setRefresh }) => {
                         timeEdit[index].open === 0 &&
                         timeEdit[index].close === 1440
                           ? "red"
-                          : "black",
+                          : darkMode.on
+                          ? "white"
+                          : darkMode.dark,
                     }}
                   >
                     {day}
                   </h3>
                 ) : (
-                  <h3 style={{ color: "black" }}>--</h3>
+                  <h3 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
+                    --
+                  </h3>
                 )}
                 {showRemove && timeEdit[index] && (
                   <button
@@ -121,7 +126,9 @@ const WorkDays = ({ schedule, setSchedule, refresh, setRefresh }) => {
                     }}
                     onClick={() => handleChange("remove", index)}
                   >
-                    <DeleteOutlineIcon style={{ color: "black" }} />
+                    <DeleteOutlineIcon
+                      style={{ color: darkMode.on ? "white" : darkMode.dark }}
+                    />
                   </button>
                 )}
                 {showAdd && !timeEdit[index] && (
@@ -135,7 +142,9 @@ const WorkDays = ({ schedule, setSchedule, refresh, setRefresh }) => {
                     }}
                     onClick={() => handleChange("add", index)}
                   >
-                    <AddIcon style={{ color: "black" }} />
+                    <AddIcon
+                      style={{ color: darkMode.on ? "white" : darkMode.dark }}
+                    />
                   </button>
                 )}
               </Box>
@@ -163,6 +172,7 @@ const WorkDays = ({ schedule, setSchedule, refresh, setRefresh }) => {
                 borderRadius: "50px",
                 border: "2px solid",
                 fontFamily: "Jost, sans-serif",
+                fontWeight:"bold"
               }}
             >
               Cancelar
