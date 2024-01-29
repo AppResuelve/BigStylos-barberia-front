@@ -179,6 +179,7 @@ const MyServices = ({
         }}
       >
         <Input
+          id="input-search-services-status"
           type="text"
           value={inputService}
           placeholder="Buscar un servicio"
@@ -213,6 +214,7 @@ const MyServices = ({
             .map((element, index) => {
               return (
                 <Box
+                  key={index}
                   style={{
                     width: "100%",
                     display: sm ? "" : "flex",
@@ -220,7 +222,6 @@ const MyServices = ({
                     alignItems: "center",
                     marginBottom: sm ? "5px" : "10px",
                   }}
-                  key={index}
                 >
                   <h3 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
                     {element[0]}
@@ -252,6 +253,8 @@ const MyServices = ({
                         <h3 style={{ marginRight: "40px" }}>-----</h3>
                       ) : (
                         <Select
+                          key={index + 40}
+                          id={`input-time-duration-${index}`}
                           sx={{
                             height: "40px",
                             width: "100px",
@@ -273,6 +276,7 @@ const MyServices = ({
                           {timeArray.map((minute, index) => (
                             <MenuItem
                               key={index}
+                              id={`menuItem-select-myServices-${index}`}
                               value={minute}
                               disabled={minute === 0 ? true : false}
                               style={{

@@ -29,7 +29,7 @@ const WorkerAcordeon = ({ user }) => {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/schedule`);
         const { data } = response;
-        console.log(data)
+        console.log(data);
         setSchedule(data.businessSchedule);
       } catch (error) {
         console.error("Error al obtener los horarios", error);
@@ -173,9 +173,7 @@ const WorkerAcordeon = ({ user }) => {
             </Box>
           </AccordionSummary>
           <AccordionDetails>
-            {loading ? (
-              <LinearProgress sx={{ height: "2px", marginBottom: "15px" }} />
-            ) : (
+            {expanded === "panel2" && (
               <MyServices
                 workerData={workerData.services}
                 email={workerData.email}

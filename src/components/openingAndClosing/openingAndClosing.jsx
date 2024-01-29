@@ -126,6 +126,8 @@ const OpeningAndClosing = ({
                     : null}
                 </h4>
                 <Select
+                  key={index + 20}
+                  id="input-schedule-open"
                   style={{
                     height: "40px",
                     minWidth: "90px",
@@ -152,6 +154,8 @@ const OpeningAndClosing = ({
                   ))}
                 </Select>
                 <Select
+                  key={index + 10}
+                  id="input-schedule-close"
                   style={{
                     height: "40px",
                     minWidth: "90px",
