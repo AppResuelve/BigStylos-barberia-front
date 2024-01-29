@@ -88,6 +88,7 @@ const Services = ({
         }}
       >
         <Input
+          id="input-search-services"
           type="text"
           value={newService}
           placeholder="Puedes buscar"
