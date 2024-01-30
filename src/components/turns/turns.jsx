@@ -60,7 +60,7 @@ const Turns = ({ user }) => {
       // serviceSelected.charAt(0).toUpperCase() + serviceSelected.slice(1);
 
       // Agregar nuevo dato a la lista
-      existingTurns.push(serviceWithUpperCase);
+      existingTurns.push(serviceSelected);
       // Guardar en el localStorage
       localStorage.setItem("turnServices", JSON.stringify(existingTurns));
       setDetailTurn({});
