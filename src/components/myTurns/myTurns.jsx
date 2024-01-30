@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { DarkModeContext } from "../../App";
 import axios from "axios";
 import { Box, Button } from "@mui/material";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import formatHour from "../../functions/formatHour";
 import AlertModal from "../interfazMUI/alertModal";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
@@ -101,72 +102,70 @@ const MyTurns = ({ userData }) => {
       <Box style={{ overflow: "auto" }}>
         {listMyTurns &&
           Object.keys(listMyTurns).length > 0 &&
-          listMyTurns.map((turn, index) => (
-            <Box
-              key={index}
-              sx={{
-                border: !darkMode.on
-                  ? `2px solid ${darkMode.dark}`
-                  : `2px solid ${darkMode.light}`,
-                borderRadius: "4px",
-                marginTop: "10px",
-                bgcolor: "white",
-              }}
-            >
+          listMyTurns.map((turn, index) => {
+            let serviceWithUpperCase =
+              turnServices[index].charAt(0).toUpperCase() +
+              turnServices[index].slice(1);
+            return (
               <Box
+                key={index}
                 sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <h3>{turnServices}</h3>
-                <h4>
-                  El día: {turn.day}/{turn.month} a las{" "}
-                  {formatHour(turn.hourTime.ini)}
-                </h4>
-                <hr style={{ width: "100%" }} />
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  padding: "4px",
+                  padding: "5px",
+                  borderRadius: "4px",
+                  marginBottom: "10px",
+                  backgroundColor: darkMode.on ? "white" : "#d6d6d5",
                 }}
               >
                 <Box
-                  className={sm ? "ticker-container" : ""}
-                  sx={{ width: "60%" }}
-                >
-                  <h4>Profesional:</h4>
-                  <h4 className={sm ? "ticker-text" : ""}>{turn.worker}</h4>
-                </Box>
-
-                <Button
-                  className="btn-cancel-myturns"
                   sx={{
-                    marginLeft: "5px",
                     display: "flex",
-                    alignSelf: "end",
-                    width: "40%",
-                    height: "30px",
-                    maxWidth: "130px",
-                    fontFamily: "Jost, sans-serif",
-                    fontWeight: "bold",
-                    color: "red",
-                    backgroundColor: "none",
-                    border: "2px solid red",
-                    letterSpacing: "1.5px",
-                    transition: ".3s",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
-                  onClick={() => handleConfirmCancelTurn(turn)}
                 >
-                  cancelar
-                </Button>
+                  <h3>{serviceWithUpperCase}</h3>
+                  <h4>
+                    El día: {turn.day}/{turn.month} a las{" "}
+                    {formatHour(turn.hourTime.ini)}
+                  </h4>
+                  <hr style={{ width: "100%" }} />
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    padding: "4px",
+                  }}
+                >
+                  <Box
+                    className={sm ? "ticker-container" : ""}
+                    sx={{ width: "80%" }}
+                  >
+                    <h4>Profesional:</h4>
+                    <h4 className={sm ? "ticker-text" : ""}>{turn.worker}</h4>
+                  </Box>
+
+                  <Button
+                    // variant="outlined"
+                    className="btn-cancel-myturns"
+                    sx={{
+                      marginLeft: "5px",
+                      display: "flex",
+                      alignSelf: "end",
+                      height: "35px",
+                      borderRadius: "5px",
+                      color: "red",
+                      transition: ".2s",
+                    }}
+                    onClick={() => handleConfirmCancelTurn(turn)}
+                  >
+                    <DeleteOutlineIcon />
+                  </Button>
+                </Box>
               </Box>
-            </Box>
-          ))}
+            );
+          })}
       </Box>
       {showAlert.alertNumber === 1 && (
         <AlertModal
