@@ -54,8 +54,13 @@ const Turns = ({ user }) => {
       // Recuperar datos existentes del localStorage
       const existingTurns =
         JSON.parse(localStorage.getItem("turnServices")) || [];
+
+      /* pasar el servicio a uppercase la 1er letra y guardar en el localStorage */
+      //   let serviceWithUpperCase =
+      // serviceSelected.charAt(0).toUpperCase() + serviceSelected.slice(1);
+
       // Agregar nuevo dato a la lista
-      existingTurns.push(serviceSelected);
+      existingTurns.push(serviceWithUpperCase);
       // Guardar en el localStorage
       localStorage.setItem("turnServices", JSON.stringify(existingTurns));
       setDetailTurn({});
@@ -117,7 +122,7 @@ const Turns = ({ user }) => {
     setServiceSelected(element[0]);
     setSelectedImg(element[1]);
   };
-console.log(serviceSelected);
+  console.log(serviceSelected);
   useEffect(() => {
     if (Object.keys(detailTurn).length > 0) {
       setShowAlert({
