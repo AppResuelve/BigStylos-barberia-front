@@ -5,6 +5,9 @@ import { Box, Button } from "@mui/material";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import noImg from "../../assets/icons/no-image.png";
+import commingSoon from "../../assets/images/coming-soon.png";
+import noImageLogotipe from "../../assets/icons/no-image-logotipe.png";
+import noImageLogotipeLight from "../../assets/icons/no-image-logotipe-light.png";
 import FormatPaintOutlinedIcon from "@mui/icons-material/FormatPaintOutlined";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import "./personalization.css";
@@ -160,7 +163,7 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
     setRefreshServices(!refreshServices);
     setShowEdit(false);
   };
-
+  console.log(auxHomeImages);
   return (
     <div>
       <hr
@@ -264,13 +267,23 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
                 </Box>
                 <Box>
                   <img
-                    src={auxHomeImages.length > 0 ? auxHomeImages[0] : noImg}
+                    src={
+                      auxHomeImages.length > 0
+                        ? auxHomeImages[0]
+                        : darkMode.on
+                        ? noImageLogotipeLight
+                        : noImageLogotipe
+                    }
                     alt="img-logo"
                     style={{
                       width: sm ? "90px" : "150px",
                       height: sm ? "90px" : "150px",
                       borderRadius: "100px",
+                      marginRight: "5px",
                       objectFit: "cover",
+                      boxShadow: "0px 10px 14px 0px rgba(0,0,0,0.75)",
+                      WebkitBoxShadow: "0px 10px 14px 0px rgba(0,0,0,0.75)",
+                      MozBoxShadow: "0px 10px 14px 0px rgba(0,0,0,0.75)",
                     }}
                   />
                 </Box>
@@ -329,12 +342,14 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
                   <img
                     src={
                       //PROXIMAMENTE//
-                      /* auxHomeImages.length > 0 ? auxHomeImages[1] : */ noImg
+                      /* auxHomeImages.length > 0 ? auxHomeImages[1] : */ commingSoon
                     }
                     alt="img-fondo-pantalla"
                     style={{
                       width: sm ? "90px" : "150px",
                       borderRadius: "3px",
+                      marginRight: "5px",
+                      filter: "drop-shadow(0px 3px 2px gray)",
                     }}
                   />
                 </Box>
@@ -418,6 +433,7 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
                         style={{
                           width: sm ? "90px" : "150px",
                           borderRadius: "3px",
+                          marginRight: "5px",
                         }}
                       />
                     </Box>
@@ -491,6 +507,7 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
                     width: sm ? "90px" : "130px",
                     height: sm ? "90px" : "130px",
                     borderRadius: "100px",
+                    marginRight: "5px",
                     backgroundColor: colorSelected,
                     boxShadow:
                       "0px 15px 25px -16px rgba(0,0,0,0.57)inset,0px 25px 25px -12px rgba(0,0,0,0.57)", // Propiedades de la sombra

@@ -175,7 +175,7 @@ const WorkDays = ({ schedule, setSchedule, refresh, setRefresh }) => {
                 fontWeight:"bold"
               }}
             >
-              Cancelar
+              Volver
             </Button>
             <Box>
               <Button

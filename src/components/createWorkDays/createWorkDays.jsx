@@ -247,7 +247,10 @@ const CreateWorkDays = ({
           }}
         />
       )}
-      <Grid container>
+      <Grid
+        container
+        style={{ display: "flex", justifyContent: "space-between" }}
+      >
         <Grid
           item
           xs={12}
@@ -270,8 +273,8 @@ const CreateWorkDays = ({
           item
           xs={12}
           sm={12}
-          md={6}
-          sx={{ display: "flex", flexDirection: "column" }}
+          md={5}
+          style={{ display: "flex", flexDirection: "column" }}
           className={md ? "" : showEdit ? "mover-izquierda" : "mover-derecha"}
         >
           {showEdit && (
