@@ -33,7 +33,10 @@ const CreateWorkDays = ({
   const [loading, setLoading] = useState(false);
   const [timeSelected, setTimeSelected] = useState([]); //estado de la rama fac, no se para que es aun.
   const [refreshDays, setRefreshDays] = useState(false);
+  const [alertDelete, setAlertDelete] = useState(false)
 
+/*   dayIsSelected && Object.keys(dayIsSelected).length > 0 && days && Object.keys(days) > 0 && console.log(days[Object.keys(dayIsSelected)[0]][Object.keys(Object.keys(dayIsSelected)[0])[0]])
+ */
   useEffect(() => {
     const openValues = Object.values(schedule).map((item) => item.open);
     const closeValues = Object.values(schedule).map((item) => item.close);
@@ -42,9 +45,14 @@ const CreateWorkDays = ({
     setOpenClose([minOpen, maxClose]);
   }, []);
   /* console.log(dayIsSelected) */
-  dayIsSelected && Object.keys(dayIsSelected)[0] && console.log(Object.keys(dayIsSelected)[0])
-  dayIsSelected && Object.keys(dayIsSelected)[0] && console.log(Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0])
-  /* Object.keys(dayIsSelected[firstLevelProperty])[0] */
+/*   dayIsSelected && Object.keys(dayIsSelected)[0] && console.log(Object.keys(dayIsSelected)[0])
+  dayIsSelected && Object.keys(dayIsSelected)[0] && console.log(Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0]) */
+  /* dayIsSelected && Object.keys(dayIsSelected)[0] && days && days[Object.keys(dayIsSelected)[0]] && days[Object.keys(dayIsSelected)[0]][Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0]] *//* console.log(Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0] */
+  useEffect(() => {
+    if(alertDelete) {
+      handleDeleteSubmit()
+    }
+  }, [alertDelete]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -238,6 +246,40 @@ const CreateWorkDays = ({
     }
   };
 
+  const handleDeleteDay = () => {
+    if (days[Object.keys(dayIsSelected)[0]] && days[Object.keys(dayIsSelected)[0]][Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0]].turn == true) {
+      setShowAlert({
+      isOpen: true,
+      message:
+        "Desea borrar un dia con turno?",
+      type: "warning",
+      button1: {
+        text: "confirmar",
+        action: "handleActionProp",
+      },
+      buttonClose: {
+        text: "cancelar",
+      },
+      alertNumber: 4,
+    });
+  } else {
+    handleDeleteSubmit()
+  }
+  }
+  const handleDeleteSubmit = async () => {
+    try{
+      const response = await axios.post(
+        `${VITE_BACKEND_URL}/workdays/delete`,
+        { month: Object.keys(dayIsSelected)[0] , day: Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0], email: user.email }
+      );
+        setDayIsSelected({})
+        setAlertDelete(false)
+        setRefreshDays(true)
+    } catch (error) {
+      console.error("Error al borrar el dia:", error);
+    }
+  }
+
   return (
     <div style={{ cursor: loading ? "wait" : "" }}>
       {loading ? (
@@ -336,11 +378,9 @@ const CreateWorkDays = ({
               <Button
                 variant="contained"
                 disabled={
-                  submit ||
-                  (!dayIsSelected || Object.keys(dayIsSelected).length === 0) ||
-                  !shouldDisableButton(dayIsSelected, days)
+                  dayIsSelected && Object.keys(dayIsSelected)[0] && days && days[Object.keys(dayIsSelected)[0]] && days[Object.keys(dayIsSelected)[0]][Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0]] ? false : true
                 }
-                onClick={handleShowSlider}
+                onClick={handleDeleteDay}
               >
                 <h4 style={{ fontFamily: "Jost, sans-serif" }}>borrar</h4>
               </Button>
@@ -349,7 +389,6 @@ const CreateWorkDays = ({
               <Button
                 variant="contained"
                 disabled={
-                  submit ||
                   (!dayIsSelected || Object.keys(dayIsSelected).length === 0) ||
                   shouldDisableButton(dayIsSelected, days)
                 }
@@ -388,6 +427,13 @@ const CreateWorkDays = ({
         )}
         {showAlert.alertNumber === 3 && (
           <AlertModal showAlert={showAlert} setShowAlert={setShowAlert} />
+        )}
+        {showAlert.alertNumber === 4 && (
+          <AlertModal
+            showAlert={showAlert}
+            setShowAlert={setShowAlert}
+            handleActionProp={setAlertDelete}
+          />
         )}
       </Grid>
     </div>
