@@ -1,8 +1,10 @@
 import { useState, useContext } from "react";
 import { DarkModeContext } from "../../App";
 import { NavLink } from "react-router-dom";
-import { Button } from "@mui/material";
-import defaultImg from "../../assets/images/fondo-peluqueria-1.avif";
+import { Box, Button, Skeleton } from "@mui/material";
+import defaultImg from "../../assets/icons/no-image-logotipe.png";
+import defaultImgLight from "../../assets/icons/no-image-logotipe-light.png";
+
 const Home = ({ user, homeImages }) => {
   const { darkMode } = useContext(DarkModeContext);
 
@@ -18,18 +20,39 @@ const Home = ({ user, homeImages }) => {
         backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
       }}
     >
-      <img
-        src={homeImages[0] ? homeImages[0] : defaultImg}
-        alt="nombre del lugar"
-        style={{
-          marginTop: "20px",
-          width: "400px",
-          height: "400px",
-          objectFit: "cover",
-          borderRadius: "200px",
-          boxShadow: "0px 43px 51px -23px rgba(0,0,0,0.57)", // Propiedades de la sombra
-        }}
-      />
+      {homeImages[0] != "" ? (
+        <img
+          src={
+            homeImages[0]
+              ? homeImages[0]
+              : darkMode.on
+              ? defaultImgLight
+              : defaultImg
+          }
+          alt="nombre del lugar"
+          style={{
+            marginTop: "20px",
+            width: "400px",
+            height: "400px",
+            objectFit: "cover",
+            borderRadius: "200px",
+            boxShadow: "0px 43px 51px -23px rgba(0,0,0,0.57)", // Propiedades de la sombra
+          }}
+        />
+      ) : (
+        <Box>
+          <Skeleton
+            style={{
+              position: "relative",
+              marginTop: "20px",
+              boxShadow: "0px 43px 51px -23px rgba(0,0,0,0.57)", // Propiedades de la sombra
+            }}
+            variant="circular"
+            width={400}
+            height={400}
+          />
+        </Box>
+      )}
       <NavLink to="/turns">
         <Button
           variant="contained"

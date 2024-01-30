@@ -74,6 +74,8 @@ const WorkerAcordeon = ({ user }) => {
       <Box>
         <Accordion
           style={{
+            borderRadius: "0px 0px 5px 5px",
+            marginBottom: "5px",
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
             backgroundColor: !darkMode.on ? darkMode.light : darkMode.dark,
           }}
@@ -122,6 +124,8 @@ const WorkerAcordeon = ({ user }) => {
         {/*  //------------------// */}
         <Accordion
           style={{
+            borderRadius: "0px 0px 5px 5px",
+            marginBottom: "5px",
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
             backgroundColor: !darkMode.on ? darkMode.light : darkMode.dark,
           }}
@@ -187,6 +191,8 @@ const WorkerAcordeon = ({ user }) => {
         {/*  //------------------// */}
         <Accordion
           style={{
+            borderRadius: "0px 0px 5px 5px",
+            marginBottom: "5px",
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
             backgroundColor: !darkMode.on ? darkMode.light : darkMode.dark,
           }}
@@ -223,6 +229,7 @@ const WorkerAcordeon = ({ user }) => {
         {/*  //------------------// */}
         <Accordion
           style={{
+            borderRadius: "0px 0px 5px 5px",
             marginBottom: "30px",
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
             backgroundColor: !darkMode.on ? darkMode.light : darkMode.dark,

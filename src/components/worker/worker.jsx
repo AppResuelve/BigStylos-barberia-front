@@ -35,34 +35,35 @@ const Worker = ({ userData, userAuth }) => {
       }}
     >
       {userData === 1 ? (
-        <Stack spacing={4} style={{ display: "flex", alignItems: "center" }}>
+        <Stack spacing={1} style={{ display: "flex", alignItems: "center" }}>
           <Skeleton
             variant="text"
             height={70}
             style={{
+              marginBottom: !sm ? "50px" : "",
               width: "80vw",
-              maxWidth: "340px",
+              maxWidth: "410px",
             }}
           />
           <Skeleton
             variant="rounded"
-            height={70}
-            style={{ width: "90vw", maxWidth: "900px" }}
+            height={60}
+            style={{ width: "95vw", maxWidth: "900px" }}
           />
           <Skeleton
             variant="rounded"
-            height={70}
-            style={{ width: "90vw", maxWidth: "900px" }}
+            height={60}
+            style={{ width: "95vw", maxWidth: "900px" }}
           />
           <Skeleton
             variant="rounded"
-            height={70}
-            style={{ width: "90vw", maxWidth: "900px" }}
+            height={60}
+            style={{ width: "95vw", maxWidth: "900px" }}
           />
           <Skeleton
             variant="rounded"
-            height={70}
-            style={{ width: "90vw", maxWidth: "900px" }}
+            height={60}
+            style={{ width: "95vw", maxWidth: "900px" }}
           />
         </Stack>
       ) : userData.worker ? (
