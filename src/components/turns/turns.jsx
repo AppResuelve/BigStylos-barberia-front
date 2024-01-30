@@ -151,9 +151,9 @@ const Turns = ({ user }) => {
         display: "flex",
         justifyContent: "center",
         backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
-        zIndex: "0",
+        /* zIndex: "0", */
         // paddingTop: sm ? "70px" : "70px",
-        height: "100vh",
+        height: "100%",
       }}
     >
       <div //container
@@ -162,6 +162,7 @@ const Turns = ({ user }) => {
           flexDirection: "column",
           width: "100%",
           maxWidth: "900px", //revisar maxWidth
+          height: "100vh",
         }}
       >
         <Box
@@ -265,6 +266,7 @@ const Turns = ({ user }) => {
             display: "flex",
             alignSelf: "center",
             width: "95%",
+            height: "50%",
           }}
         >
           <Box
@@ -272,7 +274,7 @@ const Turns = ({ user }) => {
               marginTop: "30px",
               width: "100%",
               maxWidth: "900px",
-              height: "50vh",
+              
             }}
           >
             {serviceSelected.length > 0 ? (
