@@ -1,15 +1,19 @@
+import { useContext } from "react";
+import { DarkModeContext } from "../../App";
 import "./darkMode.css";
 
-const DarkMode = ({ darkMode, setDarkMode }) => {
+const DarkMode = () => {
+  const { darkMode, toggleDarkMode } = useContext(DarkModeContext);
+  
   return (
-    <div className={!darkMode ? "toggle-switch" : "toggle-switch-dark"}>
-      <label className={!darkMode ? "switch-label" : "switch-label-dark"}>
+    <div className={!darkMode.on ? "toggle-switch" : "toggle-switch-dark"}>
+      <label className={!darkMode.on ? "switch-label" : "switch-label-dark"}>
         <input
           type="checkbox"
-          className={!darkMode ? "checkbox" : "checkbox-dark"}
-          onClick={() => setDarkMode(!darkMode)}
+          className={!darkMode.on ? "checkbox" : "checkbox-dark"}
+          onClick={toggleDarkMode}
         />
-        <span className={!darkMode ? "slider" : "slider-dark"}></span>
+        <span className={!darkMode.on ? "slider" : "slider-dark"}></span>
       </label>
     </div>
   );

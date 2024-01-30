@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import axios from "axios";
 import { Box, Button, Input, LinearProgress } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -9,6 +10,7 @@ import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Users = () => {
+  const { darkMode } = useContext(DarkModeContext);
   const [allUsers, setAllUsers] = useState([]);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [add, setAdd] = useState(false);
@@ -80,7 +82,7 @@ const Users = () => {
         <hr
           style={{
             width: "100%",
-            // marginBottom: "15px",
+            marginBottom: "15px",
             border: "none",
             height: "2px",
             backgroundColor: "#2196f3",
@@ -103,8 +105,12 @@ const Users = () => {
           onChange={(e) => setSearchValue(e.target.value)}
           style={{
             fontFamily: "Jost, sans-serif",
+            fontWeight: "bold",
             fontSize: "20px",
             width: "100%",
+            borderRadius: "5px",
+            paddingLeft: "10px",
+            backgroundColor: darkMode.on ? "white" : "#d6d6d5",
           }}
         />
       </Box>
@@ -114,15 +120,40 @@ const Users = () => {
         >
           <Box style={{ display: "flex" }}>
             <Box style={{ width: "50%" }}>
-              <h2>Profesionales</h2>
+              <h2 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
+                Profesionales
+              </h2>
+              <hr
+                style={{
+                  width: "100%",
+                  marginBottom: "15px",
+                  border: "none",
+                  height: "2px",
+                  backgroundColor: "#2196f3",
+                }}
+              />
               {filteredUsers.map(
                 (user, index) =>
                   allUsers.length > 0 &&
                   user &&
                   user.worker == true && (
                     <Box key={index}>
-                      <h4>{user.name}</h4>
-                      <h4>{user.email}</h4>
+                      <h4
+                        style={{
+                          color: darkMode.on ? "white" : darkMode.dark,
+                          letterSpacing: "1px",
+                        }}
+                      >
+                        {user.name}
+                      </h4>
+                      <h4
+                        style={{
+                          color: darkMode.on ? "white" : darkMode.dark,
+                          letterSpacing: "1px",
+                        }}
+                      >
+                        {user.email}
+                      </h4>
                       <Box
                         style={{
                           display: "flex",
@@ -140,7 +171,19 @@ const Users = () => {
             </Box>
 
             <Box style={{ width: "50%" }}>
-              <h2>Clientes</h2>
+              <h2 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
+                Clientes
+              </h2>
+              <hr
+                style={{
+                  width: "100%",
+                  marginBottom: "15px",
+                  border: "none",
+                  height: "2px",
+                  backgroundColor: "#2196f3",
+                }}
+              />
+
               {filteredUsers.map(
                 (user, index) =>
                   allUsers.length > 0 &&
@@ -148,8 +191,22 @@ const Users = () => {
                   !user.isDelete &&
                   user.worker === false && (
                     <Box key={index}>
-                      <h4>{user.name}</h4>
-                      <h4>{user.email}</h4>
+                      <h4
+                        style={{
+                          color: darkMode.on ? "white" : darkMode.dark,
+                          letterSpacing: "1px",
+                        }}
+                      >
+                        {user.name}
+                      </h4>
+                      <h4
+                        style={{
+                          color: darkMode.on ? "white" : darkMode.dark,
+                          letterSpacing: "1px",
+                        }}
+                      >
+                        {user.email}
+                      </h4>
                       <Box
                         style={{
                           display: "flex",
@@ -161,7 +218,7 @@ const Users = () => {
                         </Button>
                         <Button
                           onClick={() => handleDelete(user.email)}
-                          style={{ color: "red", borderRadius: "50px" }}
+                          style={{ color: "red" }}
                         >
                           <DeleteOutlineIcon />
                         </Button>
@@ -173,17 +230,41 @@ const Users = () => {
               )}
             </Box>
           </Box>
-
-          <Box style={{ width: "100%" }}>
-            <h2>Eliminados</h2>
+          <Box style={{ width: "100%", marginTop: "15px" }}>
+            <h2 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
+              Eliminados
+            </h2>
+            <hr
+              style={{
+                width: "100%",
+                marginBottom: "15px",
+                border: "none",
+                height: "2px",
+                backgroundColor: "#2196f3",
+              }}
+            />
             {filteredUsers.map(
               (user, index) =>
                 allUsers.length > 0 &&
                 user &&
                 user.isDelete == true && (
                   <Box key={index}>
-                    <h4>{user.name}</h4>
-                    <h4>{user.email}</h4>
+                    <h4
+                      style={{
+                        color: darkMode.on ? "white" : darkMode.dark,
+                        letterSpacing: "1px",
+                      }}
+                    >
+                      {user.name}
+                    </h4>
+                    <h4
+                      style={{
+                        color: darkMode.on ? "white" : darkMode.dark,
+                        letterSpacing: "1px",
+                      }}
+                    >
+                      {user.email}
+                    </h4>
                     <Box
                       style={{
                         display: "flex",
@@ -243,8 +324,22 @@ const Users = () => {
                     if (user.worker) {
                       return (
                         <Box key={index} style={{ marginTop: "18px" }}>
-                          <h4>{user.name}</h4>
-                          <h4>{user.email}</h4>
+                          <h4
+                            style={{
+                              color: darkMode.on ? "white" : darkMode.dark,
+                              letterSpacing: "1px",
+                            }}
+                          >
+                            {user.name}
+                          </h4>
+                          <h4
+                            style={{
+                              color: darkMode.on ? "white" : darkMode.dark,
+                              letterSpacing: "1px",
+                            }}
+                          >
+                            {user.email}
+                          </h4>
                           <Box
                             style={{
                               display: "flex",
@@ -267,8 +362,22 @@ const Users = () => {
                     if (!user.worker) {
                       return (
                         <Box key={index} style={{ marginTop: "18px" }}>
-                          <h4>{user.name}</h4>
-                          <h4>{user.email}</h4>
+                          <h4
+                            style={{
+                              color: darkMode.on ? "white" : darkMode.dark,
+                              letterSpacing: "1px",
+                            }}
+                          >
+                            {user.name}
+                          </h4>
+                          <h4
+                            style={{
+                              color: darkMode.on ? "white" : darkMode.dark,
+                              letterSpacing: "1px",
+                            }}
+                          >
+                            {user.email}
+                          </h4>
                           <Box
                             style={{
                               display: "flex",
@@ -280,9 +389,7 @@ const Users = () => {
                             >
                               <KeyboardDoubleArrowRightIcon />
                             </Button>
-                            <Button
-                              style={{ color: "red", borderRadius: "50px" }}
-                            >
+                            <Button style={{ color: "red" }}>
                               <DeleteOutlineIcon />
                             </Button>
                           </Box>
@@ -302,6 +409,8 @@ const Users = () => {
                 fontWeight: "bold",
                 border: "none",
                 borderBottom: "3px solid #2196f3",
+                marginBottom: "15px",
+                cursor: "auto",
               }}
             >
               Eliminados
@@ -312,8 +421,22 @@ const Users = () => {
                 user &&
                 user.isDelete == true && (
                   <Box key={index}>
-                    <h4>{user.name}</h4>
-                    <h4>{user.email}</h4>
+                    <h4
+                      style={{
+                        color: darkMode.on ? "white" : darkMode.dark,
+                        letterSpacing: "1px",
+                      }}
+                    >
+                      {user.name}
+                    </h4>
+                    <h4
+                      style={{
+                        color: darkMode.on ? "white" : darkMode.dark,
+                        letterSpacing: "1px",
+                      }}
+                    >
+                      {user.email}
+                    </h4>
                     <Box
                       style={{
                         display: "flex",
@@ -322,7 +445,7 @@ const Users = () => {
                     >
                       <Button
                         onClick={() => handleDelete(user.email)}
-                        style={{ color: "orange", borderRadius: "50px" }}
+                        style={{ color: "orange" }}
                       >
                         <DeleteSweepIcon />
                       </Button>

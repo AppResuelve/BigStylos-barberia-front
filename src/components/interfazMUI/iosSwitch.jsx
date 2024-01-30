@@ -57,6 +57,7 @@ const IOSSwitch = styled((props) => (
 /* ////// EMPIEZA EL COMPONENTE ////// */
 
 const IosSwitch = ({
+  index,
   element,
   showEdit,
   serviceStatus,
@@ -64,6 +65,8 @@ const IosSwitch = ({
 }) => {
   return (
     <IOSSwitch
+      key={index + 50}
+      id={`switch-status-${index}`}
       sx={{ m: 1 }}
       disabled={showEdit ? false : true}
       checked={serviceStatus[element] ? true : false}

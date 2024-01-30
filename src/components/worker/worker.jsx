@@ -1,12 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import { Skeleton, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import WorkerAcordeon from "../interfazMUI/workerAcordeon";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 
-const Worker = ({ userData, userAuth, darkMode }) => {
+const Worker = ({ userData, userAuth }) => {
   const navigate = useNavigate();
+  const { darkMode } = useContext(DarkModeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
+
   useEffect(() => {
     if (userData !== 1) {
       if (!userData.worker) {
@@ -25,41 +28,42 @@ const Worker = ({ userData, userAuth, darkMode }) => {
         overflow: "auto",
         display: "flex",
         flexDirection: "column",
-        backgroundColor: darkMode ? "#28292c" : "white",
+        backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
         alignItems: "center",
         height: "100vh",
         paddingTop: "70px",
       }}
     >
       {userData === 1 ? (
-        <Stack spacing={4} style={{ display: "flex", alignItems: "center" }}>
+        <Stack spacing={1} style={{ display: "flex", alignItems: "center" }}>
           <Skeleton
             variant="text"
             height={70}
             style={{
+              marginBottom: !sm ? "50px" : "",
               width: "80vw",
-              maxWidth: "340px",
+              maxWidth: "410px",
             }}
           />
           <Skeleton
             variant="rounded"
-            height={70}
-            style={{ width: "90vw", maxWidth: "900px" }}
+            height={60}
+            style={{ width: "95vw", maxWidth: "900px" }}
           />
           <Skeleton
             variant="rounded"
-            height={70}
-            style={{ width: "90vw", maxWidth: "900px" }}
+            height={60}
+            style={{ width: "95vw", maxWidth: "900px" }}
           />
           <Skeleton
             variant="rounded"
-            height={70}
-            style={{ width: "90vw", maxWidth: "900px" }}
+            height={60}
+            style={{ width: "95vw", maxWidth: "900px" }}
           />
           <Skeleton
             variant="rounded"
-            height={70}
-            style={{ width: "90vw", maxWidth: "900px" }}
+            height={60}
+            style={{ width: "95vw", maxWidth: "900px" }}
           />
         </Stack>
       ) : userData.worker ? (
@@ -68,7 +72,7 @@ const Worker = ({ userData, userAuth, darkMode }) => {
             style={{
               display: "flex",
               justifyContent: "center",
-              color: darkMode ? "white" : "#28292c",
+              color: !darkMode.on ? darkMode.dark : "white",
               fontSize: sm ? "28px" : "",
             }}
           >

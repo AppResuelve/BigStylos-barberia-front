@@ -1,9 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import AdminAcordeon from "../interfazMUI/adminAcordeon";
+import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { Skeleton, Stack } from "@mui/material";
 
-const Admin = ({ userData, userAuth, darkMode }) => {
+const Admin = ({ userData, userAuth }) => {
+  const { xs, sm, md, lg, xl } = useMediaQueryHook();
+  const { darkMode } = useContext(DarkModeContext);
+
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -24,41 +29,57 @@ const Admin = ({ userData, userAuth, darkMode }) => {
         overflow: "auto",
         display: "flex",
         flexDirection: "column",
-        backgroundColor: darkMode ? "#28292c" : "white",
+        backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
         alignItems: "center",
         height: "100vh",
         paddingTop: "70px",
       }}
     >
       {userData === 1 ? (
-        <Stack spacing={4} style={{ display: "flex", alignItems: "center" }}>
+        <Stack spacing={1} style={{ display: "flex", alignItems: "center" }}>
           <Skeleton
             variant="text"
             height={70}
             style={{
+              marginBottom: !sm ? "50px" : "",
               width: "80vw",
               maxWidth: "340px",
             }}
           />
           <Skeleton
             variant="rounded"
-            height={70}
-            style={{ width: "90vw", maxWidth: "900px" }}
+            height={60}
+            style={{ width: "95vw", maxWidth: "900px" }}
           />
           <Skeleton
             variant="rounded"
-            height={70}
-            style={{ width: "90vw", maxWidth: "900px" }}
+            height={60}
+            style={{ width: "95vw", maxWidth: "900px" }}
           />
           <Skeleton
             variant="rounded"
-            height={70}
-            style={{ width: "90vw", maxWidth: "900px" }}
+            height={60}
+            style={{ width: "95vw", maxWidth: "900px" }}
           />
           <Skeleton
             variant="rounded"
-            height={70}
-            style={{ width: "90vw", maxWidth: "900px" }}
+            height={60}
+            style={{ width: "95vw", maxWidth: "900px" }}
+          />
+          <Skeleton
+            variant="rounded"
+            height={60}
+            style={{ width: "95vw", maxWidth: "900px" }}
+          />
+          <Skeleton
+            variant="rounded"
+            height={60}
+            style={{ width: "95vw", maxWidth: "900px" }}
+          />
+          <Skeleton
+            variant="rounded"
+            height={60}
+            style={{ width: "95vw", maxWidth: "900px" }}
           />
         </Stack>
       ) : userData.admin ? ( // Puedes mostrar un componente de carga o un mensaje mientras se determina el estado de isAdmin
@@ -67,7 +88,7 @@ const Admin = ({ userData, userAuth, darkMode }) => {
             style={{
               display: "flex",
               justifyContent: "center",
-              color: darkMode ? "white" : "#28292c",
+              color: darkMode.on ? "white" : darkMode.dark,
             }}
           >
             Administración del local
