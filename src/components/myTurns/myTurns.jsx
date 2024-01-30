@@ -103,9 +103,6 @@ const MyTurns = ({ userData }) => {
         {listMyTurns &&
           Object.keys(listMyTurns).length > 0 &&
           listMyTurns.map((turn, index) => {
-            let serviceWithUpperCase =
-              turnServices[index].charAt(0).toUpperCase() +
-              turnServices[index].slice(1);
             return (
               <Box
                 key={index}
@@ -124,7 +121,7 @@ const MyTurns = ({ userData }) => {
                     alignItems: "center",
                   }}
                 >
-                  <h3>{serviceWithUpperCase}</h3>
+                  <h3>{turnServices[index]}</h3>
                   <h4>
                     El día: {turn.day}/{turn.month} a las{" "}
                     {formatHour(turn.hourTime.ini)}
