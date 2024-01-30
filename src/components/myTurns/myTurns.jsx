@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { DarkModeContext } from "../../App";
 import axios from "axios";
-import { Box, Button } from "@mui/material";
+import { Box, Button, setRef } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import formatHour from "../../functions/formatHour";
 import AlertModal from "../interfazMUI/alertModal";
@@ -18,6 +18,7 @@ const MyTurns = ({ userData }) => {
   const [validateAlert, setValidateAlert] = useState(false);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [turnServices, setTurnServices] = useState([]);
+  const [refresh, setRefresh] = useState(false)
 
   useEffect(() => {
     // Recupera la lista de servicios agendados del localStorage
@@ -27,8 +28,6 @@ const MyTurns = ({ userData }) => {
     // Establece la lista en el estado
     setTurnServices(existingTurns);
   }, []); // Se ejecuta solo una vez al montar el componente
-
-  console.log(InfoToSubmit)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,7 +45,7 @@ const MyTurns = ({ userData }) => {
     if (Object.keys(userData).length > 0) {
       fetchData();
     }
-  }, [userData]);
+  }, [userData , refresh]);
 
   useEffect(() => {
     if (validateAlert === true) {
@@ -85,6 +84,7 @@ const MyTurns = ({ userData }) => {
         }
       );
       const { data } = response;
+      setRefresh(!refresh)
       setShowAlert({
         isOpen: true,
         message: `Su turno ha sido cancelado exitosamente!`,
@@ -107,8 +107,8 @@ const MyTurns = ({ userData }) => {
     <div className="div-container-myturns">
       <Box style={{ overflow: "auto" }}>
         {listMyTurns &&
-          Object.keys(listMyTurns).length > 0 &&
-          listMyTurns.map((turn, index) => {
+          Object.keys(listMyTurns).length > 0 ?
+          (listMyTurns.map((turn, index) => {
             return (
               <Box
                 key={index}
@@ -168,13 +168,21 @@ const MyTurns = ({ userData }) => {
                 </Box>
               </Box>
             );
-          })}
+          })) : (
+            <h4 style={{ display: "flex", justifyContent: "center"}}>No tienes turnos todavia</h4>
+          )}
       </Box>
       {showAlert.alertNumber === 1 && (
         <AlertModal
           showAlert={showAlert}
           setShowAlert={setShowAlert}
           handleActionProp={setValidateAlert}
+        />
+      )}
+      {showAlert.alertNumber === 2 && (
+        <AlertModal
+          showAlert={showAlert}
+          setShowAlert={setShowAlert}
         />
       )}
     </div>
