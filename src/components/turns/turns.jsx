@@ -152,7 +152,6 @@ const Turns = ({ user }) => {
         justifyContent: "center",
         backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
         zIndex: "0",
-        // paddingTop: sm ? "70px" : "70px",
         height: "100vh",
       }}
     >
@@ -167,29 +166,23 @@ const Turns = ({ user }) => {
         <Box
           sx={{
             position: "relative",
+            height: "40vh",
           }}
         >
           <Box
-            sx={{
-              display: "grid",
-              marginTop: "100px",
-              gridTemplateColumns: sm
-                ? "1fr 1fr"
-                : md
-                ? "1fr 1fr 1fr 1fr"
-                : "1fr 1fr 1fr 1fr 1fr",
-              gap: "3px",
-              height: "30vh",
-              maxHeight: "500px",
-              overflow: "auto",
-              borderBottom: "3px solid #134772",
+            style={{
+              display: "flex",
+              justifyContent:"center",
+              flexWrap:"wrap",
+              marginTop: "80px",
+              maxHeight: "28vh",
               alignItems: "center",
               justifyItems: "center",
-              // justifyContent: "center",
+              overflow: "scroll",
             }}
           >
             {services.map((element, index) => (
-              <Box sx={{ marginTop: "1px" }} key={index}>
+              <Box key={index} style={{padding:"8px"}}>
                 <Button
                   variant={
                     element[0] === serviceSelected ? "contained" : "outlined"
@@ -247,7 +240,7 @@ const Turns = ({ user }) => {
               }}
             />
           </Box>
-          <Box
+          {/* <Box
             style={{
               width: "100%",
               height: "100%",
@@ -258,7 +251,7 @@ const Turns = ({ user }) => {
               background:
                 "linear-gradient(180deg, rgba(255,0,0,0) 70%, rgba(0,0,0,0.64) 100%)",
             }}
-          ></Box>
+          ></Box> */}
         </Box>
         <Box
           sx={{
