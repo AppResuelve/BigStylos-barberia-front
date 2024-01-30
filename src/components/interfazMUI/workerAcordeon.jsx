@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -12,6 +13,7 @@ import MyServices from "../myServices/myServices";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const WorkerAcordeon = ({ user }) => {
+  const { darkMode } = useContext(DarkModeContext);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(false);
   const [schedule, setSchedule] = useState({});
@@ -27,7 +29,7 @@ const WorkerAcordeon = ({ user }) => {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/schedule`);
         const { data } = response;
-        console.log(data)
+        console.log(data);
         setSchedule(data.businessSchedule);
       } catch (error) {
         console.error("Error al obtener los horarios", error);
@@ -72,7 +74,10 @@ const WorkerAcordeon = ({ user }) => {
       <Box>
         <Accordion
           style={{
+            borderRadius: "0px 0px 5px 5px",
+            marginBottom: "5px",
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
+            backgroundColor: !darkMode.on ? darkMode.light : darkMode.dark,
           }}
           expanded={
             redirectToMyServices ? false : expanded === "panel1" ? true : false
@@ -93,7 +98,17 @@ const WorkerAcordeon = ({ user }) => {
             aria-controls="panel1bh-content"
             id="panel1bh-header"
           >
-            <h2>Dias de trabajo</h2>
+            <h2
+              style={{
+                color: !darkMode.on
+                  ? darkMode.dark
+                  : expanded === "panel1"
+                  ? darkMode.dark
+                  : "white",
+              }}
+            >
+              Dias de trabajo
+            </h2>
           </AccordionSummary>
           <AccordionDetails>
             {expanded === "panel1" && (
@@ -109,7 +124,10 @@ const WorkerAcordeon = ({ user }) => {
         {/*  //------------------// */}
         <Accordion
           style={{
+            borderRadius: "0px 0px 5px 5px",
+            marginBottom: "5px",
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
+            backgroundColor: !darkMode.on ? darkMode.light : darkMode.dark,
           }}
           expanded={expanded === "panel2" || redirectToMyServices}
           onChange={handleChange("panel2")}
@@ -136,7 +154,17 @@ const WorkerAcordeon = ({ user }) => {
                 width: "100%",
               }}
             >
-              <h2>Mis servicios</h2>
+              <h2
+                style={{
+                  color: !darkMode.on
+                    ? darkMode.dark
+                    : expanded === "panel2"
+                    ? darkMode.dark
+                    : "white",
+                }}
+              >
+                Mis servicios
+              </h2>
               {pendingServices && (
                 <h4
                   style={{
@@ -149,9 +177,7 @@ const WorkerAcordeon = ({ user }) => {
             </Box>
           </AccordionSummary>
           <AccordionDetails>
-            {loading ? (
-              <LinearProgress sx={{ height: "2px", marginBottom: "15px" }} />
-            ) : (
+            {expanded === "panel2" && (
               <MyServices
                 workerData={workerData.services}
                 email={workerData.email}
@@ -165,7 +191,10 @@ const WorkerAcordeon = ({ user }) => {
         {/*  //------------------// */}
         <Accordion
           style={{
+            borderRadius: "0px 0px 5px 5px",
+            marginBottom: "5px",
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
+            backgroundColor: !darkMode.on ? darkMode.light : darkMode.dark,
           }}
           expanded={expanded === "panel3"}
           onChange={handleChange("panel3")}
@@ -183,15 +212,27 @@ const WorkerAcordeon = ({ user }) => {
             aria-controls="panel3bh-content"
             id="panel3bh-header"
           >
-            <h2>bla bla</h2>
+            <h2
+              style={{
+                color: !darkMode.on
+                  ? darkMode.dark
+                  : expanded === "panel3"
+                  ? darkMode.dark
+                  : "white",
+              }}
+            >
+              bla bla
+            </h2>
           </AccordionSummary>
           <AccordionDetails>{/* dfsdfsdfffsdf */}</AccordionDetails>
         </Accordion>
         {/*  //------------------// */}
         <Accordion
           style={{
+            borderRadius: "0px 0px 5px 5px",
             marginBottom: "30px",
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
+            backgroundColor: !darkMode.on ? darkMode.light : darkMode.dark,
           }}
           expanded={expanded === "panel4"}
           onChange={handleChange("panel4")}
@@ -209,7 +250,17 @@ const WorkerAcordeon = ({ user }) => {
             aria-controls="panel4bh-content"
             id="panel4bh-header"
           >
-            <h2 sx={{ width: "33%", flexShrink: 0 }}>Otro</h2>
+            <h2
+              style={{
+                color: !darkMode.on
+                  ? darkMode.dark
+                  : expanded === "panel4"
+                  ? darkMode.dark
+                  : "white",
+              }}
+            >
+              Otro
+            </h2>
           </AccordionSummary>
           <AccordionDetails>{/* dfsdfsdfffsdf */}</AccordionDetails>
         </Accordion>

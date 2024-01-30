@@ -46,10 +46,11 @@ const PlannedClosure = ({ schedule }) => {
   };
 
   const handleCancel = () => {
-    setShowEdit(false);
     setDayIsSelected(noWork);
+    setShowEdit(false);
   };
-
+console.log(noWork);
+console.log(dayIsSelected);
   const handleSubmit = async (confirm) => {
     //     if (confirm === "confirm") {
     //       console.log("hago peticion put con daysturn");
@@ -138,9 +139,9 @@ const PlannedClosure = ({ schedule }) => {
             <Button
               onClick={handleCancel}
               variant="outlined"
-              style={{ borderRadius: "50px", border: "2px solid " }}
+              style={{ borderRadius: "50px", border: "2px solid" }}
             >
-              <h4 style={{ fontFamily: "Jost, sans-serif" }}>Volver</h4>
+              <h4 style={{ fontFamily: "Jost, sans-serif",fontWeight:"bold" }}>Volver</h4>
             </Button>
             <Button onClick={handleSubmit} variant="contained">
               <h4 style={{ fontFamily: "Jost, sans-serif" }}>Guardar</h4>

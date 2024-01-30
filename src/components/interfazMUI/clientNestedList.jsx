@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
@@ -14,7 +15,8 @@ import MyTurns from "../myTurns/myTurns";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const ClientNestedList = ({ userData, darkMode }) => {
+const ClientNestedList = ({ userData }) => {
+  const { darkMode } = useContext(DarkModeContext);
   const [clientData, setClientData] = useState(null);
   const [currentPhoneNumber, setCurrentPhoneNumber] = useState("");
   const [newPhoneNumber, setNewPhoneNumber] = useState("");
@@ -136,7 +138,6 @@ const ClientNestedList = ({ userData, darkMode }) => {
         open={open}
         setOpen={setOpen}
       />
-
       <ListItemButton
         onClick={() => handleSectionClick("miperfil")}
         sx={{
@@ -147,10 +148,17 @@ const ClientNestedList = ({ userData, darkMode }) => {
         }}
       >
         <Box sx={{ width: "100%" }}>
-          <h3 sx={{ fontFamily: "Jost,sans-serif" }}>Mi perfil</h3>
+          <h3
+            style={{
+              fontFamily: "Jost,sans-serif",
+              color: darkMode.on ? "white" : darkMode.dark,
+            }}
+          >
+            Mi perfil
+          </h3>
         </Box>
         {openSection.miperfil ? (
-          <ExpandLess />
+          <ExpandLess sx={{ color: darkMode.on ? "white" : darkMode.dark }} />
         ) : (
           <ExpandMore sx={{ color: "#2196f3" }} />
         )}
@@ -159,9 +167,9 @@ const ClientNestedList = ({ userData, darkMode }) => {
         style={{
           border: "none",
           height: "1px", // Altura de la línea
-          backgroundColor: darkMode ? "white" : "#28292c",
+          backgroundColor: darkMode.on ? "white" : darkMode.dark,
           marginBottom: "10px",
-          marginTop: "10px",
+          // marginTop: "10px",
         }}
       />
       <Collapse
@@ -169,76 +177,6 @@ const ClientNestedList = ({ userData, darkMode }) => {
         timeout="auto"
         unmountOnExit
       >
-        {/* ////// contenido de seccion telefono dentro de miperfil ////// */}
-        <ListItemButton
-          onClick={() => handleSectionClick("telefono")}
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            height: "50px",
-            borderRadius: "4px",
-          }}
-        >
-          <Box sx={{ display: "flex" }}>
-            <LocalPhoneIcon sx={{ marginRight: "5px" }} />
-            <h3 sx={{ fontFamily: "Jost,sans-serif" }}>Teléfono</h3>
-          </Box>
-          {openSection.telefono ? (
-            <ExpandLess />
-          ) : (
-            <ExpandMore sx={{ color: "#2196f3" }} />
-          )}
-        </ListItemButton>
-
-        <Collapse
-          in={openSection.telefono ? true : false}
-          timeout="auto"
-          unmountOnExit
-        >
-          <List component="div" disablePadding>
-            <Box
-              sx={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "space-between",
-                // alignItems: "center",
-              }}
-            >
-              <Input
-                type="text"
-                value={newPhoneNumber}
-                placeholder="ej: 011493523"
-                onChange={(e) => handleSetPhoneState(e.target.value)}
-                onKeyDown={handleKeyDown} // Manejar el evento onKeyDown
-                sx={{
-                  fontFamily: "Jost, sans-serif",
-                  fontSize: "20px",
-                  borderRadius: "50px",
-                  width: "80%",
-                }}
-              />
-              <Button
-                variant="contained"
-                color="success"
-                sx={{ width: "20%" }}
-                onClick={handleUpdatePhone}
-              >
-                <DoneOutlineIcon sx={{ color: "white" }} />
-              </Button>
-            </Box>
-          </List>
-        </Collapse>
-        {!openSection.telefono && (
-          <hr
-            style={{
-              border: "none",
-              height: "1px", // Altura de la línea
-              backgroundColor: darkMode ? "white" : "#28292c",
-              marginBottom: "10px",
-              // marginTop: "10px",
-            }}
-          />
-        )}
         {/*////// contenido de seccion turnos dentro de miperfil //////*/}
         <ListItemButton
           onClick={() => handleSectionClick("turnos")}
@@ -250,11 +188,23 @@ const ClientNestedList = ({ userData, darkMode }) => {
           }}
         >
           <Box sx={{ display: "flex" }}>
-            <CalendarMonthIcon sx={{ marginRight: "5px" }} />
-            <h3 sx={{ fontFamily: "Jost,sans-serif" }}>Mis turnos</h3>
+            <CalendarMonthIcon
+              sx={{
+                marginRight: "5px",
+                color: darkMode.on ? "white" : darkMode.dark,
+              }}
+            />
+            <h3
+              style={{
+                fontFamily: "Jost,sans-serif",
+                color: darkMode.on ? "white" : darkMode.dark,
+              }}
+            >
+              Mis turnos
+            </h3>
           </Box>
           {openSection.turnos ? (
-            <ExpandLess />
+            <ExpandLess sx={{ color: darkMode.on ? "white" : darkMode.dark }} />
           ) : (
             <ExpandMore sx={{ color: "#2196f3" }} />
           )}
@@ -273,8 +223,93 @@ const ClientNestedList = ({ userData, darkMode }) => {
             style={{
               border: "none",
               height: "1px", // Altura de la línea
-              backgroundColor: darkMode ? "white" : "#28292c",
+              backgroundColor: darkMode.on ? "white" : darkMode.dark,
               marginBottom: "10px",
+            }}
+          />
+        )}
+        {/* ////// contenido de seccion telefono dentro de miperfil ////// */}
+        <ListItemButton
+          onClick={() => handleSectionClick("telefono")}
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            height: "50px",
+            borderRadius: "4px",
+          }}
+        >
+          <Box sx={{ display: "flex" }}>
+            <LocalPhoneIcon
+              sx={{
+                marginRight: "5px",
+                color: darkMode.on ? "white" : darkMode.dark,
+              }}
+            />
+            <h3
+              style={{
+                fontFamily: "Jost,sans-serif",
+                color: darkMode.on ? "white" : darkMode.dark,
+              }}
+            >
+              Teléfono
+            </h3>
+          </Box>
+          {openSection.telefono ? (
+            <ExpandLess sx={{ color: darkMode.on ? "white" : darkMode.dark }} />
+          ) : (
+            <ExpandMore sx={{ color: "#2196f3" }} />
+          )}
+        </ListItemButton>
+        <Collapse
+          in={openSection.telefono ? true : false}
+          timeout="auto"
+          unmountOnExit
+        >
+          <List component="div" disablePadding sx={{ marginBottom: "10px" }}>
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "space-between",
+                // alignItems: "center",
+              }}
+            >
+              <Input
+                id="input-telephone-myProfile"
+                type="tel"
+                value={newPhoneNumber}
+                placeholder="ej: 01149352 ..."
+                onChange={(e) => handleSetPhoneState(e.target.value)}
+                onKeyDown={handleKeyDown} // Manejar el evento onKeyDown
+                sx={{
+                  paddingLeft: "10px",
+                  fontFamily: "Jost, sans-serif",
+                  fontWeight:"bold",
+                  fontSize: "20px",
+                  width: "80%",
+                  borderRadius: "5px",
+                  bgcolor: darkMode.on ? "white" : "#d6d6d5",
+                }}
+              />
+              <Button
+                variant="contained"
+                color="success"
+                sx={{ width: "20%" }}
+                onClick={handleUpdatePhone}
+              >
+                <DoneOutlineIcon sx={{ color: "white" }} />
+              </Button>
+            </Box>
+          </List>
+        </Collapse>
+        {!openSection.telefono && (
+          <hr
+            style={{
+              border: "none",
+              height: "1px", // Altura de la línea
+              backgroundColor: darkMode.on ? "white" : darkMode.dark,
+              marginBottom: "10px",
+              // marginTop: "10px",
             }}
           />
         )}

@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import axios from "axios";
 import { Box, Button, Input, MenuItem, Select } from "@mui/material";
 import formatHour from "../../functions/formatHour";
@@ -15,6 +16,7 @@ const MyServices = ({
   setRefresh,
   setPendingServices,
 }) => {
+  const { darkMode } = useContext(DarkModeContext);
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [inputService, setInputService] = useState("");
@@ -108,8 +110,6 @@ const MyServices = ({
     }
   }, [auxState]);
 
- 
-
   const handleServiceStatus = (element) => {
     setServiceStatus((prevState) => {
       let newState = { ...prevState };
@@ -179,6 +179,7 @@ const MyServices = ({
         }}
       >
         <Input
+          id="input-search-services-status"
           type="text"
           value={inputService}
           placeholder="Buscar un servicio"
@@ -187,8 +188,12 @@ const MyServices = ({
           }}
           style={{
             fontFamily: "Jost, sans-serif",
+            fontWeight: "bold",
             fontSize: "20px",
             width: "100%",
+            borderRadius: "5px",
+            paddingLeft: "10px",
+            backgroundColor: darkMode.on ? "white" : "#d6d6d5",
           }}
         />
       </Box>
@@ -209,6 +214,7 @@ const MyServices = ({
             .map((element, index) => {
               return (
                 <Box
+                  key={index}
                   style={{
                     width: "100%",
                     display: sm ? "" : "flex",
@@ -216,9 +222,10 @@ const MyServices = ({
                     alignItems: "center",
                     marginBottom: sm ? "5px" : "10px",
                   }}
-                  key={index}
                 >
-                  <h3>{element[0]}</h3>
+                  <h3 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
+                    {element[0]}
+                  </h3>
                   <Box
                     style={{
                       display: "flex",
@@ -246,10 +253,15 @@ const MyServices = ({
                         <h3 style={{ marginRight: "40px" }}>-----</h3>
                       ) : (
                         <Select
+                          key={index + 40}
+                          id={`input-time-duration-${index}`}
                           sx={{
                             height: "40px",
                             width: "100px",
                             marginLeft: "10px",
+                            backgroundColor: darkMode.on ? "white" : "#d6d6d5",
+                            fontFamily: "Jost, sans-serif",
+                            fontWeight: "bold",
                           }}
                           disabled={showEdit ? false : true}
                           value={
@@ -264,8 +276,13 @@ const MyServices = ({
                           {timeArray.map((minute, index) => (
                             <MenuItem
                               key={index}
+                              id={`menuItem-select-myServices-${index}`}
                               value={minute}
                               disabled={minute === 0 ? true : false}
+                              style={{
+                                fontFamily: "Jost, sans-serif",
+                                fontWeight: "bold",
+                              }}
                             >
                               {minute === 0 ? "..." : formatHour(minute)}
                             </MenuItem>

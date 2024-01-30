@@ -2,7 +2,8 @@ import daysMonthCalendarCustom from "../../functions/daysMonthCalendarCustom";
 import getToday from "../../functions/getToday";
 import { Box } from "@mui/material";
 import "./customCalendar.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import axios from "axios";
 import obtainDayName from "../../functions/obtainDayName";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -16,6 +17,7 @@ const CustomCalendarTurns = ({
   serviceSelected,
   setIsOpen,
 }) => {
+  const { darkMode } = useContext(DarkModeContext);
   const daysCalendarCustom = daysMonthCalendarCustom(amountOfDays, true);
   const { currentMonth, nextMonth, currentYear, nextYear } = daysCalendarCustom;
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
@@ -54,7 +56,7 @@ const CustomCalendarTurns = ({
     <div className="div-container-calendar">
       <Box className={"line7day-query600px"}>
         {daysOfWeek.map((day) => (
-          <div key={day}>{day}</div>
+          <h4 key={day} style={{color:darkMode.on? "white": darkMode.dark}}>{day}</h4>
         ))}
       </Box>
       <Box className={"line7-query600px"}>

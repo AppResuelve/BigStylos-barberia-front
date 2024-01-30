@@ -7,7 +7,7 @@ import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import AlertModal from "../interfazMUI/alertModal";
 import SliderModal from "../interfazMUI/sliderModal";
 import { Grid, Box, Button, LinearProgress } from "@mui/material";
-import "./CreateWorkDays.css";
+import "./createWorkDays.css";
 import getCurrentMonth from "../../functions/getCurrentMonth";
 import durationMax from "../../helpers/durationMax";
 import shouldDisableButton from "../../helpers/shouldDisableButton";
@@ -252,7 +252,10 @@ const CreateWorkDays = ({
           }}
         />
       )}
-      <Grid container>
+      <Grid
+        container
+        style={{ display: "flex", justifyContent: "space-between" }}
+      >
         <Grid
           item
           xs={12}
@@ -275,8 +278,8 @@ const CreateWorkDays = ({
           item
           xs={12}
           sm={12}
-          md={6}
-          sx={{ display: "flex", flexDirection: "column" }}
+          md={5}
+          style={{ display: "flex", flexDirection: "column" }}
           className={md ? "" : showEdit ? "mover-izquierda" : "mover-derecha"}
         >
           {showEdit && (

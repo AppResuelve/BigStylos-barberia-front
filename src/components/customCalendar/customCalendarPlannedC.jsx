@@ -4,6 +4,8 @@ import obtainDayName from "../../functions/obtainDayName";
 import "./customCalendar.css";
 import { Box } from "@mui/material";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
+import { useContext } from "react";
+import { DarkModeContext } from "../../App";
 
 const CustomCalendarPlannedC = ({
   schedule,
@@ -16,6 +18,7 @@ const CustomCalendarPlannedC = ({
   days,
   setDaysWithTurns,
 }) => {
+  const { darkMode } = useContext(DarkModeContext);
   const daysCalendarCustom = daysMonthCalendarCustom(amountOfDays, false);
   let { currentMonth, nextMonth, currentYear, nextYear } = daysCalendarCustom;
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
@@ -23,30 +26,6 @@ const CustomCalendarPlannedC = ({
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
   const handleDay = (day, month) => {
-    setNoWork((prevState) => {
-      const newState = { ...prevState };
-
-      if (newState[month] && newState[month][day]) {
-        // Si ya existe en dayIsSelected, lo quitamos
-
-        const { [day]: _, ...rest } = newState[month];
-
-        if (Object.keys(rest).length < 1) {
-          delete newState[month];
-        } else {
-          newState[month] = rest;
-        }
-      } else {
-        // Si no existe, lo agregamos
-        newState[month] = {
-          ...newState[month],
-          [day]: {},
-        };
-      }
-
-      return newState;
-    });
-
     setDayIsSelected((prevState) => {
       const newState = { ...prevState };
 
@@ -76,7 +55,12 @@ const CustomCalendarPlannedC = ({
     <div className="div-container-calendar">
       <Box className="line7day-query600px">
         {daysOfWeek.map((day) => (
-          <h4 key={day}>{day}</h4>
+          <h4
+            key={day}
+            style={{ color: darkMode.on ? "white" : darkMode.dark }}
+          >
+            {day}
+          </h4>
         ))}
       </Box>
 
@@ -198,35 +182,59 @@ const CustomCalendarPlannedC = ({
         <Box sx={{ display: "flex", alignItems: "center", margin: "5px" }}>
           <div
             style={{
-              height: "14px",
-              width: "14px",
+              height: "18px",
+              width: "18px",
               backgroundColor: "#e6b226d0",
               borderRadius: "25px",
             }}
           ></div>
-          <h4>Con reserva/s</h4>
+          <h4
+            style={{
+              color: darkMode.on ? "white" : darkMode.dark,
+              marginLeft: "4px",
+              letterSpacing: "1px",
+            }}
+          >
+            Con reserva/s
+          </h4>
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", margin: "5px" }}>
           <div
             style={{
-              height: "14px",
-              width: "14px",
+              height: "18px",
+              width: "18px",
               backgroundColor: "gray",
               borderRadius: "25px",
             }}
           ></div>
-          <h4>No laborable</h4>
+          <h4
+            style={{
+              color: darkMode.on ? "white" : darkMode.dark,
+              marginLeft: "4px",
+              letterSpacing: "1px",
+            }}
+          >
+            No laborable
+          </h4>
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", margin: "5px" }}>
           <div
             style={{
-              height: "14px",
-              width: "14px",
+              height: "18px",
+              width: "18px",
               backgroundColor: "#e0e0e0d2",
               borderRadius: "25px",
             }}
           ></div>
-          <h4>Día hábil</h4>
+          <h4
+            style={{
+              color: darkMode.on ? "white" : darkMode.dark,
+              marginLeft: "4px",
+              letterSpacing: "1px",
+            }}
+          >
+            Día hábil
+          </h4>
         </Box>
       </Box>
     </div>
