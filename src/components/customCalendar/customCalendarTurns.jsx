@@ -19,7 +19,7 @@ const CustomCalendarTurns = ({
 }) => {
   const { darkMode } = useContext(DarkModeContext);
   const daysCalendarCustom = daysMonthCalendarCustom(amountOfDays, true);
-  const { currentMonth, nextMonth, currentYear, nextYear } = daysCalendarCustom;
+  const { currentMonth, nextMonth, currentYear, nextYear, month1, month2 } = daysCalendarCustom;
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
   const getDayPosition = getToday() - 1; // devuelve número que representa qué día de la semana es (lunes, martes, etc)
   const [schedule, setSchedule] = useState({});
@@ -148,6 +148,7 @@ const CustomCalendarTurns = ({
               onClick={() => handleDay(day, nextMonth)}
               disabled={disable}
               style={{
+                gridColumnStart: month1.length < 1 && index === 0 ? getDayPosition : "auto",
                 backgroundColor:
                   dayIsSelected.length > 0 &&
                   dayIsSelected[0] == day &&
