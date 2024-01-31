@@ -14,19 +14,20 @@ const Home = ({ user, homeImages }) => {
 
   return (
     <div
+      className="container-home"
       style={{
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
         alignItems: "center",
         height: "100vh",
-        paddingTop: "70px",
         backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
       }}
     >
       <Box>
         {homeImages[0] != "" ? (
           <img
+            className="img-logotipo-home"
             src={
               homeImages[0]
                 ? homeImages[0]
@@ -37,8 +38,6 @@ const Home = ({ user, homeImages }) => {
             alt="nombre del lugar"
             style={{
               marginTop: "20px",
-              width: "400px",
-              height: "400px",
               objectFit: "cover",
               borderRadius: "200px",
               boxShadow: "0px 43px 51px -23px rgba(0,0,0,0.57)", // Propiedades de la sombra
@@ -96,13 +95,13 @@ const Home = ({ user, homeImages }) => {
         >
           <NavLink to="/turns">
             <Button
+              className="btn-reservar-home"
               variant="contained"
               style={{
-                marginBottom: "150px",
+                marginBottom: "50px",
                 borderRadius: "50px",
-                height: "60px",
                 fontFamily: "Jost, sans-serif",
-                fontSize: "23px",
+                fontSize: "20px",
                 backgroundColor: darkMode.on ? "white" : darkMode.dark,
                 color: darkMode.on ? darkMode.dark : "white",
               }}

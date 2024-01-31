@@ -4,47 +4,32 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { CircularProgress, Button, Skeleton, Box } from "@mui/material";
 import noUser from "../../assets/icons/noUser.png";
 import ModalMUI from "../interfazMUI/userModal";
+import "./userProfile.css";
+
 const Profile = ({ userData }) => {
   const { darkMode } = useContext(DarkModeContext);
   const { user, isAuthenticated, isLoading } = useAuth0();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div style={{ position: "relative" }}>
-      <Button
+    <div >
+      <button
+        className="btn-userProfile"
         disabled={isLoading ? true : false}
         onClick={() => setIsOpen(true)}
-        style={{
-          borderRadius: "50px",
-          width: "0px",
-        }}
       >
         {!isLoading ? (
           <img
+            className="img-user-nav"
             src={user ? user.picture : noUser}
             alt="mi perfil"
-            style={{
-              borderRadius: "50px",
-              width: "50px",
-              border: `solid 3px ${
-                darkMode.on ? darkMode.light : darkMode.dark
-              }`,
-            }}
           />
         ) : (
-          <Box style={{ position: "relative" }}>
-            <Skeleton
-              variant="circular"
-              width={50}
-              height={50}
-              style={{ position: "absolute" }}
-            />
-            <CircularProgress
-              style={{ width: "50px", height: "50px", color: "black" }}
-            />
+          <Box>
+              <CircularProgress size={43} sx={{color:"black",display:"flex"}} />
           </Box>
         )}
-      </Button>
+      </button>
       <ModalMUI
         isOpen={isOpen}
         setIsOpen={setIsOpen}

@@ -151,7 +151,6 @@ const Turns = ({ user }) => {
         display: "flex",
         justifyContent: "center",
         backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
-        zIndex: "0",
         height: "100vh",
       }}
     >
@@ -241,7 +240,7 @@ const Turns = ({ user }) => {
               }}
             />
           </Box>
-          {/* <Box
+          <Box
             style={{
               width: "100%",
               height: "100%",
@@ -252,7 +251,7 @@ const Turns = ({ user }) => {
               background:
                 "linear-gradient(180deg, rgba(255,0,0,0) 70%, rgba(0,0,0,0.64) 100%)",
             }}
-          ></Box> */}
+          ></Box>
         </Box>
         <Box
           sx={{

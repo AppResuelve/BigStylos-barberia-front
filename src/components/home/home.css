@@ -1,6 +1,9 @@
+.container-home {
+      padding-left: 10px;
+      padding-right: 10px;
+}
+
 .img-whatsapp-home {
-      width: 50px;
-      height: 50px;
       transition: .3s;
 }
 
@@ -13,8 +16,6 @@
 }
 
 .img-social-home {
-      width: 40px;
-      height: 40px;
       transition: .3s;
 }
 
@@ -24,4 +25,86 @@
       filter: drop-shadow(0px 5px 1px #000000);
       /* -webkit-filter: drop-shadow(0px 10px 8px #000000);
       -moz-filter: drop-shadow(0px 10px 8px #000000); */
+}
+
+@media (min-width:500px) and (max-height: 800px) {
+      .container-home {
+            padding-top: 40px;
+      }
+
+      .img-logotipo-home {
+            width: 300px;
+            height: 300px;
+      }
+
+      .btn-reservar-home {
+            height: 40px;
+            width: 120px;
+      }
+
+      .img-social-home {
+            width: 30px;
+            height: 30px;
+            transition: .3s;
+      }
+
+      .img-whatsapp-home {
+            width: 40px;
+            height: 40px;
+      }
+}
+
+
+@media (min-width:500px) and (max-height: 1000px) {
+      .container-home {
+            padding-top: 50px;
+      }
+
+      .img-logotipo-home {
+            width: 380px;
+            height: 380px;
+      }
+
+      .btn-reservar-home {
+            height: 50px;
+            width: 140px;
+      }
+
+      .img-social-home {
+            width: 40px;
+            height: 40px;
+            transition: .3s;
+      }
+
+      .img-whatsapp-home {
+            width: 55px;
+            height: 55px;
+      }
+}
+
+@media (max-width:500px) and (max-height: 1000px) {
+      .container-home {
+            padding-top: 50px;
+      }
+
+      .img-logotipo-home {
+            width: 380px;
+            height: 380px;
+      }
+
+      .btn-reservar-home {
+            height: 50px;
+            width: 140px;
+      }
+
+      .img-social-home {
+            width: 40px;
+            height: 40px;
+            transition: .3s;
+      }
+
+      .img-whatsapp-home {
+            width: 55px;
+            height: 55px;
+      }
 }
