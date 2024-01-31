@@ -56,7 +56,12 @@ const CustomCalendarTurns = ({
     <div className="div-container-calendar">
       <Box className={"line7day-query600px"}>
         {daysOfWeek.map((day) => (
-          <h4 key={day} style={{color:darkMode.on? "white": darkMode.dark}}>{day}</h4>
+          <h4
+            key={day}
+            style={{ color: darkMode.on ? "white" : darkMode.dark }}
+          >
+            {day}
+          </h4>
         ))}
       </Box>
       <Box className={"line7-query600px"}>

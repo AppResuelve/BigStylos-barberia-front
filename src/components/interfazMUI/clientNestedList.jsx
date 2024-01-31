@@ -12,6 +12,7 @@ import { Box, Button, Input } from "@mui/material";
 import axios from "axios";
 import AlertSnackBar from "./alertSnackBar";
 import MyTurns from "../myTurns/myTurns";
+import "./clientNestedList.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -139,18 +140,13 @@ const ClientNestedList = ({ userData }) => {
         setOpen={setOpen}
       />
       <ListItemButton
+        className="listItembtn-nestedList"
         onClick={() => handleSectionClick("miperfil")}
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          height: "50px",
-          borderRadius: "4px",
-        }}
       >
         <Box sx={{ width: "100%" }}>
           <h3
+            className="h3-nestedList"
             style={{
-              fontFamily: "Jost,sans-serif",
               color: darkMode.on ? "white" : darkMode.dark,
             }}
           >
@@ -164,12 +160,9 @@ const ClientNestedList = ({ userData }) => {
         )}
       </ListItemButton>
       <hr
+        className="hr-nestedList"
         style={{
-          border: "none",
-          height: "1px", // Altura de la línea
           backgroundColor: darkMode.on ? "white" : darkMode.dark,
-          marginBottom: "10px",
-          // marginTop: "10px",
         }}
       />
       <Collapse
@@ -179,15 +172,10 @@ const ClientNestedList = ({ userData }) => {
       >
         {/*////// contenido de seccion turnos dentro de miperfil //////*/}
         <ListItemButton
+          className="listItembtn-nestedList"
           onClick={() => handleSectionClick("turnos")}
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            height: "50px",
-            borderRadius: "4px",
-          }}
         >
-          <Box sx={{ display: "flex" }}>
+          <Box sx={{ display: "flex", width: "100%" }}>
             <CalendarMonthIcon
               sx={{
                 marginRight: "5px",
@@ -195,8 +183,8 @@ const ClientNestedList = ({ userData }) => {
               }}
             />
             <h3
+              className="h3-nestedList"
               style={{
-                fontFamily: "Jost,sans-serif",
                 color: darkMode.on ? "white" : darkMode.dark,
               }}
             >
@@ -220,25 +208,18 @@ const ClientNestedList = ({ userData }) => {
         </Collapse>
         {!openSection.turnos && (
           <hr
+            className="hr-nestedList"
             style={{
-              border: "none",
-              height: "1px", // Altura de la línea
               backgroundColor: darkMode.on ? "white" : darkMode.dark,
-              marginBottom: "10px",
             }}
           />
         )}
         {/* ////// contenido de seccion telefono dentro de miperfil ////// */}
         <ListItemButton
+          className="listItembtn-nestedList"
           onClick={() => handleSectionClick("telefono")}
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            height: "50px",
-            borderRadius: "4px",
-          }}
         >
-          <Box sx={{ display: "flex" }}>
+          <Box sx={{ display: "flex", width: "100%" }}>
             <LocalPhoneIcon
               sx={{
                 marginRight: "5px",
@@ -246,8 +227,8 @@ const ClientNestedList = ({ userData }) => {
               }}
             />
             <h3
+              className="h3-nestedList"
               style={{
-                fontFamily: "Jost,sans-serif",
                 color: darkMode.on ? "white" : darkMode.dark,
               }}
             >
@@ -270,11 +251,10 @@ const ClientNestedList = ({ userData }) => {
               sx={{
                 width: "100%",
                 display: "flex",
-                justifyContent: "space-between",
-                // alignItems: "center",
               }}
             >
               <Input
+                className="input-tel-nestedList"
                 id="input-telephone-myProfile"
                 type="tel"
                 value={newPhoneNumber}
@@ -282,19 +262,16 @@ const ClientNestedList = ({ userData }) => {
                 onChange={(e) => handleSetPhoneState(e.target.value)}
                 onKeyDown={handleKeyDown} // Manejar el evento onKeyDown
                 sx={{
-                  paddingLeft: "10px",
                   fontFamily: "Jost, sans-serif",
-                  fontWeight:"bold",
-                  fontSize: "20px",
-                  width: "80%",
-                  borderRadius: "5px",
+                  fontWeight: "bold",
+                  fontSize: "15px",
                   bgcolor: darkMode.on ? "white" : "#d6d6d5",
                 }}
               />
               <Button
+                className="btn-update-turn-nestedList"
                 variant="contained"
                 color="success"
-                sx={{ width: "20%" }}
                 onClick={handleUpdatePhone}
               >
                 <DoneOutlineIcon sx={{ color: "white" }} />
@@ -318,8 +295,3 @@ const ClientNestedList = ({ userData }) => {
   );
 };
 export default ClientNestedList;
-
-//  <Box sx={{ marginBottom: "10px" }}>
-//    <h3>Mi perfil</h3>
-
-//  </Box>;
