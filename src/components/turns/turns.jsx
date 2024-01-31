@@ -151,9 +151,7 @@ const Turns = ({ user }) => {
         display: "flex",
         justifyContent: "center",
         backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
-        /* zIndex: "0", */
-        // paddingTop: sm ? "70px" : "70px",
-        height: "100%",
+        height: "100vh",
       }}
     >
       <div //container
@@ -161,36 +159,30 @@ const Turns = ({ user }) => {
           display: "flex",
           flexDirection: "column",
           width: "100%",
+          backgroundColor: "red",
           maxWidth: "900px", //revisar maxWidth
-          height: "100vh",
         }}
       >
         <Box
           sx={{
             position: "relative",
+            height: "40vh",
           }}
         >
           <Box
-            sx={{
-              display: "grid",
-              marginTop: "100px",
-              gridTemplateColumns: sm
-                ? "1fr 1fr"
-                : md
-                ? "1fr 1fr 1fr 1fr"
-                : "1fr 1fr 1fr 1fr 1fr",
-              gap: "3px",
-              height: "30vh",
-              maxHeight: "500px",
-              overflow: "auto",
-              borderBottom: "3px solid #134772",
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              flexWrap: "wrap",
+              marginTop: "80px",
+              maxHeight: "28vh",
               alignItems: "center",
               justifyItems: "center",
-              // justifyContent: "center",
+              overflow: "scroll",
             }}
           >
             {services.map((element, index) => (
-              <Box sx={{ marginTop: "1px" }} key={index}>
+              <Box key={index} style={{ padding: "8px" }}>
                 <Button
                   variant={
                     element[0] === serviceSelected ? "contained" : "outlined"
@@ -266,17 +258,10 @@ const Turns = ({ user }) => {
             display: "flex",
             alignSelf: "center",
             width: "95%",
-            height: "50%",
+            height: "60vh",
           }}
         >
-          <Box
-            sx={{
-              marginTop: "30px",
-              width: "100%",
-              maxWidth: "900px",
-              
-            }}
-          >
+          <Box className="box-calendar-turns">
             {serviceSelected.length > 0 ? (
               <CustomCalendarTurns
                 sm={sm}
@@ -292,17 +277,9 @@ const Turns = ({ user }) => {
                 sx={{
                   display: "flex",
                   justifyContent: "center",
-                  marginTop: "20px",
                 }}
               >
-                <img
-                  src={calendar}
-                  style={{
-                    filter: " grayscale(100%)",
-                    width: sm ? "250px" : "300px",
-                    height: sm ? "250px" : "300px",
-                  }}
-                />
+                <img src={calendar} className="img-calendar-turns" />
               </Box>
             )}
           </Box>
