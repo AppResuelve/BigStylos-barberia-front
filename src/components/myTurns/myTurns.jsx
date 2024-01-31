@@ -112,10 +112,8 @@ const MyTurns = ({ userData }) => {
             return (
               <Box
                 key={index}
+                className="box-container-turn-myTurns"
                 sx={{
-                  padding: "5px",
-                  borderRadius: "4px",
-                  marginBottom: "10px",
                   backgroundColor: darkMode.on ? "white" : "#d6d6d5",
                 }}
               >
@@ -127,8 +125,8 @@ const MyTurns = ({ userData }) => {
                     alignItems: "center",
                   }}
                 >
-                  <h3>{turnServices[index]}</h3>
-                  <h4>
+                  <h3 className="h3-myTurns">{turnServices[index]}</h3>
+                  <h4 className="h4-myTurns">
                     El día: {turn.day}/{turn.month} a las{" "}
                     {formatHour(turn.hourTime.ini)}
                   </h4>
@@ -145,18 +143,19 @@ const MyTurns = ({ userData }) => {
                     className={sm ? "ticker-container" : ""}
                     sx={{ width: "80%" }}
                   >
-                    <h4>Profesional:</h4>
-                    <h4 className={sm ? "ticker-text" : ""}>{turn.worker}</h4>
+                    <h4 className="h4-myTurns">Profesional:</h4>
+                    <h4 className={sm ? "ticker-text" : "h4-myTurns"}>
+                      {turn.worker}
+                    </h4>
                   </Box>
 
                   <Button
                     // variant="outlined"
-                    className="btn-cancel-myturns"
+                    className="btn-cancel-myTurns"
                     sx={{
                       marginLeft: "5px",
                       display: "flex",
                       alignSelf: "end",
-                      height: "35px",
                       borderRadius: "5px",
                       color: "red",
                       transition: ".2s",

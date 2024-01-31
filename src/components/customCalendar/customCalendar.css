@@ -58,13 +58,6 @@
   transition: .3s;
 }
 
-/* //////////estilos aplicables para query600px/////////// */
-
-
-
-
-
-
 @media (min-width:500px) and (max-height: 800px) {
 
   .line7day-query600px {
@@ -139,7 +132,7 @@
   }
 
   .line7-query600px {
-    width:95%;
+    width: 95%;
     min-width: 260px;
     max-width: 370px;
     height: 70vw;

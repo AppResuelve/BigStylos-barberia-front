@@ -20,7 +20,7 @@ const CustomCalendarPlannedC = ({
 }) => {
   const { darkMode } = useContext(DarkModeContext);
   const daysCalendarCustom = daysMonthCalendarCustom(amountOfDays, false);
-  let { currentMonth, nextMonth, currentYear, nextYear } = daysCalendarCustom;
+  let { currentMonth, nextMonth, currentYear, nextYear, month1, month2 } = daysCalendarCustom;
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
   const getDayPosition = getToday();
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
@@ -148,6 +148,7 @@ const CustomCalendarPlannedC = ({
               className={!showEdit || disabled ? "month2-false" : "month2"}
               onClick={() => handleDay(day, nextMonth)}
               style={{
+                gridColumnStart: month1.length < 1 && index === 0 ? getDayPosition : "auto",
                 backgroundColor: colorDay,
                 ...(dayIsSelected[nextMonth] && dayIsSelected[nextMonth][day]
                   ? { backgroundColor: "gray" }
