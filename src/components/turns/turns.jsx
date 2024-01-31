@@ -159,7 +159,6 @@ const Turns = ({ user }) => {
           display: "flex",
           flexDirection: "column",
           width: "100%",
-          backgroundColor: "red",
           maxWidth: "900px", //revisar maxWidth
         }}
       >
