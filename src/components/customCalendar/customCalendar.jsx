@@ -21,12 +21,14 @@ const CustomCalendar = ({
 }) => {
   const { darkMode } = useContext(DarkModeContext);
   const daysCalendarCustom = daysMonthCalendarCustom(amountOfDays, false);
-  let { currentMonth, nextMonth, currentYear, nextYear } = daysCalendarCustom;
+  let { currentMonth, nextMonth, currentYear, nextYear, month1, month2 } = daysCalendarCustom;
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
   const getDayPosition = getToday();
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [exist50, setExist50] = useState(false);
   const [noWork, setNoWork] = useState({});
+
+  console.log(month1, month2)
 
   useEffect(() => {
     const fetchNoWorkDays = async () => {
@@ -206,6 +208,7 @@ const CustomCalendar = ({
               disabled={!showEdit ? true : disabled}
               onClick={() => handleDay(day, nextMonth)}
               style={{
+                gridColumnStart: month1.length < 1 && index === 0 ? getDayPosition : "auto",
                 backgroundColor: colorDay,
                 ...(dayIsSelected[nextMonth] && dayIsSelected[nextMonth][day]
                   ? { backgroundColor: "#2196f3" }
