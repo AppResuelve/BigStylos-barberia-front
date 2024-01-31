@@ -159,8 +159,8 @@ const Turns = ({ user }) => {
           display: "flex",
           flexDirection: "column",
           width: "100%",
+          backgroundColor: "red",
           maxWidth: "900px", //revisar maxWidth
-          height: "100vh",
         }}
       >
         <Box
@@ -172,8 +172,8 @@ const Turns = ({ user }) => {
           <Box
             style={{
               display: "flex",
-              justifyContent:"center",
-              flexWrap:"wrap",
+              justifyContent: "center",
+              flexWrap: "wrap",
               marginTop: "80px",
               maxHeight: "28vh",
               alignItems: "center",
@@ -182,7 +182,7 @@ const Turns = ({ user }) => {
             }}
           >
             {services.map((element, index) => (
-              <Box key={index} style={{padding:"8px"}}>
+              <Box key={index} style={{ padding: "8px" }}>
                 <Button
                   variant={
                     element[0] === serviceSelected ? "contained" : "outlined"
@@ -258,17 +258,10 @@ const Turns = ({ user }) => {
             display: "flex",
             alignSelf: "center",
             width: "95%",
-            height: "50%",
+            height: "60vh",
           }}
         >
-          <Box
-            sx={{
-              marginTop: "30px",
-              width: "100%",
-              maxWidth: "900px",
-              
-            }}
-          >
+          <Box className="box-calendar-turns">
             {serviceSelected.length > 0 ? (
               <CustomCalendarTurns
                 sm={sm}
@@ -284,17 +277,9 @@ const Turns = ({ user }) => {
                 sx={{
                   display: "flex",
                   justifyContent: "center",
-                  marginTop: "20px",
                 }}
               >
-                <img
-                  src={calendar}
-                  style={{
-                    filter: " grayscale(100%)",
-                    width: sm ? "250px" : "300px",
-                    height: sm ? "250px" : "300px",
-                  }}
-                />
+                <img src={calendar} className="img-calendar-turns" />
               </Box>
             )}
           </Box>
