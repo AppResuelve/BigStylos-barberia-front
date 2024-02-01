@@ -22,14 +22,77 @@ const WorkerAcordeon = ({ user }) => {
   const [pendingServices, setPendingServices] = useState(false);
   const [redirectToMyServices, setRedirectToMyServices] = useState(false);
 
+  const [services, setServices] = useState([]);
+  const [serviceStatus, setServiceStatus] = useState({});
+  const [timeEdit, setTimeEdit] = useState({});
+  const [showEdit, setShowEdit] = useState(false);
+
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
+
+  useEffect(() => {
+    setTimeEdit(workerData.services);
+  }, [workerData]);
+
+  useEffect(() => {
+    if (timeEdit && Object.keys(timeEdit).length > 0) {
+      if (services && services.length > 0) {
+        let aux = false;
+        for (const prop in timeEdit) {
+          if (services.some((serviceArr) => serviceArr[0] === prop)) {
+            if (timeEdit[prop].duration === null) {
+              aux = true;
+              setPendingServices(aux);
+              return;
+            } else {
+              aux = false;
+            }
+            setPendingServices(aux);
+          }
+        }
+      }
+    }
+  }, [timeEdit, services]);
+
+  useEffect(() => {
+    let objNewServicies = {};
+    if (services && services.length > 0) {
+      for (const prop in workerData.services) {
+        if (services.some((serviceArr) => serviceArr[0] === prop)) {
+          if (workerData.services[prop].duration === null) {
+            objNewServicies[prop] = true;
+          } else if (workerData.services[prop].duration === 0) {
+            objNewServicies[prop] = false;
+          } else {
+            objNewServicies[prop] = true;
+          }
+        }
+      }
+    }
+    if (!showEdit) {
+      setServiceStatus(objNewServicies);
+    }
+  }, [services, workerData, showEdit]);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await axios.get(`${VITE_BACKEND_URL}/services/`);
+        const { data } = response;
+        setServices(data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error al obtener los servicios:", error);
+        alert("Error al obtener los servicios");
+      }
+    };
+    fetchServices();
+  }, []);
 
   useEffect(() => {
     const fetchSchedule = async () => {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/schedule`);
         const { data } = response;
-        console.log(data);
         setSchedule(data.businessSchedule);
       } catch (error) {
         console.error("Error al obtener los horarios", error);
@@ -57,6 +120,7 @@ const WorkerAcordeon = ({ user }) => {
   }, [refresh]);
 
   const handleChange = (panel) => (event, isExpanded) => {
+    console.log(panel, event, isExpanded, "esto hace el handlechange")
     setExpanded(isExpanded ? panel : false);
     setRedirectToMyServices(false);
   };
@@ -177,13 +241,21 @@ const WorkerAcordeon = ({ user }) => {
             </Box>
           </AccordionSummary>
           <AccordionDetails>
-            {expanded === "panel2" && (
+            {expanded === "panel2" || redirectToMyServices && (
               <MyServices
                 workerData={workerData.services}
                 email={workerData.email}
                 refresh={refresh}
                 setRefresh={setRefresh}
                 setPendingServices={setPendingServices}
+                services={services}
+                setServices={setServices}
+                serviceStatus={serviceStatus}
+                setServiceStatus={setServiceStatus}
+                timeEdit={timeEdit}
+                setTimeEdit={setTimeEdit}
+                showEdit={showEdit}
+                setShowEdit={setShowEdit}
               />
             )}
           </AccordionDetails>

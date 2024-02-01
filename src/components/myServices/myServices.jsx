@@ -15,16 +15,24 @@ const MyServices = ({
   refresh,
   setRefresh,
   setPendingServices,
+  services,
+  setServices,
+  serviceStatus,
+  setServiceStatus,
+  timeEdit,
+  setTimeEdit,
+  showEdit,
+  setShowEdit
 }) => {
   const { darkMode } = useContext(DarkModeContext);
-  const [services, setServices] = useState([]);
+  
   const [loading, setLoading] = useState(true);
   const [inputService, setInputService] = useState("");
-  const [timeEdit, setTimeEdit] = useState({});
+ 
   const [searchValue, setSearchValue] = useState("");
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-  const [serviceStatus, setServiceStatus] = useState({});
-  const [showEdit, setShowEdit] = useState(false);
+
+
   const [auxState, setAuxState] = useState([]);
 
   const timeArray = [
@@ -32,64 +40,13 @@ const MyServices = ({
     255, 270,
   ];
 
-  useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const response = await axios.get(`${VITE_BACKEND_URL}/services/`);
-        const { data } = response;
-        setServices(data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error al obtener los servicios:", error);
-        alert("Error al obtener los servicios");
-      }
-    };
-    fetchServices();
-  }, []);
 
-  useEffect(() => {
-    setTimeEdit(workerData);
-  }, [workerData]);
 
-  useEffect(() => {
-    let objNewServicies = {};
-    if (services && services.length > 0) {
-      for (const prop in workerData) {
-        if (services.some((serviceArr) => serviceArr[0] === prop)) {
-          if (workerData[prop].duration === null) {
-            objNewServicies[prop] = true;
-          } else if (workerData[prop].duration === 0) {
-            objNewServicies[prop] = false;
-          } else {
-            objNewServicies[prop] = true;
-          }
-        }
-      }
-    }
-    if (!showEdit) {
-      setServiceStatus(objNewServicies);
-    }
-  }, [services, workerData, showEdit]);
 
-  useEffect(() => {
-    if (timeEdit && Object.keys(timeEdit).length > 0) {
-      if (services && services.length > 0) {
-        let aux = false;
-        for (const prop in timeEdit) {
-          if (services.some((serviceArr) => serviceArr[0] === prop)) {
-            if (timeEdit[prop].duration === null) {
-              aux = true;
-              setPendingServices(aux);
-              return;
-            } else {
-              aux = false;
-            }
-            setPendingServices(aux);
-          }
-        }
-      }
-    }
-  }, [timeEdit, services]);
+
+
+
+
   useEffect(() => {
     if (serviceStatus[auxState[0]] && auxState !== false) {
       setTimeEdit((prevState) => ({
@@ -245,7 +202,7 @@ const MyServices = ({
                     />
 
                     <Box sx={{ display: "flex", alignItems: "center" }}>
-                      {timeEdit[element[0]].duration === null &&
+                      {timeEdit && Object.keys(timeEdit).length > 0 && timeEdit[element[0]].duration === null &&
                         serviceStatus && (
                           <h3 style={{ color: "red" }}>Pendiente</h3>
                         )}

@@ -7,6 +7,7 @@ import defaultImgLight from "../../assets/icons/no-image-logotipe-light.png";
 
 const Home = ({ user, homeImages }) => {
   const { darkMode } = useContext(DarkModeContext);
+  console.log(darkMode)
 
   return (
     <div
