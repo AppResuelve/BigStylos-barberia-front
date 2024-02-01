@@ -403,17 +403,26 @@ const AdminAcordeon = () => {
             aria-controls="panel7bh-content"
             id="panel7bh-header"
           >
-            <h2
+            <Box
               style={{
-                color: !darkMode.on
-                  ? darkMode.dark
-                  : expanded === "panel7"
-                  ? darkMode.dark
-                  : "white",
+                display: "flex",
+                alignItems: "center",
+                width: "100%",
               }}
             >
-              Turnos cancelados
-            </h2>
+              <h2
+                style={{
+                  color: !darkMode.on
+                    ? darkMode.dark
+                    : expanded === "panel7"
+                    ? darkMode.dark
+                    : "white",
+                }}
+              >
+                Turnos cancelados
+              </h2>
+              <h4 style={{ color: "#2196f3" }}>Proximamente</h4>
+            </Box>
           </AccordionSummary>
           <AccordionDetails></AccordionDetails>
         </Accordion>

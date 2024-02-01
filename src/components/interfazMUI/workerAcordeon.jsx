@@ -201,6 +201,7 @@ const WorkerAcordeon = ({ user }) => {
         >
           <AccordionSummary
             sx={{
+              display: "flex",
               backgroundColor: expanded === "panel3" ? "#d6d6d5" : "",
               borderRadius: "2px",
             }}
@@ -212,17 +213,26 @@ const WorkerAcordeon = ({ user }) => {
             aria-controls="panel3bh-content"
             id="panel3bh-header"
           >
-            <h2
+            <Box
               style={{
-                color: !darkMode.on
-                  ? darkMode.dark
-                  : expanded === "panel3"
-                  ? darkMode.dark
-                  : "white",
+                display: "flex",
+                alignItems: "center",
+                width: "100%",
               }}
             >
-              bla bla
-            </h2>
+              <h2
+                style={{
+                  color: !darkMode.on
+                    ? darkMode.dark
+                    : expanded === "panel3"
+                    ? darkMode.dark
+                    : "white",
+                }}
+              >
+                Quien viene?
+              </h2>
+              <h4 style={{ color: "#2196f3" }}>Proximamente</h4>
+            </Box>
           </AccordionSummary>
           <AccordionDetails>{/* dfsdfsdfffsdf */}</AccordionDetails>
         </Accordion>
@@ -250,17 +260,26 @@ const WorkerAcordeon = ({ user }) => {
             aria-controls="panel4bh-content"
             id="panel4bh-header"
           >
-            <h2
+            <Box
               style={{
-                color: !darkMode.on
-                  ? darkMode.dark
-                  : expanded === "panel4"
-                  ? darkMode.dark
-                  : "white",
+                display: "flex",
+                alignItems: "center",
+                width: "100%",
               }}
             >
-              Otro
-            </h2>
+              <h2
+                style={{
+                  color: !darkMode.on
+                    ? darkMode.dark
+                    : expanded === "panel4"
+                    ? darkMode.dark
+                    : "white",
+                }}
+              >
+                Turnos cancelados
+              </h2>
+              <h4 style={{ color: "#2196f3" }}>Proximamente</h4>
+            </Box>
           </AccordionSummary>
           <AccordionDetails>{/* dfsdfsdfffsdf */}</AccordionDetails>
         </Accordion>
