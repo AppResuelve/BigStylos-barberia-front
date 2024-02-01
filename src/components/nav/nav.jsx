@@ -7,6 +7,7 @@ import toHome2 from "../../assets/icons/homeWhite.png";
 import DarkMode from "../interfazUiverse.io/darkMode";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { Box } from "@mui/system";
+import "./nav.css";
 
 const Nav = ({ user }) => {
   const { darkMode } = useContext(DarkModeContext);
@@ -15,8 +16,8 @@ const Nav = ({ user }) => {
 
   return (
     <div
+      className="container-nav"
       style={{
-        height: "70px",
         display: "flex",
         justifyContent: "space-between",
         alignItems: " center",
@@ -31,33 +32,24 @@ const Nav = ({ user }) => {
         zIndex: "100",
       }}
     >
-      <div style={{ paddingLeft: "10px" }}>
+      <div>
         <NavLink to="/">
           <Box
+            className="box-container-img-home-nav"
             sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
               backgroundColor: darkMode.on ? darkMode.dark : "white",
-              borderRadius: "50px",
-              width: "50px",
-              height: "50px",
             }}
           >
             <img
+              className="img-home-nav"
               src={darkMode.on ? toHome2 : toHome}
               alt="inicio"
-              style={{
-                marginBottom: "4px",
-                width: "40px",
-              }}
             />
           </Box>
         </NavLink>
       </div>
       <div
         style={{
-          paddingRight: "10px",
           display: "flex",
           alignItems: "center",
         }}
