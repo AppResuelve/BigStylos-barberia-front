@@ -26,6 +26,7 @@ function App() {
   const [redirectToMyServices, setRedirectToMyServices] = useState(false);
   const [alertDelete, setAlertDelete] = useState(false);
   const [validateAlert, setValidateAlert] = useState(false);
+  const [validateAlertTurns, setValidateAlertTurns] = useState(false);
 
   const [showAlert, setShowAlert] = useState({});
   const [darkMode, setDarkMode] = useState({
@@ -133,6 +134,8 @@ function App() {
         setAlertDelete,
         validateAlert,
         setValidateAlert,
+        validateAlertTurns,
+        setValidateAlertTurns,
       }}
     >
       <div style={{ position: "relative" }}>
@@ -163,6 +166,7 @@ function App() {
             setRedirectToMyServices={setRedirectToMyServices}
             setAlertDelete={setAlertDelete}
             setValidateAlert={setValidateAlert}
+            setValidateAlertTurns={setValidateAlertTurns}
           />
         )}
       </div>

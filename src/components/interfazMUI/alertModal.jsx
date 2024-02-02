@@ -10,6 +10,7 @@ const AlertModal = ({
   setRedirectToMyServices,
   setAlertDelete,
   setValidateAlert,
+  setValidateAlertTurns,
 }) => {
   const [moveDown, setMoveDown] = useState(false);
   const { loginWithRedirect } = useAuth0();
@@ -19,13 +20,16 @@ const AlertModal = ({
     case "redirectToMyServices":
       handleActionProp = setRedirectToMyServices;
       break;
-    
+
     case "alertDelete":
       handleActionProp = setAlertDelete;
       break;
 
     case "validateAlert":
       handleActionProp = setValidateAlert;
+      break;
+    case "validateAlertTurns":
+      handleActionProp = setValidateAlertTurns;
       break;
 
     default:

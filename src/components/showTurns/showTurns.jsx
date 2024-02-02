@@ -35,9 +35,6 @@ const ShowTurns = ({
   const [selectedTime, setSelectedTime] = useState("");
   const [selectedWorker, setSelectedWorker] = useState("");
 
-  console.log(dayForTurns);
-  console.log(buttons)
-
   useEffect(() => {
     const fetchday = async () => {
       try {
@@ -58,7 +55,8 @@ const ShowTurns = ({
     var renderizate = [];
     if (dayForTurns.length > 0) {
       for (let i = 0; i < dayForTurns.length; i++) {
-        renderizate.push([dayForTurns[i].name]);
+        renderizate.push([dayForTurns[i].email]);
+        renderizate[i].push(dayForTurns[i].name);
         let contador = null;
         let init = 0;
         for (let k = 0; k < dayForTurns[i].time.length; k++) {
@@ -74,6 +72,7 @@ const ShowTurns = ({
           }
         }
       }
+      console.log(renderizate);
       setButtons(renderizate);
     }
   }, [dayForTurns]);
@@ -88,7 +87,9 @@ const ShowTurns = ({
   };
 
   const handleAsignTurn = () => {
-    const tardanza = dayForTurns.filter(
+    console.log(dayForTurns);
+    console.log(selectedWorker);
+    let tardanza = dayForTurns.filter(
       (element) => element.email == selectedWorker
     );
     setDetailTurn({
@@ -173,7 +174,7 @@ const ShowTurns = ({
                 }}
               >
                 {buttonGroup.map((button, buttonIndex) => {
-                  if (buttonIndex === 0) {
+                  if (buttonIndex === 1) {
                     return (
                       <Box
                         key={buttonIndex}
@@ -198,7 +199,7 @@ const ShowTurns = ({
                 })}
                 <Box className="box-to-scroll">
                   <ShowTimeCarousel
-                    buttonGroup={buttonGroup.slice(1)}
+                    buttonGroup={buttonGroup.slice(2)}
                     selectedTime={selectedTime}
                     setSelectedTime={setSelectedTime}
                     handleSelectTime={handleSelectTime}
