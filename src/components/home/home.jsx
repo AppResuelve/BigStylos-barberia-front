@@ -10,8 +10,7 @@ import whatsapp from "../../assets/icons/whatsapp.png";
 import "./home.css";
 
 const Home = ({ user, homeImages }) => {
-  const { darkMode } = useContext(DarkModeContext);
-  console.log(homeImages);
+  const { darkMode, setShowAlert } = useContext(DarkModeContext);
   return (
     <div
       className="container-home"
