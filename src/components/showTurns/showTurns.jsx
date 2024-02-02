@@ -35,7 +35,8 @@ const ShowTurns = ({
   const [selectedTime, setSelectedTime] = useState("");
   const [selectedWorker, setSelectedWorker] = useState("");
 
-  console.log(selectedTime, selectedWorker);
+  console.log(dayForTurns);
+  console.log(buttons)
 
   useEffect(() => {
     const fetchday = async () => {
@@ -57,7 +58,7 @@ const ShowTurns = ({
     var renderizate = [];
     if (dayForTurns.length > 0) {
       for (let i = 0; i < dayForTurns.length; i++) {
-        renderizate.push([dayForTurns[i].email]);
+        renderizate.push([dayForTurns[i].name]);
         let contador = null;
         let init = 0;
         for (let k = 0; k < dayForTurns[i].time.length; k++) {
@@ -187,9 +188,9 @@ const ShowTurns = ({
                         </h2>
                         ;
                         <img
-                          src={NoUser}
+                          src={ user.image ? user.image : NoUser}
                           alt="Profesional"
-                          style={{ width: "40px" }}
+                          style={{ width: "40px", borderRadius: "50px"}}
                         />
                       </Box>
                     );

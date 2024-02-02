@@ -27,8 +27,9 @@ const CustomCalendar = ({
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [exist50, setExist50] = useState(false);
   const [noWork, setNoWork] = useState({});
+  console.log(dayIsSelected)
+  console.log(days)
 
-  console.log(month1, month2)
 
   useEffect(() => {
     const fetchNoWorkDays = async () => {

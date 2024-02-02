@@ -121,7 +121,6 @@ const WorkerAcordeon = ({ user }) => {
   }, [refresh]);
 
   const handleChange = (panel) => (event, isExpanded) => {
-    console.log(panel, event, isExpanded, "esto hace el handlechange");
     setExpanded(isExpanded ? panel : false);
     setRedirectToMyServices(false);
   };
