@@ -28,7 +28,7 @@ function App() {
   const [validateAlert, setValidateAlert] = useState(false);
   const [validateAlertTurns, setValidateAlertTurns] = useState(false);
   const [refreshUser, setRefreshUser] = useState(false);
-
+  const [refreshPersonalization, setRefreshPersonalization] = useState(false);
   const [showAlert, setShowAlert] = useState({});
   const [darkMode, setDarkMode] = useState({
     dark: "#252627",
@@ -63,7 +63,7 @@ function App() {
     };
 
     fetchImages();
-  }, []);
+  }, [refreshPersonalization]);
 
   useEffect(() => {
     // Actualizar el estado del modo oscuro después de obtener el color
@@ -138,6 +138,8 @@ function App() {
         setValidateAlert,
         validateAlertTurns,
         setValidateAlertTurns,
+        refreshPersonalization,
+        setRefreshPersonalization,
       }}
     >
       <div style={{ position: "relative" }}>

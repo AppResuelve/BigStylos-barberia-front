@@ -16,7 +16,8 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const VITE_CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
 
 const Personalization = ({ services, refreshServices, setRefreshServices }) => {
-  const { darkMode } = useContext(DarkModeContext);
+  const { darkMode, refreshPersonalization, setRefreshPersonalization } =
+    useContext(DarkModeContext);
   const [imgServices, setImgServices] = useState([]); //images de los services basado en el estado services
   const [homeImages, setHomeImages] = useState([]); //images del home
   const [auxHomeImages, setAuxHomeImages] = useState([]); //images del home basado ene le estado homeImages
@@ -160,6 +161,7 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
       console.error("Error al actulizar las imgenes", error);
       alert("Error al actulizar las imgenes");
     }
+    setRefreshPersonalization(!refreshPersonalization);
     setRefreshServices(!refreshServices);
     setShowEdit(false);
   };
