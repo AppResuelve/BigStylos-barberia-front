@@ -5,7 +5,6 @@ import axios from "axios";
 import SelectedDay from "../selectedDay/selectedDay";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
-import AlertModal from "../interfazMUI/alertModal";
 import SliderModal from "../interfazMUI/sliderModal";
 import { Grid, Box, Button, LinearProgress } from "@mui/material";
 import "./createWorkDays.css";
@@ -17,7 +16,7 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const CreateWorkDays = ({ user, schedule, pendingServices }) => {
   //informacion del estado global
-  const { showAlert, setShowAlert, alertDelete, setAlertDelete } =
+  const {darkMode, setShowAlert, alertDelete, setAlertDelete } =
     useContext(DarkModeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [isOpen, setIsOpen] = useState(false);
@@ -370,6 +369,7 @@ const CreateWorkDays = ({ user, schedule, pendingServices }) => {
               {/* *********************************************** */}
               <Button
                 variant="contained"
+                color="error"
                 disabled={
                   dayIsSelected &&
                   Object.keys(dayIsSelected)[0] &&
