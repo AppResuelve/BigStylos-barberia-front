@@ -14,24 +14,21 @@ const MyServices = ({
   email,
   refresh,
   setRefresh,
-  setPendingServices,
   services,
-  setServices,
   serviceStatus,
   setServiceStatus,
   timeEdit,
   setTimeEdit,
   showEdit,
-  setShowEdit
+  setShowEdit,
 }) => {
   const { darkMode } = useContext(DarkModeContext);
-  
+
   const [loading, setLoading] = useState(true);
   const [inputService, setInputService] = useState("");
- 
+
   const [searchValue, setSearchValue] = useState("");
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-
 
   const [auxState, setAuxState] = useState([]);
 
@@ -39,13 +36,6 @@ const MyServices = ({
     0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210, 225, 240,
     255, 270,
   ];
-
-
-
-
-
-
-
 
   useEffect(() => {
     if (serviceStatus[auxState[0]] && auxState !== false) {
@@ -202,7 +192,9 @@ const MyServices = ({
                     />
 
                     <Box sx={{ display: "flex", alignItems: "center" }}>
-                      {timeEdit && Object.keys(timeEdit).length > 0 && timeEdit[element[0]].duration === null &&
+                      {timeEdit &&
+                        Object.keys(timeEdit).length > 0 &&
+                        timeEdit[element[0]].duration === null &&
                         serviceStatus && (
                           <h3 style={{ color: "red" }}>Pendiente</h3>
                         )}

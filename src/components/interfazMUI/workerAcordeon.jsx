@@ -13,15 +13,16 @@ import MyServices from "../myServices/myServices";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const WorkerAcordeon = ({ user }) => {
-  const { darkMode } = useContext(DarkModeContext);
+  const { darkMode, redirectToMyServices, setRedirectToMyServices } =
+    useContext(DarkModeContext);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(false);
   const [schedule, setSchedule] = useState({});
   const [workerData, setWorkerData] = useState({});
   const [refresh, setRefresh] = useState(false);
   const [pendingServices, setPendingServices] = useState(false);
-  const [redirectToMyServices, setRedirectToMyServices] = useState(false);
-
+  // const [redirectToMyServices, setRedirectToMyServices] = useState(false); estado global ahora
+  /* estados locales del componente myServices */
   const [services, setServices] = useState([]);
   const [serviceStatus, setServiceStatus] = useState({});
   const [timeEdit, setTimeEdit] = useState({});
@@ -120,7 +121,7 @@ const WorkerAcordeon = ({ user }) => {
   }, [refresh]);
 
   const handleChange = (panel) => (event, isExpanded) => {
-    console.log(panel, event, isExpanded, "esto hace el handlechange")
+    console.log(panel, event, isExpanded, "esto hace el handlechange");
     setExpanded(isExpanded ? panel : false);
     setRedirectToMyServices(false);
   };
@@ -180,7 +181,6 @@ const WorkerAcordeon = ({ user }) => {
                 user={workerData}
                 schedule={schedule}
                 pendingServices={pendingServices}
-                setRedirectToMyServices={setRedirectToMyServices}
               />
             )}
           </AccordionDetails>
@@ -241,15 +241,13 @@ const WorkerAcordeon = ({ user }) => {
             </Box>
           </AccordionSummary>
           <AccordionDetails>
-            {expanded === "panel2" || redirectToMyServices && (
+            {(expanded === "panel2" || redirectToMyServices) && (
               <MyServices
                 workerData={workerData.services}
                 email={workerData.email}
                 refresh={refresh}
                 setRefresh={setRefresh}
-                setPendingServices={setPendingServices}
                 services={services}
-                setServices={setServices}
                 serviceStatus={serviceStatus}
                 setServiceStatus={setServiceStatus}
                 timeEdit={timeEdit}

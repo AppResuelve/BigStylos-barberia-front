@@ -4,20 +4,17 @@ import axios from "axios";
 import formatHour from "../../functions/formatHour";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { Box, Button, MenuItem, Select } from "@mui/material";
-import AlertModal from "../interfazMUI/alertModal";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const OpeningAndClosing = ({
   schedule,
-  setSchedule,
   refresh,
   setRefresh,
   setRemaining,
 }) => {
-  const { darkMode } = useContext(DarkModeContext);
+  const { darkMode, setShowAlert } = useContext(DarkModeContext);
   const [showEdit, setShowEdit] = useState(false);
-  const [showAlert, setShowAlert] = useState({});
   const [timeEdit, setTimeEdit] = useState({});
   const [loading, setLoading] = useState(true);
 
@@ -222,7 +219,6 @@ const OpeningAndClosing = ({
           </Box>
         )}
       </Box>
-      <AlertModal showAlert={showAlert} setShowAlert={setShowAlert} />
     </div>
   );
 };

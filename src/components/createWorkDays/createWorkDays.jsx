@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import CustomCalendar from "../customCalendar/customCalendar";
 import axios from "axios";
 import SelectedDay from "../selectedDay/selectedDay";
@@ -14,29 +15,25 @@ import shouldDisableButton from "../../helpers/shouldDisableButton";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const CreateWorkDays = ({
-  user,
-  schedule,
-  pendingServices,
-  setRedirectToMyServices,
-}) => {
+const CreateWorkDays = ({ user, schedule, pendingServices }) => {
+  //informacion del estado global
+  const { showAlert, setShowAlert, alertDelete, setAlertDelete } =
+    useContext(DarkModeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
+  const [isOpen, setIsOpen] = useState(false);
   const [dayIsSelected, setDayIsSelected] = useState({});
   const [days, setDays] = useState({});
   const [firstMonth, setFirstMonth] = useState({});
   const [firstDay, setFirstDay] = useState({});
-  const [isOpen, setIsOpen] = useState(false);
   const [openClose, setOpenClose] = useState([]);
   const [showEdit, setShowEdit] = useState(false);
-  const [showAlert, setShowAlert] = useState({});
   const [submit, setSubmit] = useState(false);
   const [loading, setLoading] = useState(false);
   const [timeSelected, setTimeSelected] = useState([]); //estado de la rama fac, no se para que es aun.
   const [refreshDays, setRefreshDays] = useState(false);
-  const [alertDelete, setAlertDelete] = useState(false)
 
-/*   dayIsSelected && Object.keys(dayIsSelected).length > 0 && days && Object.keys(days) > 0 && console.log(days[Object.keys(dayIsSelected)[0]][Object.keys(Object.keys(dayIsSelected)[0])[0]])
- */
+  /*   dayIsSelected && Object.keys(dayIsSelected).length > 0 && days && Object.keys(days) > 0 && console.log(days[Object.keys(dayIsSelected)[0]][Object.keys(Object.keys(dayIsSelected)[0])[0]])
+   */
   useEffect(() => {
     const openValues = Object.values(schedule).map((item) => item.open);
     const closeValues = Object.values(schedule).map((item) => item.close);
@@ -45,12 +42,12 @@ const CreateWorkDays = ({
     setOpenClose([minOpen, maxClose]);
   }, []);
   /* console.log(dayIsSelected) */
-/*   dayIsSelected && Object.keys(dayIsSelected)[0] && console.log(Object.keys(dayIsSelected)[0])
+  /*   dayIsSelected && Object.keys(dayIsSelected)[0] && console.log(Object.keys(dayIsSelected)[0])
   dayIsSelected && Object.keys(dayIsSelected)[0] && console.log(Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0]) */
-  /* dayIsSelected && Object.keys(dayIsSelected)[0] && days && days[Object.keys(dayIsSelected)[0]] && days[Object.keys(dayIsSelected)[0]][Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0]] *//* console.log(Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0] */
+  /* dayIsSelected && Object.keys(dayIsSelected)[0] && days && days[Object.keys(dayIsSelected)[0]] && days[Object.keys(dayIsSelected)[0]][Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0]] */ /* console.log(Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0] */
   useEffect(() => {
-    if(alertDelete) {
-      handleDeleteSubmit()
+    if (alertDelete) {
+      handleDeleteSubmit();
     }
   }, [alertDelete]);
 
@@ -115,7 +112,7 @@ const CreateWorkDays = ({
         buttonClose: {
           text: "VOLVER",
         },
-        alertNumber: 2,
+        stateName: "redirectToMyServices",
       });
     } else {
       setShowEdit(true);
@@ -128,28 +125,7 @@ const CreateWorkDays = ({
   };
 
   const handleShowSlider = () => {
-    if (
-      days &&
-      days[firstMonth] &&
-      days[firstMonth][firstDay] &&
-      days[firstMonth][firstDay].turn == true
-    ) {
-      setShowAlert({
-        isOpen: true,
-        message: "Has seleccionado un día con reserva/s, deseas continuar?",
-        type: "error",
-        button1: {
-          text: "Continuar",
-          action: "handleActionProp",
-        },
-        buttonClose: {
-          text: "Volver",
-        },
-        alertNumber: 1,
-      });
-    } else {
-      setIsOpen(true);
-    }
+    setIsOpen(true);
   };
 
   const handleSubmit = async (time, values) => {
@@ -236,49 +212,53 @@ const CreateWorkDays = ({
         type: "warning",
         button1: {
           text: "",
-          action: "handleActionProp",
+          action: "",
         },
         buttonClose: {
           text: "Ok",
         },
-        alertNumber: 3,
       });
     }
   };
 
   const handleDeleteDay = () => {
-    if (days[Object.keys(dayIsSelected)[0]] && days[Object.keys(dayIsSelected)[0]][Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0]].turn == true) {
+    if (
+      days[Object.keys(dayIsSelected)[0]] &&
+      days[Object.keys(dayIsSelected)[0]][
+        Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0]
+      ].turn == true
+    ) {
       setShowAlert({
-      isOpen: true,
-      message:
-        "Desea borrar un dia con turno?",
-      type: "warning",
-      button1: {
-        text: "confirmar",
-        action: "handleActionProp",
-      },
-      buttonClose: {
-        text: "cancelar",
-      },
-      alertNumber: 4,
-    });
-  } else {
-    handleDeleteSubmit()
-  }
-  }
+        isOpen: true,
+        message: "Desea borrar un dia con turno?",
+        type: "warning",
+        button1: {
+          text: "confirmar",
+          action: "handleActionProp",
+        },
+        buttonClose: {
+          text: "cancelar",
+        },
+        stateName: "alertDelete",
+      });
+    } else {
+      handleDeleteSubmit();
+    }
+  };
   const handleDeleteSubmit = async () => {
-    try{
-      const response = await axios.post(
-        `${VITE_BACKEND_URL}/workdays/delete`,
-        { month: Object.keys(dayIsSelected)[0] , day: Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0], email: user.email }
-      );
-        setDayIsSelected({})
-        setAlertDelete(false)
-        setRefreshDays(true)
+    try {
+      const response = await axios.post(`${VITE_BACKEND_URL}/workdays/delete`, {
+        month: Object.keys(dayIsSelected)[0],
+        day: Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0],
+        email: user.email,
+      });
+      setDayIsSelected({});
+      setAlertDelete(false);
+      setRefreshDays(true);
     } catch (error) {
       console.error("Error al borrar el dia:", error);
     }
-  }
+  };
 
   return (
     <div style={{ cursor: loading ? "wait" : "" }}>
@@ -378,7 +358,15 @@ const CreateWorkDays = ({
               <Button
                 variant="contained"
                 disabled={
-                  dayIsSelected && Object.keys(dayIsSelected)[0] && days && days[Object.keys(dayIsSelected)[0]] && days[Object.keys(dayIsSelected)[0]][Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0]] ? false : true
+                  dayIsSelected &&
+                  Object.keys(dayIsSelected)[0] &&
+                  days &&
+                  days[Object.keys(dayIsSelected)[0]] &&
+                  days[Object.keys(dayIsSelected)[0]][
+                    Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0]
+                  ]
+                    ? false
+                    : true
                 }
                 onClick={handleDeleteDay}
               >
@@ -389,14 +377,16 @@ const CreateWorkDays = ({
               <Button
                 variant="contained"
                 disabled={
-                  (!dayIsSelected || Object.keys(dayIsSelected).length === 0) ||
+                  !dayIsSelected ||
+                  Object.keys(dayIsSelected).length === 0 ||
                   shouldDisableButton(dayIsSelected, days)
                 }
                 onClick={handleShowSlider}
               >
-                <h4 style={{ fontFamily: "Jost, sans-serif" }}>Asignar horarios</h4>
+                <h4 style={{ fontFamily: "Jost, sans-serif" }}>
+                  Asignar horarios
+                </h4>
               </Button>
-
             </Box>
           )}
           {/* sección del slider */}
@@ -411,30 +401,6 @@ const CreateWorkDays = ({
           setTimeSelected={setTimeSelected}
           handleSubmit={handleSubmit}
         />
-        {showAlert.alertNumber === 1 && (
-          <AlertModal
-            showAlert={showAlert}
-            setShowAlert={setShowAlert}
-            handleActionProp={setIsOpen}
-          />
-        )}
-        {showAlert.alertNumber === 2 && (
-          <AlertModal
-            showAlert={showAlert}
-            setShowAlert={setShowAlert}
-            handleActionProp={setRedirectToMyServices}
-          />
-        )}
-        {showAlert.alertNumber === 3 && (
-          <AlertModal showAlert={showAlert} setShowAlert={setShowAlert} />
-        )}
-        {showAlert.alertNumber === 4 && (
-          <AlertModal
-            showAlert={showAlert}
-            setShowAlert={setShowAlert}
-            handleActionProp={setAlertDelete}
-          />
-        )}
       </Grid>
     </div>
   );
