@@ -16,10 +16,12 @@ const CustomCalendarTurns = ({
   amountOfDays,
   serviceSelected,
   setIsOpen,
+  user,
 }) => {
-  const { darkMode } = useContext(DarkModeContext);
+  const { darkMode, setShowAlert } = useContext(DarkModeContext);
   const daysCalendarCustom = daysMonthCalendarCustom(amountOfDays, true);
-  const { currentMonth, nextMonth, currentYear, nextYear, month1, month2 } = daysCalendarCustom;
+  const { currentMonth, nextMonth, currentYear, nextYear, month1, month2 } =
+    daysCalendarCustom;
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
   const getDayPosition = getToday() - 1; // devuelve número que representa qué día de la semana es (lunes, martes, etc)
   const [schedule, setSchedule] = useState({});
@@ -39,18 +41,46 @@ const CustomCalendarTurns = ({
     };
     fetchData();
   }, []);
-
+  console.log(user);
   const handleDay = (day, month) => {
-    setIsOpen(true);
-    setDayIsSelected((prevState) => {
-      let newState = { ...prevState };
-      if (prevState[1] == month && prevState[0] == day) {
-        newState = [];
-      } else {
-        newState = [day, month];
-      }
-      return newState;
-    });
+    if (Object.keys(user).length > 0 && user.isDelete === false) {
+      setIsOpen(true);
+      setDayIsSelected((prevState) => {
+        let newState = { ...prevState };
+        if (prevState[1] == month && prevState[0] == day) {
+          newState = [];
+        } else {
+          newState = [day, month];
+        }
+        return newState;
+      });
+    } else if (user.isDelete === true) {
+      setShowAlert({
+        isOpen: true,
+        message: "Has sido inhabilitado por incumplir las normas",
+        type: "error",
+        button1: {
+          text: "",
+          action: "",
+        },
+        buttonClose: {
+          text: "aceptar",
+        },
+      });
+    } else {
+      setShowAlert({
+        isOpen: true,
+        message: "Debes estar loggeado para agendar un turno",
+        type: "warning",
+        button1: {
+          text: "login",
+          action: "login",
+        },
+        buttonClose: {
+          text: "cancelar",
+        },
+      });
+    }
   };
   return (
     <div className="div-container-calendar">
@@ -148,7 +178,8 @@ const CustomCalendarTurns = ({
               onClick={() => handleDay(day, nextMonth)}
               disabled={disable}
               style={{
-                gridColumnStart: month1.length < 1 && index === 0 ? getDayPosition : "auto",
+                gridColumnStart:
+                  month1.length < 1 && index === 0 ? getDayPosition : "auto",
                 backgroundColor:
                   dayIsSelected.length > 0 &&
                   dayIsSelected[0] == day &&
