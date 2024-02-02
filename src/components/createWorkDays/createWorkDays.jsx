@@ -35,6 +35,7 @@ const CreateWorkDays = ({
   const [refreshDays, setRefreshDays] = useState(false);
   const [alertDelete, setAlertDelete] = useState(false)
 
+
 /*   dayIsSelected && Object.keys(dayIsSelected).length > 0 && days && Object.keys(days) > 0 && console.log(days[Object.keys(dayIsSelected)[0]][Object.keys(Object.keys(dayIsSelected)[0])[0]])
  */
   useEffect(() => {
@@ -155,6 +156,7 @@ const CreateWorkDays = ({
   const handleSubmit = async (time, values) => {
     const currentMonth = getCurrentMonth();
     const currentMonth2 = currentMonth == 12 ? 1 : currentMonth + 1;
+    
     const resultDuration = durationMax(user.services, values);
     if (resultDuration) {
       const arrayServices = Object.keys(user.services);
@@ -175,27 +177,32 @@ const CreateWorkDays = ({
           };
         }
       });
-
+      
       let submitArray = [];
-      if (dayIsSelected[1]) {
-        const first = Object.keys(dayIsSelected[1]);
+      if (dayIsSelected[Object.keys(dayIsSelected)[0]]) {
+        const first = Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])
         first.forEach((element) => {
           submitArray.push({
             month: currentMonth,
             day: Number(element),
             email: user.email,
+            name: user.name,
+            image: user.image,
             time,
             services: objServices,
           });
         });
       }
-      if (dayIsSelected[2]) {
-        const second = Object.keys(dayIsSelected[2]);
+      if (dayIsSelected[Object.keys(dayIsSelected)[1]]) {
+        const second = Object.keys(dayIsSelected[Object.keys(dayIsSelected)[1]])
+        
         second.forEach((element) => {
           submitArray.push({
             month: currentMonth2,
             day: Number(element),
             email: user.email,
+            name: user.name,
+            image: user.image,
             time,
             services: objServices,
           });
@@ -208,13 +215,19 @@ const CreateWorkDays = ({
             submitArray[i]
           );
           const { data } = response;
+          console.log(data)
+          console.log(dayIsSelected, "este es el seteo del dayIsSelected")
           setDayIsSelected((prevState) => {
             let newState = { ...prevState };
+            console.log(newState, "entra al set")
+            console.log(newState[submitArray[i].month], "este es a lo que no accede")
             delete newState[submitArray[i].month][submitArray[i].day];
             if (Object.keys(newState[submitArray[i].month]).length === 0) {
               delete newState[submitArray[i].month];
             }
+            console.log(newState, "sale del set")
             return newState;
+            
           });
           console.log(
             `el dia ${submitArray[i].day}/${submitArray[i].month} se creo exitosamente`

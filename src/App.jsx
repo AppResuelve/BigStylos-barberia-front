@@ -79,6 +79,7 @@ function App() {
         sendUser = {
           name: user.name,
           email: user.email,
+          image: user.picture
         };
         try {
           const response = await axios.post(
