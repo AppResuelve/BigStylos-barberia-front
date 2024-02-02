@@ -41,9 +41,22 @@ const CustomCalendarTurns = ({
     };
     fetchData();
   }, []);
-  console.log(user);
+
   const handleDay = (day, month) => {
-    if (Object.keys(user).length > 0 && user.isDelete === false) {
+    if (Object.keys(user).length > 0 && user.phone === "") {
+      setShowAlert({
+        isOpen: true,
+        message: "Por unica vez debes ingresar tu numero de celular",
+        type: "info",
+        button1: {
+          text: "aceptar",
+          action: "submit",
+        },
+        buttonClose: {
+          text: "phone",
+        },
+      });
+    } else if (Object.keys(user).length > 0 && user.isDelete === false) {
       setIsOpen(true);
       setDayIsSelected((prevState) => {
         let newState = { ...prevState };
