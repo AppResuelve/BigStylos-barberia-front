@@ -210,6 +210,8 @@ const AlertModal = ({
                     fontFamily: "Jost, sans-serif",
                     fontWeight: "bold",
                     fontSize: "15px",
+                    height: "30px",
+                    borderRadius: "4px",
                     bgcolor: darkMode.on ? "white" : "#d6d6d5",
                   }}
                 />

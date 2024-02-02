@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import Slide from "@mui/material/Slide";
 import { Dialog, Grid, Slider, Box, Button, Backdrop } from "@mui/material";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
@@ -6,6 +7,7 @@ import time from "../../helpers/arrayTime";
 import HelpIcon from "@mui/icons-material/Help";
 import formatHour from "../../functions/formatHour";
 import durationMax from "../../helpers/durationMax";
+import { dark } from "@mui/material/styles/createPalette";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction={"up"} ref={ref} {...props} />;
@@ -14,13 +16,13 @@ const SliderModal = ({
   user,
   isOpen,
   setIsOpen,
-  darkMode,
   setSubmit,
   openClose,
   timeSelected,
   setTimeSelected,
   handleSubmit,
 }) => {
+  const { darkMode } = useContext(DarkModeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [timeResult, setTimeResult] = useState([]); // aca estaran los values convertidos a time de back
   const handleClose = () => setIsOpen(false);
@@ -106,11 +108,12 @@ const SliderModal = ({
         <Box /* container */
           sx={{
             height: sm ? "100vh" : "500px",
-            backgroundColor: darkMode ? "#28292c" : "white",
+            backgroundColor: darkMode.on ? darkMode.dark : "white",
             p: 3,
             display: "flex",
             flexDirection: sm ? "row" : "column",
             justifyContent: "space-between",
+            paddingBottom: sm ? "50px" : "",
           }}
         >
           {!sm && (
@@ -124,7 +127,9 @@ const SliderModal = ({
               }}
             >
               <Box sx={{ display: "flex", alignItems: "center" }}>
-                <h2>Selección de horarios por rango</h2>
+                <h2 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
+                  Selección de horarios por rango
+                </h2>
                 <Button>
                   <HelpIcon />
                 </Button>
@@ -170,20 +175,32 @@ const SliderModal = ({
                             style={{
                               fontSize: "11px",
                               borderRadius: "5px",
-                              padding: "3px",
-                              color: values.some(
-                                ([start, end]) =>
-                                  mark.value >= start && mark.value <= end
-                              )
-                                ? "white"
-                                : "",
+                              padding: "5px",
+                              color:
+                                values.some(
+                                  ([start, end]) =>
+                                    mark.value >= start && mark.value <= end
+                                ) && darkMode.on
+                                  ? darkMode.dark
+                                  : values.some(
+                                      ([start, end]) =>
+                                        mark.value >= start && mark.value <= end
+                                    ) && !darkMode.on
+                                  ? "white"
+                                  : darkMode.dark,
                               /* writingMode: sm ? "horizontal" : "vertical-lr", */
-                              backgroundColor: values.some(
-                                ([start, end]) =>
-                                  mark.value >= start && mark.value <= end
-                              )
-                                ? "#232bd16e"
-                                : "",
+                              backgroundColor:
+                                values.some(
+                                  ([start, end]) =>
+                                    mark.value >= start && mark.value <= end
+                                ) && darkMode.on
+                                  ? "#d6d6d5"
+                                  : values.some(
+                                      ([start, end]) =>
+                                        mark.value >= start && mark.value <= end
+                                    ) && !darkMode.on
+                                  ? darkMode.dark
+                                  : "",
                             }}
                           >
                             {formatHour(mark.label)}
@@ -211,7 +228,8 @@ const SliderModal = ({
               height: sm ? "100%" : "40%",
             }}
           >
-            {sm /* render de una copia del titulo para reoganizar mobile */ && (
+            {/* render de una copia del titulo para reoganizar mobile */}
+            {sm && (
               <Box
                 sx={{
                   display: "flex",
@@ -221,7 +239,13 @@ const SliderModal = ({
                   borderBottom: "2px solid #2196f3",
                 }}
               >
-                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    color: darkMode.on ? "white" : darkMode.dark,
+                  }}
+                >
                   <h2>Selecciona el horario</h2>
                   <Button>
                     <HelpIcon />
@@ -229,6 +253,7 @@ const SliderModal = ({
                 </Box>
               </Box>
             )}
+            {/* fin de render de una copia del titulo para reoganizar mobile */}
             <Grid
               container
               gap={sm ? 5 : 0}
@@ -248,15 +273,16 @@ const SliderModal = ({
                   borderRadius: "5px",
                   border: "2px solid #2196f3",
                   padding: "10px",
+                  color: darkMode.on ? "white" : darkMode.dark,
                 }}
               >
                 <Box>
-                  <h2>{formatHour(values[0][0])} hs</h2>
+                  <h2>{formatHour(values[0][0])}</h2>
                 </Box>
                 <h2>a</h2>
 
                 <Box>
-                  <h2>{formatHour(values[0][1])} hs</h2>
+                  <h2>{formatHour(values[0][1])}</h2>
                 </Box>
               </Grid>
               {/*---------------------  mostrar condicionalmente el segundo grid si hay 2 valores para mostrar -----------*/}
@@ -272,14 +298,15 @@ const SliderModal = ({
                   borderRadius: "5px",
                   border: "2px solid #2196f3",
                   padding: "10px",
+                  color: darkMode.on ? "white" : darkMode.dark,
                 }}
               >
                 <Box>
-                  <h2>{formatHour(values[1][0])} hs</h2>
+                  <h2>{formatHour(values[1][0])}</h2>
                 </Box>
                 <h2>a</h2>
                 <Box>
-                  <h2>{formatHour(values[1][1])} hs</h2>
+                  <h2>{formatHour(values[1][1])}</h2>
                 </Box>
               </Grid>
             </Grid>
@@ -288,7 +315,7 @@ const SliderModal = ({
                 display: "flex",
                 flexDirection: sm ? "column" : "row-reverse",
                 width: sm ? "80%" : "100%",
-                justifyContent: "space-between",
+                justifyContent: sm ? "center" : "space-between",
               }}
             >
               <Button
@@ -306,10 +333,15 @@ const SliderModal = ({
               </Button>
               <Button
                 variant="outlined"
-                sx={{
+                style={{
                   fontFamily: "Jost, sans-serif",
                   fontWeight: "bold",
                   marginBottom: sm ? "25px" : "",
+                  borderRadius: "50px",
+                  border: "2px solid ",
+                  display: "flex",
+                  alignSelf: sm ? "center" : "",
+                  width: sm ? "70%" : "",
                 }}
                 onClick={() => {
                   handleClose();
