@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { DarkModeContext } from "../../App";
 import { NavLink } from "react-router-dom";
-import { Box, Button, Skeleton } from "@mui/material";
+import { Box, Button, CircularProgress, Skeleton } from "@mui/material";
 import defaultImg from "../../assets/icons/no-image-logotipe.png";
 import defaultImgLight from "../../assets/icons/no-image-logotipe-light.png";
 import instagram from "../../assets/icons/instagram.png";
@@ -11,7 +11,7 @@ import "./home.css";
 
 const Home = ({ user, homeImages }) => {
   const { darkMode } = useContext(DarkModeContext);
-
+  console.log(homeImages);
   return (
     <div
       className="container-home"
@@ -25,7 +25,19 @@ const Home = ({ user, homeImages }) => {
       }}
     >
       <Box>
-        {homeImages[0] != "" ? (
+        {homeImages === 1 ? (
+          <Box className="img-logotipo-home">
+            <Skeleton
+              style={{
+                width: "100%",
+                height: "100%",
+                marginTop: "20px",
+                boxShadow: "0px 43px 51px -23px rgba(0,0,0,0.57)", // Propiedades de la sombra
+              }}
+              variant="circular"
+            />
+          </Box>
+        ) : (
           <img
             className="img-logotipo-home"
             src={
@@ -43,19 +55,6 @@ const Home = ({ user, homeImages }) => {
               boxShadow: "0px 43px 51px -23px rgba(0,0,0,0.57)", // Propiedades de la sombra
             }}
           />
-        ) : (
-          <Box>
-            <Skeleton
-              style={{
-                position: "relative",
-                marginTop: "20px",
-                boxShadow: "0px 43px 51px -23px rgba(0,0,0,0.57)", // Propiedades de la sombra
-              }}
-              variant="circular"
-              width={400}
-              height={400}
-            />
-          </Box>
         )}
       </Box>
       <Box

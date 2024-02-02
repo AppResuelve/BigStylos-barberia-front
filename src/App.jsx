@@ -9,30 +9,51 @@ import "./App.css";
 import Admin from "./components/admin/admin";
 import Worker from "./components/worker/worker";
 import NotFound from "./components/pageNotFound/pageNotFound";
+import AlertModal from "./components/interfazMUI/alertModal";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const DarkModeContext = createContext();
 
 function App() {
-  const [userData, setUserData] = useState(1);
-  const [userAuth, setUserAuth] = useState(false);
   const { user } = useAuth0();
   const location = useLocation();
+  const [userData, setUserData] = useState(1);
+  const [userAuth, setUserAuth] = useState(false);
   const [colors, setColors] = useState("#000000");
+  const [homeImages, setHomeImages] = useState(1); //images del home
+  /* estados locales para el contexto global */
+  const [redirectToMyServices, setRedirectToMyServices] = useState(false);
+  const [alertDelete, setAlertDelete] = useState(false);
+  const [validateAlert, setValidateAlert] = useState(false);
+  const [validateAlertTurns, setValidateAlertTurns] = useState(false);
+
+  const [showAlert, setShowAlert] = useState({});
   const [darkMode, setDarkMode] = useState({
     dark: "#252627",
     light: colors,
     on: false,
   });
-  const [homeImages, setHomeImages] = useState([]); //images del home
+
+  /* función para el dark mode */
+  const toggleDarkMode = () => {
+    setDarkMode((prevMode) => ({
+      ...prevMode,
+      on: !prevMode.on,
+    }));
+  };
 
   useEffect(() => {
     const fetchImages = async () => {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/personalization`);
         const { data } = response;
-        setHomeImages(data.allImages);
+        setTimeout(() => {
+        }, 1000);
+        setTimeout(() => {
+     setHomeImages(data.allImages);
+        }, 1000);
+        
         setColors(data.allColors);
         //  setLoading(false);
       } catch (error) {
@@ -43,13 +64,6 @@ function App() {
 
     fetchImages();
   }, []);
-
-  const toggleDarkMode = () => {
-    setDarkMode((prevMode) => ({
-      ...prevMode,
-      on: !prevMode.on,
-    }));
-  };
 
   useEffect(() => {
     // Actualizar el estado del modo oscuro después de obtener el color
@@ -79,6 +93,7 @@ function App() {
         sendUser = {
           name: user.name,
           email: user.email,
+          image: user.picture
         };
         try {
           const response = await axios.post(
@@ -107,8 +122,23 @@ function App() {
   }, [darkMode]);
 
   return (
-    <DarkModeContext.Provider value={{ darkMode, toggleDarkMode }}>
-      <div>
+    <DarkModeContext.Provider
+      value={{
+        darkMode,
+        toggleDarkMode,
+        showAlert,
+        setShowAlert,
+        redirectToMyServices,
+        setRedirectToMyServices,
+        alertDelete,
+        setAlertDelete,
+        validateAlert,
+        setValidateAlert,
+        validateAlertTurns,
+        setValidateAlertTurns,
+      }}
+    >
+      <div style={{ position: "relative" }}>
         {location.pathname !== "/requestDenied401" && <Nav user={userData} />}
         <Routes>
           <Route
@@ -129,6 +159,16 @@ function App() {
             element={<NotFound user={userData} />}
           />
         </Routes>
+        {Object.keys(showAlert).length > 0 && (
+          <AlertModal
+            showAlert={showAlert}
+            setShowAlert={setShowAlert}
+            setRedirectToMyServices={setRedirectToMyServices}
+            setAlertDelete={setAlertDelete}
+            setValidateAlert={setValidateAlert}
+            setValidateAlertTurns={setValidateAlertTurns}
+          />
+        )}
       </div>
     </DarkModeContext.Provider>
   );

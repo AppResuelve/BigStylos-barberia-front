@@ -13,23 +13,87 @@ import MyServices from "../myServices/myServices";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const WorkerAcordeon = ({ user }) => {
-  const { darkMode } = useContext(DarkModeContext);
+  const { darkMode, redirectToMyServices, setRedirectToMyServices } =
+    useContext(DarkModeContext);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(false);
   const [schedule, setSchedule] = useState({});
   const [workerData, setWorkerData] = useState({});
   const [refresh, setRefresh] = useState(false);
   const [pendingServices, setPendingServices] = useState(false);
-  const [redirectToMyServices, setRedirectToMyServices] = useState(false);
+  // const [redirectToMyServices, setRedirectToMyServices] = useState(false); estado global ahora
+  /* estados locales del componente myServices */
+  const [services, setServices] = useState([]);
+  const [serviceStatus, setServiceStatus] = useState({});
+  const [timeEdit, setTimeEdit] = useState({});
+  const [showEdit, setShowEdit] = useState(false);
 
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
+
+  useEffect(() => {
+    setTimeEdit(workerData.services);
+  }, [workerData]);
+
+  useEffect(() => {
+    if (timeEdit && Object.keys(timeEdit).length > 0) {
+      if (services && services.length > 0) {
+        let aux = false;
+        for (const prop in timeEdit) {
+          if (services.some((serviceArr) => serviceArr[0] === prop)) {
+            if (timeEdit[prop].duration === null) {
+              aux = true;
+              setPendingServices(aux);
+              return;
+            } else {
+              aux = false;
+            }
+            setPendingServices(aux);
+          }
+        }
+      }
+    }
+  }, [timeEdit, services]);
+
+  useEffect(() => {
+    let objNewServicies = {};
+    if (services && services.length > 0) {
+      for (const prop in workerData.services) {
+        if (services.some((serviceArr) => serviceArr[0] === prop)) {
+          if (workerData.services[prop].duration === null) {
+            objNewServicies[prop] = true;
+          } else if (workerData.services[prop].duration === 0) {
+            objNewServicies[prop] = false;
+          } else {
+            objNewServicies[prop] = true;
+          }
+        }
+      }
+    }
+    if (!showEdit) {
+      setServiceStatus(objNewServicies);
+    }
+  }, [services, workerData, showEdit]);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await axios.get(`${VITE_BACKEND_URL}/services/`);
+        const { data } = response;
+        setServices(data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error al obtener los servicios:", error);
+        alert("Error al obtener los servicios");
+      }
+    };
+    fetchServices();
+  }, []);
 
   useEffect(() => {
     const fetchSchedule = async () => {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/schedule`);
         const { data } = response;
-        console.log(data);
         setSchedule(data.businessSchedule);
       } catch (error) {
         console.error("Error al obtener los horarios", error);
@@ -116,7 +180,6 @@ const WorkerAcordeon = ({ user }) => {
                 user={workerData}
                 schedule={schedule}
                 pendingServices={pendingServices}
-                setRedirectToMyServices={setRedirectToMyServices}
               />
             )}
           </AccordionDetails>
@@ -177,13 +240,19 @@ const WorkerAcordeon = ({ user }) => {
             </Box>
           </AccordionSummary>
           <AccordionDetails>
-            {expanded === "panel2" && (
+            {(expanded === "panel2" || redirectToMyServices) && (
               <MyServices
                 workerData={workerData.services}
                 email={workerData.email}
                 refresh={refresh}
                 setRefresh={setRefresh}
-                setPendingServices={setPendingServices}
+                services={services}
+                serviceStatus={serviceStatus}
+                setServiceStatus={setServiceStatus}
+                timeEdit={timeEdit}
+                setTimeEdit={setTimeEdit}
+                showEdit={showEdit}
+                setShowEdit={setShowEdit}
               />
             )}
           </AccordionDetails>
@@ -201,6 +270,7 @@ const WorkerAcordeon = ({ user }) => {
         >
           <AccordionSummary
             sx={{
+              display: "flex",
               backgroundColor: expanded === "panel3" ? "#d6d6d5" : "",
               borderRadius: "2px",
             }}
@@ -212,17 +282,26 @@ const WorkerAcordeon = ({ user }) => {
             aria-controls="panel3bh-content"
             id="panel3bh-header"
           >
-            <h2
+            <Box
               style={{
-                color: !darkMode.on
-                  ? darkMode.dark
-                  : expanded === "panel3"
-                  ? darkMode.dark
-                  : "white",
+                display: "flex",
+                alignItems: "center",
+                width: "100%",
               }}
             >
-              bla bla
-            </h2>
+              <h2
+                style={{
+                  color: !darkMode.on
+                    ? darkMode.dark
+                    : expanded === "panel3"
+                    ? darkMode.dark
+                    : "white",
+                }}
+              >
+                Quien viene?
+              </h2>
+              <h4 style={{ color: "#2196f3" }}>Proximamente</h4>
+            </Box>
           </AccordionSummary>
           <AccordionDetails>{/* dfsdfsdfffsdf */}</AccordionDetails>
         </Accordion>
@@ -250,17 +329,26 @@ const WorkerAcordeon = ({ user }) => {
             aria-controls="panel4bh-content"
             id="panel4bh-header"
           >
-            <h2
+            <Box
               style={{
-                color: !darkMode.on
-                  ? darkMode.dark
-                  : expanded === "panel4"
-                  ? darkMode.dark
-                  : "white",
+                display: "flex",
+                alignItems: "center",
+                width: "100%",
               }}
             >
-              Otro
-            </h2>
+              <h2
+                style={{
+                  color: !darkMode.on
+                    ? darkMode.dark
+                    : expanded === "panel4"
+                    ? darkMode.dark
+                    : "white",
+                }}
+              >
+                Turnos cancelados
+              </h2>
+              <h4 style={{ color: "#2196f3" }}>Proximamente</h4>
+            </Box>
           </AccordionSummary>
           <AccordionDetails>{/* dfsdfsdfffsdf */}</AccordionDetails>
         </Accordion>

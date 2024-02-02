@@ -13,7 +13,8 @@ import formatHour from "../../functions/formatHour";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Turns = ({ user }) => {
-  const { darkMode } = useContext(DarkModeContext);
+  const { darkMode, setShowAlert, validateAlertTurns, setValidateAlertTurns } =
+    useContext(DarkModeContext);
   const [days, setDays] = useState([]);
   const [services, setServices] = useState([]);
   const [dayIsSelected, setDayIsSelected] = useState([]);
@@ -22,16 +23,14 @@ const Turns = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImg, setSelectedImg] = useState(false);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-  const [showAlert, setShowAlert] = useState({});
   const [detailTurn, setDetailTurn] = useState({});
-  const [validateAlert, setValidateAlert] = useState(false);
 
   useEffect(() => {
-    if (validateAlert === true) {
+    if (validateAlertTurns === true) {
       submit();
-      setValidateAlert(false);
+      setValidateAlertTurns(false);
     }
-  }, [validateAlert]);
+  }, [validateAlertTurns]);
 
   const submit = async () => {
     const {
@@ -64,19 +63,20 @@ const Turns = ({ user }) => {
       // Guardar en el localStorage
       localStorage.setItem("turnServices", JSON.stringify(existingTurns));
       setDetailTurn({});
-      setShowAlert({
-        isOpen: true,
-        message: `Su turno ha sido agendado exitosamente!`,
-        type: "success",
-        button1: {
-          text: "",
-          action: "",
-        },
-        buttonClose: {
-          text: "aceptar",
-        },
-        alertNumber: 2,
-      });
+      setTimeout(() => {
+        setShowAlert({
+          isOpen: true,
+          message: `Su turno ha sido agendado exitosamente!`,
+          type: "success",
+          button1: {
+            text: "",
+            action: "",
+          },
+          buttonClose: {
+            text: "aceptar",
+          },
+        });
+      }, 800);
     } catch (error) {
       console.error("Error al tomar turno submit:", error);
     }
@@ -122,7 +122,7 @@ const Turns = ({ user }) => {
     setServiceSelected(element[0]);
     setSelectedImg(element[1]);
   };
-  console.log(serviceSelected);
+
   useEffect(() => {
     if (Object.keys(detailTurn).length > 0) {
       setShowAlert({
@@ -140,7 +140,7 @@ const Turns = ({ user }) => {
         buttonClose: {
           text: "cancelar",
         },
-        alertNumber: 1,
+        stateName: "validateAlertTurns",
       });
     }
   }, [detailTurn]);
@@ -296,16 +296,6 @@ const Turns = ({ user }) => {
           />
         )}
       </div>
-      {showAlert.alertNumber === 1 && (
-        <AlertModal
-          showAlert={showAlert}
-          setShowAlert={setShowAlert}
-          handleActionProp={setValidateAlert}
-        />
-      )}
-      {showAlert.alertNumber === 2 && (
-        <AlertModal showAlert={showAlert} setShowAlert={setShowAlert} />
-      )}
     </div>
   );
 };

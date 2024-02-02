@@ -34,8 +34,7 @@ const ShowTurns = ({
   const [buttons, setButtons] = useState([]);
   const [selectedTime, setSelectedTime] = useState("");
   const [selectedWorker, setSelectedWorker] = useState("");
-
-  console.log(selectedTime, selectedWorker);
+  const [selectedWorkerName, setSelectedWorkerName] = useState("");
 
   useEffect(() => {
     const fetchday = async () => {
@@ -58,6 +57,7 @@ const ShowTurns = ({
     if (dayForTurns.length > 0) {
       for (let i = 0; i < dayForTurns.length; i++) {
         renderizate.push([dayForTurns[i].email]);
+        renderizate[i].push(dayForTurns[i].name);
         let contador = null;
         let init = 0;
         for (let k = 0; k < dayForTurns[i].time.length; k++) {
@@ -73,21 +73,25 @@ const ShowTurns = ({
           }
         }
       }
+      console.log(renderizate);
       setButtons(renderizate);
     }
   }, [dayForTurns]);
 
-  const handleSelectTime = (workerEmail, selectTime) => {
+  const handleSelectTime = (workerEmail, workerName, selectTime) => {
     const tardanza = dayForTurns.filter(
       (element) => element.email == workerEmail
     );
-   
+
     // setSelectedTime(selectTime);
     setSelectedWorker(workerEmail);
+    setSelectedWorkerName(workerName);
   };
 
   const handleAsignTurn = () => {
-    const tardanza = dayForTurns.filter(
+    console.log(dayForTurns);
+    console.log(selectedWorker);
+    let tardanza = dayForTurns.filter(
       (element) => element.email == selectedWorker
     );
     setDetailTurn({
@@ -172,7 +176,7 @@ const ShowTurns = ({
                 }}
               >
                 {buttonGroup.map((button, buttonIndex) => {
-                  if (buttonIndex === 0) {
+                  if (buttonIndex === 1) {
                     return (
                       <Box
                         key={buttonIndex}
@@ -187,9 +191,9 @@ const ShowTurns = ({
                         </h2>
                         ;
                         <img
-                          src={NoUser}
+                          src={user.image ? user.image : NoUser}
                           alt="Profesional"
-                          style={{ width: "40px" }}
+                          style={{ width: "40px", borderRadius: "50px" }}
                         />
                       </Box>
                     );
@@ -197,11 +201,12 @@ const ShowTurns = ({
                 })}
                 <Box className="box-to-scroll">
                   <ShowTimeCarousel
-                    buttonGroup={buttonGroup.slice(1)}
+                    buttonGroup={buttonGroup.slice(2)}
                     selectedTime={selectedTime}
                     setSelectedTime={setSelectedTime}
                     handleSelectTime={handleSelectTime}
                     button0={buttonGroup[0]}
+                    button1={buttonGroup[1]}
                   />
                 </Box>
               </Box>
@@ -233,7 +238,7 @@ const ShowTurns = ({
               >
                 <Box>
                   <h2>Profesional:</h2>
-                  <h2>{selectedWorker}</h2>
+                  <h2>{selectedWorkerName}</h2>
                 </Box>
                 <Button
                   onClick={() => {

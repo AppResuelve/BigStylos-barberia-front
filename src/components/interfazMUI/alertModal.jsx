@@ -4,9 +4,37 @@ import Alert from "@mui/material/Alert";
 import { useAuth0 } from "@auth0/auth0-react";
 import "./alertModal.css";
 
-const AlertModal = ({ showAlert, setShowAlert, handleActionProp }) => {
+const AlertModal = ({
+  showAlert,
+  setShowAlert,
+  setRedirectToMyServices,
+  setAlertDelete,
+  setValidateAlert,
+  setValidateAlertTurns,
+}) => {
   const [moveDown, setMoveDown] = useState(false);
   const { loginWithRedirect } = useAuth0();
+  let handleActionProp;
+
+  switch (showAlert.stateName) {
+    case "redirectToMyServices":
+      handleActionProp = setRedirectToMyServices;
+      break;
+
+    case "alertDelete":
+      handleActionProp = setAlertDelete;
+      break;
+
+    case "validateAlert":
+      handleActionProp = setValidateAlert;
+      break;
+    case "validateAlertTurns":
+      handleActionProp = setValidateAlertTurns;
+      break;
+
+    default:
+    // Código a ejecutar si ninguno de los casos anteriores se cumple
+  }
 
   useEffect(() => {
     if (moveDown) {
@@ -45,7 +73,7 @@ const AlertModal = ({ showAlert, setShowAlert, handleActionProp }) => {
         setMoveDown(true);
       };
     }
-}
+  }
 
   if (showAlert.type === "warning") {
     type = ["warning", "#ffe1ab", "#db9718"];
@@ -56,7 +84,7 @@ const AlertModal = ({ showAlert, setShowAlert, handleActionProp }) => {
   }
 
   return (
-    <>
+    <div style={{ display: "flex", justifyContent: "center" }}>
       {Object.keys(showAlert).length > 0 && (
         <Alert
           className={`alert-container ${moveDown ? "exit" : ""}`}
@@ -70,12 +98,18 @@ const AlertModal = ({ showAlert, setShowAlert, handleActionProp }) => {
           }}
         >
           <h2 style={{ color: type[2] }}>{showAlert.message}</h2>
-          <Box sx={{ display: "flex", justifyContent: "space-around", marginTop:"12px" }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-around",
+              marginTop: "12px",
+            }}
+          >
             {showAlert.buttonClose.text !== "" && (
               <Button
                 variant="outlined"
                 onClick={() => setMoveDown(true)}
-                style={{ fontFamily: "Jost, sans-serif", fontWeight:"bold" }}
+                style={{ fontFamily: "Jost, sans-serif", fontWeight: "bold" }}
               >
                 {showAlert.buttonClose.text}
               </Button>
@@ -84,7 +118,7 @@ const AlertModal = ({ showAlert, setShowAlert, handleActionProp }) => {
               <Button
                 variant="contained"
                 onClick={() => action()}
-                style={{ fontFamily: "Jost, sans-serif", fontWeight:"bold" }}
+                style={{ fontFamily: "Jost, sans-serif", fontWeight: "bold" }}
               >
                 {showAlert.button1.text}
               </Button>
@@ -92,7 +126,7 @@ const AlertModal = ({ showAlert, setShowAlert, handleActionProp }) => {
           </Box>
         </Alert>
       )}
-    </>
+    </div>
   );
 };
 
