@@ -34,6 +34,7 @@ const ShowTurns = ({
   const [buttons, setButtons] = useState([]);
   const [selectedTime, setSelectedTime] = useState("");
   const [selectedWorker, setSelectedWorker] = useState("");
+  const [selectedWorkerName, setSelectedWorkerName] = useState("");
 
   useEffect(() => {
     const fetchday = async () => {
@@ -77,13 +78,14 @@ const ShowTurns = ({
     }
   }, [dayForTurns]);
 
-  const handleSelectTime = (workerEmail, selectTime) => {
+  const handleSelectTime = (workerEmail, workerName, selectTime) => {
     const tardanza = dayForTurns.filter(
       (element) => element.email == workerEmail
     );
-   
+
     // setSelectedTime(selectTime);
     setSelectedWorker(workerEmail);
+    setSelectedWorkerName(workerName);
   };
 
   const handleAsignTurn = () => {
@@ -189,9 +191,9 @@ const ShowTurns = ({
                         </h2>
                         ;
                         <img
-                          src={ user.image ? user.image : NoUser}
+                          src={user.image ? user.image : NoUser}
                           alt="Profesional"
-                          style={{ width: "40px", borderRadius: "50px"}}
+                          style={{ width: "40px", borderRadius: "50px" }}
                         />
                       </Box>
                     );
@@ -204,6 +206,7 @@ const ShowTurns = ({
                     setSelectedTime={setSelectedTime}
                     handleSelectTime={handleSelectTime}
                     button0={buttonGroup[0]}
+                    button1={buttonGroup[1]}
                   />
                 </Box>
               </Box>
@@ -235,7 +238,7 @@ const ShowTurns = ({
               >
                 <Box>
                   <h2>Profesional:</h2>
-                  <h2>{selectedWorker}</h2>
+                  <h2>{selectedWorkerName}</h2>
                 </Box>
                 <Button
                   onClick={() => {

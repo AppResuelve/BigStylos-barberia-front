@@ -13,6 +13,7 @@ const ShowTimeCarousel = ({
   setSelectedTime,
   handleSelectTime,
   button0,
+  button1,
 }) => {
   const [activeStep, setActiveStep] = useState(0);
   const theme = useTheme();
@@ -50,7 +51,7 @@ const ShowTimeCarousel = ({
             {subArray.map((step, subIndex) => (
               <Button
                 onClick={() => {
-                  handleSelectTime(button0, step);
+                  handleSelectTime(button0, button1, step);
                   setSelectedTime(step);
                 }}
                 key={subIndex}
@@ -58,7 +59,7 @@ const ShowTimeCarousel = ({
                 style={{
                   backgroundColor: selectedTime === step ? "black" : "",
                   fontFamily: "Jost, sans-serif",
-                  fontWeight:"bold",
+                  fontWeight: "bold",
                   marginRight: "10px",
                   transition: ".3s",
                 }}
