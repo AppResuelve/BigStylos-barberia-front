@@ -30,7 +30,7 @@ const ClientNestedList = ({ userData }) => {
     telefono: false,
     turnos: false,
   });
-
+console.log(error);
   const handleSectionClick = (section) => {
     setOpenSection((prevSections) => {
       // Si la sección clicada es "miperfil", establece todas las demás secciones en false
@@ -111,7 +111,7 @@ const ClientNestedList = ({ userData }) => {
     } else {
       try {
         if (newPhoneNumber !== "") {
-          // Verifica si el nuevo servicio no está vacío
+          // Verifica si el nuevo telefono no está vacío
           await axios.put(`${VITE_BACKEND_URL}/users/update`, {
             email: clientData.email,
             newPhoneNumber,
@@ -121,7 +121,6 @@ const ClientNestedList = ({ userData }) => {
             type: "success",
           });
           setOpen(true);
-          // Refresca la lista de servicios después de agregar uno nuevo
           setRefresh(!refresh);
         }
       } catch (error) {

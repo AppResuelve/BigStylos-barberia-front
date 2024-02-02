@@ -1,15 +1,15 @@
 import { useEffect, useState, createContext } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-import axios from "axios";
 import Nav from "./components/nav/nav";
 import Home from "./components/home/home";
 import Turns from "./components/turns/turns";
-import "./App.css";
 import Admin from "./components/admin/admin";
 import Worker from "./components/worker/worker";
 import NotFound from "./components/pageNotFound/pageNotFound";
 import AlertModal from "./components/interfazMUI/alertModal";
+import axios from "axios";
+import "./App.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -27,6 +27,7 @@ function App() {
   const [alertDelete, setAlertDelete] = useState(false);
   const [validateAlert, setValidateAlert] = useState(false);
   const [validateAlertTurns, setValidateAlertTurns] = useState(false);
+  const [refreshUser, setRefreshUser] = useState(false);
 
   const [showAlert, setShowAlert] = useState({});
   const [darkMode, setDarkMode] = useState({
@@ -48,12 +49,11 @@ function App() {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/personalization`);
         const { data } = response;
+        setTimeout(() => {}, 1000);
         setTimeout(() => {
+          setHomeImages(data.allImages);
         }, 1000);
-        setTimeout(() => {
-     setHomeImages(data.allImages);
-        }, 1000);
-        
+
         setColors(data.allColors);
         //  setLoading(false);
       } catch (error) {
@@ -88,12 +88,13 @@ function App() {
 
   useEffect(() => {
     const postUser = async () => {
+      console.log("pase por el refresh con este user,", user);
       let sendUser;
       if (user) {
         sendUser = {
           name: user.name,
           email: user.email,
-          image: user.picture
+          image: user.picture,
         };
         try {
           const response = await axios.post(
@@ -101,13 +102,14 @@ function App() {
             sendUser
           );
           setUserData(response.data);
+          setRefreshUser(false);
         } catch (error) {
           console.log(error);
         }
       }
     };
     postUser(user);
-  }, [user]);
+  }, [user, refreshUser]);
 
   // Lee la configuración del modo desde localStorage al cargar la página
   useEffect(() => {
@@ -161,12 +163,14 @@ function App() {
         </Routes>
         {Object.keys(showAlert).length > 0 && (
           <AlertModal
+            userData={userData}
             showAlert={showAlert}
             setShowAlert={setShowAlert}
             setRedirectToMyServices={setRedirectToMyServices}
             setAlertDelete={setAlertDelete}
             setValidateAlert={setValidateAlert}
             setValidateAlertTurns={setValidateAlertTurns}
+            setRefreshUser={setRefreshUser}
           />
         )}
       </div>

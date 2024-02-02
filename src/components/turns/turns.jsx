@@ -8,13 +8,14 @@ import { Box, Button } from "@mui/material";
 import calendar from "../../assets/images/calendar2.png";
 import defaultServiceImg from "../../assets/images/default-img-services.jpg";
 import "./turns.css";
-import AlertModal from "../interfazMUI/alertModal";
 import formatHour from "../../functions/formatHour";
+
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Turns = ({ user }) => {
   const { darkMode, setShowAlert, validateAlertTurns, setValidateAlertTurns } =
     useContext(DarkModeContext);
+
   const [days, setDays] = useState([]);
   const [services, setServices] = useState([]);
   const [dayIsSelected, setDayIsSelected] = useState([]);
@@ -24,6 +25,8 @@ const Turns = ({ user }) => {
   const [selectedImg, setSelectedImg] = useState(false);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [detailTurn, setDetailTurn] = useState({});
+  // console.log(user);
+
 
   useEffect(() => {
     if (validateAlertTurns === true) {
@@ -270,6 +273,7 @@ const Turns = ({ user }) => {
                 serviceSelected={serviceSelected}
                 days={days}
                 setIsOpen={setIsOpen}
+                user={user}
               />
             ) : (
               <Box
