@@ -13,6 +13,7 @@ import PlannedClosure from "../plannedClosure/plannedClosure";
 import axios from "axios";
 import { useMediaQueryHook } from "./useMediaQuery";
 import Personalization from "../personalization/personalization";
+import CancelledTurnsForAdmin from "../cancelledTurnsForAdmin/cancelledTurnsForAdmin";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const AdminAcordeon = () => {
@@ -424,7 +425,9 @@ const AdminAcordeon = () => {
               <h4 style={{ color: "#2196f3" }}>Proximamente</h4>
             </Box>
           </AccordionSummary>
-          <AccordionDetails></AccordionDetails>
+          <AccordionDetails>
+            <CancelledTurnsForAdmin />
+          </AccordionDetails>
         </Accordion>
       </Box>
     </div>

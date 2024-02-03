@@ -90,11 +90,11 @@ console.log(error);
     const allowedCharacters = /^[0-9+()-]*$/;
 
     // Verificar si el valor cumple con la expresión regular y no excede los 20 caracteres
-    if (allowedCharacters.test(value) && value.length < 10) {
+    if (allowedCharacters.test(value) && value.length < 8) {
       setNewPhoneNumber(value);
 
       // Actualizar el estado solo si el valor cumple con las validaciones
-      setError("Debe ser mayor a 10 caracteres");
+      setError("Debe ser mayor a 8 caracteres");
     } else if (allowedCharacters.test(value) && value.length <= 20) {
       setError("");
       setNewPhoneNumber(value);
