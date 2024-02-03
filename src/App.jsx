@@ -88,7 +88,6 @@ function App() {
 
   useEffect(() => {
     const postUser = async () => {
-      console.log("pase por el refresh con este user,", user);
       let sendUser;
       if (user) {
         sendUser = {
