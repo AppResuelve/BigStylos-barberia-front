@@ -55,9 +55,6 @@ const CancelledTurnsForWorker = ({ user }) => {
     setSelectedDay(element);
   };
 
-  const handleSendWhatsapp = () => {
-    console.log("pase por aca");
-  };
   return (
     <div>
       <hr
@@ -142,10 +139,13 @@ const CancelledTurnsForWorker = ({ user }) => {
                       href={`whatsapp://send?phone=${element.phone}&text=Hola , quiero contactarte`}
                       target="_blank"
                       rel="noopener noreferrer"
+                      style={{ textDecoration: "none" }}
                     >
                       <button
                         className={
-                          element.phone === "no requerido" ? "" : "btn-wsp-ctfw"
+                          element.phone === "no requerido"
+                            ? "btn-wsp-ctfw-false"
+                            : "btn-wsp-ctfw"
                         }
                         style={{
                           fontFamily: "Jost, sans-serif",
