@@ -9,8 +9,18 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const WhoIsComingWorker = ({ user }) => {
   const [turns, setTurns] = useState([]);
+/*  turns contiene:
+  {
+    email: el email del cliente
+    name: el name del cliente
+    ini: el minuto de inicio de su turno
+    fin: minuto final de su turno
+    phone: su cel
+    image: su imagen
+  } */
   const [count, setCount] = useState([]);
   const [selectedDay, setSelectedDay] = useState("");
+
 
   const date = new Date();
   const currentDay = date.getDate();
