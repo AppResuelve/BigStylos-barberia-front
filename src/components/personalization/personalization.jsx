@@ -165,7 +165,7 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
     setRefreshServices(!refreshServices);
     setShowEdit(false);
   };
-  console.log(auxHomeImages);
+
   return (
     <div>
       <hr

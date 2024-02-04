@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { DarkModeContext } from "../../App";
 import { NavLink } from "react-router-dom";
+import Footer from "../footer/footer"
 import { Box, Button, CircularProgress, Skeleton } from "@mui/material";
 import defaultImg from "../../assets/icons/no-image-logotipe.png";
 import defaultImgLight from "../../assets/icons/no-image-logotipe-light.png";
@@ -9,8 +10,8 @@ import facebook from "../../assets/icons/facebook.png";
 import whatsapp from "../../assets/icons/whatsapp.png";
 import "./home.css";
 
-const Home = ({ user, homeImages }) => {
-  const { darkMode, setShowAlert } = useContext(DarkModeContext);
+const Home = ({ homeImages }) => {
+  const { darkMode } = useContext(DarkModeContext);
   return (
     <div
       className="container-home"
@@ -19,11 +20,24 @@ const Home = ({ user, homeImages }) => {
         flexDirection: "column",
         justifyContent: "space-between",
         alignItems: "center",
-        height: "100vh",
+        // height: "105vh",
         backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
       }}
     >
-      <Box>
+      <div class="custom-shape-divider-bottom-1707002929">
+        <svg
+          data-name="Layer 1"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1200 120"
+          preserveAspectRatio="none"
+        >
+          <path
+            d="M600,112.77C268.63,112.77,0,65.52,0,7.23V120H1200V7.23C1200,65.52,931.37,112.77,600,112.77Z"
+            style={{fill:darkMode.on?darkMode.light:darkMode.dark}}
+          ></path>
+        </svg>
+      </div>
+      <Box style={{ height: "50vh" }}>
         {homeImages === 1 ? (
           <Box className="img-logotipo-home">
             <Skeleton
@@ -58,7 +72,9 @@ const Home = ({ user, homeImages }) => {
       </Box>
       <Box
         style={{
+          position: "relative",
           width: "100%",
+          height: "40vh",
           display: "flex",
           justifyContent: "space-between",
           padding: "10px",
@@ -66,6 +82,7 @@ const Home = ({ user, homeImages }) => {
       >
         <Box
           style={{
+            zIndex: "100",
             width: "25%",
             display: "flex",
             flexDirection: "column",
@@ -74,6 +91,7 @@ const Home = ({ user, homeImages }) => {
           }}
         >
           <NavLink
+            className="img-social-home-link"
             to="https://www.instagram.com/"
             target="-blank"
             rel="noopener noreferrer"
@@ -81,6 +99,7 @@ const Home = ({ user, homeImages }) => {
             <img src={instagram} alt="instagram" className="img-social-home" />
           </NavLink>
           <NavLink
+            className="img-social-home-link"
             to="https://www.facebook.com/"
             target="-blank"
             rel="noopener noreferrer"
@@ -89,9 +108,14 @@ const Home = ({ user, homeImages }) => {
           </NavLink>
         </Box>
         <Box
-          style={{ width: "50%", display: "flex", justifyContent: "center" }}
+          style={{
+            width: "50%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
-          <NavLink to="/turns">
+          <NavLink to="/turns" className="btn-reservar-home-link">
             <Button
               className="btn-reservar-home"
               variant="contained"
@@ -115,6 +139,7 @@ const Home = ({ user, homeImages }) => {
             justifyContent: "end",
             alignItems: "end",
             marginBottom: "40px",
+            zIndex: "100",
           }}
         >
           <a
@@ -126,6 +151,7 @@ const Home = ({ user, homeImages }) => {
           </a>
         </Box>
       </Box>
+      <Footer/>
     </div>
   );
 };

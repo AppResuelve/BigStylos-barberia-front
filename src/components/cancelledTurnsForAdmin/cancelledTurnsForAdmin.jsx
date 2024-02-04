@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import { Box, width } from "@mui/system";
+import { Box } from "@mui/system";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { WhatsApp } from "@mui/icons-material";
@@ -11,8 +11,8 @@ const CancelledTurnsForAdmin = () => {
   const [cancelledTurnsByDays, setCancelledTurnsByDays] = useState([]);
   const [count, setCount] = useState([]);
   const [selectedDay, setSelectedDay] = useState("");
-  const [workers, setWorkers] = useState([])
-  const [selectedWorker, setSelectedWorker] = useState('')
+  const [workers, setWorkers] = useState([]);
+  const [selectedWorker, setSelectedWorker] = useState("");
 
   const date = new Date();
   const currentDay = date.getDate();
@@ -21,7 +21,8 @@ const CancelledTurnsForAdmin = () => {
     const fetchWorkers = async () => {
       try {
         const response = await axios.get(
-          `${VITE_BACKEND_URL}/users/getworkers`);
+          `${VITE_BACKEND_URL}/users/getworkers`
+        );
         const { data } = response;
         setWorkers(data);
       } catch (error) {
@@ -44,8 +45,8 @@ const CancelledTurnsForAdmin = () => {
         console.error("Error al obtener el count.", error);
       }
     };
-    if (selectedWorker.length > 0){
-        fetchCount();
+    if (selectedWorker.length > 0) {
+      fetchCount();
     }
   }, [selectedWorker]);
 
@@ -73,9 +74,9 @@ const CancelledTurnsForAdmin = () => {
   };
 
   const handleChangeWorker = (email) => {
-    setSelectedDay('')
-    setSelectedWorker(email)
-  }
+    setSelectedDay("");
+    setSelectedWorker(email);
+  };
 
   return (
     <div>
@@ -122,8 +123,10 @@ const CancelledTurnsForAdmin = () => {
                     handleChangeWorker(element.email);
                   }}
                 >
-                  <h3 style={{textTransform: "lowercase",}}>{element.email}</h3>
-                  <h5 style={{color: "#cccaca",}}>{element.name}</h5>
+                  <h3 style={{ textTransform: "lowercase" }}>
+                    {element.email}
+                  </h3>
+                  <h5 style={{ color: "#cccaca" }}>{element.name}</h5>
                 </Button>
               );
             })}

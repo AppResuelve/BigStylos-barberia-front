@@ -1,8 +1,3 @@
-.container-home {
-      padding-left: 10px;
-      padding-right: 10px;
-}
-
 .img-whatsapp-home {
       transition: .3s;
 }
@@ -42,13 +37,33 @@
             width: 120px;
       }
 
+      .btn-reservar-home-link {
+            height: 40px;
+            width: 120px;
+            border-radius: 50px;
+      }
+
       .img-social-home {
             width: 30px;
             height: 30px;
             transition: .3s;
+            margin-left: 10px;
+      }
+
+      .img-social-home-link {
+            width: 30px;
+            height: 30px;
+            margin-bottom: 10px;
+
       }
 
       .img-whatsapp-home {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+      }
+
+      .img-whatsapp-home-link {
             width: 40px;
             height: 40px;
       }
@@ -70,13 +85,35 @@
             width: 140px;
       }
 
+      .btn-reservar-home-link {
+            height: 50px;
+            width: 140px;
+            border-radius: 50px;
+      }
+
       .img-social-home {
             width: 40px;
             height: 40px;
             transition: .3s;
+            margin-left: 10px;
+
+      }
+
+      .img-social-home-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50px;
+            margin-bottom: 10px;
+
       }
 
       .img-whatsapp-home {
+            width: 55px;
+            height: 55px;
+            margin-right: 10px;
+      }
+
+      .img-whatsapp-home-link {
             width: 55px;
             height: 55px;
       }
@@ -97,14 +134,64 @@
             width: 140px;
       }
 
+      .btn-reservar-home-link {
+            height: 50px;
+            width: 140px;
+            border-radius: 50px;
+      }
+
       .img-social-home {
             width: 40px;
             height: 40px;
             transition: .3s;
+            margin-left: 10px;
+      }
+
+      .img-social-home-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50px;
+            margin-bottom: 10px;
+
       }
 
       .img-whatsapp-home {
             width: 45px;
             height: 45px;
+            margin-right: 10px;
+      }
+
+      .img-whatsapp-home-link {
+            width: 45px;
+            height: 45px;
+      }
+}
+
+
+
+
+
+.custom-shape-divider-bottom-1707002929 {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      overflow: hidden;
+      line-height: 0;
+      filter: drop-shadow(0px -2px 5px rgba(0, 0, 0, 0.75));
+}
+
+.custom-shape-divider-bottom-1707002929 svg {
+      position: relative;
+      display: block;
+      width: calc(100% + 1.3px);
+      height: 55px;
+}
+
+/** For mobile devices **/
+@media (max-width: 767px) {
+      .custom-shape-divider-bottom-1707002929 svg {
+            width: calc(100% + 1.3px);
+            height: 70px;
       }
 }
