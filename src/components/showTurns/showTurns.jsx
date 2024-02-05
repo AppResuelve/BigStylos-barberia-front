@@ -1,13 +1,14 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import formatHour from "../../functions/formatHour";
 import Slide from "@mui/material/Slide";
-import { Dialog, Grid, Slider, Box, Button, Backdrop } from "@mui/material";
+import { Dialog, Box, Button, Backdrop } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import NoUser from "../../assets/icons/noUser.png";
 import "./showTurns.css";
 import ShowTimeCarousel from "../interfazMUI/showTimeCarousel";
+import axios from "axios";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -25,6 +26,7 @@ const ShowTurns = ({
   detailTurn,
   setDetailTurn,
 }) => {
+  const { darkMode } = useContext(DarkModeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const handleClose = () => {
     setDayIsSelected({});
@@ -58,6 +60,8 @@ const ShowTurns = ({
       for (let i = 0; i < dayForTurns.length; i++) {
         renderizate.push([dayForTurns[i].email]);
         renderizate[i].push(dayForTurns[i].name);
+        renderizate[i].push(dayForTurns[i].image);
+
         let contador = null;
         let init = 0;
         for (let k = 0; k < dayForTurns[i].time.length; k++) {
@@ -73,17 +77,15 @@ const ShowTurns = ({
           }
         }
       }
-      console.log(renderizate);
       setButtons(renderizate);
     }
   }, [dayForTurns]);
 
-  const handleSelectTime = (workerEmail, workerName, selectTime) => {
+  const handleSelectTime = (workerEmail, workerName) => {
     const tardanza = dayForTurns.filter(
       (element) => element.email == workerEmail
     );
 
-    // setSelectedTime(selectTime);
     setSelectedWorker(workerEmail);
     setSelectedWorkerName(workerName);
   };
@@ -126,11 +128,10 @@ const ShowTurns = ({
         <Box /* container */
           sx={{
             height: sm ? "100vh" : "100%",
-            // backgroundColor: darkMode ? "#28292c" : "white",
+            backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
             p: 3,
             display: "flex",
             flexDirection: "column",
-            // justifyContent: "space-between",
           }}
         >
           <Box>
@@ -151,11 +152,18 @@ const ShowTurns = ({
                   display: "flex",
                   justifyContent: "center",
                   marginRight: "4px",
+                  color: darkMode.on ? "white" : darkMode.dark,
                 }}
               >
                 Horarios para el:
               </h2>
-              <h2 style={{ display: "flex", justifyContent: "center" }}>
+              <h2
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  color: darkMode.on ? "white" : darkMode.dark,
+                }}
+              >
                 {`${dayIsSelected[0]}/${dayIsSelected[1]}`}
               </h2>
             </Box>
@@ -182,16 +190,26 @@ const ShowTurns = ({
                         key={buttonIndex}
                         sx={{
                           display: "flex",
+                          height: "30%",
                           justifyContent: "space-between",
                           marginBottom: "10px",
                         }}
                       >
-                        <h2 key={button} style={{ overflow: "hidden" }}>
+                        <h2
+                          key={button}
+                          style={{
+                            overflow: "hidden",
+                            color: darkMode.on ? "white" : darkMode.dark,
+                          }}
+                        >
                           {button}
                         </h2>
-                        ;
                         <img
-                          src={user.image ? user.image : NoUser}
+                          src={
+                            buttonGroup[buttonIndex + 1]
+                              ? buttonGroup[buttonIndex + 1]
+                              : NoUser
+                          }
                           alt="Profesional"
                           style={{ width: "40px", borderRadius: "50px" }}
                         />
@@ -199,9 +217,10 @@ const ShowTurns = ({
                     );
                   }
                 })}
-                <Box className="box-to-scroll">
+                <Box className="box-to-scroll" style={{ height: "70%" }}>
                   <ShowTimeCarousel
-                    buttonGroup={buttonGroup.slice(2)}
+                    selectedWorker={selectedWorker}
+                    buttonGroup={buttonGroup.slice(3)}
                     selectedTime={selectedTime}
                     setSelectedTime={setSelectedTime}
                     handleSelectTime={handleSelectTime}
@@ -212,50 +231,111 @@ const ShowTurns = ({
               </Box>
             ))}
           </Box>
-          <Box sx={{ height: "30%" }}>
-            <Box>
-              <h2>Resumen del turno:</h2>
-              <hr />
-            </Box>
-            <Box sx={{ display: "flex", flexDirection: "column" }}>
-              <Box
-                sx={{ display: "flex", width: "100%", alignItems: "center" }}
-              >
-                <h2>{serviceSelected}</h2>
-                <h3>para el</h3>
-                <h2>
-                  {dayIsSelected[0]}/{dayIsSelected[1]}
-                </h2>
-                <h3>a las</h3>
-                <h2>{formatHour(selectedTime)}</h2>
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "end",
+          <Box
+            sx={{
+              height: "30%",
+              width: "100%",
+              marginTop: "40px",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                width: "100%",
+              }}
+            >
+              <Button
+                variant="contained"
+                style={{
+                  margin: "5px",
+                  fontFamily: "Jost,sans-serif",
+                  fontWeight: "bold",
+                  textTransform: "lowercase",
+                  color: darkMode.on ? "black" : "white",
+                  backgroundColor: darkMode.on ? "white" : "black",
+                  pointerEvents: "none",
                 }}
               >
+                {serviceSelected}
+              </Button>
+
+              <Button
+                variant="contained"
+                style={{
+                  margin: "5px",
+                  fontFamily: "Jost,sans-serif",
+                  fontWeight: "bold",
+                  textTransform: "lowercase",
+                  color: darkMode.on ? "black" : "white",
+                  backgroundColor: darkMode.on ? "white" : "black",
+                  pointerEvents: "none",
+                }}
+              >
+                {dayIsSelected[0]}/{dayIsSelected[1]}
+              </Button>
+
+              <Button
+                variant="contained"
+                style={{
+                  margin: "5px",
+                  fontFamily: "Jost,sans-serif",
+                  fontWeight: "bold",
+                  textTransform: "lowercase",
+                  color: darkMode.on ? "black" : "white",
+                  backgroundColor: darkMode.on ? "white" : "black",
+                  pointerEvents: "none",
+                }}
+              >
+                {formatHour(selectedTime)}
+              </Button>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginTop: "20px",
+              }}
+            >
+              {selectedTime ? (
                 <Box>
-                  <h2>Profesional:</h2>
-                  <h2>{selectedWorkerName}</h2>
+                  <Button
+                    variant="contained"
+                    style={{
+                      margin: "5px",
+                      fontFamily: "Jost,sans-serif",
+                      fontWeight: "bold",
+                      textTransform: "lowercase",
+                      color: darkMode.on ? "black" : "white",
+                      backgroundColor: darkMode.on ? "white" : "black",
+                      pointerEvents: "none",
+                    }}
+                  >
+                    {selectedWorkerName}
+                  </Button>
                 </Box>
-                <Button
-                  onClick={() => {
-                    handleAsignTurn(), handleClose();
-                  }}
-                  disabled={selectedTime && selectedTime != "" ? false : true}
-                  variant="contained"
-                  sx={{
-                    maxHeight: "35px",
-                    fontFamily: "Jost, sans serif",
-                    fontWeight: "bold",
-                    letterSpacing: "2px",
-                  }}
-                >
-                  aceptar
-                </Button>
-              </Box>
+              ) : (
+                <Box></Box>
+              )}
+              <Button
+                onClick={() => {
+                  handleAsignTurn(), handleClose();
+                }}
+                disabled={selectedTime && selectedTime != "" ? false : true}
+                variant="contained"
+                sx={{
+                  display: "flex",
+                  height: sm ? "45px" : "35px",
+                  width: sm ? "120px" : "90px",
+                  fontFamily: "Jost, sans serif",
+                  fontSize: sm ? "17px" : "14px",
+                  fontWeight: "bold",
+                  letterSpacing: "2px",
+                }}
+              >
+                aceptar
+              </Button>
             </Box>
           </Box>
         </Box>

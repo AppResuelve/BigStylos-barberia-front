@@ -34,8 +34,7 @@ const Footer = () => {
       setColorRGB(color);
     }
   }, [darkMode]);
-  console.log(darkMode);
-  console.log(colorRGB);
+
   // Configuración del carrusel
   const settings = {
     infinite: true,
@@ -79,6 +78,7 @@ const Footer = () => {
           height: "100px",
           width: "100%",
           maxWidth: "900px",
+          pointerEvents: "none",
         }}
       >
         {/* Degradado a la izquierda */}
@@ -89,7 +89,7 @@ const Footer = () => {
             top: 0,
             bottom: 0,
             left: 0,
-            width: "70px", // Ancho de la sombra
+            width: "100px", // Ancho de la sombra
             height: "100px",
             background: `linear-gradient(to left, rgba(255,255,255,0), rgba(255,255,255,1))`,
           }}
@@ -104,91 +104,81 @@ const Footer = () => {
             }}
           >
             <img
+              className="img-carousel-footer"
               src={loreal}
-              alt="Descripción de la imagen 1"
+              alt="Imagen 1"
               style={{
-                width: "100%",
                 height: "100px",
                 objectFit: "contain",
-                maxWidth: "200px",
                 margin: "0 auto",
-                filter: darkMode.on
+                /*   filter: darkMode.on
                   ? "none"
                   : "drop-shadow(0px 5px 15px rgba(255, 255, 255, 1))",
+              */
               }}
             />
           </div>
           <div style={{ display: "flex", width: "20%" }}>
             <img
+              className="img-carousel-footer"
               src={gama}
-              alt="Descripción de la imagen 2"
+              alt="Imagen 2"
               style={{
-                padding: "5px",
-
-                width: "100%",
                 height: "100px",
                 objectFit: "contain",
-                maxWidth: "200px",
                 margin: "0 auto",
-                filter: darkMode.on
+                /*   filter: darkMode.on
                   ? "none"
                   : "drop-shadow(0px 5px 15px rgba(255, 255, 255, 1))",
+              */
               }}
             />
           </div>
           <div style={{ display: "flex", width: "20%" }}>
             <img
+              className="img-carousel-footer"
               src={pantene}
-              alt="Descripción de la imagen 3"
+              alt="Imagen 3"
               style={{
-                padding: "5px",
-
-                display: "flex",
-                justifySelf: "center",
-                alignSelf: "center",
-                width: "100%",
                 height: "100px",
                 objectFit: "cover",
-                maxWidth: "200px",
                 margin: "0 auto",
-                filter: darkMode.on
+                /*  filter: darkMode.on
                   ? "none"
                   : "drop-shadow(0px 5px 15px rgba(255, 255, 255, 1))",
+              */
               }}
             />
           </div>
           <div style={{ display: "flex", width: "20%" }}>
             <img
+              className="img-carousel-footer"
               src={silkey}
-              alt="Descripción de la imagen 4"
+              alt="Imagen 4"
               style={{
-                padding: "15px",
-
-                width: "100%",
                 height: "100px",
                 objectFit: "cover",
-                maxWidth: "200px",
                 margin: "0 auto",
-                filter: darkMode.on
+                /*    filter: darkMode.on
                   ? "none"
                   : "drop-shadow(0px 5px 15px rgba(255, 255, 255, 1))",
+              */
               }}
             />
           </div>
           <div style={{ display: "flex", width: "20%" }}>
             <img
+              className="img-carousel-footer"
               src={babyliss}
-              alt="Descripción de la imagen 5"
+              alt="Imagen 5"
               style={{
-                padding: "5px",
-                width: "100%",
                 height: "100px",
                 objectFit: "contain",
-                maxWidth: "200px",
                 margin: "0 auto",
-                filter: darkMode.on
+                /*    filter: darkMode.on
                   ? "none"
                   : "drop-shadow(0px 5px 15px rgba(255, 255, 255, 1))",
+              */
               }}
             />
           </div>
@@ -202,7 +192,7 @@ const Footer = () => {
             top: 0,
             bottom: 0,
             right: 0,
-            width: "70px", // Ancho de la sombra
+            width: "100px", // Ancho de la sombra
             height: "100px",
             background: `linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,1))`,
           }}

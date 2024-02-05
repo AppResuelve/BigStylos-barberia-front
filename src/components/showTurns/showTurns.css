@@ -1,7 +1,6 @@
-.box-to-scroll {
+/* .box-to-scroll {
       display: flex;
-      overflow: scroll;
-}
+} */
 
 .box-to-scroll::-webkit-scrollbar {
       height: 5px;

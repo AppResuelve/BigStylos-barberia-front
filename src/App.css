@@ -26,6 +26,7 @@
  /* Estilos para motores Webkit y blink (Chrome, Safari, Opera...) */
  *::-webkit-scrollbar {
    width: 2px;
+   height: 2px;
  }
 
  *::-webkit-scrollbar-thumb {
@@ -39,7 +40,5 @@
 
  *::-webkit-scrollbar-track {
    border-radius: 10px;
-   background-color: #000000;
-
-
+   height: 2px;
  }

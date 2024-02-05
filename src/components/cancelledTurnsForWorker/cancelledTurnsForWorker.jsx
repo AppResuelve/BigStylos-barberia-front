@@ -135,35 +135,39 @@ const CancelledTurnsForWorker = ({ user }) => {
                   </h4>
                   <hr />
                   <Box className="h-phone-ctfw">
-                    <a
-                      href={`whatsapp://send?phone=${element.phone}&text=Hola , quiero contactarte`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ textDecoration: "none" }}
-                    >
-                      <button
-                        className={
-                          element.phone === "no requerido"
-                            ? "btn-wsp-ctfw-false"
-                            : "btn-wsp-ctfw"
-                        }
-                        style={{
-                          fontFamily: "Jost, sans-serif",
-                          fontWeight: "bold",
-                          border: "none",
-                          cursor: "pointer",
-                          width: "100%",
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
+                    {element.phone !== "no requerido" ? (
+                      <a
+                        href={`whatsapp://send?phone=${element.phone}&text=Hola , quiero contactarte`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ textDecoration: "none" }}
                       >
-                        <h4>{element.phone}</h4>
-                        {element.phone !== "no requerido" && (
-                          <WhatsApp color="success" />
-                        )}
-                      </button>
-                    </a>
+                        <button
+                          className={
+                            element.phone === "no requerido"
+                              ? "btn-wsp-ctfw-false"
+                              : "btn-wsp-ctfw"
+                          }
+                          style={{
+                            fontFamily: "Jost, sans-serif",
+                            fontWeight: "bold",
+                            border: "none",
+                            cursor: "pointer",
+                            width: "100%",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
+                        >
+                          <h4>{element.phone}</h4>
+                          {element.phone !== "no requerido" && (
+                            <WhatsApp color="success" />
+                          )}
+                        </button>
+                      </a>
+                    ) : (
+                      <h4>{element.phone}</h4>
+                    )}
                   </Box>
 
                   <hr />
