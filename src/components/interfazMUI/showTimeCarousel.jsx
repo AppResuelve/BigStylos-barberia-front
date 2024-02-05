@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import MobileStepper from "@mui/material/MobileStepper";
 import { useTheme } from "@mui/material/styles";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
@@ -8,6 +9,7 @@ import formatHour from "../../functions/formatHour";
 import { Box, Button } from "@mui/material";
 
 const ShowTimeCarousel = ({
+  selectedWorker,
   buttonGroup,
   selectedTime,
   setSelectedTime,
@@ -15,6 +17,7 @@ const ShowTimeCarousel = ({
   button0,
   button1,
 }) => {
+  const { darkMode } = useContext(DarkModeContext);
   const [activeStep, setActiveStep] = useState(0);
   const theme = useTheme();
   const itemsPerPage = 10;
@@ -35,52 +38,82 @@ const ShowTimeCarousel = ({
   };
 
   const handleStepChange = (step) => {
+    console.log(step);
     setActiveStep(step);
   };
-
+  console.log(activeStep);
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box
+      sx={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+      }}
+    >
       <SwipeableViews
         axis={theme.direction === "rtl" ? "x-reverse" : "x"}
         index={activeStep}
         onChangeIndex={handleStepChange}
-        enableMouseEvents
       >
-        {subArrays.map((subArray, index) => (
-          <div key={index} style={{ display: "flex", overflow: "hidden" }}>
-            {subArray.map((step, subIndex) => (
-              <Button
-                onClick={() => {
-                  handleSelectTime(button0, button1, step);
-                  setSelectedTime(step);
-                }}
-                key={subIndex}
-                variant="contained"
-                style={{
-                  backgroundColor: selectedTime === step ? "black" : "",
-                  fontFamily: "Jost, sans-serif",
-                  fontWeight: "bold",
-                  marginRight: "10px",
-                  transition: ".3s",
-                }}
-              >
-                {formatHour(step)}
-              </Button>
-            ))}
-          </div>
-        ))}
+        {subArrays.map((subArray, index) => {
+          return (
+            <div key={index} style={{ display: "flex", overflow: "scroll" }}>
+              {subArray.map((step, subIndex) => (
+                <Button
+                  onClick={() => {
+                    handleSelectTime(button0, button1);
+                    setSelectedTime(step);
+                  }}
+                  key={subIndex}
+                  variant="contained"
+                  style={{
+                    backgroundColor:
+                      selectedTime === step &&
+                      selectedWorker === button0 &&
+                      darkMode.on
+                        ? "white"
+                        : selectedTime === step &&
+                          selectedWorker === button0 &&
+                          !darkMode.on
+                        ? "black"
+                        : "",
+                    color:
+                      selectedTime === step &&
+                      selectedWorker === button0 &&
+                      darkMode.on
+                        ? "black"
+                        : "white",
+                    fontFamily: "Jost, sans-serif",
+                    fontWeight: "bold",
+                    marginRight: "10px",
+                    transition: ".3s",
+                  }}
+                >
+                  {formatHour(step)}
+                </Button>
+              ))}
+            </div>
+          );
+        })}
       </SwipeableViews>
       <MobileStepper
+        style={{
+          height: "40px",
+          backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
+        }}
         steps={subArrays.length}
         position="static"
         activeStep={Math.floor(activeStep / groupItemPerPage)}
         nextButton={
           <Button
-            size="small"
+            style={{ border: "2px solid" }}
+            size="large"
+            variant="outlined"
             onClick={handleNext}
             disabled={activeStep >= (subArrays.length - 1) * groupItemPerPage}
           >
-            Next
             {theme.direction === "rtl" ? (
               <KeyboardArrowLeft />
             ) : (
@@ -89,13 +122,18 @@ const ShowTimeCarousel = ({
           </Button>
         }
         backButton={
-          <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+          <Button
+            style={{ border: "2px solid" }}
+            size="large"
+            variant="outlined"
+            onClick={handleBack}
+            disabled={activeStep === 0}
+          >
             {theme.direction === "rtl" ? (
               <KeyboardArrowRight />
             ) : (
               <KeyboardArrowLeft />
             )}
-            Back
           </Button>
         }
       />

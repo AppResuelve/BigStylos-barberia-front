@@ -1,26 +1,35 @@
 import { Button } from "@mui/material";
-import { Box, width } from "@mui/system";
+import { Box } from "@mui/system";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { WhatsApp } from "@mui/icons-material";
-import "./cancelledTurnsForWorker.css";
+import "./whoIsComingWorker.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const CancelledTurnsForWorker = ({ user }) => {
-  const [cancelledTurnsByDays, setCancelledTurnsByDays] = useState([]);
+const WhoIsComingWorker = ({ user }) => {
+  const [turns, setTurns] = useState([]);
+/*  turns contiene:
+  {
+    email: el email del cliente
+    name: el name del cliente
+    ini: el minuto de inicio de su turno
+    fin: minuto final de su turno
+    phone: su cel
+    image: su imagen
+  } */
   const [count, setCount] = useState([]);
   const [selectedDay, setSelectedDay] = useState("");
 
+
   const date = new Date();
   const currentDay = date.getDate();
-  console.log(cancelledTurnsByDays);
 
   useEffect(() => {
     const fetchCount = async () => {
       try {
         const response = await axios.post(
-          `${VITE_BACKEND_URL}/cancelledturns/getcount`,
+          `${VITE_BACKEND_URL}/workdays/countworker`,
           { emailWorker: user.email }
         );
         const { data } = response;
@@ -33,21 +42,22 @@ const CancelledTurnsForWorker = ({ user }) => {
   }, []);
 
   useEffect(() => {
-    const fetchCancelled = async () => {
+    const fetchTurns = async () => {
       const [numberDay, numberMonth] = selectedDay.split("/").map(Number);
       try {
         const response = await axios.post(
-          `${VITE_BACKEND_URL}/cancelledturns/getforworker`,
+          `${VITE_BACKEND_URL}/workdays/whoiscoming`,
           { emailWorker: user.email, month: numberMonth, day: numberDay }
         );
         const { data } = response;
-        setCancelledTurnsByDays(data);
+        console.log(data)
+        setTurns(data);
       } catch (error) {
         console.error("Error al obtener los dias cancelados.", error);
       }
     };
     if (selectedDay.length > 0) {
-      fetchCancelled();
+      fetchTurns();
     }
   }, [selectedDay]);
 
@@ -110,15 +120,15 @@ const CancelledTurnsForWorker = ({ user }) => {
         }}
       >
         <Box style={{ overflow: "scroll", maxHeight: "350px" }}>
-          {cancelledTurnsByDays.length > 0 &&
-            cancelledTurnsByDays.map((element, index) => (
+          {turns.length > 0 &&
+            turns.map((element, index) => (
               <Box key={index}>
                 {index === 0 && (
                   <Box>
                     <Box style={{ display: "flex" }}>
                       <h3 className="h-email-ctfw">Email</h3>
                       <hr />
-                      <h3 className="h-whocancelled-ctfw">Quien canceló?</h3>
+                      <h3 className="h-whocancelled-ctfw">Nombre</h3>
                       <hr />
                       <h3 className="h-phone-ctfw">Celular</h3>
                       <hr />
@@ -131,47 +141,43 @@ const CancelledTurnsForWorker = ({ user }) => {
                   <h4 className="h-email-ctfw">{element.email}</h4>
                   <hr />
                   <h4 className="h-whocancelled-ctfw">
-                    {element.howCancelled}
+                    {element.name}
                   </h4>
                   <hr />
                   <Box className="h-phone-ctfw">
-                    {element.phone !== "no requerido" ? (
-                      <a
-                        href={`whatsapp://send?phone=${element.phone}&text=Hola , quiero contactarte`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ textDecoration: "none" }}
+                    <a
+                      href={`whatsapp://send?phone=${element.phone}&text=Hola , quiero contactarte`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ textDecoration: "none" }}
+                    >
+                      <button
+                        className={
+                          element.phone === "no requerido"
+                            ? "btn-wsp-ctfw-false"
+                            : "btn-wsp-ctfw"
+                        }
+                        style={{
+                          fontFamily: "Jost, sans-serif",
+                          fontWeight: "bold",
+                          border: "none",
+                          cursor: "pointer",
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
                       >
-                        <button
-                          className={
-                            element.phone === "no requerido"
-                              ? "btn-wsp-ctfw-false"
-                              : "btn-wsp-ctfw"
-                          }
-                          style={{
-                            fontFamily: "Jost, sans-serif",
-                            fontWeight: "bold",
-                            border: "none",
-                            cursor: "pointer",
-                            width: "100%",
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                          }}
-                        >
-                          <h4>{element.phone}</h4>
-                          {element.phone !== "no requerido" && (
-                            <WhatsApp color="success" />
-                          )}
-                        </button>
-                      </a>
-                    ) : (
-                      <h4>{element.phone}</h4>
-                    )}
+                        <h4>{element.phone}</h4>
+                        {element.phone !== "no requerido" && (
+                          <WhatsApp color="success" />
+                        )}
+                      </button>
+                    </a>
                   </Box>
 
                   <hr />
-                  <h4 className="h-day-ctfw">{selectedDay}</h4>
+                  <img src={element.image} alt={element.image} style={{width:"30px", borderRadius:"200px"}}></img>
                 </Box>
                 <hr className="hr-ctfw" />
               </Box>
@@ -182,4 +188,4 @@ const CancelledTurnsForWorker = ({ user }) => {
   );
 };
 
-export default CancelledTurnsForWorker;
+export default WhoIsComingWorker;

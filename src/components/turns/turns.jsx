@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect, useState, useContext } from "react";
 import { DarkModeContext } from "../../App";
 import CustomCalendarTurns from "../customCalendar/customCalendarTurns";
@@ -7,8 +6,9 @@ import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { Box, Button } from "@mui/material";
 import calendar from "../../assets/images/calendar2.png";
 import defaultServiceImg from "../../assets/images/default-img-services.jpg";
-import "./turns.css";
 import formatHour from "../../functions/formatHour";
+import axios from "axios";
+import "./turns.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
