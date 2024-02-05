@@ -11,6 +11,7 @@ import axios from "axios";
 import { useMediaQueryHook } from "./useMediaQuery";
 import MyServices from "../myServices/myServices";
 import CancelledTurnsForWorker from "../cancelledTurnsForWorker/cancelledTurnsForWorker";
+import WhoIsComingWorker from "../whoIsComingWorker/whoIsComingWorker";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const WorkerAcordeon = ({ user }) => {
@@ -304,7 +305,9 @@ const WorkerAcordeon = ({ user }) => {
               <h4 style={{ color: "#2196f3" }}>Proximamente</h4>
             </Box>
           </AccordionSummary>
-          <AccordionDetails>{/* dfsdfsdfffsdf */}</AccordionDetails>
+          <AccordionDetails>
+            <WhoIsComingWorker user={user}/>
+          </AccordionDetails>
         </Accordion>
         {/*  //------------------// */}
         <Accordion
