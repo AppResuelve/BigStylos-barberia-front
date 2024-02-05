@@ -33,7 +33,7 @@ const Home = ({ homeImages }) => {
         >
           <path
             d="M600,112.77C268.63,112.77,0,65.52,0,7.23V120H1200V7.23C1200,65.52,931.37,112.77,600,112.77Z"
-            style={{fill:darkMode.on?darkMode.light:darkMode.dark}}
+            style={{fill:"white"}}
           ></path>
         </svg>
       </div>

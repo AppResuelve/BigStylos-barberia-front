@@ -29,7 +29,6 @@ const Footer = () => {
     if (darkMode.on) {
       color = convertToRGB(darkMode.light);
       setColorRGB(color);
-
     } else {
       color = convertToRGB(darkMode.dark);
       setColorRGB(color);
@@ -44,7 +43,6 @@ const Footer = () => {
     slidesToShow: 4,
     autoplay: true,
     autoplaySpeed: 1000,
-    // cssEase: "",
     arrows: false,
     responsive: [
       {
@@ -61,14 +59,16 @@ const Footer = () => {
     <div
       style={{
         display: "flex",
+        flexDirection: "column",
         justifyContent: "center",
+        alignItems: "center",
         position: "absolute",
         top: "100%",
         width: "100%",
-        height: "200px",
+        height: "250px",
         overflow: "hidden",
         zIndex: 1000,
-        backgroundColor: darkMode.on ? darkMode.light : darkMode.dark,
+        backgroundColor: "white",
       }}
     >
       <Box
@@ -91,7 +91,7 @@ const Footer = () => {
             left: 0,
             width: "70px", // Ancho de la sombra
             height: "100px",
-            background: `linear-gradient(to left, rgba(${colorRGB.r},${colorRGB.g},${colorRGB.b},0), rgba(${colorRGB.r},${colorRGB.g},${colorRGB.b},1))`,
+            background: `linear-gradient(to left, rgba(255,255,255,0), rgba(255,255,255,1))`,
           }}
         ></div>
 
@@ -107,7 +107,7 @@ const Footer = () => {
               src={loreal}
               alt="Descripción de la imagen 1"
               style={{
-                width: "100px",
+                width: "100%",
                 height: "100px",
                 objectFit: "contain",
                 maxWidth: "200px",
@@ -123,7 +123,9 @@ const Footer = () => {
               src={gama}
               alt="Descripción de la imagen 2"
               style={{
-                width: "100px",
+                padding: "5px",
+
+                width: "100%",
                 height: "100px",
                 objectFit: "contain",
                 maxWidth: "200px",
@@ -137,12 +139,14 @@ const Footer = () => {
           <div style={{ display: "flex", width: "20%" }}>
             <img
               src={pantene}
-              alt="Descripción de la imagen 2"
+              alt="Descripción de la imagen 3"
               style={{
+                padding: "5px",
+
                 display: "flex",
                 justifySelf: "center",
                 alignSelf: "center",
-                width: "100px",
+                width: "100%",
                 height: "100px",
                 objectFit: "cover",
                 maxWidth: "200px",
@@ -156,9 +160,11 @@ const Footer = () => {
           <div style={{ display: "flex", width: "20%" }}>
             <img
               src={silkey}
-              alt="Descripción de la imagen 2"
+              alt="Descripción de la imagen 4"
               style={{
-                width: "100px",
+                padding: "15px",
+
+                width: "100%",
                 height: "100px",
                 objectFit: "cover",
                 maxWidth: "200px",
@@ -172,9 +178,10 @@ const Footer = () => {
           <div style={{ display: "flex", width: "20%" }}>
             <img
               src={babyliss}
-              alt="Descripción de la imagen 2"
+              alt="Descripción de la imagen 5"
               style={{
-                width: "100px",
+                padding: "5px",
+                width: "100%",
                 height: "100px",
                 objectFit: "contain",
                 maxWidth: "200px",
@@ -197,9 +204,23 @@ const Footer = () => {
             right: 0,
             width: "70px", // Ancho de la sombra
             height: "100px",
-            background: `linear-gradient(to right, rgba(${colorRGB.r},${colorRGB.g},${colorRGB.b},0), rgba(${colorRGB.r},${colorRGB.g},${colorRGB.b},1))`,
+            background: `linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,1))`,
           }}
         ></div>
+      </Box>
+      <Box
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "end",
+          alignItems: "end",
+          width: "100%",
+          height: "100px",
+          padding: "15px",
+        }}
+      >
+        <h4>Olavarria, Bs As, Argentina</h4>
+        <h4>Todos los derechos reservados @2024 </h4>
       </Box>
     </div>
   );
