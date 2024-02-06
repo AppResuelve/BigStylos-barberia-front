@@ -12,7 +12,7 @@ import OpeningAndClosing from "../openingAndClosing/openingAndClosing";
 import PlannedClosure from "../plannedClosure/plannedClosure";
 import Users from "../users/users";
 import Personalization from "../personalization/personalization";
-import WhoIsComingAdmin from "../whoIsComingAdmin/whoIsComingAdmin";
+import WhoIsComingAdmin from "../WhoIsComingAdmin/whoIsComingAdmin";
 import CancelledTurnsForAdmin from "../cancelledTurnsForAdmin/cancelledTurnsForAdmin";
 import axios from "axios";
 
