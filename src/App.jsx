@@ -20,7 +20,7 @@ function App() {
   const location = useLocation();
   const [userData, setUserData] = useState(1);
   const [userAuth, setUserAuth] = useState(false);
-  const [colors, setColors] = useState("#000000");
+  const [colors, setColors] = useState("");
   const [homeImages, setHomeImages] = useState(1); //images del home
   /* estados locales para el contexto global */
   const [redirectToMyServices, setRedirectToMyServices] = useState(false);
@@ -49,13 +49,8 @@ function App() {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/personalization`);
         const { data } = response;
-        setTimeout(() => {}, 1000);
-        setTimeout(() => {
-          setHomeImages(data.allImages);
-        }, 1000);
-
-        setColors(data.allColors);
-        //  setLoading(false);
+        setHomeImages(data.allImages);
+        setColors(data.allColors[0]);
       } catch (error) {
         console.error("Error al obtener los datos de personalizacion:", error);
         alert("Error al obtener los datos de personalizacion");

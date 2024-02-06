@@ -333,29 +333,20 @@ const WorkerAcordeon = ({ user }) => {
             aria-controls="panel4bh-content"
             id="panel4bh-header"
           >
-            <Box
+            <h2
               style={{
-                display: "flex",
-                alignItems: "center",
-                width: "100%",
+                color: !darkMode.on
+                  ? darkMode.dark
+                  : expanded === "panel4"
+                  ? darkMode.dark
+                  : "white",
               }}
             >
-              <h2
-                style={{
-                  color: !darkMode.on
-                    ? darkMode.dark
-                    : expanded === "panel4"
-                    ? darkMode.dark
-                    : "white",
-                }}
-              >
-                Turnos cancelados
-              </h2>
-              <h4 style={{ color: "#2196f3" }}>Proximamente</h4>
-            </Box>
+              Turnos cancelados
+            </h2>
           </AccordionSummary>
           <AccordionDetails>
-          <CancelledTurnsForWorker user={user}/>
+            <CancelledTurnsForWorker user={user} />
           </AccordionDetails>
         </Accordion>
       </Box>

@@ -401,8 +401,8 @@ const AdminAcordeon = () => {
                 sx={{ color: expanded === "panel7" ? "" : "#2196f3" }}
               />
             }
-            aria-controls="panel3bh-content"
-            id="panel3bh-header"
+            aria-controls="panel7bh-content"
+            id="panel7bh-header"
           >
             <Box
               style={{
@@ -452,29 +452,20 @@ const AdminAcordeon = () => {
                 sx={{ color: expanded === "panel8" ? "" : "#2196f3" }}
               />
             }
-            aria-controls="panel7bh-content"
-            id="panel7bh-header"
+            aria-controls="panel8bh-content"
+            id="panel8bh-header"
           >
-            <Box
+            <h2
               style={{
-                display: "flex",
-                alignItems: "center",
-                width: "100%",
+                color: !darkMode.on
+                  ? darkMode.dark
+                  : expanded === "panel8"
+                  ? darkMode.dark
+                  : "white",
               }}
             >
-              <h2
-                style={{
-                  color: !darkMode.on
-                    ? darkMode.dark
-                    : expanded === "panel8"
-                    ? darkMode.dark
-                    : "white",
-                }}
-              >
-                Turnos cancelados
-              </h2>
-              <h4 style={{ color: "#2196f3" }}>Proximamente</h4>
-            </Box>
+              Turnos cancelados
+            </h2>
           </AccordionSummary>
           <AccordionDetails>
             <CancelledTurnsForAdmin />

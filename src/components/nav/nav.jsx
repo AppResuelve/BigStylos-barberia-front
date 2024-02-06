@@ -37,7 +37,7 @@ const Nav = ({ user }) => {
           <Box
             className="box-container-img-home-nav"
             sx={{
-              backgroundColor: darkMode.on ? darkMode.dark : "white",
+              backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
             }}
           >
             <img

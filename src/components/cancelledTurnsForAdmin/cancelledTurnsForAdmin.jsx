@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import { Box, width } from "@mui/system";
+import { Box } from "@mui/system";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { WhatsApp } from "@mui/icons-material";
@@ -11,8 +11,8 @@ const CancelledTurnsForAdmin = () => {
   const [cancelledTurnsByDays, setCancelledTurnsByDays] = useState([]);
   const [count, setCount] = useState([]);
   const [selectedDay, setSelectedDay] = useState("");
-  const [workers, setWorkers] = useState([])
-  const [selectedWorker, setSelectedWorker] = useState('')
+  const [workers, setWorkers] = useState([]);
+  const [selectedWorker, setSelectedWorker] = useState("");
 
   const date = new Date();
   const currentDay = date.getDate();
@@ -21,7 +21,8 @@ const CancelledTurnsForAdmin = () => {
     const fetchWorkers = async () => {
       try {
         const response = await axios.get(
-          `${VITE_BACKEND_URL}/users/getworkers`);
+          `${VITE_BACKEND_URL}/users/getworkers`
+        );
         const { data } = response;
         setWorkers(data);
       } catch (error) {
@@ -44,8 +45,8 @@ const CancelledTurnsForAdmin = () => {
         console.error("Error al obtener el count.", error);
       }
     };
-    if (selectedWorker.length > 0){
-        fetchCount();
+    if (selectedWorker.length > 0) {
+      fetchCount();
     }
   }, [selectedWorker]);
 
@@ -73,9 +74,9 @@ const CancelledTurnsForAdmin = () => {
   };
 
   const handleChangeWorker = (email) => {
-    setSelectedDay('')
-    setSelectedWorker(email)
-  }
+    setSelectedDay("");
+    setSelectedWorker(email);
+  };
 
   return (
     <div>
@@ -90,7 +91,6 @@ const CancelledTurnsForAdmin = () => {
       <Box
         className="box-container-ctfw"
         style={{
-          overFlow: "scroll",
           marginBottom: "20px",
         }}
       >
@@ -99,8 +99,7 @@ const CancelledTurnsForAdmin = () => {
           style={{
             display: "flex",
             width: "100%",
-            maxWidth: "900px",
-            overflow: "auto",
+            overflow: "scroll",
           }}
         >
           {workers.length > 0 &&
@@ -112,8 +111,12 @@ const CancelledTurnsForAdmin = () => {
                   sx={{
                     display: "flex",
                     flexDirection: "column",
-                    backgroundColor: selectedDay == element ? "black" : "",
+                    alignItems: "start",
+                    backgroundColor:
+                      selectedWorker == element.email ? "black" : "",
                     margin: "5px",
+                    minWidth: "180px",
+                    overflow: "hidden",
                     fontFamily: "Jost, sans-serif",
                     fontWeight: "bold",
                     lineHeight: "1.2",
@@ -122,8 +125,12 @@ const CancelledTurnsForAdmin = () => {
                     handleChangeWorker(element.email);
                   }}
                 >
-                  <h3 style={{textTransform: "lowercase",}}>{element.email}</h3>
-                  <h5 style={{color: "#cccaca",}}>{element.name}</h5>
+                  <h3 style={{ textTransform: "lowercase" }}>
+                    {element.email}
+                  </h3>
+                  <h5 style={{ color: "#cccaca", display: "flex" }}>
+                    {element.name}
+                  </h5>
                 </Button>
               );
             })}
@@ -192,37 +199,40 @@ const CancelledTurnsForAdmin = () => {
                   </h4>
                   <hr />
                   <Box className="h-phone-ctfw">
-                    <a
-                      href={`whatsapp://send?phone=${element.phone}&text=Hola , quiero contactarte`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ textDecoration: "none" }}
-                    >
-                      <button
-                        className={
-                          element.phone === "no requerido"
-                            ? "btn-wsp-ctfw-false"
-                            : "btn-wsp-ctfw"
-                        }
-                        style={{
-                          fontFamily: "Jost, sans-serif",
-                          fontWeight: "bold",
-                          border: "none",
-                          cursor: "pointer",
-                          width: "100%",
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
+                    {element.phone !== "no requerido" ? (
+                      <a
+                        href={`whatsapp://send?phone=${element.phone}&text=Hola , quiero contactarte`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ textDecoration: "none" }}
                       >
-                        <h4>{element.phone}</h4>
-                        {element.phone !== "no requerido" && (
-                          <WhatsApp color="success" />
-                        )}
-                      </button>
-                    </a>
+                        <button
+                          className={
+                            element.phone === "no requerido"
+                              ? "btn-wsp-ctfw-false"
+                              : "btn-wsp-ctfw"
+                          }
+                          style={{
+                            fontFamily: "Jost, sans-serif",
+                            fontWeight: "bold",
+                            border: "none",
+                            cursor: "pointer",
+                            width: "100%",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
+                        >
+                          <h4>{element.phone}</h4>
+                          {element.phone !== "no requerido" && (
+                            <WhatsApp color="success" />
+                          )}
+                        </button>
+                      </a>
+                    ) : (
+                      <h4>{element.phone}</h4>
+                    )}
                   </Box>
-
                   <hr />
                   <h4 className="h-day-ctfw">{selectedDay}</h4>
                 </Box>
