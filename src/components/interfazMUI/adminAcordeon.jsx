@@ -14,7 +14,7 @@ import axios from "axios";
 import { useMediaQueryHook } from "./useMediaQuery";
 import Personalization from "../personalization/personalization";
 import CancelledTurnsForAdmin from "../cancelledTurnsForAdmin/cancelledTurnsForAdmin";
-import WhoIsComingAdmin from "../WhoIsComingAdmin/WhoIsComingAdmin";
+import WhoIsComingAdmin from "../whoIsComingAdmin/whoIsComingAdmin";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const AdminAcordeon = () => {
@@ -404,26 +404,17 @@ const AdminAcordeon = () => {
             aria-controls="panel7bh-content"
             id="panel7bh-header"
           >
-            <Box
+            <h2
               style={{
-                display: "flex",
-                alignItems: "center",
-                width: "100%",
+                color: !darkMode.on
+                  ? darkMode.dark
+                  : expanded === "panel7"
+                  ? darkMode.dark
+                  : "white",
               }}
             >
-              <h2
-                style={{
-                  color: !darkMode.on
-                    ? darkMode.dark
-                    : expanded === "panel7"
-                    ? darkMode.dark
-                    : "white",
-                }}
-              >
-                Quien viene?
-              </h2>
-              <h4 style={{ color: "#2196f3" }}>Proximamente</h4>
-            </Box>
+              Quien viene?
+            </h2>
           </AccordionSummary>
           <AccordionDetails>
             <WhoIsComingAdmin />

@@ -1,13 +1,15 @@
+import { useEffect, useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import { Button } from "@mui/material";
-import { Box, width } from "@mui/system";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { Box } from "@mui/system";
 import { WhatsApp } from "@mui/icons-material";
-import "./cancelledTurnsForWorker.css";
+import axios from "axios";
+import "../cancelledTurnsForAdmin/cancelledTurns.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const CancelledTurnsForWorker = ({ user }) => {
+  const { darkMode } = useContext(DarkModeContext);
   const [cancelledTurnsByDays, setCancelledTurnsByDays] = useState([]);
   const [count, setCount] = useState([]);
   const [selectedDay, setSelectedDay] = useState("");
@@ -87,7 +89,14 @@ const CancelledTurnsForWorker = ({ user }) => {
                   variant="contained"
                   key={index}
                   sx={{
-                    backgroundColor: selectedDay == element ? "black" : "",
+                    backgroundColor:
+                      selectedDay == element && darkMode.on
+                        ? "white"
+                        : selectedDay == element && !darkMode.on
+                        ? "black"
+                        : "",
+                    color:
+                      selectedDay == element && darkMode.on ? "black" : "white",
                     margin: "5px",
                     fontFamily: "Jost, sans-serif",
                     fontWeight: "bold",
@@ -115,7 +124,12 @@ const CancelledTurnsForWorker = ({ user }) => {
               <Box key={index}>
                 {index === 0 && (
                   <Box>
-                    <Box style={{ display: "flex" }}>
+                    <Box
+                      style={{
+                        display: "flex",
+                        color: darkMode.on ? "white" : darkMode.dark,
+                      }}
+                    >
                       <h3 className="h-email-ctfw">Email</h3>
                       <hr />
                       <h3 className="h-whocancelled-ctfw">Quien canceló?</h3>
@@ -127,14 +141,23 @@ const CancelledTurnsForWorker = ({ user }) => {
                     <hr className="hr-ctfw" />
                   </Box>
                 )}
-                <Box style={{ display: "flex" }}>
+                <Box
+                  style={{
+                    display: "flex",
+                    color: darkMode.on ? "white" : darkMode.dark,
+                  }}
+                >
                   <h4 className="h-email-ctfw">{element.email}</h4>
                   <hr />
                   <h4 className="h-whocancelled-ctfw">
                     {element.howCancelled}
                   </h4>
                   <hr />
-                  <Box className="h-phone-ctfw">
+                  <Box
+                    className={
+                      darkMode.on ? "h-phone-ctfw-dark" : "h-phone-ctfw"
+                    }
+                  >
                     {element.phone !== "no requerido" ? (
                       <a
                         href={`whatsapp://send?phone=${element.phone}&text=Hola , quiero contactarte`}
