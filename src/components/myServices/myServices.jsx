@@ -146,10 +146,12 @@ const MyServices = ({
       </Box>
       {/* box servicios/selects */}
       <Box
-        style={{
+        sx={{
           width: "100%",
           display: "flex",
           flexDirection: "column",
+          overflow: "scroll",
+          maxHeight: "400px",
         }}
       >
         {services && services.length > 0 ? (

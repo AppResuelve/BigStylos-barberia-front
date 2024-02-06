@@ -34,7 +34,7 @@ const AlertModal = ({
       handleUpdatePhone();
     }
   };
-  console.log(error);
+  
   const handleSetPhoneState = async (value) => {
     // Expresión regular que solo permite números, "+", "(", ")" y "-"
     const allowedCharacters = /^[0-9+()-]*$/;

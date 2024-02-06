@@ -25,7 +25,6 @@ const WhoIsComingAdmin = () => {
   const [selectedWorker, setSelectedWorker] = useState("");
   const [workers, setWorkers] = useState([]);
 
-  console.log(turns);
 
   const date = new Date();
   const currentDay = date.getDate();
@@ -72,7 +71,6 @@ const WhoIsComingAdmin = () => {
           { emailWorker: selectedWorker, month: numberMonth, day: numberDay }
         );
         const { data } = response;
-        console.log(data);
         setTurns(data);
       } catch (error) {
         console.error("Error al obtener los dias cancelados.", error);

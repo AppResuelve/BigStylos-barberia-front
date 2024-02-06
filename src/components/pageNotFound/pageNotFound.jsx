@@ -1,62 +1,73 @@
-import React from "react";
+import { useContext } from "react";
+import { DarkModeContext } from "../../App";
 import toHome from "../../assets/icons/homeBlack.png";
-import cilindroBlanco from "../../assets/images/cilindro-blanco.jpg";
+import toHomeWhite from "../../assets/icons/homeWhite.png";
+
+import imgFondoError from "../../assets/images/mano-error.png";
 import { NavLink } from "react-router-dom";
 import { Box, Button } from "@mui/material";
 
 const NotFound = () => {
+  const { darkMode } = useContext(DarkModeContext);
+
   return (
     <div
       style={{
         position: "relative",
+        overflow: "hidden",
         display: "flex",
-        width: "100%",
         justifyContent: "center",
-        height: "100vh", // Puedes ajustar esto según tus necesidades
-        overflow: "hidden", // Para ocultar cualquier desbordamiento de la imagen
+        width: "100%",
+        height: "100vh",
+        backgroundColor: darkMode.on ? darkMode.dark : "#cccccc",
       }}
     >
       <Box
         style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)", // Centrar horizontal y verticalmente
           width: "100%",
-          height: "400px",
+          height: "300px",
           display: "flex",
           flexDirection: "column",
+          justifyContent: "space-around",
           alignItems: "center",
           zIndex: "1",
         }}
       >
-        <h1 style={{ fontSize: "50px" }}>Error 401</h1>
-        <h2>No tienes permiso para acceder</h2>
+        <Box
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            color: darkMode.on ? "white" : darkMode.dark,
+          }}
+        >
+          <h1 style={{ fontSize: "50px" }}>Error 401</h1>
+          <h2>No tienes permiso para acceder</h2>
+        </Box>
         <NavLink to="/">
           <Button
             style={{
-              marginTop: "200px",
               border: "none",
-              backgroundColor: "rgba(227,220,216)",
-              padding: "10px",
-              borderRadius: "20px",
-              boxShadow: "0px 12px 5px 0px rgba(0,0,0,0.75)",
+              backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
+              padding: "40px",
+              borderRadius: "50%",
+              background: darkMode.on
+                ? "linear-gradient(145deg, #28292a, #212223)"
+                : "linear-gradient(145deg, #dadada, #b8b8b8)",
+              boxShadow: darkMode.on
+                ? "30px 30px 57px #1e1e1f,-30px -30px 57px #2c2e2f"
+                : "30px 30px 57px #a3a3a3,-30px -30px 57px #f5f5f5",
             }}
           >
-            <img src={toHome} />
+            <img src={darkMode.on ? toHomeWhite : toHome} />
           </Button>
         </NavLink>
       </Box>
       <img
-        src={cilindroBlanco}
+        src={imgFondoError}
         style={{
-          rotate:"180deg",
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
           position: "absolute",
-          top: 0,
-          left: 0,
+          bottom: "-10%",
         }}
       />
     </div>

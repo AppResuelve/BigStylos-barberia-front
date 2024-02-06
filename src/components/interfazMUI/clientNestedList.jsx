@@ -30,7 +30,6 @@ const ClientNestedList = ({ userData }) => {
     telefono: false,
     turnos: false,
   });
-console.log(error);
   const handleSectionClick = (section) => {
     setOpenSection((prevSections) => {
       // Si la sección clicada es "miperfil", establece todas las demás secciones en false
