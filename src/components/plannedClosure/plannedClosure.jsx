@@ -49,8 +49,7 @@ const PlannedClosure = ({ schedule }) => {
     setDayIsSelected(noWork);
     setShowEdit(false);
   };
-console.log(noWork);
-console.log(dayIsSelected);
+
   const handleSubmit = async (confirm) => {
     //     if (confirm === "confirm") {
     //       console.log("hago peticion put con daysturn");

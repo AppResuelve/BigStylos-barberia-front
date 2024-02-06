@@ -40,29 +40,29 @@ const Worker = ({ userData, userAuth }) => {
             variant="text"
             height={70}
             style={{
-              marginBottom: !sm ? "50px" : "",
+              marginBottom: !sm ? "35px" : "",
               width: "80vw",
               maxWidth: "410px",
             }}
           />
           <Skeleton
             variant="rounded"
-            height={60}
+            height={58}
             style={{ width: "95vw", maxWidth: "900px" }}
           />
           <Skeleton
             variant="rounded"
-            height={60}
+            height={58}
             style={{ width: "95vw", maxWidth: "900px" }}
           />
           <Skeleton
             variant="rounded"
-            height={60}
+            height={58}
             style={{ width: "95vw", maxWidth: "900px" }}
           />
           <Skeleton
             variant="rounded"
-            height={60}
+            height={58}
             style={{ width: "95vw", maxWidth: "900px" }}
           />
         </Stack>

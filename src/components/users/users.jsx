@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { DarkModeContext } from "../../App";
-import axios from "axios";
+import axios, { all } from "axios";
 import { Box, Button, Input, LinearProgress } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
@@ -11,13 +11,17 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Users = () => {
   const { darkMode } = useContext(DarkModeContext);
-  const [allUsers, setAllUsers] = useState([]);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [add, setAdd] = useState(false);
   const [typeUser, setTypeUser] = useState(true);
   const [loading, setLoading] = useState(true);
   const [searchValue, setSearchValue] = useState("");
+  const [allUsers, setAllUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
+  /* estados de los tipos de users para condicionar cuando no se encuentran */
+  const [filteredClients, setFilteredClients] = useState([]);
+  const [filteredProfesionals, setFilteredProfesionals] = useState([]);
+  const [filteredDelete, setFilteredDelete] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,12 +66,34 @@ const Users = () => {
       user.email.toLowerCase().includes(email.toLowerCase())
     );
     setFilteredUsers(filtered);
+    // Primero, creamos tres arrays vacíos para almacenar los usuarios filtrados
+    const filteredClients = [];
+    const filteredProfesionals = [];
+    const filteredDelete = [];
+
+    // Luego, utilizamos el método map para iterar sobre el array de usuarios y aplicar los filtros
+    filtered.forEach((user) => {
+      if (user.isDelete === true) {
+        filteredDelete.push(user);
+      } else if (user.worker === false) {
+        filteredClients.push(user);
+      } else if (user.worker === true) {
+        filteredProfesionals.push(user);
+      }
+    });
+
+    // Finalmente, seteamos los estados locales con los arrays filtrados
+    setFilteredClients(filteredClients);
+    setFilteredProfesionals(filteredProfesionals);
+    setFilteredDelete(filteredDelete);
   };
 
   useEffect(() => {
     filterUsersByEmail(searchValue, allUsers);
   }, [searchValue]);
 
+  console.log(allUsers);
+  console.log(filteredProfesionals);
   return (
     <div
       style={{
@@ -116,9 +142,18 @@ const Users = () => {
       </Box>
       {!sm ? (
         <Box
-          style={{ display: "flex", flexDirection: "column", width: "100%" }}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+          }}
         >
-          <Box style={{ display: "flex" }}>
+          <Box
+            style={{
+              display: "flex",
+              marginBottom: "10px",
+            }}
+          >
             <Box style={{ width: "50%" }}>
               <h2 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
                 Profesionales
@@ -126,7 +161,6 @@ const Users = () => {
               <hr
                 style={{
                   width: "100%",
-                  marginBottom: "15px",
                   border: "none",
                   height: "2px",
                   backgroundColor: "#2196f3",
@@ -137,7 +171,7 @@ const Users = () => {
                   allUsers.length > 0 &&
                   user &&
                   user.worker == true && (
-                    <Box key={index}>
+                    <Box key={index} style={{ marginTop: "7px" }}>
                       <h4
                         style={{
                           color: darkMode.on ? "white" : darkMode.dark,
@@ -168,6 +202,18 @@ const Users = () => {
                     </Box>
                   )
               )}
+              {filteredProfesionals.length < 1 && (
+                <Box
+                  style={{
+                    marginTop: "7px",
+                    display: "flex",
+                    alignItems: "center",
+                    height: "80px",
+                  }}
+                >
+                  <h4>No se encontró usuario de este tipo</h4>
+                </Box>
+              )}
             </Box>
 
             <Box style={{ width: "50%" }}>
@@ -177,7 +223,6 @@ const Users = () => {
               <hr
                 style={{
                   width: "100%",
-                  marginBottom: "15px",
                   border: "none",
                   height: "2px",
                   backgroundColor: "#2196f3",
@@ -190,7 +235,7 @@ const Users = () => {
                   user &&
                   !user.isDelete &&
                   user.worker === false && (
-                    <Box key={index}>
+                    <Box key={index} style={{ marginTop: "7px" }}>
                       <h4
                         style={{
                           color: darkMode.on ? "white" : darkMode.dark,
@@ -228,16 +273,27 @@ const Users = () => {
                     </Box>
                   )
               )}
+              {filteredClients.length < 1 && (
+                <Box
+                  style={{
+                    marginTop: "7px",
+                    display: "flex",
+                    alignItems: "center",
+                    height: "80px",
+                  }}
+                >
+                  <h4>No se encontró usuario de este tipo</h4>
+                </Box>
+              )}
             </Box>
           </Box>
-          <Box style={{ width: "100%", marginTop: "15px" }}>
+          <Box style={{ width: "100%" }}>
             <h2 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
               Eliminados
             </h2>
             <hr
               style={{
                 width: "100%",
-                marginBottom: "15px",
                 border: "none",
                 height: "2px",
                 backgroundColor: "#2196f3",
@@ -248,7 +304,7 @@ const Users = () => {
                 allUsers.length > 0 &&
                 user &&
                 user.isDelete == true && (
-                  <Box key={index}>
+                  <Box key={index} style={{ marginTop: "7px" }}>
                     <h4
                       style={{
                         color: darkMode.on ? "white" : darkMode.dark,
@@ -282,6 +338,18 @@ const Users = () => {
                     <hr />
                   </Box>
                 )
+            )}
+            {filteredDelete.length < 1 && (
+              <Box
+                style={{
+                  marginTop: "7px",
+                  display: "flex",
+                  alignItems: "center",
+                  height: "80px",
+                }}
+              >
+                <h4>No se encontró usuario de este tipo</h4>
+              </Box>
             )}
           </Box>
         </Box>
@@ -317,7 +385,7 @@ const Users = () => {
                 Clientes
               </Button>
             </Box>
-            <Box style={{ width: "100%" }}>
+            <Box sx={{ width: "100%" }}>
               {typeUser
                 ? allUsers.length > 0 &&
                   filteredUsers.map((user, index) => {
@@ -401,6 +469,19 @@ const Users = () => {
                       );
                     }
                   })}
+              {((filteredProfesionals.length < 1 && typeUser) ||
+                (filteredClients.length < 1 && !typeUser)) && (
+                <Box
+                  style={{
+                    marginTop: "7px",
+                    display: "flex",
+                    alignItems: "center",
+                    height: "80px",
+                  }}
+                >
+                  <h4>No se encontró usuario de este tipo</h4>
+                </Box>
+              )}
             </Box>
           </Box>
           <Box style={{ width: "100%", marginTop: "18px" }}>
@@ -412,51 +493,63 @@ const Users = () => {
                 fontWeight: "bold",
                 border: "none",
                 borderBottom: "3px solid #2196f3",
-                marginBottom: "15px",
                 cursor: "auto",
+                pointerEvents: "none",
               }}
             >
               Eliminados
             </Button>
-            {allUsers.map(
-              (user, index) =>
-                allUsers.length > 0 &&
-                user &&
-                user.isDelete == true && (
-                  <Box key={index}>
-                    <h4
-                      style={{
-                        color: darkMode.on ? "white" : darkMode.dark,
-                        letterSpacing: "1px",
-                      }}
-                    >
-                      {user.name}
-                    </h4>
-                    <h4
-                      style={{
-                        color: darkMode.on ? "white" : darkMode.dark,
-                        letterSpacing: "1px",
-                      }}
-                    >
-                      {user.email}
-                    </h4>
-                    <Box
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Button
-                        onClick={() => handleDelete(user.email)}
-                        style={{ color: "orange" }}
+            {allUsers.length > 0 &&
+              filteredUsers.map((user, index) => {
+                if (user.isDelete == true) {
+                  return (
+                    <Box key={index} style={{ marginTop: "10px" }}>
+                      <h4
+                        style={{
+                          color: darkMode.on ? "white" : darkMode.dark,
+                          letterSpacing: "1px",
+                        }}
                       >
-                        <DeleteSweepIcon />
-                      </Button>
-                    </Box>
+                        {user.name}
+                      </h4>
+                      <h4
+                        style={{
+                          color: darkMode.on ? "white" : darkMode.dark,
+                          letterSpacing: "1px",
+                        }}
+                      >
+                        {user.email}
+                      </h4>
+                      <Box
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Button
+                          onClick={() => handleDelete(user.email)}
+                          style={{ color: "orange" }}
+                        >
+                          <DeleteSweepIcon />
+                        </Button>
+                      </Box>
 
-                    <hr />
-                  </Box>
-                )
+                      <hr />
+                    </Box>
+                  );
+                }
+              })}
+            {filteredDelete.length < 1 && (
+              <Box
+                style={{
+                  marginTop: "7px",
+                  display: "flex",
+                  alignItems: "center",
+                  height: "80px",
+                }}
+              >
+                <h4>No se encontró usuario de este tipo</h4>
+              </Box>
             )}
           </Box>
         </Box>

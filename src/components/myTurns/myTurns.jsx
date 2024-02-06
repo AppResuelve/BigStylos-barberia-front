@@ -35,10 +35,7 @@ const MyTurns = ({ userData }) => {
           { emailUser: userData.email }
         );
         const { data } = response;
-        // Agregar un retraso de 3 segundos antes de establecer el estado
-        setTimeout(() => {
-          setListMyTurns(data);
-        }, 3000);
+        setListMyTurns(data);
       } catch (error) {
         console.log(error);
       }
