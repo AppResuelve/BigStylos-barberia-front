@@ -5,7 +5,7 @@ import { Box } from "@mui/system";
 import { WhatsApp } from "@mui/icons-material";
 import formatHour from "../../functions/formatHour";
 import axios from "axios";
-import "../WhoIsComingAdmin/whoIsComing.css";
+import "../whoIsComingAdmin/whoIsComing.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
