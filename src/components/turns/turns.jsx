@@ -5,7 +5,7 @@ import ShowTurns from "../showTurns/showTurns";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { Box, Button } from "@mui/material";
 import calendar from "../../assets/images/calendar2.png";
-import defaultServiceImg from "../../assets/images/default-img-services.jpg";
+import defaultServiceImg from "../../assets/images/banner-de-peluqueria-fondo-horizontal.jpg";
 import formatHour from "../../functions/formatHour";
 import axios from "axios";
 import "./turns.css";
@@ -25,8 +25,6 @@ const Turns = ({ user }) => {
   const [selectedImg, setSelectedImg] = useState(false);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [detailTurn, setDetailTurn] = useState({});
-  // console.log(user);
-
 
   useEffect(() => {
     if (validateAlertTurns === true) {
@@ -186,6 +184,7 @@ const Turns = ({ user }) => {
             {services.map((element, index) => (
               <Box key={index} style={{ padding: "8px" }}>
                 <Button
+                  disabled={user === 1 ? true : false}
                   variant={
                     element[0] === serviceSelected ? "contained" : "outlined"
                   }

@@ -16,7 +16,7 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const CreateWorkDays = ({ user, schedule, pendingServices }) => {
   //informacion del estado global
-  const {darkMode, setShowAlert, alertDelete, setAlertDelete } =
+  const { darkMode, setShowAlert, alertDelete, setAlertDelete } =
     useContext(DarkModeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [isOpen, setIsOpen] = useState(false);
@@ -31,9 +31,8 @@ const CreateWorkDays = ({ user, schedule, pendingServices }) => {
   const [timeSelected, setTimeSelected] = useState([]); //estado de la rama fac, no se para que es aun.
   const [refreshDays, setRefreshDays] = useState(false);
 
-
-/*   dayIsSelected && Object.keys(dayIsSelected).length > 0 && days && Object.keys(days) > 0 && console.log(days[Object.keys(dayIsSelected)[0]][Object.keys(Object.keys(dayIsSelected)[0])[0]])
- */
+  /*   dayIsSelected && Object.keys(dayIsSelected).length > 0 && days && Object.keys(days) > 0 && console.log(days[Object.keys(dayIsSelected)[0]][Object.keys(Object.keys(dayIsSelected)[0])[0]])
+   */
   useEffect(() => {
     const openValues = Object.values(schedule).map((item) => item.open);
     const closeValues = Object.values(schedule).map((item) => item.close);
@@ -131,7 +130,7 @@ const CreateWorkDays = ({ user, schedule, pendingServices }) => {
   const handleSubmit = async (time, values) => {
     const currentMonth = getCurrentMonth();
     const currentMonth2 = currentMonth == 12 ? 1 : currentMonth + 1;
-    
+
     const resultDuration = durationMax(user.services, values);
     if (resultDuration) {
       const arrayServices = Object.keys(user.services);
@@ -152,10 +151,10 @@ const CreateWorkDays = ({ user, schedule, pendingServices }) => {
           };
         }
       });
-      
+
       let submitArray = [];
       if (dayIsSelected[Object.keys(dayIsSelected)[0]]) {
-        const first = Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])
+        const first = Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]]);
         first.forEach((element) => {
           submitArray.push({
             month: currentMonth,
@@ -169,8 +168,10 @@ const CreateWorkDays = ({ user, schedule, pendingServices }) => {
         });
       }
       if (dayIsSelected[Object.keys(dayIsSelected)[1]]) {
-        const second = Object.keys(dayIsSelected[Object.keys(dayIsSelected)[1]])
-        
+        const second = Object.keys(
+          dayIsSelected[Object.keys(dayIsSelected)[1]]
+        );
+
         second.forEach((element) => {
           submitArray.push({
             month: currentMonth2,
@@ -190,19 +191,21 @@ const CreateWorkDays = ({ user, schedule, pendingServices }) => {
             submitArray[i]
           );
           const { data } = response;
-          console.log(data)
-          console.log(dayIsSelected, "este es el seteo del dayIsSelected")
+          console.log(data);
+          console.log(dayIsSelected, "este es el seteo del dayIsSelected");
           setDayIsSelected((prevState) => {
             let newState = { ...prevState };
-            console.log(newState, "entra al set")
-            console.log(newState[submitArray[i].month], "este es a lo que no accede")
+            console.log(newState, "entra al set");
+            console.log(
+              newState[submitArray[i].month],
+              "este es a lo que no accede"
+            );
             delete newState[submitArray[i].month][submitArray[i].day];
             if (Object.keys(newState[submitArray[i].month]).length === 0) {
               delete newState[submitArray[i].month];
             }
-            console.log(newState, "sale del set")
+            console.log(newState, "sale del set");
             return newState;
-            
           });
           console.log(
             `el dia ${submitArray[i].day}/${submitArray[i].month} se creo exitosamente`
@@ -335,7 +338,7 @@ const CreateWorkDays = ({ user, schedule, pendingServices }) => {
                   display: "flex",
                   width: "100%",
                   justifyContent: "center",
-                  marginTop: "12px",
+                  marginBottom:"10px",
                   color: "red",
                 }}
               >
@@ -367,39 +370,42 @@ const CreateWorkDays = ({ user, schedule, pendingServices }) => {
                 <h4 style={{ fontFamily: "Jost, sans-serif" }}>Volver</h4>
               </Button>
               {/* *********************************************** */}
-              <Button
-                variant="contained"
-                color="error"
-                disabled={
-                  dayIsSelected &&
-                  Object.keys(dayIsSelected)[0] &&
-                  days &&
-                  days[Object.keys(dayIsSelected)[0]] &&
-                  days[Object.keys(dayIsSelected)[0]][
-                    Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0]
-                  ]
-                    ? false
-                    : true
-                }
-                onClick={handleDeleteDay}
-              >
-                <h4 style={{ fontFamily: "Jost, sans-serif" }}>borrar</h4>
-              </Button>
+              <Box style={{ display: "flex" }}>
+                <Button
+                  variant="contained"
+                  color="error"
+                  disabled={
+                    dayIsSelected &&
+                    Object.keys(dayIsSelected)[0] &&
+                    days &&
+                    days[Object.keys(dayIsSelected)[0]] &&
+                    days[Object.keys(dayIsSelected)[0]][
+                      Object.keys(
+                        dayIsSelected[Object.keys(dayIsSelected)[0]]
+                      )[0]
+                    ]
+                      ? false
+                      : true
+                  }
+                  onClick={handleDeleteDay}
+                >
+                  <h4 style={{ fontFamily: "Jost, sans-serif" }}>borrar</h4>
+                </Button>
 
-              {/* *********************************************** */}
-              <Button
-                variant="contained"
-                disabled={
-                  !dayIsSelected ||
-                  Object.keys(dayIsSelected).length === 0 ||
-                  shouldDisableButton(dayIsSelected, days)
-                }
-                onClick={handleShowSlider}
-              >
-                <h4 style={{ fontFamily: "Jost, sans-serif" }}>
-                  Asignar horarios
-                </h4>
-              </Button>
+                {/* *********************************************** */}
+                <Button
+                  style={{ marginLeft: "10px" }}
+                  variant="contained"
+                  disabled={
+                    !dayIsSelected ||
+                    Object.keys(dayIsSelected).length === 0 ||
+                    shouldDisableButton(dayIsSelected, days)
+                  }
+                  onClick={handleShowSlider}
+                >
+                  <h4 style={{ fontFamily: "Jost, sans-serif" }}>Asignar</h4>
+                </Button>
+              </Box>
             </Box>
           )}
           {/* sección del slider */}

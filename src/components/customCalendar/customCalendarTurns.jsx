@@ -41,7 +41,7 @@ const CustomCalendarTurns = ({
     };
     fetchData();
   }, []);
-
+  
   const handleDay = (day, month) => {
     if (Object.keys(user).length > 0 && user.phone === "") {
       setShowAlert({

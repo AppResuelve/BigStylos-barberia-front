@@ -20,7 +20,7 @@ const Nav = ({ user }) => {
       style={{
         display: "flex",
         justifyContent: "space-between",
-        alignItems: " center",
+        alignItems: "center",
         position: "fixed",
         width: "100%",
         backgroundColor:
