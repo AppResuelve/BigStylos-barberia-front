@@ -1,15 +1,18 @@
+import { useEffect, useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import { Button } from "@mui/material";
 import { Box } from "@mui/system";
-import axios from "axios";
-import { useEffect, useState } from "react";
 import { WhatsApp } from "@mui/icons-material";
-import "./whoIsComingWorker.css";
+import formatHour from "../../functions/formatHour";
+import axios from "axios";
+import "../whoIsComingAdmin/whoIsComing.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const WhoIsComingWorker = ({ user }) => {
+  const { darkMode } = useContext(DarkModeContext);
   const [turns, setTurns] = useState([]);
-/*  turns contiene:
+  /*  turns contiene:
   {
     email: el email del cliente
     name: el name del cliente
@@ -20,7 +23,6 @@ const WhoIsComingWorker = ({ user }) => {
   } */
   const [count, setCount] = useState([]);
   const [selectedDay, setSelectedDay] = useState("");
-
 
   const date = new Date();
   const currentDay = date.getDate();
@@ -50,7 +52,7 @@ const WhoIsComingWorker = ({ user }) => {
           { emailWorker: user.email, month: numberMonth, day: numberDay }
         );
         const { data } = response;
-        console.log(data)
+        console.log(data);
         setTurns(data);
       } catch (error) {
         console.error("Error al obtener los dias cancelados.", error);
@@ -97,7 +99,14 @@ const WhoIsComingWorker = ({ user }) => {
                   variant="contained"
                   key={index}
                   sx={{
-                    backgroundColor: selectedDay == element ? "black" : "",
+                    backgroundColor:
+                      selectedDay == element && darkMode.on
+                        ? "white"
+                        : selectedDay == element && !darkMode.on
+                        ? "black"
+                        : "",
+                    color:
+                      selectedDay == element && darkMode.on ? "black" : "white",
                     margin: "5px",
                     fontFamily: "Jost, sans-serif",
                     fontWeight: "bold",
@@ -113,76 +122,102 @@ const WhoIsComingWorker = ({ user }) => {
         </Box>
       </Box>
       <Box
-        className="box-container-ctfw"
-        sx={{
-          width: "100%",
-          overFlow: "scroll",
-        }}
+        style={{ overflow: "scroll", maxHeight: "350px", marginTop: "20px" }}
       >
-        <Box style={{ overflow: "scroll", maxHeight: "350px" }}>
-          {turns.length > 0 &&
-            turns.map((element, index) => (
-              <Box key={index}>
-                {index === 0 && (
-                  <Box>
-                    <Box style={{ display: "flex" }}>
-                      <h3 className="h-email-ctfw">Email</h3>
-                      <hr />
-                      <h3 className="h-whocancelled-ctfw">Nombre</h3>
-                      <hr />
-                      <h3 className="h-phone-ctfw">Celular</h3>
-                      <hr />
-                      <h3 className="h-day-ctfw">Día</h3>
-                    </Box>
-                    <hr className="hr-ctfw" />
+        {turns.length > 0 &&
+          turns.map((element, index) => (
+            <Box key={index}>
+              {index === 0 && (
+                <Box>
+                  <Box
+                    style={{
+                      display: "flex",
+                      color: darkMode.on ? "white" : darkMode.dark,
+                    }}
+                  >
+                    <h3 className="h-email-hic">Email</h3>
+                    <hr />
+                    <h3 className="h-time-hic">Horario</h3>
+                    <hr />
+                    <h3 className="h-phone-hic">Celular</h3>
+                    <hr />
+                    <h3 className="h-name-hic">Nombre</h3>
                   </Box>
-                )}
-                <Box style={{ display: "flex" }}>
-                  <h4 className="h-email-ctfw">{element.email}</h4>
-                  <hr />
-                  <h4 className="h-whocancelled-ctfw">
-                    {element.name}
-                  </h4>
-                  <hr />
-                  <Box className="h-phone-ctfw">
-                    <a
-                      href={`whatsapp://send?phone=${element.phone}&text=Hola , quiero contactarte`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ textDecoration: "none" }}
-                    >
-                      <button
-                        className={
-                          element.phone === "no requerido"
-                            ? "btn-wsp-ctfw-false"
-                            : "btn-wsp-ctfw"
-                        }
-                        style={{
-                          fontFamily: "Jost, sans-serif",
-                          fontWeight: "bold",
-                          border: "none",
-                          cursor: "pointer",
-                          width: "100%",
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        <h4>{element.phone}</h4>
-                        {element.phone !== "no requerido" && (
-                          <WhatsApp color="success" />
-                        )}
-                      </button>
-                    </a>
-                  </Box>
-
-                  <hr />
-                  <img src={element.image} alt={element.image} style={{width:"30px", borderRadius:"200px"}}></img>
+                  <hr className="hr-hic" />
                 </Box>
-                <hr className="hr-ctfw" />
+              )}
+              <Box
+                style={{
+                  display: "flex",
+                  color: darkMode.on ? "white" : darkMode.dark,
+                }}
+              >
+                <h4 className="h-email-hic">{element.email}</h4>
+                <hr />
+                <h4 className="h-time-hic">
+                  {`${formatHour(element.ini)} - ${formatHour(element.fin)}`}
+                </h4>
+                <hr />
+                <Box
+                  className={darkMode.on ? "h-phone-hic-dark" : "h-phone-hic"}
+                >
+                  <a
+                    href={`whatsapp://send?phone=${element.phone}&text=Hola , quiero contactarte`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ textDecoration: "none" }}
+                  >
+                    <button
+                      className={
+                        element.phone === "no requerido"
+                          ? "btn-wsp-ctfw-false"
+                          : "btn-wsp-ctfw"
+                      }
+                      style={{
+                        fontFamily: "Jost, sans-serif",
+                        fontWeight: "bold",
+                        border: "none",
+                        cursor: "pointer",
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <h4>{element.phone}</h4>
+                      {element.phone !== "no requerido" && (
+                        <WhatsApp color="success" />
+                      )}
+                    </button>
+                  </a>
+                </Box>
+
+                <hr />
+                <Box style={{ display: "flex", alignItems: "center" }}>
+                  <img
+                    src={element.image}
+                    alt="imagen de perfil"
+                    style={{ width: "30px", borderRadius: "50px" }}
+                  ></img>
+                  <h4 className="h-name-hic">{element.name}</h4>
+                </Box>
               </Box>
-            ))}
-        </Box>
+              <hr className="hr-hic" />
+            </Box>
+          ))}
+        {turns.length < 1 && selectedDay !== "" && (
+          <Box
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "15px",
+            }}
+          >
+            <h4 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
+              No tiene turnos para este día
+            </h4>
+          </Box>
+        )}
       </Box>
     </div>
   );

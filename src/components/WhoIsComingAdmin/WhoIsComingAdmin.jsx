@@ -2,19 +2,31 @@ import { useEffect, useState, useContext } from "react";
 import { DarkModeContext } from "../../App";
 import { Button } from "@mui/material";
 import { Box } from "@mui/system";
-import axios from "axios";
 import { WhatsApp } from "@mui/icons-material";
-import "./cancelledTurns.css";
+import formatHour from "../../functions/formatHour";
+import axios from "axios";
+import "./whoIsComing.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const CancelledTurnsForAdmin = () => {
+const WhoIsComingAdmin = () => {
   const { darkMode } = useContext(DarkModeContext);
-  const [cancelledTurnsByDays, setCancelledTurnsByDays] = useState([]);
+  const [turns, setTurns] = useState([]);
+  /*  turns contiene:
+  {
+    email: el email del cliente
+    name: el name del cliente
+    ini: el minuto de inicio de su turno
+    fin: minuto final de su turno
+    phone: su cel
+    image: su imagen
+  } */
   const [count, setCount] = useState([]);
   const [selectedDay, setSelectedDay] = useState("");
-  const [workers, setWorkers] = useState([]);
   const [selectedWorker, setSelectedWorker] = useState("");
+  const [workers, setWorkers] = useState([]);
+
+  console.log(turns);
 
   const date = new Date();
   const currentDay = date.getDate();
@@ -28,7 +40,7 @@ const CancelledTurnsForAdmin = () => {
         const { data } = response;
         setWorkers(data);
       } catch (error) {
-        console.error("Error al obtener el count.", error);
+        console.error("Error al obtener workers.", error);
       }
     };
     fetchWorkers();
@@ -38,7 +50,7 @@ const CancelledTurnsForAdmin = () => {
     const fetchCount = async () => {
       try {
         const response = await axios.post(
-          `${VITE_BACKEND_URL}/cancelledturns/getcount`,
+          `${VITE_BACKEND_URL}/workdays/countworker`,
           { emailWorker: selectedWorker }
         );
         const { data } = response;
@@ -53,21 +65,22 @@ const CancelledTurnsForAdmin = () => {
   }, [selectedWorker]);
 
   useEffect(() => {
-    const fetchCancelled = async () => {
+    const fetchTurns = async () => {
       const [numberDay, numberMonth] = selectedDay.split("/").map(Number);
       try {
         const response = await axios.post(
-          `${VITE_BACKEND_URL}/cancelledturns/getforworker`,
+          `${VITE_BACKEND_URL}/workdays/whoiscoming`,
           { emailWorker: selectedWorker, month: numberMonth, day: numberDay }
         );
         const { data } = response;
-        setCancelledTurnsByDays(data);
+        console.log(data);
+        setTurns(data);
       } catch (error) {
         console.error("Error al obtener los dias cancelados.", error);
       }
     };
     if (selectedDay.length > 0) {
-      fetchCancelled();
+      fetchTurns();
     }
   }, [selectedDay]);
 
@@ -190,17 +203,11 @@ const CancelledTurnsForAdmin = () => {
               );
             })}
         </Box>
-      </Box>
-      <Box
-        className="box-container-ctfw"
-        sx={{
-          width: "100%",
-          overFlow: "scroll",
-        }}
-      >
-        <Box style={{ overflow: "scroll", maxHeight: "350px" }}>
-          {cancelledTurnsByDays.length > 0 &&
-            cancelledTurnsByDays.map((element, index) => (
+        <Box
+          style={{ overflow: "scroll", maxHeight: "350px", marginTop: "20px" }}
+        >
+          {turns.length > 0 &&
+            turns.map((element, index) => (
               <Box key={index}>
                 {index === 0 && (
                   <Box>
@@ -210,15 +217,15 @@ const CancelledTurnsForAdmin = () => {
                         color: darkMode.on ? "white" : darkMode.dark,
                       }}
                     >
-                      <h3 className="h-email-ctfw">Email</h3>
+                      <h3 className="h-email-hic">Email</h3>
                       <hr />
-                      <h3 className="h-whocancelled-ctfw">Quien canceló?</h3>
+                      <h3 className="h-time-hic">Horario</h3>
                       <hr />
-                      <h3 className="h-phone-ctfw">Celular</h3>
+                      <h3 className="h-phone-hic">Celular</h3>
                       <hr />
-                      <h3 className="h-day-ctfw">Día</h3>
+                      <h3 className="h-name-hic">Nombre</h3>
                     </Box>
-                    <hr className="hr-ctfw" />
+                    <hr className="hr-hic" />
                   </Box>
                 )}
                 <Box
@@ -227,61 +234,78 @@ const CancelledTurnsForAdmin = () => {
                     color: darkMode.on ? "white" : darkMode.dark,
                   }}
                 >
-                  <h4 className="h-email-ctfw">{element.email}</h4>
+                  <h4 className="h-email-hic">{element.email}</h4>
                   <hr />
-                  <h4 className="h-whocancelled-ctfw">
-                    {element.howCancelled}
+                  <h4 className="h-time-hic">
+                    {`${formatHour(element.ini)} - ${formatHour(element.fin)}`}
                   </h4>
                   <hr />
                   <Box
-                    className={
-                      darkMode.on ? "h-phone-ctfw-dark" : "h-phone-ctfw"
-                    }
+                    className={darkMode.on ? "h-phone-hic-dark" : "h-phone-hic"}
                   >
-                    {element.phone !== "no requerido" ? (
-                      <a
-                        href={`whatsapp://send?phone=${element.phone}&text=Hola , quiero contactarte`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ textDecoration: "none" }}
+                    <a
+                      href={`whatsapp://send?phone=${element.phone}&text=Hola , quiero contactarte`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        textDecoration: "none",
+                      }}
+                    >
+                      <button
+                        className={
+                          element.phone === "no requerido"
+                            ? "btn-wsp-ctfw-false"
+                            : "btn-wsp-ctfw"
+                        }
+                        style={{
+                          fontFamily: "Jost, sans-serif",
+                          fontWeight: "bold",
+                          border: "none",
+                          cursor: "pointer",
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
                       >
-                        <button
-                          className={
-                            element.phone === "no requerido"
-                              ? "btn-wsp-ctfw-false"
-                              : "btn-wsp-ctfw"
-                          }
-                          style={{
-                            fontFamily: "Jost, sans-serif",
-                            fontWeight: "bold",
-                            border: "none",
-                            cursor: "pointer",
-                            width: "100%",
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                          }}
-                        >
-                          <h4>{element.phone}</h4>
-                          {element.phone !== "no requerido" && (
-                            <WhatsApp color="success" />
-                          )}
-                        </button>
-                      </a>
-                    ) : (
-                      <h4>{element.phone}</h4>
-                    )}
+                        <h4>{element.phone}</h4>
+                        {element.phone !== "no requerido" && (
+                          <WhatsApp color="success" />
+                        )}
+                      </button>
+                    </a>
                   </Box>
+
                   <hr />
-                  <h4 className="h-day-ctfw">{selectedDay}</h4>
+                  <Box style={{ display: "flex", alignItems: "center" }}>
+                    <img
+                      src={element.image}
+                      alt="imagen de perfil"
+                      style={{ width: "30px", borderRadius: "50px" }}
+                    ></img>
+                    <h4 className="h-name-hic">{element.name}</h4>
+                  </Box>
                 </Box>
-                <hr className="hr-ctfw" />
+                <hr className="hr-hic" />
               </Box>
             ))}
+          {turns.length < 1 && selectedDay !== "" && (
+            <Box
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "15px",
+              }}
+            >
+              <h4 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
+                No tienes turnos para este día
+              </h4>
+            </Box>
+          )}
         </Box>
       </Box>
     </div>
   );
 };
 
-export default CancelledTurnsForAdmin;
+export default WhoIsComingAdmin;

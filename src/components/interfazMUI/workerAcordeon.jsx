@@ -23,7 +23,6 @@ const WorkerAcordeon = ({ user }) => {
   const [workerData, setWorkerData] = useState({});
   const [refresh, setRefresh] = useState(false);
   const [pendingServices, setPendingServices] = useState(false);
-  // const [redirectToMyServices, setRedirectToMyServices] = useState(false); estado global ahora
   /* estados locales del componente myServices */
   const [services, setServices] = useState([]);
   const [serviceStatus, setServiceStatus] = useState({});
@@ -284,29 +283,20 @@ const WorkerAcordeon = ({ user }) => {
             aria-controls="panel3bh-content"
             id="panel3bh-header"
           >
-            <Box
+            <h2
               style={{
-                display: "flex",
-                alignItems: "center",
-                width: "100%",
+                color: !darkMode.on
+                  ? darkMode.dark
+                  : expanded === "panel3"
+                  ? darkMode.dark
+                  : "white",
               }}
             >
-              <h2
-                style={{
-                  color: !darkMode.on
-                    ? darkMode.dark
-                    : expanded === "panel3"
-                    ? darkMode.dark
-                    : "white",
-                }}
-              >
-                Quien viene?
-              </h2>
-              <h4 style={{ color: "#2196f3" }}>Proximamente</h4>
-            </Box>
+              Quien viene?
+            </h2>
           </AccordionSummary>
           <AccordionDetails>
-            <WhoIsComingWorker user={user}/>
+            <WhoIsComingWorker user={user} />
           </AccordionDetails>
         </Accordion>
         {/*  //------------------// */}

@@ -14,6 +14,7 @@ import axios from "axios";
 import { useMediaQueryHook } from "./useMediaQuery";
 import Personalization from "../personalization/personalization";
 import CancelledTurnsForAdmin from "../cancelledTurnsForAdmin/cancelledTurnsForAdmin";
+import WhoIsComingAdmin from "../whoIsComingAdmin/whoIsComingAdmin";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const AdminAcordeon = () => {
@@ -382,17 +383,16 @@ const AdminAcordeon = () => {
         <Accordion
           style={{
             borderRadius: "0px 0px 5px 5px",
-            marginBottom: "30px",
+            marginBottom: "5px",
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
             backgroundColor: !darkMode.on ? darkMode.light : darkMode.dark,
-
-            border: "none",
           }}
           expanded={expanded === "panel7"}
           onChange={handleChange("panel7")}
         >
           <AccordionSummary
             sx={{
+              display: "flex",
               backgroundColor: expanded === "panel7" ? "#d6d6d5" : "",
               borderRadius: "2px",
             }}
@@ -409,6 +409,48 @@ const AdminAcordeon = () => {
                 color: !darkMode.on
                   ? darkMode.dark
                   : expanded === "panel7"
+                  ? darkMode.dark
+                  : "white",
+              }}
+            >
+              Quien viene?
+            </h2>
+          </AccordionSummary>
+          <AccordionDetails>
+            <WhoIsComingAdmin />
+          </AccordionDetails>
+        </Accordion>
+        {/* ********************************************************************************************************* */}
+        <Accordion
+          style={{
+            borderRadius: "0px 0px 5px 5px",
+            marginBottom: "30px",
+            boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
+            backgroundColor: !darkMode.on ? darkMode.light : darkMode.dark,
+
+            border: "none",
+          }}
+          expanded={expanded === "panel8"}
+          onChange={handleChange("panel8")}
+        >
+          <AccordionSummary
+            sx={{
+              backgroundColor: expanded === "panel8" ? "#d6d6d5" : "",
+              borderRadius: "2px",
+            }}
+            expandIcon={
+              <ExpandMoreIcon
+                sx={{ color: expanded === "panel8" ? "" : "#2196f3" }}
+              />
+            }
+            aria-controls="panel8bh-content"
+            id="panel8bh-header"
+          >
+            <h2
+              style={{
+                color: !darkMode.on
+                  ? darkMode.dark
+                  : expanded === "panel8"
                   ? darkMode.dark
                   : "white",
               }}
