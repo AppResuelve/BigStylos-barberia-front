@@ -113,7 +113,7 @@ const SliderModal = ({
             display: "flex",
             flexDirection: sm ? "row" : "column",
             justifyContent: "space-between",
-            paddingBottom: sm ? "50px" : "",
+            paddingBottom: sm ? "60px" : "",
           }}
         >
           {!sm && (

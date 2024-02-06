@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { DarkModeContext } from "../../App";
 import timeForRenderedStructure from "../../functions/timeForRenderedStructure";
 
 const SelectedDay = ({
@@ -9,6 +10,7 @@ const SelectedDay = ({
   setDayIsSelected,
   schedule,
 }) => {
+  const { darkMode } = useContext(DarkModeContext);
   const [renderedStructure, setRenderedStructure] = useState([]);
 
   useEffect(() => {
@@ -45,7 +47,13 @@ const SelectedDay = ({
         maxHeight: "350px",
       }}
     >
-      <h2 style={{ width: "100%", marginBottom: "12px" }}>
+      <h2
+        style={{
+          width: "100%",
+          marginBottom: "12px",
+          color: darkMode.on ? "white" : darkMode.dark,
+        }}
+      >
         Días seleccionados :
         {renderedStructure.length > 0 ? renderedStructure.length : 0}
       </h2>
@@ -65,12 +73,27 @@ const SelectedDay = ({
                 display: "flex",
               }}
             >
-              <h2 style={{ marginRight: "10px" }}>{item}</h2>
+              <h2
+                style={{
+                  marginRight: "10px",
+                  color: darkMode.on ? "white" : darkMode.dark,
+                }}
+              >
+                {item}
+              </h2>
               {days && days[firstMonth] && days[firstMonth][firstDay] ? (
-                <h2>{timeForRenderedStructure(firstMonth, firstDay, days)}</h2>
+                <h2 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
+                  {timeForRenderedStructure(firstMonth, firstDay, days)}
+                </h2>
               ) : null}
             </div>
-            <hr style={{ width: "100%", marginBottom: "10px" }} />
+            <hr
+              style={{
+                width: "100%",
+                marginBottom: "10px",
+                color: darkMode.on ? "white" : darkMode.dark,
+              }}
+            />
           </div>
         ))}
       </div>

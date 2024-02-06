@@ -1,11 +1,10 @@
+import { useContext } from "react";
+import { DarkModeContext } from "../../App";
 import daysMonthCalendarCustom from "../../functions/daysMonthCalendarCustom";
 import getToday from "../../functions/getToday";
 import obtainDayName from "../../functions/obtainDayName";
-import "./customCalendar.css";
 import { Box } from "@mui/material";
-import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
-import { useContext } from "react";
-import { DarkModeContext } from "../../App";
+import "./customCalendar.css";
 
 const CustomCalendarPlannedC = ({
   schedule,
@@ -23,7 +22,6 @@ const CustomCalendarPlannedC = ({
   let { currentMonth, nextMonth, currentYear, nextYear, month1, month2 } = daysCalendarCustom;
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
   const getDayPosition = getToday();
-  const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
   const handleDay = (day, month) => {
     setDayIsSelected((prevState) => {

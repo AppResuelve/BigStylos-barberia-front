@@ -21,7 +21,8 @@ const CustomCalendar = ({
 }) => {
   const { darkMode } = useContext(DarkModeContext);
   const daysCalendarCustom = daysMonthCalendarCustom(amountOfDays, false);
-  let { currentMonth, nextMonth, currentYear, nextYear, month1, month2 } = daysCalendarCustom;
+  let { currentMonth, nextMonth, currentYear, nextYear, month1, month2 } =
+    daysCalendarCustom;
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
   const getDayPosition = getToday();
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
@@ -206,7 +207,8 @@ const CustomCalendar = ({
               disabled={!showEdit ? true : disabled}
               onClick={() => handleDay(day, nextMonth)}
               style={{
-                gridColumnStart: month1.length < 1 && index === 0 ? getDayPosition : "auto",
+                gridColumnStart:
+                  month1.length < 1 && index === 0 ? getDayPosition : "auto",
                 backgroundColor: colorDay,
                 ...(dayIsSelected[nextMonth] && dayIsSelected[nextMonth][day]
                   ? { backgroundColor: "#2196f3" }
@@ -239,6 +241,8 @@ const CustomCalendar = ({
           display: "flex",
           width: "100%",
           justifyContent: "center",
+          marginTop: "10px",
+          marginBottom: "15px",
         }}
       >
         <Box>
@@ -278,6 +282,25 @@ const CustomCalendar = ({
               }}
             >
               No laborable
+            </h4>
+          </Box>
+          <Box sx={{ display: "flex", alignItems: "center", margin: "5px" }}>
+            <div
+              style={{
+                height: "18px",
+                width: "18px",
+                backgroundColor: "#5bfd33d0",
+                borderRadius: "25px",
+              }}
+            ></div>
+            <h4
+              style={{
+                color: darkMode.on ? "white" : darkMode.dark,
+                marginLeft: "4px",
+                letterSpacing: "1px",
+              }}
+            >
+              Día laborable
             </h4>
           </Box>
         </Box>
