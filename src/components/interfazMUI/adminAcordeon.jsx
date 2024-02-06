@@ -1,20 +1,21 @@
 import { useEffect, useState, useContext } from "react";
 import { DarkModeContext } from "../../App";
+import { useMediaQueryHook } from "./useMediaQuery";
 import Accordion from "@mui/material/Accordion";
+import { Box, LinearProgress } from "@mui/material";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
-import { Box, LinearProgress } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Services from "../services/services";
-import OpeningAndClosing from "../openingAndClosing/openingAndClosing";
 import WorkDays from "../workDays/workDays";
-import Users from "../users/users";
+import OpeningAndClosing from "../openingAndClosing/openingAndClosing";
 import PlannedClosure from "../plannedClosure/plannedClosure";
-import axios from "axios";
-import { useMediaQueryHook } from "./useMediaQuery";
+import Users from "../users/users";
 import Personalization from "../personalization/personalization";
-import CancelledTurnsForAdmin from "../cancelledTurnsForAdmin/cancelledTurnsForAdmin";
 import WhoIsComingAdmin from "../whoIsComingAdmin/whoIsComingAdmin";
+import CancelledTurnsForAdmin from "../cancelledTurnsForAdmin/cancelledTurnsForAdmin";
+import axios from "axios";
+
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const AdminAcordeon = () => {
