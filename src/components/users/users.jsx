@@ -1,12 +1,14 @@
 import { useEffect, useState, useContext } from "react";
 import { DarkModeContext } from "../../App";
-import axios, { all } from "axios";
+import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { Box, Button, Input, LinearProgress } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
-import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
+import "./users.css";
+import axios from "axios";
+
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Users = () => {
@@ -211,7 +213,9 @@ const Users = () => {
                     height: "80px",
                   }}
                 >
-                  <h4>No se encontró usuario de este tipo</h4>
+                  <h4 className={darkMode.on ? "h4-not-found-users" : ""}>
+                    No se encontró usuario de este tipo
+                  </h4>
                 </Box>
               )}
             </Box>
@@ -282,7 +286,9 @@ const Users = () => {
                     height: "80px",
                   }}
                 >
-                  <h4>No se encontró usuario de este tipo</h4>
+                  <h4 className={darkMode.on ? "h4-not-found-users" : ""}>
+                    No se encontró usuario de este tipo
+                  </h4>
                 </Box>
               )}
             </Box>
@@ -348,7 +354,9 @@ const Users = () => {
                   height: "80px",
                 }}
               >
-                <h4>No se encontró usuario de este tipo</h4>
+                <h4 className={darkMode.on ? "h4-not-found-users" : ""}>
+                  No se encontró usuario de este tipo
+                </h4>
               </Box>
             )}
           </Box>
@@ -479,7 +487,9 @@ const Users = () => {
                     height: "80px",
                   }}
                 >
-                  <h4>No se encontró usuario de este tipo</h4>
+                  <h4 className={darkMode.on ? "h4-not-found-users" : ""}>
+                    No se encontró usuario de este tipo
+                  </h4>
                 </Box>
               )}
             </Box>
@@ -548,7 +558,9 @@ const Users = () => {
                   height: "80px",
                 }}
               >
-                <h4>No se encontró usuario de este tipo</h4>
+                <h4 className={darkMode.on ? "h4-not-found-users" : ""}>
+                  No se encontró usuario de este tipo
+                </h4>
               </Box>
             )}
           </Box>
