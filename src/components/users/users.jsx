@@ -359,7 +359,7 @@ const Users = () => {
                   })
                 : allUsers.length > 0 &&
                   filteredUsers.map((user, index) => {
-                    if (!user.worker) {
+                    if (!user.worker && !user.isDelete) {
                       return (
                         <Box key={index} style={{ marginTop: "18px" }}>
                           <h4
@@ -387,9 +387,12 @@ const Users = () => {
                             <Button
                               onClick={() => handleUpdateUser(user.email)}
                             >
-                              <KeyboardDoubleArrowRightIcon />
+                              <KeyboardDoubleArrowLeftIcon />
                             </Button>
-                            <Button style={{ color: "red" }}>
+                            <Button
+                              onClick={() => handleDelete(user.email)}
+                              style={{ color: "red" }}
+                            >
                               <DeleteOutlineIcon />
                             </Button>
                           </Box>

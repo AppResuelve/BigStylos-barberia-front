@@ -16,7 +16,6 @@ const CancelledTurnsForWorker = ({ user }) => {
 
   const date = new Date();
   const currentDay = date.getDate();
-  console.log(cancelledTurnsByDays);
 
   useEffect(() => {
     const fetchCount = async () => {

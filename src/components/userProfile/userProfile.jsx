@@ -14,6 +14,7 @@ const Profile = ({ userData }) => {
   return (
     <div >
       <button
+        style={{cursor:isLoading? "auto":"pointer"}}
         className="btn-userProfile"
         disabled={isLoading ? true : false}
         onClick={() => setIsOpen(true)}

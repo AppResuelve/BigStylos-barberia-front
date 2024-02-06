@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import timeForRenderedStructure from "../../functions/timeForRenderedStructure";
 
 const SelectedDay = ({
   firstMonth,
@@ -57,7 +58,6 @@ const SelectedDay = ({
               display: "flex",
               width: "100%",
               flexDirection: "column",
-              // alignItems: "center",
             }}
           >
             <div
@@ -67,7 +67,7 @@ const SelectedDay = ({
             >
               <h2 style={{ marginRight: "10px" }}>{item}</h2>
               {days && days[firstMonth] && days[firstMonth][firstDay] ? (
-                <h2>traer time</h2>
+                <h2>{timeForRenderedStructure(firstMonth, firstDay, days)}</h2>
               ) : null}
             </div>
             <hr style={{ width: "100%", marginBottom: "10px" }} />

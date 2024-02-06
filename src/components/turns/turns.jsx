@@ -25,8 +25,6 @@ const Turns = ({ user }) => {
   const [selectedImg, setSelectedImg] = useState(false);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [detailTurn, setDetailTurn] = useState({});
-  // console.log(user);
-
 
   useEffect(() => {
     if (validateAlertTurns === true) {
@@ -186,6 +184,7 @@ const Turns = ({ user }) => {
             {services.map((element, index) => (
               <Box key={index} style={{ padding: "8px" }}>
                 <Button
+                  disabled={user === 1 ? true : false}
                   variant={
                     element[0] === serviceSelected ? "contained" : "outlined"
                   }

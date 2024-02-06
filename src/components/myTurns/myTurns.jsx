@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { DarkModeContext } from "../../App";
 import axios from "axios";
-import { Box, Button, setRef } from "@mui/material";
+import { Box, Button, Skeleton } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import formatHour from "../../functions/formatHour";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
@@ -12,7 +12,7 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const MyTurns = ({ userData }) => {
   const { darkMode, setShowAlert, validateAlert, setValidateAlert } =
     useContext(DarkModeContext);
-  const [listMyTurns, setListMyTurns] = useState([]);
+  const [listMyTurns, setListMyTurns] = useState(1);
   const [InfoToSubmit, setInfoToSubmit] = useState({});
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [turnServices, setTurnServices] = useState([]);
@@ -35,7 +35,10 @@ const MyTurns = ({ userData }) => {
           { emailUser: userData.email }
         );
         const { data } = response;
-        setListMyTurns(data);
+        // Agregar un retraso de 3 segundos antes de establecer el estado
+        setTimeout(() => {
+          setListMyTurns(data);
+        }, 3000);
       } catch (error) {
         console.log(error);
       }
@@ -103,11 +106,13 @@ const MyTurns = ({ userData }) => {
       console.error("Error al cancelar el turno:", error);
     }
   };
-
+  console.log(listMyTurns);
   return (
     <div className="div-container-myturns">
       <Box style={{ overflow: "auto" }}>
-        {listMyTurns && Object.keys(listMyTurns).length > 0 ? (
+        {listMyTurns === 1 ? (
+          <Skeleton variant="rounded" height={80} style={{ width: "100%" }} />
+        ) : listMyTurns && Object.keys(listMyTurns).length > 0 ? (
           listMyTurns.map((turn, index) => {
             return (
               <Box
@@ -148,9 +153,7 @@ const MyTurns = ({ userData }) => {
                       {turn.worker}
                     </h4>
                   </Box>
-
                   <Button
-                    // variant="outlined"
                     className="btn-cancel-myTurns"
                     sx={{
                       marginLeft: "5px",
@@ -169,7 +172,15 @@ const MyTurns = ({ userData }) => {
             );
           })
         ) : (
-          <h4 style={{ display: "flex", justifyContent: "center" }}>
+          <h4
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              color: darkMode.on ? "white" : darkMode.dark,
+              height: "80px",
+            }}
+          >
             No tienes turnos todavia
           </h4>
         )}
