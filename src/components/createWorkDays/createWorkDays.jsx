@@ -14,13 +14,18 @@ import shouldDisableButton from "../../helpers/shouldDisableButton";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const CreateWorkDays = ({ user, schedule, pendingServices, setRefreshForWhoIsComing }) => {
+const CreateWorkDays = ({
+  user,
+  schedule,
+  pendingServices,
+  setRefreshForWhoIsComing,
+}) => {
   //informacion del estado global
   const { darkMode, setShowAlert, alertDelete, setAlertDelete } =
     useContext(DarkModeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [isOpen, setIsOpen] = useState(false);
-  const [dayIsSelected, setDayIsSelected] = useState({});
+  const [dayIsSelected, setDayIsSelected] = useState({}); 
   const [days, setDays] = useState({});
   const [firstMonth, setFirstMonth] = useState({});
   const [firstDay, setFirstDay] = useState({});
@@ -126,6 +131,7 @@ const CreateWorkDays = ({ user, schedule, pendingServices, setRefreshForWhoIsCom
   const handleShowSlider = () => {
     setIsOpen(true);
   };
+  console.log(dayIsSelected);
 
   const handleSubmit = async (time, values) => {
     const currentMonth = getCurrentMonth();
@@ -154,10 +160,12 @@ const CreateWorkDays = ({ user, schedule, pendingServices, setRefreshForWhoIsCom
 
       let submitArray = [];
       if (dayIsSelected[Object.keys(dayIsSelected)[0]]) {
+        // console.log(Object.keys(dayIsSelected)[0]);
+        // console.log(Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]]));
         const first = Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]]);
         first.forEach((element) => {
           submitArray.push({
-            month: currentMonth,
+            month: Object.keys(dayIsSelected)[0],
             day: Number(element),
             email: user.email,
             name: user.name,
@@ -168,6 +176,8 @@ const CreateWorkDays = ({ user, schedule, pendingServices, setRefreshForWhoIsCom
         });
       }
       if (dayIsSelected[Object.keys(dayIsSelected)[1]]) {
+        // console.log(dayIsSelected[Object.keys(dayIsSelected)[1]]);
+        // console.log(Object.keys(dayIsSelected[Object.keys(dayIsSelected)[1]]));
         const second = Object.keys(
           dayIsSelected[Object.keys(dayIsSelected)[1]]
         );
@@ -191,8 +201,8 @@ const CreateWorkDays = ({ user, schedule, pendingServices, setRefreshForWhoIsCom
             submitArray[i]
           );
           const { data } = response;
-          setDayIsSelected((prevState) => {
 
+          setDayIsSelected((prevState) => {
             let newState = { ...prevState };
 
             delete newState[submitArray[i].month][submitArray[i].day];
@@ -200,13 +210,11 @@ const CreateWorkDays = ({ user, schedule, pendingServices, setRefreshForWhoIsCom
             if (Object.keys(newState[submitArray[i].month]).length === 0) {
               delete newState[submitArray[i].month];
             }
-
             return newState;
           });
           console.log(
             `el dia ${submitArray[i].day}/${submitArray[i].month} se creo exitosamente`
           );
-          setRefreshForWhoIsComing
         } catch (error) {
           console.error(
             `Error al crear el dia ${submitArray[i].day}/${submitArray[i].month}`,
@@ -214,7 +222,7 @@ const CreateWorkDays = ({ user, schedule, pendingServices, setRefreshForWhoIsCom
           );
         }
       }
-      setRefreshForWhoIsComing(true)
+      setRefreshForWhoIsComing(true);
       setShowEdit(false);
       setRefreshDays(true);
     } else {
@@ -268,7 +276,7 @@ const CreateWorkDays = ({ user, schedule, pendingServices, setRefreshForWhoIsCom
       setDayIsSelected({});
       setAlertDelete(false);
       setRefreshDays(true);
-      setRefreshForWhoIsComing(true)
+      setRefreshForWhoIsComing(true);
     } catch (error) {
       console.error("Error al borrar el dia:", error);
     }
@@ -337,7 +345,7 @@ const CreateWorkDays = ({ user, schedule, pendingServices, setRefreshForWhoIsCom
                   display: "flex",
                   width: "100%",
                   justifyContent: "center",
-                  marginBottom:"10px",
+                  marginBottom: "10px",
                   color: "red",
                 }}
               >

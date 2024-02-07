@@ -167,7 +167,7 @@ const Services = ({
               paddingTop: "15px",
             }}
           >
-            <h2>
+            <h2 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
               {loadingServices
                 ? "Cargando servicios"
                 : "No hay servicios todavía"}

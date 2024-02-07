@@ -156,7 +156,6 @@ const CancelledTurnsForAdmin = () => {
 
         <Box
           style={{
-            display: "flex",
             width: "100%",
             maxWidth: "900px",
             overflow: "auto",
@@ -189,6 +188,18 @@ const CancelledTurnsForAdmin = () => {
                 </Button>
               );
             })}
+          {count.length < 1 && selectedWorker !== "" && (
+            <h2
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                padding: "10px",
+                color: darkMode.on ? "white" : darkMode.dark,
+              }}
+            >
+              Todavía no hay dias
+            </h2>
+          )}
         </Box>
       </Box>
       <Box

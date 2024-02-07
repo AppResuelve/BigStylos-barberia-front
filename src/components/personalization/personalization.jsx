@@ -31,7 +31,7 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
   useEffect(() => {
     setImgServices(services);
   }, [services]);
-
+  
   useEffect(() => {
     const fetchImages = async () => {
       try {
@@ -322,7 +322,7 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
                         marginBottom: "5px",
                         borderRadius: "5px",
                         padding: "5px",
-                        cursor: showEdit ? "pointer" : "not-allowed",
+                        cursor: /* showEdit ? "pointer" : */ "not-allowed",
                         fontWeight: "bold",
                         color: darkMode.on ? "white" : darkMode.dark,
                       }}
@@ -366,82 +366,97 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
               }}
             />
             <Box sx={{ overflow: "scroll", maxHeight: "350px" }}>
-              {imgServices.map((service, index) => {
-                return (
-                  <Box
-                    key={index}
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      marginTop: "15px",
-                    }}
-                  >
+              {imgServices.length > 0 &&
+                imgServices.map((service, index) => {
+                  return (
                     <Box
+                      key={index}
                       sx={{
-                        minHeight: "90px",
-                        maxHeight: "150px",
                         display: "flex",
-                        flexDirection: "column",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginTop: "15px",
                       }}
                     >
-                      <h3
-                        style={{
-                          marginBottom: "7px",
-                          color: darkMode.on ? "white" : darkMode.dark,
+                      <Box
+                        sx={{
+                          minHeight: "90px",
+                          maxHeight: "150px",
+                          display: "flex",
+                          flexDirection: "column",
                         }}
                       >
-                        {service[0]}
-                      </h3>
-                      <label
-                        htmlFor={`fileInput-${service[0]}`}
-                        style={{ cursor: "pointer" }}
-                      >
-                        <span
-                          className={
-                            showEdit
-                              ? "span-input-personalization"
-                              : "span-input-personalization-false"
-                          }
+                        <h3
                           style={{
-                            marginBottom: "5px",
-                            borderRadius: "5px",
-                            padding: "5px",
-                            fontWeight: "bold",
-                            cursor: showEdit ? "pointer" : "not-allowed",
-                            display: "flex",
+                            marginBottom: "7px",
                             color: darkMode.on ? "white" : darkMode.dark,
                           }}
                         >
-                          Selecciona una imagen
-                          <AttachFileIcon />
-                        </span>
-                        <input
-                          type="file"
-                          id={`fileInput-${service[0]}`}
-                          name={service[0]}
-                          onChange={uploadImage}
-                          disabled={!showEdit ? true : false}
-                          style={{ display: "none" }}
+                          {service[0]}
+                        </h3>
+                        <label
+                          htmlFor={`fileInput-${service[0]}`}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <span
+                            className={
+                              showEdit
+                                ? "span-input-personalization"
+                                : "span-input-personalization-false"
+                            }
+                            style={{
+                              marginBottom: "5px",
+                              borderRadius: "5px",
+                              padding: "5px",
+                              fontWeight: "bold",
+                              cursor: showEdit ? "pointer" : "not-allowed",
+                              display: "flex",
+                              color: darkMode.on ? "white" : darkMode.dark,
+                            }}
+                          >
+                            Selecciona una imagen
+                            <AttachFileIcon />
+                          </span>
+                          <input
+                            type="file"
+                            id={`fileInput-${service[0]}`}
+                            name={service[0]}
+                            onChange={uploadImage}
+                            disabled={!showEdit ? true : false}
+                            style={{ display: "none" }}
+                          />
+                        </label>
+                      </Box>
+                      <Box>
+                        <img
+                          src={
+                            service.length > 0 && service[1]
+                              ? service[1]
+                              : noImg
+                          }
+                          alt="img-servicio"
+                          style={{
+                            width: sm ? "90px" : "150px",
+                            borderRadius: "3px",
+                            marginRight: "5px",
+                          }}
                         />
-                      </label>
+                      </Box>
                     </Box>
-                    <Box>
-                      <img
-                        src={
-                          service.length > 0 && service[1] ? service[1] : noImg
-                        }
-                        alt="img-servicio"
-                        style={{
-                          width: sm ? "90px" : "150px",
-                          borderRadius: "3px",
-                          marginRight: "5px",
-                        }}
-                      />
-                    </Box>
-                  </Box>
-                );
-              })}
+                  );
+                })}
+              {imgServices.length < 1 && (
+                <h2
+                  style={{
+                    color: darkMode.on ? "white" : darkMode.dark,
+                    display: "flex",
+                    justifyContent: "center",
+                    padding: "15px",
+                  }}
+                >
+                  Todavía no hay servicios
+                </h2>
+              )}
             </Box>
           </Box>
         ) : (
