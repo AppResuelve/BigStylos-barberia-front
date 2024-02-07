@@ -197,6 +197,8 @@ const WorkerAcordeon = ({ user }) => {
                   display: "flex",
                   justifyContent: "center",
                   color: "red",
+                  fontSize: sm ? "" : "20px",
+                  letterSpacing: "0.5px",
                 }}
               >
                 Se necesitan servicios para crear días de trabajo

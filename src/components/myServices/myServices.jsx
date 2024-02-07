@@ -266,7 +266,7 @@ const MyServices = ({
               paddingTop: "15px",
             }}
           >
-            <h2>
+            <h2 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
               {services !== 1 &&
                 services.length < 1 &&
                 "No hay servicios todavía"}

@@ -90,7 +90,8 @@ const ModalMUI = ({
                   src={noUser}
                   alt="mi perfil"
                   style={{
-                    border: "solid 2px black",
+                    border: darkMode.on ? "" : "solid 2px black",
+                    backgroundColor: "white",
                   }}
                 />
               )}
@@ -105,34 +106,34 @@ const ModalMUI = ({
             />
           </Box>
           <Box>
-              {/* seccion del admin */}
-              {userData !== 1 && userData.admin && (
-                <NavLink
+            {/* seccion del admin */}
+            {userData !== 1 && userData.admin && (
+              <NavLink
                 to="/admin"
                 style={{ textDecoration: "none", color: "black" }}
-                >
-                  <Box onClick={() => setIsOpen(false)}>
-                    <button
-                      className="btn-userModal"
-                      style={{
-                        color: darkMode.on ? "white" : darkMode.dark,
-                        fontWeight: "bold",
-                      }}
-                      onClick={() => setIsOpen(false)}
-                    >
-                      Administración del local
-                    </button>
-                    <hr
-                      className="hr-userModal"
-                      style={{
-                        border: "none",
-                        height: "1px",
-                        backgroundColor: darkMode.on ? "white" : darkMode.dark,
-                      }}
-                    />
-                  </Box>
-                </NavLink>
-              )}
+              >
+                <Box onClick={() => setIsOpen(false)}>
+                  <button
+                    className="btn-userModal"
+                    style={{
+                      color: darkMode.on ? "white" : darkMode.dark,
+                      fontWeight: "bold",
+                    }}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Administración del local
+                  </button>
+                  <hr
+                    className="hr-userModal"
+                    style={{
+                      border: "none",
+                      height: "1px",
+                      backgroundColor: darkMode.on ? "white" : darkMode.dark,
+                    }}
+                  />
+                </Box>
+              </NavLink>
+            )}
             {/* seccion del worker */}
             {userData !== 1 && userData.worker && (
               <NavLink
