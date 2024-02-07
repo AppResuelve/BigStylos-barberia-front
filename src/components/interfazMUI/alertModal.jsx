@@ -159,7 +159,7 @@ const AlertModal = ({
   }
 
   return (
-    <div style={{ display: "flex", justifyContent: "center" }}>
+    <div style={{ display: "flex", justifyContent: "center"}}>
       <AlertSnackBar
         showAlertSnack={showAlertSnack}
         setShowAlertSnack={setShowAlertSnack}

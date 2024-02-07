@@ -116,7 +116,7 @@ const ClientNestedList = ({ userData }) => {
             newPhoneNumber,
           });
           setShowAlertSnack({
-            message: "El numero se ha actualizado",
+            message: "",
             type: "success",
           });
           setOpen(true);
