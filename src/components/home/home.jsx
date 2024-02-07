@@ -1,8 +1,8 @@
 import { useState, useContext } from "react";
 import { DarkModeContext } from "../../App";
 import { NavLink } from "react-router-dom";
-import Footer from "../footer/footer"
-import { Box, Button, CircularProgress, Skeleton } from "@mui/material";
+import Footer from "../footer/footer";
+import { Box, Button, Skeleton } from "@mui/material";
 import defaultImg from "../../assets/icons/no-image-logotipe.png";
 import defaultImgLight from "../../assets/icons/no-image-logotipe-light.png";
 import instagram from "../../assets/icons/instagram.png";
@@ -24,7 +24,7 @@ const Home = ({ homeImages }) => {
         backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
       }}
     >
-      <div class="custom-shape-divider-bottom-1707002929">
+      <div className="custom-shape-divider-bottom-1707002929">
         <svg
           data-name="Layer 1"
           xmlns="http://www.w3.org/2000/svg"
@@ -33,7 +33,7 @@ const Home = ({ homeImages }) => {
         >
           <path
             d="M600,112.77C268.63,112.77,0,65.52,0,7.23V120H1200V7.23C1200,65.52,931.37,112.77,600,112.77Z"
-            style={{fill:"white"}}
+            style={{ fill: "white" }}
           ></path>
         </svg>
       </div>
@@ -151,7 +151,7 @@ const Home = ({ homeImages }) => {
           </a>
         </Box>
       </Box>
-      <Footer/>
+      <Footer />
     </div>
   );
 };

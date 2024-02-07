@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import WorkerAcordeon from "../interfazMUI/workerAcordeon";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 
-const Worker = ({ userData, userAuth, refreshForWhoIsComing, setRefreshForWhoIsComing }) => {
+const Worker = ({ userData, userAuth}) => {
   const navigate = useNavigate();
   const { darkMode } = useContext(DarkModeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
@@ -78,7 +78,7 @@ const Worker = ({ userData, userAuth, refreshForWhoIsComing, setRefreshForWhoIsC
           >
             Administración del profesional
           </h1>
-          <WorkerAcordeon user={userData} refreshForWhoIsComing={refreshForWhoIsComing} setRefreshForWhoIsComing={setRefreshForWhoIsComing} />
+          <WorkerAcordeon user={userData} />
         </div>
       ) : null}
     </div>
