@@ -120,6 +120,7 @@ const Home = ({ homeImages }) => {
               className="btn-reservar-home"
               variant="contained"
               style={{
+                boxShadow: "0px 10px 17px 0px rgba(0,0,0,0.75)",
                 marginBottom: "50px",
                 borderRadius: "50px",
                 fontFamily: "Jost, sans-serif",
