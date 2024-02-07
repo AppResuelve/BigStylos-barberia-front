@@ -35,6 +35,7 @@ function App() {
     light: colors,
     on: false,
   });
+  const [refreshForWhoIsComing, setRefreshForWhoIsComing] = useState(false)
 
   /* función para el dark mode */
   const toggleDarkMode = () => {
@@ -146,11 +147,11 @@ function App() {
           <Route path="/turns" element={<Turns user={userData} />} />
           <Route
             path="/admin"
-            element={<Admin userData={userData} userAuth={userAuth} />}
+            element={<Admin userData={userData} userAuth={userAuth} refreshForWhoIsComing={refreshForWhoIsComing} setRefreshForWhoIsComing={setRefreshForWhoIsComing}/>}
           />
           <Route
             path="/worker"
-            element={<Worker userData={userData} userAuth={userAuth} />}
+            element={<Worker userData={userData} userAuth={userAuth} refreshForWhoIsComing={refreshForWhoIsComing} setRefreshForWhoIsComing={setRefreshForWhoIsComing}/>}
           />
           <Route
             path="/requestDenied401"

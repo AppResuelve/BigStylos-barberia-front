@@ -5,7 +5,7 @@ import AdminAcordeon from "../interfazMUI/adminAcordeon";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { Skeleton, Stack } from "@mui/material";
 
-const Admin = ({ userData, userAuth }) => {
+const Admin = ({ userData, userAuth, refreshForWhoIsComing, setRefreshForWhoIsComing }) => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const { darkMode } = useContext(DarkModeContext);
 
@@ -98,7 +98,7 @@ const Admin = ({ userData, userAuth }) => {
           >
             Administración del local
           </h1>
-          <AdminAcordeon />
+          <AdminAcordeon refreshForWhoIsComing={refreshForWhoIsComing} setRefreshForWhoIsComing={setRefreshForWhoIsComing}/>
         </div>
       ) : null}
     </div>

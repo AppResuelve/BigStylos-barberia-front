@@ -18,7 +18,7 @@ import axios from "axios";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const AdminAcordeon = () => {
+const AdminAcordeon = ({ refreshForWhoIsComing, setRefreshForWhoIsComing }) => {
   const { darkMode } = useContext(DarkModeContext);
   const [expanded, setExpanded] = useState(false);
   const [schedule, setSchedule] = useState({});
@@ -418,7 +418,7 @@ const AdminAcordeon = () => {
             </h2>
           </AccordionSummary>
           <AccordionDetails>
-            <WhoIsComingAdmin />
+            <WhoIsComingAdmin refreshForWhoIsComing={refreshForWhoIsComing} setRefreshForWhoIsComing={setRefreshForWhoIsComing} />
           </AccordionDetails>
         </Accordion>
         {/* ********************************************************************************************************* */}

@@ -111,7 +111,7 @@ const CancelledTurnsForAdmin = () => {
                 <Button
                   variant="contained"
                   key={index}
-                  sx={{
+                  style={{
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "start",
@@ -168,7 +168,7 @@ const CancelledTurnsForAdmin = () => {
                 <Button
                   variant="contained"
                   key={index}
-                  sx={{
+                  style={{
                     backgroundColor:
                       selectedDay == element && darkMode.on
                         ? "white"
@@ -240,7 +240,7 @@ const CancelledTurnsForAdmin = () => {
                   >
                     {element.phone !== "no requerido" ? (
                       <a
-                        href={`whatsapp://send?phone=${element.phone}&text=Hola , quiero contactarte`}
+                        href={`whatsapp://send?phone=${element.phone}&text=Su turno para la barbería ha sido cancelado, por favor realice una nueva reserva.`}
                         target="_blank"
                         rel="noopener noreferrer"
                         style={{ textDecoration: "none" }}
