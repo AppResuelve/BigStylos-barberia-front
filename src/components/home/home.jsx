@@ -143,7 +143,7 @@ const Home = ({ homeImages }) => {
           }}
         >
           <a
-            href="whatsapp://send?phone=+5493834971799&text=Hola , quiero contactarte"
+            href="whatsapp://send?phone=+5492983664119&text=Quiero saber cómo obtener una página para mi negocio."
             target="_blank"
             rel="noopener noreferrer"
           >

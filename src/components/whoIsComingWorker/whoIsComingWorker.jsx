@@ -9,7 +9,7 @@ import "../whoIsComingAdmin/whoIsComing.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const WhoIsComingWorker = ({ user }) => {
+const WhoIsComingWorker = ({ user, refreshForWhoIsComing, setRefreshForWhoIsComing }) => {
   const { darkMode } = useContext(DarkModeContext);
   const [turns, setTurns] = useState([]);
   /*  turns contiene:
@@ -41,7 +41,10 @@ const WhoIsComingWorker = ({ user }) => {
       }
     };
     fetchCount();
-  }, []);
+    if (refreshForWhoIsComing == true) {
+      setRefreshForWhoIsComing(false)
+    }
+  }, [refreshForWhoIsComing]);
 
   useEffect(() => {
     const fetchTurns = async () => {
@@ -61,7 +64,10 @@ const WhoIsComingWorker = ({ user }) => {
     if (selectedDay.length > 0) {
       fetchTurns();
     }
-  }, [selectedDay]);
+    if (refreshForWhoIsComing == true) {
+      setRefreshForWhoIsComing(false)
+    }
+  }, [selectedDay, refreshForWhoIsComing]);
 
   const handleChangeDay = (element) => {
     setSelectedDay(element);
@@ -162,7 +168,7 @@ const WhoIsComingWorker = ({ user }) => {
                   className={darkMode.on ? "h-phone-hic-dark" : "h-phone-hic"}
                 >
                   <a
-                    href={`whatsapp://send?phone=${element.phone}&text=Hola , quiero contactarte`}
+                    href={`whatsapp://send?phone=${element.phone}&text=Recuerda que tienes reserva en la barbería, revisa en la página, sección "Mis Turnos".`}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ textDecoration: "none" }}

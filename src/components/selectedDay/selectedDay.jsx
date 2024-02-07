@@ -82,9 +82,9 @@ const SelectedDay = ({
                 {item}
               </h2>
               {days && days[firstMonth] && days[firstMonth][firstDay] ? (
-                <h2 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
-                  {timeForRenderedStructure(firstMonth, firstDay, days)}
-                </h2>
+                <h4 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
+                  {timeForRenderedStructure(days[firstMonth][firstDay].time)}
+                </h4>
               ) : null}
             </div>
             <hr

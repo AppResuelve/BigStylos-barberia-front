@@ -14,7 +14,7 @@ import CancelledTurnsForWorker from "../cancelledTurnsForWorker/cancelledTurnsFo
 import WhoIsComingWorker from "../whoIsComingWorker/whoIsComingWorker";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const WorkerAcordeon = ({ user }) => {
+const WorkerAcordeon = ({ user, refreshForWhoIsComing, setRefreshForWhoIsComing }) => {
   const { darkMode, redirectToMyServices, setRedirectToMyServices } =
     useContext(DarkModeContext);
   const [loading, setLoading] = useState(true);
@@ -181,6 +181,7 @@ const WorkerAcordeon = ({ user }) => {
                 user={workerData}
                 schedule={schedule}
                 pendingServices={pendingServices}
+                setRefreshForWhoIsComing={setRefreshForWhoIsComing}
               />
             )}
           </AccordionDetails>
@@ -296,7 +297,7 @@ const WorkerAcordeon = ({ user }) => {
             </h2>
           </AccordionSummary>
           <AccordionDetails>
-            <WhoIsComingWorker user={user} />
+            <WhoIsComingWorker user={user} refreshForWhoIsComing={refreshForWhoIsComing} setRefreshForWhoIsComing={setRefreshForWhoIsComing} />
           </AccordionDetails>
         </Accordion>
         {/*  //------------------// */}

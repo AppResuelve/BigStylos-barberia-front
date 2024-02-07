@@ -8,7 +8,7 @@ import "./whoIsComing.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const WhoIsComingAdmin = () => {
+const WhoIsComingAdmin = ({ refreshForWhoIsComing, setRefreshForWhoIsComing }) => {
   const { darkMode } = useContext(DarkModeContext);
   const [turns, setTurns] = useState([]);
   /*  turns contiene:
@@ -28,6 +28,10 @@ const WhoIsComingAdmin = () => {
 
   const date = new Date();
   const currentDay = date.getDate();
+
+  useEffect(() => {
+
+  },[])
 
   useEffect(() => {
     const fetchWorkers = async () => {
@@ -60,7 +64,10 @@ const WhoIsComingAdmin = () => {
     if (selectedWorker.length > 0) {
       fetchCount();
     }
-  }, [selectedWorker]);
+    if(refreshForWhoIsComing == true) {
+      setRefreshForWhoIsComing(false)
+    }
+  }, [selectedWorker, refreshForWhoIsComing]);
 
   useEffect(() => {
     const fetchTurns = async () => {
@@ -79,7 +86,10 @@ const WhoIsComingAdmin = () => {
     if (selectedDay.length > 0) {
       fetchTurns();
     }
-  }, [selectedDay]);
+    if(refreshForWhoIsComing == true) {
+      setRefreshForWhoIsComing(false)
+    }
+  }, [selectedDay, refreshForWhoIsComing]);
 
   const handleChangeDay = (element) => {
     setSelectedDay(element);
@@ -241,7 +251,7 @@ const WhoIsComingAdmin = () => {
                     className={darkMode.on ? "h-phone-hic-dark" : "h-phone-hic"}
                   >
                     <a
-                      href={`whatsapp://send?phone=${element.phone}&text=Hola , quiero contactarte`}
+                      href={`whatsapp://send?phone=${element.phone}&text=Recuerda que tienes reserva en la barbería, revisa en la página, sección "Mis Turnos".e`}
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{
