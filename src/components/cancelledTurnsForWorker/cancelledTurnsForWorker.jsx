@@ -87,7 +87,7 @@ const CancelledTurnsForWorker = ({ user }) => {
                 <Button
                   variant="contained"
                   key={index}
-                  sx={{
+                  style={{
                     backgroundColor:
                       selectedDay == element && darkMode.on
                         ? "white"

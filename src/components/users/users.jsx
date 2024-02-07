@@ -94,8 +94,6 @@ const Users = () => {
     filterUsersByEmail(searchValue, allUsers);
   }, [searchValue]);
 
-  console.log(allUsers);
-  console.log(filteredProfesionals);
   return (
     <div
       style={{

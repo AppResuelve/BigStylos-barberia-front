@@ -131,7 +131,7 @@ const WhoIsComingAdmin = ({ refreshForWhoIsComing, setRefreshForWhoIsComing }) =
                 <Button
                   variant="contained"
                   key={index}
-                  sx={{
+                  style={{
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "start",
@@ -188,7 +188,7 @@ const WhoIsComingAdmin = ({ refreshForWhoIsComing, setRefreshForWhoIsComing }) =
                 <Button
                   variant="contained"
                   key={index}
-                  sx={{
+                  style={{
                     backgroundColor:
                       selectedDay == element && darkMode.on
                         ? "white"

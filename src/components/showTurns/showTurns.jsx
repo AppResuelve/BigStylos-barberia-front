@@ -91,8 +91,6 @@ const ShowTurns = ({
   };
 
   const handleAsignTurn = () => {
-    console.log(dayForTurns);
-    console.log(selectedWorker);
     let tardanza = dayForTurns.filter(
       (element) => element.email == selectedWorker
     );
