@@ -173,6 +173,7 @@ const WhoIsComingAdmin = () => {
 
         <Box
           style={{
+            display:"flex",
             width: "100%",
             maxWidth: "900px",
             overflow: "auto",
