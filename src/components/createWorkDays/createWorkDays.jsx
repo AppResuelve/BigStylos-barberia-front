@@ -25,7 +25,7 @@ const CreateWorkDays = ({
     useContext(DarkModeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [isOpen, setIsOpen] = useState(false);
-  const [dayIsSelected, setDayIsSelected] = useState({}); 
+  const [dayIsSelected, setDayIsSelected] = useState({});
   const [days, setDays] = useState({});
   const [firstMonth, setFirstMonth] = useState({});
   const [firstDay, setFirstDay] = useState({});
@@ -131,7 +131,6 @@ const CreateWorkDays = ({
   const handleShowSlider = () => {
     setIsOpen(true);
   };
-  console.log(dayIsSelected);
 
   const handleSubmit = async (time, values) => {
     const currentMonth = getCurrentMonth();
