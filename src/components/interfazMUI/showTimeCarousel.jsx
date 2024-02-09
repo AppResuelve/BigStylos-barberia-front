@@ -41,7 +41,7 @@ const ShowTimeCarousel = ({
     console.log(step);
     setActiveStep(step);
   };
-  console.log(activeStep);
+
   return (
     <Box
       sx={{

@@ -80,7 +80,6 @@ const MyTurns = ({ userData }) => {
       });
       const { data } = response;
       setRefresh(!refresh);
-      console.log("paswe por aca");
       const timeoutId = setTimeout(() => {
         setShowAlert({
           isOpen: true,
@@ -103,7 +102,7 @@ const MyTurns = ({ userData }) => {
       console.error("Error al cancelar el turno:", error);
     }
   };
-  console.log(listMyTurns);
+
   return (
     <div className="div-container-myturns">
       <Box style={{ overflow: "auto" }}>
