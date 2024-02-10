@@ -9,55 +9,60 @@ import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { Box } from "@mui/system";
 import "./nav.css";
 
-const Nav = ({ user }) => {
+const Nav = ({ user, homeImages }) => {
   const { darkMode } = useContext(DarkModeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const location = useLocation();
 
   return (
-    <div
-      className="container-nav"
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        position: "fixed",
-        width: "100%",
-        backgroundColor:
-          (location.pathname === "/turns" && md) || location.pathname === "/"
-            ? "transparent"
-            : darkMode.on
-            ? "#252627"
-            : darkMode.light,
-        zIndex: "100",
-      }}
-    >
-      <div>
-        <NavLink to="/">
-          <Box
-            className="box-container-img-home-nav"
-            sx={{
-              backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
+    <>
+      {homeImages !== 1 && (
+        <div
+          className="container-nav"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            position: "fixed",
+            width: "100%",
+            backgroundColor:
+              (location.pathname === "/turns" && md) ||
+              location.pathname === "/"
+                ? "transparent"
+                : darkMode.on
+                ? "#252627"
+                : darkMode.light,
+            zIndex: "100",
+          }}
+        >
+          <div>
+            <NavLink to="/">
+              <Box
+                className="box-container-img-home-nav"
+                sx={{
+                  backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
+                }}
+              >
+                <img
+                  className="img-home-nav"
+                  src={darkMode.on ? toHome2 : toHome}
+                  alt="inicio"
+                />
+              </Box>
+            </NavLink>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
             }}
           >
-            <img
-              className="img-home-nav"
-              src={darkMode.on ? toHome2 : toHome}
-              alt="inicio"
-            />
-          </Box>
-        </NavLink>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        <DarkMode />
-        <Profile userData={user} />
-      </div>
-    </div>
+            <DarkMode />
+            <Profile userData={user} />
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 export default Nav;
