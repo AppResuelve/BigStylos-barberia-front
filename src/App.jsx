@@ -119,21 +119,21 @@ function App() {
     localStorage.setItem("darkMode", JSON.stringify(darkMode));
   }, [darkMode]);
 
- const handleSetMoveDown = (e) => {
-   if (Object.keys(showAlert).length > 0) {
-     // Obtenemos el elemento clickeado
-     const clickedElement = e.target;
+  const handleSetMoveDown = (e) => {
+    if (Object.keys(showAlert).length > 0) {
+      // Obtenemos el elemento clickeado
+      const clickedElement = e.target;
 
-     // Obtenemos el contenedor de la alerta
-     const alertContainer = document.querySelector(".alert-container");
+      // Obtenemos el contenedor de la alerta
+      const alertContainer = document.querySelector(".alert-container");
 
-     // Verificamos si el elemento clickeado es descendiente de la alerta
-     if (!alertContainer.contains(clickedElement)) {
-       // Si el clic no proviene de dentro de la alerta, cerramos la alerta
-       setMoveDown(true);
-     }
-   }
- };
+      // Verificamos si el elemento clickeado es descendiente de la alerta
+      if (!alertContainer.contains(clickedElement)) {
+        // Si el clic no proviene de dentro de la alerta, cerramos la alerta
+        setMoveDown(true);
+      }
+    }
+  };
 
   return (
     <DarkModeContext.Provider
@@ -159,7 +159,9 @@ function App() {
       }}
     >
       <div style={{ position: "relative" }} onClick={handleSetMoveDown}>
-        {location.pathname !== "/requestDenied401" && <Nav user={userData} />}
+        {location.pathname !== "/requestDenied401" && (
+          <Nav user={userData} homeImages={homeImages} />
+        )}
         <Routes>
           <Route
             path="/"
