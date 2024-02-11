@@ -111,7 +111,7 @@ const CancelledTurnsForAdmin = () => {
                 <Button
                   variant="contained"
                   key={index}
-                  sx={{
+                  style={{
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "start",
@@ -156,7 +156,7 @@ const CancelledTurnsForAdmin = () => {
 
         <Box
           style={{
-            display: "flex",
+            display:"flex",
             width: "100%",
             maxWidth: "900px",
             overflow: "auto",
@@ -168,7 +168,7 @@ const CancelledTurnsForAdmin = () => {
                 <Button
                   variant="contained"
                   key={index}
-                  sx={{
+                  style={{
                     backgroundColor:
                       selectedDay == element && darkMode.on
                         ? "white"
@@ -189,6 +189,18 @@ const CancelledTurnsForAdmin = () => {
                 </Button>
               );
             })}
+          {count.length < 1 && selectedWorker !== "" && (
+            <h2
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                padding: "10px",
+                color: darkMode.on ? "white" : darkMode.dark,
+              }}
+            >
+              Todavía no hay dias
+            </h2>
+          )}
         </Box>
       </Box>
       <Box

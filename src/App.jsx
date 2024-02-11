@@ -23,6 +23,8 @@ function App() {
   const [colors, setColors] = useState("");
   const [homeImages, setHomeImages] = useState(1); //images del home
   /* estados locales para el contexto global */
+  const [moveDown, setMoveDown] = useState(false);
+  const [refreshForWhoIsComing, setRefreshForWhoIsComing] = useState(false);
   const [redirectToMyServices, setRedirectToMyServices] = useState(false);
   const [alertDelete, setAlertDelete] = useState(false);
   const [validateAlert, setValidateAlert] = useState(false);
@@ -35,7 +37,6 @@ function App() {
     light: colors,
     on: false,
   });
-  const [refreshForWhoIsComing, setRefreshForWhoIsComing] = useState(false)
 
   /* función para el dark mode */
   const toggleDarkMode = () => {
@@ -118,9 +119,27 @@ function App() {
     localStorage.setItem("darkMode", JSON.stringify(darkMode));
   }, [darkMode]);
 
+  const handleSetMoveDown = (e) => {
+    if (Object.keys(showAlert).length > 0) {
+      // Obtenemos el elemento clickeado
+      const clickedElement = e.target;
+
+      // Obtenemos el contenedor de la alerta
+      const alertContainer = document.querySelector(".alert-container");
+
+      // Verificamos si el elemento clickeado es descendiente de la alerta
+      if (!alertContainer.contains(clickedElement)) {
+        // Si el clic no proviene de dentro de la alerta, cerramos la alerta
+        setMoveDown(true);
+      }
+    }
+  };
+
   return (
     <DarkModeContext.Provider
       value={{
+        moveDown,
+        setMoveDown,
         darkMode,
         toggleDarkMode,
         showAlert,
@@ -135,10 +154,14 @@ function App() {
         setValidateAlertTurns,
         refreshPersonalization,
         setRefreshPersonalization,
+        refreshForWhoIsComing,
+        setRefreshForWhoIsComing,
       }}
     >
-      <div style={{ position: "relative" }}>
-        {location.pathname !== "/requestDenied401" && <Nav user={userData} />}
+      <div style={{ position: "relative" }} onClick={handleSetMoveDown}>
+        {location.pathname !== "/requestDenied401" && (
+          <Nav user={userData} homeImages={homeImages} />
+        )}
         <Routes>
           <Route
             path="/"
@@ -147,11 +170,11 @@ function App() {
           <Route path="/turns" element={<Turns user={userData} />} />
           <Route
             path="/admin"
-            element={<Admin userData={userData} userAuth={userAuth} refreshForWhoIsComing={refreshForWhoIsComing} setRefreshForWhoIsComing={setRefreshForWhoIsComing}/>}
+            element={<Admin userData={userData} userAuth={userAuth} />}
           />
           <Route
             path="/worker"
-            element={<Worker userData={userData} userAuth={userAuth} refreshForWhoIsComing={refreshForWhoIsComing} setRefreshForWhoIsComing={setRefreshForWhoIsComing}/>}
+            element={<Worker userData={userData} userAuth={userAuth} />}
           />
           <Route
             path="/requestDenied401"

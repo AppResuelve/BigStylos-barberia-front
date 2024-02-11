@@ -83,7 +83,6 @@ const PlannedClosure = ({ schedule }) => {
     //       });
     //     } else {
     try {
-      console.log("hice el put con dias sin turno");
       const response = await axios.put(
         `${VITE_BACKEND_URL}/schedule/updateNoWork`,
         {

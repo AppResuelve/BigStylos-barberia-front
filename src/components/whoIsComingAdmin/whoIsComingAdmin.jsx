@@ -8,8 +8,9 @@ import "./whoIsComing.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const WhoIsComingAdmin = ({ refreshForWhoIsComing, setRefreshForWhoIsComing }) => {
-  const { darkMode } = useContext(DarkModeContext);
+const WhoIsComingAdmin = () => {
+  const { darkMode, refreshForWhoIsComing, setRefreshForWhoIsComing } =
+    useContext(DarkModeContext);
   const [turns, setTurns] = useState([]);
   /*  turns contiene:
   {
@@ -25,13 +26,10 @@ const WhoIsComingAdmin = ({ refreshForWhoIsComing, setRefreshForWhoIsComing }) =
   const [selectedWorker, setSelectedWorker] = useState("");
   const [workers, setWorkers] = useState([]);
 
-
   const date = new Date();
   const currentDay = date.getDate();
 
-  useEffect(() => {
-
-  },[])
+  useEffect(() => {}, []);
 
   useEffect(() => {
     const fetchWorkers = async () => {
@@ -64,8 +62,8 @@ const WhoIsComingAdmin = ({ refreshForWhoIsComing, setRefreshForWhoIsComing }) =
     if (selectedWorker.length > 0) {
       fetchCount();
     }
-    if(refreshForWhoIsComing == true) {
-      setRefreshForWhoIsComing(false)
+    if (refreshForWhoIsComing == true) {
+      setRefreshForWhoIsComing(false);
     }
   }, [selectedWorker, refreshForWhoIsComing]);
 
@@ -86,8 +84,8 @@ const WhoIsComingAdmin = ({ refreshForWhoIsComing, setRefreshForWhoIsComing }) =
     if (selectedDay.length > 0) {
       fetchTurns();
     }
-    if(refreshForWhoIsComing == true) {
-      setRefreshForWhoIsComing(false)
+    if (refreshForWhoIsComing == true) {
+      setRefreshForWhoIsComing(false);
     }
   }, [selectedDay, refreshForWhoIsComing]);
 
@@ -99,7 +97,6 @@ const WhoIsComingAdmin = ({ refreshForWhoIsComing, setRefreshForWhoIsComing }) =
     setSelectedDay("");
     setSelectedWorker(email);
   };
-
   return (
     <div>
       <hr
@@ -131,7 +128,7 @@ const WhoIsComingAdmin = ({ refreshForWhoIsComing, setRefreshForWhoIsComing }) =
                 <Button
                   variant="contained"
                   key={index}
-                  sx={{
+                  style={{
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "start",
@@ -176,7 +173,7 @@ const WhoIsComingAdmin = ({ refreshForWhoIsComing, setRefreshForWhoIsComing }) =
 
         <Box
           style={{
-            display: "flex",
+            display:"flex",
             width: "100%",
             maxWidth: "900px",
             overflow: "auto",
@@ -188,7 +185,7 @@ const WhoIsComingAdmin = ({ refreshForWhoIsComing, setRefreshForWhoIsComing }) =
                 <Button
                   variant="contained"
                   key={index}
-                  sx={{
+                  style={{
                     backgroundColor:
                       selectedDay == element && darkMode.on
                         ? "white"
@@ -209,6 +206,18 @@ const WhoIsComingAdmin = ({ refreshForWhoIsComing, setRefreshForWhoIsComing }) =
                 </Button>
               );
             })}
+          {count.length < 1 && selectedWorker !== "" && (
+            <h2
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                padding: "10px",
+                color: darkMode.on ? "white" : darkMode.dark,
+              }}
+            >
+              Todavía no hay dias
+            </h2>
+          )}
         </Box>
         <Box
           style={{ overflow: "scroll", maxHeight: "350px", marginTop: "20px" }}

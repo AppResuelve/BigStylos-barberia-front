@@ -75,7 +75,7 @@ const CancelledTurnsForWorker = ({ user }) => {
       >
         <Box
           style={{
-            display: "flex",
+            display:"flex",
             width: "100%",
             maxWidth: "900px",
             overflow: "auto",
@@ -87,7 +87,7 @@ const CancelledTurnsForWorker = ({ user }) => {
                 <Button
                   variant="contained"
                   key={index}
-                  sx={{
+                  style={{
                     backgroundColor:
                       selectedDay == element && darkMode.on
                         ? "white"
@@ -108,6 +108,18 @@ const CancelledTurnsForWorker = ({ user }) => {
                 </Button>
               );
             })}
+          {count.length < 1 && (
+            <h2
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                padding: "10px",
+                color: darkMode.on ? "white" : darkMode.dark,
+              }}
+            >
+              Todavía no tienes dias
+            </h2>
+          )}
         </Box>
       </Box>
       <Box

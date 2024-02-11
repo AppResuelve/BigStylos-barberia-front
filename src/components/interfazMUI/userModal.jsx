@@ -90,7 +90,8 @@ const ModalMUI = ({
                   src={noUser}
                   alt="mi perfil"
                   style={{
-                    border: "solid 2px black",
+                    border: darkMode.on ? "" : "solid 2px black",
+                    backgroundColor: "white",
                   }}
                 />
               )}
@@ -111,7 +112,7 @@ const ModalMUI = ({
                 to="/admin"
                 style={{ textDecoration: "none", color: "black" }}
               >
-                <div style={{ cursor: "pointer" }}>
+                <Box onClick={() => setIsOpen(false)}>
                   <button
                     className="btn-userModal"
                     style={{
@@ -130,16 +131,16 @@ const ModalMUI = ({
                       backgroundColor: darkMode.on ? "white" : darkMode.dark,
                     }}
                   />
-                </div>
+                </Box>
               </NavLink>
             )}
             {/* seccion del worker */}
             {userData !== 1 && userData.worker && (
-              <div>
-                <NavLink
-                  to="/worker"
-                  style={{ textDecoration: "none", color: darkMode.dark }}
-                >
+              <NavLink
+                to="/worker"
+                style={{ textDecoration: "none", color: darkMode.dark }}
+              >
+                <Box onClick={() => setIsOpen(false)}>
                   <button
                     className="btn-userModal"
                     style={{
@@ -150,16 +151,16 @@ const ModalMUI = ({
                   >
                     Administracíon del profesional
                   </button>
-                </NavLink>
-                <hr
-                  className="hr-userModal"
-                  style={{
-                    border: "none",
-                    height: "1px", // Altura de la línea
-                    backgroundColor: darkMode.on ? "white" : darkMode.dark,
-                  }}
-                />
-              </div>
+                  <hr
+                    className="hr-userModal"
+                    style={{
+                      border: "none",
+                      height: "1px", // Altura de la línea
+                      backgroundColor: darkMode.on ? "white" : darkMode.dark,
+                    }}
+                  />
+                </Box>
+              </NavLink>
             )}
           </Box>
           <Box>
@@ -168,10 +169,7 @@ const ModalMUI = ({
           </Box>
         </Box>
         <Box>
-          <div
-            className="box-login-logout-userModal"
-           
-          >
+          <div className="box-login-logout-userModal">
             {isAuthenticated ? <LogoutButton /> : <LoginButton />}
           </div>
         </Box>

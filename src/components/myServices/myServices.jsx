@@ -1,7 +1,14 @@
 import { useEffect, useState, useContext } from "react";
 import { DarkModeContext } from "../../App";
 import axios from "axios";
-import { Box, Button, Input, MenuItem, Select } from "@mui/material";
+import {
+  Box,
+  Button,
+  Input,
+  LinearProgress,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import formatHour from "../../functions/formatHour";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import IosSwitch from "../interfazMUI/iosSwitch";
@@ -108,15 +115,19 @@ const MyServices = ({
         alignItems: "center",
       }}
     >
-      <hr
-        style={{
-          width: "100%",
-          marginBottom: "15px",
-          border: "none",
-          height: "2px",
-          backgroundColor: "#2196f3",
-        }}
-      />
+      {services !== 1 ? (
+        <hr
+          style={{
+            width: "100%",
+            marginBottom: "15px",
+            border: "none",
+            height: "2px",
+            backgroundColor: "#2196f3",
+          }}
+        />
+      ) : (
+        <LinearProgress />
+      )}
       {/* box input search */}
       <Box
         style={{
@@ -255,8 +266,10 @@ const MyServices = ({
               paddingTop: "15px",
             }}
           >
-            <h2>
-              {loading ? "Cargando servicios" : "No hay servicios todavía"}
+            <h2 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
+              {services !== 1 &&
+                services.length < 1 &&
+                "No hay servicios todavía"}
             </h2>
           </Box>
         )}
@@ -265,7 +278,10 @@ const MyServices = ({
         sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}
       >
         {showEdit === false && (
-          <Button onClick={handleEdit}>
+          <Button
+            disabled={services !== 1 && services.length == 0 ? true : false}
+            onClick={handleEdit}
+          >
             <BorderColorIcon />
           </Button>
         )}

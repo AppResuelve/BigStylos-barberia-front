@@ -55,7 +55,6 @@ const WhoIsComingWorker = ({ user, refreshForWhoIsComing, setRefreshForWhoIsComi
           { emailWorker: user.email, month: numberMonth, day: numberDay }
         );
         const { data } = response;
-        console.log(data);
         setTurns(data);
       } catch (error) {
         console.error("Error al obtener los dias cancelados.", error);
@@ -92,7 +91,7 @@ const WhoIsComingWorker = ({ user, refreshForWhoIsComing, setRefreshForWhoIsComi
       >
         <Box
           style={{
-            display: "flex",
+            display:"flex",
             width: "100%",
             maxWidth: "900px",
             overflow: "auto",
@@ -104,7 +103,7 @@ const WhoIsComingWorker = ({ user, refreshForWhoIsComing, setRefreshForWhoIsComi
                 <Button
                   variant="contained"
                   key={index}
-                  sx={{
+                  style={{
                     backgroundColor:
                       selectedDay == element && darkMode.on
                         ? "white"
@@ -125,6 +124,18 @@ const WhoIsComingWorker = ({ user, refreshForWhoIsComing, setRefreshForWhoIsComi
                 </Button>
               );
             })}
+          {count.length < 1 && (
+            <h2
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                padding: "10px",
+                color: darkMode.on ? "white" : darkMode.dark,
+              }}
+            >
+              Todavía no tienes dias
+            </h2>
+          )}
         </Box>
       </Box>
       <Box

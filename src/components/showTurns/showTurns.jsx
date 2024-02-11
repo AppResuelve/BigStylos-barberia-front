@@ -2,13 +2,13 @@ import React, { useEffect, useState, useContext } from "react";
 import { DarkModeContext } from "../../App";
 import formatHour from "../../functions/formatHour";
 import Slide from "@mui/material/Slide";
-import { Dialog, Box, Button, Backdrop } from "@mui/material";
+import { Dialog, Box, Button, Backdrop, Skeleton } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import NoUser from "../../assets/icons/noUser.png";
-import "./showTurns.css";
 import ShowTimeCarousel from "../interfazMUI/showTimeCarousel";
 import axios from "axios";
+import "./showTurns.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -91,8 +91,6 @@ const ShowTurns = ({
   };
 
   const handleAsignTurn = () => {
-    console.log(dayForTurns);
-    console.log(selectedWorker);
     let tardanza = dayForTurns.filter(
       (element) => element.email == selectedWorker
     );
@@ -169,68 +167,78 @@ const ShowTurns = ({
             </Box>
             <hr style={{ marginBottom: "2px" }} />
           </Box>
-          <Box sx={{ maxHeight: !sm ? "40vh" : "60%", overflow: "scroll" }}>
-            {buttons.map((buttonGroup, index) => (
-              <Box
-                key={index}
-                sx={{
-                  height: "160px",
-                  border: "2px solid #2196f3",
-                  borderRadius: "5px",
-                  padding: "4px",
-                  marginTop: "15px",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                {buttonGroup.map((button, buttonIndex) => {
-                  if (buttonIndex === 1) {
-                    return (
-                      <Box
-                        key={buttonIndex}
-                        sx={{
-                          display: "flex",
-                          height: "30%",
-                          justifyContent: "space-between",
-                          marginBottom: "10px",
-                        }}
-                      >
-                        <h2
-                          key={button}
-                          style={{
-                            overflow: "hidden",
-                            color: darkMode.on ? "white" : darkMode.dark,
+          {buttons.length > 0 ? (
+            <Box sx={{ maxHeight: !sm ? "40vh" : "60%", overflow: "scroll" }}>
+              {buttons.map((buttonGroup, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    height: "160px",
+                    border: "2px solid #2196f3",
+                    borderRadius: "5px",
+                    padding: "4px",
+                    marginTop: "15px",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  {buttonGroup.map((button, buttonIndex) => {
+                    if (buttonIndex === 1) {
+                      return (
+                        <Box
+                          key={buttonIndex}
+                          sx={{
+                            display: "flex",
+                            height: "30%",
+                            justifyContent: "space-between",
+                            marginBottom: "10px",
                           }}
                         >
-                          {button}
-                        </h2>
-                        <img
-                          src={
-                            buttonGroup[buttonIndex + 1]
-                              ? buttonGroup[buttonIndex + 1]
-                              : NoUser
-                          }
-                          alt="Profesional"
-                          style={{ width: "40px", borderRadius: "50px" }}
-                        />
-                      </Box>
-                    );
-                  }
-                })}
-                <Box className="box-to-scroll" style={{ height: "70%" }}>
-                  <ShowTimeCarousel
-                    selectedWorker={selectedWorker}
-                    buttonGroup={buttonGroup.slice(3)}
-                    selectedTime={selectedTime}
-                    setSelectedTime={setSelectedTime}
-                    handleSelectTime={handleSelectTime}
-                    button0={buttonGroup[0]}
-                    button1={buttonGroup[1]}
-                  />
+                          <h2
+                            key={button}
+                            style={{
+                              overflow: "hidden",
+                              color: darkMode.on ? "white" : darkMode.dark,
+                            }}
+                          >
+                            {button}
+                          </h2>
+                          <img
+                            src={
+                              buttonGroup[buttonIndex + 1]
+                                ? buttonGroup[buttonIndex + 1]
+                                : NoUser
+                            }
+                            alt="Profesional"
+                            style={{ width: "40px", borderRadius: "50px" }}
+                          />
+                        </Box>
+                      );
+                    }
+                  })}
+                  <Box className="box-to-scroll" style={{ height: "70%" }}>
+                    <ShowTimeCarousel
+                      selectedWorker={selectedWorker}
+                      buttonGroup={buttonGroup.slice(3)}
+                      selectedTime={selectedTime}
+                      setSelectedTime={setSelectedTime}
+                      handleSelectTime={handleSelectTime}
+                      button0={buttonGroup[0]}
+                      button1={buttonGroup[1]}
+                    />
+                  </Box>
                 </Box>
-              </Box>
-            ))}
-          </Box>
+              ))}
+            </Box>
+          ) : (
+            <Box>
+              <Skeleton
+                variant="rounded"
+                height={140}
+                style={{ marginTop: "10px" }}
+              />
+            </Box>
+          )}
           <Box
             sx={{
               height: "30%",

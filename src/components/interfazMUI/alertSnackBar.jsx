@@ -12,8 +12,7 @@ const alertSnackBar = ({ showAlertSnack, open, setOpen }) => {
       autoHideDuration={2000}
       onClose={handleClose}
       sx={{
-        position: "absolute",
-        top: "-80%",
+        zIndex: "100000",
         display: "flex",
         justifyContent: "center",
       }}

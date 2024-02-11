@@ -14,9 +14,14 @@ import CancelledTurnsForWorker from "../cancelledTurnsForWorker/cancelledTurnsFo
 import WhoIsComingWorker from "../whoIsComingWorker/whoIsComingWorker";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const WorkerAcordeon = ({ user, refreshForWhoIsComing, setRefreshForWhoIsComing }) => {
-  const { darkMode, redirectToMyServices, setRedirectToMyServices } =
-    useContext(DarkModeContext);
+const WorkerAcordeon = ({ user }) => {
+  const {
+    darkMode,
+    redirectToMyServices,
+    setRedirectToMyServices,
+    refreshForWhoIsComing,
+    setRefreshForWhoIsComing,
+  } = useContext(DarkModeContext);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(false);
   const [schedule, setSchedule] = useState({});
@@ -24,7 +29,7 @@ const WorkerAcordeon = ({ user, refreshForWhoIsComing, setRefreshForWhoIsComing 
   const [refresh, setRefresh] = useState(false);
   const [pendingServices, setPendingServices] = useState(false);
   /* estados locales del componente myServices */
-  const [services, setServices] = useState([]);
+  const [services, setServices] = useState(1);
   const [serviceStatus, setServiceStatus] = useState({});
   const [timeEdit, setTimeEdit] = useState({});
   const [showEdit, setShowEdit] = useState(false);
@@ -81,7 +86,6 @@ const WorkerAcordeon = ({ user, refreshForWhoIsComing, setRefreshForWhoIsComing 
         const response = await axios.get(`${VITE_BACKEND_URL}/services/`);
         const { data } = response;
         setServices(data);
-        setLoading(false);
       } catch (error) {
         console.error("Error al obtener los servicios:", error);
         alert("Error al obtener los servicios");
@@ -111,7 +115,6 @@ const WorkerAcordeon = ({ user, refreshForWhoIsComing, setRefreshForWhoIsComing 
           email: user.email,
         });
         const { data } = response;
-        setLoading(false);
         setWorkerData(data);
       } catch (error) {
         console.error("Error al obtener los dias:", error);
@@ -125,7 +128,6 @@ const WorkerAcordeon = ({ user, refreshForWhoIsComing, setRefreshForWhoIsComing 
     setExpanded(isExpanded ? panel : false);
     setRedirectToMyServices(false);
   };
-
   return (
     <div
       style={{
@@ -176,13 +178,31 @@ const WorkerAcordeon = ({ user, refreshForWhoIsComing, setRefreshForWhoIsComing 
             </h2>
           </AccordionSummary>
           <AccordionDetails>
-            {expanded === "panel1" && (
-              <CreateWorkDays
-                user={workerData}
-                schedule={schedule}
-                pendingServices={pendingServices}
-                setRefreshForWhoIsComing={setRefreshForWhoIsComing}
-              />
+            {expanded === "panel1" &&
+              Object.keys(workerData).length > 0 &&
+              services.length > 0 && (
+                <CreateWorkDays
+                  user={workerData}
+                  schedule={schedule}
+                  pendingServices={pendingServices}
+                  setRefreshForWhoIsComing={setRefreshForWhoIsComing}
+                />
+              )}
+            {expanded === "panel1" && Object.keys(workerData).length < 1 && (
+              <LinearProgress />
+            )}
+            {services !== 1 && services.length == 0 && (
+              <h4
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  color: "red",
+                  fontSize: sm ? "" : "20px",
+                  letterSpacing: "0.5px",
+                }}
+              >
+                Se necesitan servicios para crear días de trabajo
+              </h4>
             )}
           </AccordionDetails>
         </Accordion>
@@ -237,6 +257,15 @@ const WorkerAcordeon = ({ user, refreshForWhoIsComing, setRefreshForWhoIsComing 
                   }}
                 >
                   Pendiente
+                </h4>
+              )}
+              {services !== 1 && services.length == 0 && (
+                <h4
+                  style={{
+                    color: "red",
+                  }}
+                >
+                  No hay servicios
                 </h4>
               )}
             </Box>
@@ -297,7 +326,11 @@ const WorkerAcordeon = ({ user, refreshForWhoIsComing, setRefreshForWhoIsComing 
             </h2>
           </AccordionSummary>
           <AccordionDetails>
-            <WhoIsComingWorker user={user} refreshForWhoIsComing={refreshForWhoIsComing} setRefreshForWhoIsComing={setRefreshForWhoIsComing} />
+            <WhoIsComingWorker
+              user={user}
+              refreshForWhoIsComing={refreshForWhoIsComing}
+              setRefreshForWhoIsComing={setRefreshForWhoIsComing}
+            />
           </AccordionDetails>
         </Accordion>
         {/*  //------------------// */}

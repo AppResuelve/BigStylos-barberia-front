@@ -19,8 +19,7 @@ const AlertModal = ({
   setValidateAlertTurns,
   setRefreshUser,
 }) => {
-  const { darkMode } = useContext(DarkModeContext);
-  const [moveDown, setMoveDown] = useState(false);
+  const { darkMode, moveDown, setMoveDown } = useContext(DarkModeContext);
   const { loginWithRedirect } = useAuth0();
   const [newPhoneNumber, setNewPhoneNumber] = useState("");
   const [error, setError] = useState("");
@@ -34,17 +33,17 @@ const AlertModal = ({
       handleUpdatePhone();
     }
   };
-  
+
   const handleSetPhoneState = async (value) => {
     // Expresión regular que solo permite números, "+", "(", ")" y "-"
     const allowedCharacters = /^[0-9+()-]*$/;
 
     // Verificar si el valor cumple con la expresión regular y no excede los 20 caracteres
-    if (allowedCharacters.test(value) && value.length < 10) {
+    if (allowedCharacters.test(value) && value.length < 8) {
       setNewPhoneNumber(value);
 
       // Actualizar el estado solo si el valor cumple con las validaciones
-      setError("Debe ser mayor a 10 caracteres");
+      setError("Debe ser mayor a 8 caracteres");
     } else if (allowedCharacters.test(value) && value.length <= 20) {
       setError("valid");
       setNewPhoneNumber(value);
@@ -52,7 +51,6 @@ const AlertModal = ({
   };
 
   const handleUpdatePhone = async () => {
-    console.log("entre al update");
     if (error !== "valid") {
       setShowAlertSnack({
         message: error,
