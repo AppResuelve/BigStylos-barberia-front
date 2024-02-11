@@ -31,6 +31,8 @@ const CreateWorkDays = ({ user, schedule, pendingServices, setRefreshForWhoIsCom
   const [timeSelected, setTimeSelected] = useState([]); //estado de la rama fac, no se para que es aun.
   const [refreshDays, setRefreshDays] = useState(false);
 
+  console.log(dayIsSelected)
+
   /*   dayIsSelected && Object.keys(dayIsSelected).length > 0 && days && Object.keys(days) > 0 && console.log(days[Object.keys(dayIsSelected)[0]][Object.keys(Object.keys(dayIsSelected)[0])[0]])
    */
   useEffect(() => {
@@ -200,6 +202,7 @@ const CreateWorkDays = ({ user, schedule, pendingServices, setRefreshForWhoIsCom
             if (Object.keys(newState[submitArray[i].month]).length === 0) {
               delete newState[submitArray[i].month];
             }
+            console.log(newState)
 
             return newState;
           });

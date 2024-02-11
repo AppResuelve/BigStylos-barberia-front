@@ -23,7 +23,7 @@ const CustomCalendarTurns = ({
   const { currentMonth, nextMonth, currentYear, nextYear, month1, month2 } =
     daysCalendarCustom;
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
-  const getDayPosition = getToday() - 1; // devuelve número que representa qué día de la semana es (lunes, martes, etc)
+  const getDayPosition = getToday() == 0 ? 7 : getToday();
   const [schedule, setSchedule] = useState({});
   const [noWork, setNoWork] = useState({});
 
