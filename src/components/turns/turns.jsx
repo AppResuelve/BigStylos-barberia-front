@@ -54,11 +54,6 @@ const Turns = ({ user }) => {
       // Recuperar datos existentes del localStorage
       const existingTurns =
         JSON.parse(localStorage.getItem("turnServices")) || [];
-
-      /* pasar el servicio a uppercase la 1er letra y guardar en el localStorage */
-      //   let serviceWithUpperCase =
-      // serviceSelected.charAt(0).toUpperCase() + serviceSelected.slice(1);
-
       // Agregar nuevo dato a la lista
       existingTurns.push(serviceSelected);
       // Guardar en el localStorage
@@ -184,7 +179,6 @@ const Turns = ({ user }) => {
             {services.map((element, index) => (
               <Box key={index} style={{ padding: "8px" }}>
                 <Button
-                  disabled={user === 1 ? true : false}
                   variant={
                     element[0] === serviceSelected ? "contained" : "outlined"
                   }

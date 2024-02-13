@@ -4,23 +4,25 @@ import { Skeleton, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import WorkerAcordeon from "../interfazMUI/workerAcordeon";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
+import { useAuth0 } from "@auth0/auth0-react";
 
-const Worker = ({ userData, userAuth}) => {
-  const navigate = useNavigate();
-  const { darkMode } = useContext(DarkModeContext);
+const Worker = () => {
+  const { darkMode, userData } = useContext(DarkModeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
+  const { isLoading, isAuthenticated } = useAuth0();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (userData !== 1) {
       if (!userData.worker) {
         navigate("/requestDenied401");
       }
-    } else if (userAuth) {
+    } else if (!isLoading && !isAuthenticated) {
       navigate("/requestDenied401");
     } else {
       return;
     }
-  }, [userData, userAuth]);
+  }, [userData, isLoading]);
 
   return (
     <div
@@ -34,7 +36,7 @@ const Worker = ({ userData, userAuth}) => {
         paddingTop: "70px",
       }}
     >
-      {userData === 1 ? (
+      {isLoading ? (
         <Stack spacing={1} style={{ display: "flex", alignItems: "center" }}>
           <Skeleton
             variant="text"
