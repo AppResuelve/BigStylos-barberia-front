@@ -3,6 +3,7 @@ import { DarkModeContext } from "../../App";
 import { Box, Button, Input } from "@mui/material";
 import AlertSnackBar from "./alertSnackBar";
 import Alert from "@mui/material/Alert";
+import CloseIcon from "@mui/icons-material/Close";
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import "./alertModal.css";
@@ -176,56 +177,59 @@ const AlertModal = ({
             border: `2px solid ${type[2]}`,
           }}
         >
+          <Button
+            onClick={() => setMoveDown(true)}
+            style={{
+              top: 0,
+              right: 0,
+              height: "45px",
+              borderRadius: "10px",
+              position: "absolute",
+            }}
+          >
+            <CloseIcon />
+          </Button>
           <h2 style={{ color: type[2] }}>{showAlert.message}</h2>
           <Box
             sx={{
               display: "flex",
-              justifyContent: "space-around",
+              justifyContent: "space-between",
               marginTop: "12px",
             }}
           >
             {/* ///// comienzo del area de botones para el alerta que pide el phone ///// */}
             {showAlert.buttonClose.text === "phone" && (
-              <Box style={{ display: "flex" }}>
-                <Button
-                  variant="outlined"
-                  onClick={() => setMoveDown(true)}
-                  style={{
-                    fontFamily: "Jost, sans-serif",
-                    fontWeight: "bold",
-                    marginRight: "18px",
-                  }}
-                >
-                  cancelar
-                </Button>
-                <Input
-                  type="tel"
-                  value={newPhoneNumber}
-                  placeholder="ej: 01149352 ..."
-                  onKeyDown={handleKeyDown}
-                  onChange={(e) => handleSetPhoneState(e.target.value)}
-                  sx={{
-                    fontFamily: "Jost, sans-serif",
-                    fontWeight: "bold",
-                    fontSize: "15px",
-                    height: "30px",
-                    borderRadius: "4px",
-                    bgcolor: darkMode.on ? "white" : "#d6d6d5",
-                  }}
-                />
-              </Box>
+              <Input
+                type="tel"
+                value={newPhoneNumber}
+                placeholder="ej: 01149352 ..."
+                onKeyDown={handleKeyDown}
+                onChange={(e) => handleSetPhoneState(e.target.value)}
+                sx={{
+                  paddingLeft: "10px",
+                  fontFamily: "Jost, sans-serif",
+                  fontWeight: "bold",
+                  fontSize: "15px",
+                  height: "35px",
+                  borderRadius: "5px",
+                  bgcolor: "#d6d6d5",
+                }}
+              />
             )}
             {/* ///// fin del area de botones para el alerta que pide el phone ///// */}
-            {showAlert.buttonClose.text !== "" &&
-              showAlert.buttonClose.text !== "phone" && (
-                <Button
-                  variant="outlined"
-                  onClick={() => setMoveDown(true)}
-                  style={{ fontFamily: "Jost, sans-serif", fontWeight: "bold" }}
-                >
-                  {showAlert.buttonClose.text}
-                </Button>
-              )}
+            {/* {showAlert.buttonClose.text !== "" &&
+                showAlert.buttonClose.text !== "phone" && (
+                  <Button
+                    variant="outlined"
+                    onClick={() => setMoveDown(true)}
+                    style={{
+                      fontFamily: "Jost, sans-serif",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {showAlert.buttonClose.text}
+                  </Button>
+                )} */}
             {showAlert.button1.text !== "" && (
               <Button
                 disabled={
