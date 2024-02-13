@@ -24,7 +24,7 @@ const CustomCalendar = ({
   let { currentMonth, nextMonth, currentYear, nextYear, month1, month2 } =
     daysCalendarCustom;
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
-  const getDayPosition = getToday();
+  const getDayPosition =  getToday() + 1
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [exist50, setExist50] = useState(false);
   const [noWork, setNoWork] = useState({});
