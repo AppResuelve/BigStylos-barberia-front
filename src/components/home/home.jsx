@@ -14,7 +14,7 @@ const Home = ({ homeImages }) => {
   const { darkMode } = useContext(DarkModeContext);
 
   return (
-    <>
+    < div /* style={{position:"relative"}} */>
       {homeImages === 1 ? (
         <Box
           style={{
@@ -190,7 +190,7 @@ const Home = ({ homeImages }) => {
           <Footer />
         </div>
       )}
-    </>
+    </div>
   );
 };
 export default Home;

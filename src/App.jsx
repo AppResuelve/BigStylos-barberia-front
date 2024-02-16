@@ -159,7 +159,7 @@ function App() {
         setRefreshForWhoIsComing,
         userData,
         refreshWhenCancelTurn,
-        setRefreshWhenCancelTurn
+        setRefreshWhenCancelTurn,
       }}
     >
       <div style={{ position: "relative" }} onClick={handleSetMoveDown}>
@@ -196,6 +196,33 @@ function App() {
             setValidateAlertTurns={setValidateAlertTurns}
             setRefreshUser={setRefreshUser}
           />
+        )}
+        {Object.keys(showAlert).length > 0 &&
+          !moveDown&&(
+            <div
+              className="div-bg-alert"
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100vh",
+                zIndex: "10000",
+              }}
+            ></div>
+          )}
+        {moveDown && (
+          <div
+            className="div-bg-alert-down"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100vh",
+              zIndex: "10000",
+            }}
+          ></div>
         )}
       </div>
     </DarkModeContext.Provider>
