@@ -52,8 +52,13 @@ const MyTurns = ({ userData }) => {
     }
   }, [validateAlert]);
 
-  const handleConfirmCancelTurn = (turn) => {
-    setInfoToSubmit(turn);
+  const handleConfirmCancelTurn = (turn, selectedService) => {
+    let newTurn = {
+      ...turn,
+      selectedService: selectedService
+  };
+    
+    setInfoToSubmit(newTurn);
     setShowAlert({
       isOpen: true,
       message: "Estas a punto de cancelar el turno, deseas continuar?",
@@ -77,6 +82,7 @@ const MyTurns = ({ userData }) => {
         time: InfoToSubmit.hourTime,
         emailWorker: InfoToSubmit.worker,
         emailClient: userData.email,
+        selectedService: InfoToSubmit.selectedService
       });
       const { data } = response;
       setRefresh(!refresh);
@@ -159,7 +165,7 @@ const MyTurns = ({ userData }) => {
                       color: "red",
                       transition: ".2s",
                     }}
-                    onClick={() => handleConfirmCancelTurn(turn)}
+                    onClick={() => handleConfirmCancelTurn(turn, turnServices[index])}
                   >
                     <DeleteOutlineIcon />
                   </Button>

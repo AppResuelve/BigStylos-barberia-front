@@ -25,6 +25,7 @@ const Turns = ({ user }) => {
   const [selectedImg, setSelectedImg] = useState(false);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [detailTurn, setDetailTurn] = useState({});
+  const [refresh, setRefresh] = useState(false)
 
   useEffect(() => {
     if (validateAlertTurns === true) {
@@ -78,6 +79,7 @@ const Turns = ({ user }) => {
           },
         });
       }, 800);
+      setRefresh(true)
     } catch (error) {
       console.error("Error al tomar turno submit:", error);
     }
@@ -96,14 +98,15 @@ const Turns = ({ user }) => {
         );
         const { data } = response;
         setDays(data);
+        setRefresh(false)
       } catch (error) {
         console.error("Error al obtener los dias:", error);
       }
     };
-    if (serviceSelected.length > 0) {
+    if (serviceSelected.length > 0 || refresh == true) {
       fetchDays();
     }
-  }, [serviceSelected]);
+  }, [serviceSelected, refresh]);
 
   useEffect(() => {
     const fetchServices = async () => {
