@@ -17,6 +17,8 @@ const MyTurns = ({ userData }) => {
     setValidateAlert,
     refreshWhenCancelTurn,
     setRefreshWhenCancelTurn,
+    disableButtonMyTurns,
+    setDisableButtonMyTurns,
   } = useContext(DarkModeContext);
   const [listMyTurns, setListMyTurns] = useState(1);
   const [InfoToSubmit, setInfoToSubmit] = useState({});
@@ -43,7 +45,7 @@ const MyTurns = ({ userData }) => {
         const { data } = response;
         setListMyTurns(data);
         if (data.length < 1) {
-           localStorage.removeItem("turnServices");
+          localStorage.removeItem("turnServices");
         }
       } catch (error) {
         console.log(error);
@@ -66,7 +68,6 @@ const MyTurns = ({ userData }) => {
       ...turn,
       selectedService: selectedService,
     };
-
     setInfoToSubmit(newTurn);
     setShowAlert({
       isOpen: true,
@@ -81,6 +82,7 @@ const MyTurns = ({ userData }) => {
       },
       stateName: "validateAlert",
     });
+    setDisableButtonMyTurns(true);
   };
 
   const handleSubmit = async () => {
@@ -128,7 +130,7 @@ const MyTurns = ({ userData }) => {
             text: "aceptar",
           },
         });
-      }, 850);
+      }, 450);
 
       return () => {
         clearTimeout(timeoutId);
@@ -197,6 +199,7 @@ const MyTurns = ({ userData }) => {
                     </h4>
                   </Box>
                   <Button
+                    disabled={disableButtonMyTurns ? true : false}
                     className="btn-cancel-myTurns"
                     sx={{
                       marginLeft: "5px",
@@ -206,9 +209,7 @@ const MyTurns = ({ userData }) => {
                       color: "red",
                       transition: ".2s",
                     }}
-                    onClick={() =>
-                      handleConfirmCancelTurn(turn, turnServices[index])
-                    }
+                    onClick={() => handleConfirmCancelTurn(turn, serviceName)}
                   >
                     <DeleteOutlineIcon />
                   </Button>

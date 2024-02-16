@@ -20,7 +20,12 @@ const AlertModal = ({
   setValidateAlertTurns,
   setRefreshUser,
 }) => {
-  const { darkMode, moveDown, setMoveDown } = useContext(DarkModeContext);
+  const {
+    darkMode,
+    moveDown,
+    setMoveDown,
+    setDisableButtonMyTurns,
+  } = useContext(DarkModeContext);
   const { loginWithRedirect } = useAuth0();
   const [newPhoneNumber, setNewPhoneNumber] = useState("");
   const [error, setError] = useState("");
@@ -103,15 +108,17 @@ const AlertModal = ({
     default:
     // Código a ejecutar si ninguno de los casos anteriores se cumple
   }
-
   useEffect(() => {
     if (moveDown) {
       const timeoutId = setTimeout(() => {
         setShowAlert({});
         setMoveDown(false);
+        if (showAlert.type === "success") {
+          setDisableButtonMyTurns(false);
+        }
         // Remover la clase alert-open cuando se cierra el alerta
         document.body.classList.remove("alert-open");
-      }, 300);
+      }, 400);
 
       return () => {
         clearTimeout(timeoutId);

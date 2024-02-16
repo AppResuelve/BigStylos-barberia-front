@@ -32,6 +32,7 @@ function App() {
   const [refreshUser, setRefreshUser] = useState(false);
   const [refreshWhenCancelTurn, setRefreshWhenCancelTurn] = useState(false);
   const [refreshPersonalization, setRefreshPersonalization] = useState(false);
+  const [disableButtonMyTurns, setDisableButtonMyTurns] = useState(false);
   const [showAlert, setShowAlert] = useState({});
   const [darkMode, setDarkMode] = useState({
     dark: "#252627",
@@ -132,6 +133,7 @@ function App() {
       if (!alertContainer.contains(clickedElement)) {
         // Si el clic no proviene de dentro de la alerta, cerramos la alerta
         setMoveDown(true);
+        setDisableButtonMyTurns(false);
       }
     }
   };
@@ -160,6 +162,8 @@ function App() {
         userData,
         refreshWhenCancelTurn,
         setRefreshWhenCancelTurn,
+        disableButtonMyTurns,
+        setDisableButtonMyTurns,
       }}
     >
       <div style={{ position: "relative" }} onClick={handleSetMoveDown}>
@@ -197,20 +201,20 @@ function App() {
             setRefreshUser={setRefreshUser}
           />
         )}
-        {Object.keys(showAlert).length > 0 &&
-          !moveDown&&(
-            <div
-              className="div-bg-alert"
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100vh",
-                zIndex: "10000",
-              }}
-            ></div>
-          )}
+        {/* este y el de abajo son las cortinas de back drop de la alerta, entrada-salida */}
+        {Object.keys(showAlert).length > 0 && !moveDown && (
+          <div
+            className="div-bg-alert"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100vh",
+              zIndex: "10000",
+            }}
+          ></div>
+        )}
         {moveDown && (
           <div
             className="div-bg-alert-down"
