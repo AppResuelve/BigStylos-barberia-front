@@ -13,8 +13,13 @@ import "./turns.css";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Turns = ({ user }) => {
-  const { darkMode, setShowAlert, validateAlertTurns, setValidateAlertTurns } =
-    useContext(DarkModeContext);
+  const {
+    darkMode,
+    setShowAlert,
+    validateAlertTurns,
+    setValidateAlertTurns,
+    refreshWhenCancelTurn,
+  } = useContext(DarkModeContext);
 
   const [days, setDays] = useState([]);
   const [services, setServices] = useState([]);
@@ -25,7 +30,7 @@ const Turns = ({ user }) => {
   const [selectedImg, setSelectedImg] = useState(false);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [detailTurn, setDetailTurn] = useState({});
-  const [refresh, setRefresh] = useState(false)
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     if (validateAlertTurns === true) {
@@ -33,7 +38,7 @@ const Turns = ({ user }) => {
       setValidateAlertTurns(false);
     }
   }, [validateAlertTurns]);
-
+  
   const submit = async () => {
     const {
       dayIsSelected,
@@ -55,8 +60,19 @@ const Turns = ({ user }) => {
       // Recuperar datos existentes del localStorage
       const existingTurns =
         JSON.parse(localStorage.getItem("turnServices")) || [];
-      // Agregar nuevo dato a la lista
-      existingTurns.push(serviceSelected);
+
+      // Crear un nuevo objeto con la estructura deseada
+      const newTurn = {
+        [serviceSelected]: {
+          month: dayIsSelected[1],
+          day: dayIsSelected[0],
+          ini: selectedTime,
+        },
+      };
+
+      // Agregar el nuevo objeto a la lista
+      existingTurns.push(newTurn);
+
       // Guardar en el localStorage
       localStorage.setItem("turnServices", JSON.stringify(existingTurns));
       setDetailTurn({});
@@ -74,7 +90,7 @@ const Turns = ({ user }) => {
           },
         });
       }, 800);
-      setRefresh(true)
+      setRefresh(true);
     } catch (error) {
       console.error("Error al tomar turno submit:", error);
     }
@@ -93,7 +109,7 @@ const Turns = ({ user }) => {
         );
         const { data } = response;
         setDays(data);
-        setRefresh(false)
+        setRefresh(false);
       } catch (error) {
         console.error("Error al obtener los dias:", error);
       }
@@ -101,7 +117,7 @@ const Turns = ({ user }) => {
     if (serviceSelected.length > 0 || refresh == true) {
       fetchDays();
     }
-  }, [serviceSelected, refresh]);
+  }, [serviceSelected, refresh, refreshWhenCancelTurn]);
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -301,3 +317,20 @@ const Turns = ({ user }) => {
 };
 
 export default Turns;
+
+// let arrr = [
+//   {
+//     peinado: {
+//       month: 2,
+//       day: 16,
+//       ini: 450,
+//     },
+//   },
+//   {
+//     cortedepelo: {
+//       month: 2,
+//       day: 17,
+//       ini: 490,
+//     },
+//   },
+// ];

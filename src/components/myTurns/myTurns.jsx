@@ -10,8 +10,14 @@ import "./myTurns.css";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const MyTurns = ({ userData }) => {
-  const { darkMode, setShowAlert, validateAlert, setValidateAlert } =
-    useContext(DarkModeContext);
+  const {
+    darkMode,
+    setShowAlert,
+    validateAlert,
+    setValidateAlert,
+    refreshWhenCancelTurn,
+    setRefreshWhenCancelTurn,
+  } = useContext(DarkModeContext);
   const [listMyTurns, setListMyTurns] = useState(1);
   const [InfoToSubmit, setInfoToSubmit] = useState({});
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
@@ -55,9 +61,9 @@ const MyTurns = ({ userData }) => {
   const handleConfirmCancelTurn = (turn, selectedService) => {
     let newTurn = {
       ...turn,
-      selectedService: selectedService
-  };
-    
+      selectedService: selectedService,
+    };
+
     setInfoToSubmit(newTurn);
     setShowAlert({
       isOpen: true,
@@ -73,7 +79,7 @@ const MyTurns = ({ userData }) => {
       stateName: "validateAlert",
     });
   };
-
+  
   const handleSubmit = async () => {
     try {
       const response = await axios.post(`${VITE_BACKEND_URL}/workdays/cancel`, {
@@ -82,10 +88,30 @@ const MyTurns = ({ userData }) => {
         time: InfoToSubmit.hourTime,
         emailWorker: InfoToSubmit.worker,
         emailClient: userData.email,
-        selectedService: InfoToSubmit.selectedService
+        selectedService: InfoToSubmit.selectedService,
       });
       const { data } = response;
+
+      // Recuperar los turnos del localStorage
+      let existingTurns =
+        JSON.parse(localStorage.getItem("turnServices")) || [];
+
+      // Filtrar los turnos para eliminar el turno cancelado
+      existingTurns = existingTurns.filter((turn) => {
+        const serviceName = Object.keys(turn)[0];
+        const { month, day, ini } = turn[serviceName];
+        return (
+          month !== InfoToSubmit.month ||
+          day !== InfoToSubmit.day ||
+          ini !== InfoToSubmit.hourTime.ini
+        );
+      });
+
+      // Guardar los turnos actualizados en el localStorage
+      localStorage.setItem("turnServices", JSON.stringify(existingTurns));
+
       setRefresh(!refresh);
+      setRefreshWhenCancelTurn(!refreshWhenCancelTurn);
       const timeoutId = setTimeout(() => {
         setShowAlert({
           isOpen: true,
@@ -116,6 +142,18 @@ const MyTurns = ({ userData }) => {
           <Skeleton variant="rounded" height={80} style={{ width: "100%" }} />
         ) : listMyTurns && Object.keys(listMyTurns).length > 0 ? (
           listMyTurns.map((turn, index) => {
+            let serviceName;
+            turnServices.map((service, index) => {
+              let serviceObj = Object.keys(service); //para acceder luego a la prop de cada obj en cada vuelta
+              if (
+                turn.month === service[serviceObj].month &&
+                turn.day === service[serviceObj].day &&
+                turn.hourTime.ini === service[serviceObj].ini
+              ) {
+                serviceName = Object.keys(service)[0];
+              }
+            });
+
             return (
               <Box
                 key={index}
@@ -132,7 +170,7 @@ const MyTurns = ({ userData }) => {
                     alignItems: "center",
                   }}
                 >
-                  <h3 className="h3-myTurns">{turnServices[index]}</h3>
+                  <h3 className="h3-myTurns">{serviceName}</h3>
                   <h4 className="h4-myTurns">
                     El día: {turn.day}/{turn.month} a las{" "}
                     {formatHour(turn.hourTime.ini)}
@@ -165,7 +203,9 @@ const MyTurns = ({ userData }) => {
                       color: "red",
                       transition: ".2s",
                     }}
-                    onClick={() => handleConfirmCancelTurn(turn, turnServices[index])}
+                    onClick={() =>
+                      handleConfirmCancelTurn(turn, turnServices[index])
+                    }
                   >
                     <DeleteOutlineIcon />
                   </Button>
@@ -183,7 +223,7 @@ const MyTurns = ({ userData }) => {
               height: "80px",
             }}
           >
-            No tienes turnos todavia
+            No tienes turnos todavía
           </h4>
         )}
       </Box>

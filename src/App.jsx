@@ -30,6 +30,7 @@ function App() {
   const [validateAlert, setValidateAlert] = useState(false);
   const [validateAlertTurns, setValidateAlertTurns] = useState(false);
   const [refreshUser, setRefreshUser] = useState(false);
+  const [refreshWhenCancelTurn, setRefreshWhenCancelTurn] = useState(false);
   const [refreshPersonalization, setRefreshPersonalization] = useState(false);
   const [showAlert, setShowAlert] = useState({});
   const [darkMode, setDarkMode] = useState({
@@ -156,7 +157,9 @@ function App() {
         setRefreshPersonalization,
         refreshForWhoIsComing,
         setRefreshForWhoIsComing,
-        userData
+        userData,
+        refreshWhenCancelTurn,
+        setRefreshWhenCancelTurn
       }}
     >
       <div style={{ position: "relative" }} onClick={handleSetMoveDown}>
