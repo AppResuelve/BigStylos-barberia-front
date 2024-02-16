@@ -42,6 +42,9 @@ const MyTurns = ({ userData }) => {
         );
         const { data } = response;
         setListMyTurns(data);
+        if (data.length < 1) {
+           localStorage.removeItem("turnServices");
+        }
       } catch (error) {
         console.log(error);
       }
@@ -79,7 +82,7 @@ const MyTurns = ({ userData }) => {
       stateName: "validateAlert",
     });
   };
-  
+
   const handleSubmit = async () => {
     try {
       const response = await axios.post(`${VITE_BACKEND_URL}/workdays/cancel`, {
