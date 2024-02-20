@@ -21,7 +21,7 @@ const CustomCalendarPlannedC = ({
   const daysCalendarCustom = daysMonthCalendarCustom(amountOfDays, false);
   let { currentMonth, nextMonth, currentYear, nextYear, month1, month2 } = daysCalendarCustom;
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
-  const getDayPosition = getToday();
+  const getDayPosition = getToday() + 1;
 
   const handleDay = (day, month) => {
     setDayIsSelected((prevState) => {

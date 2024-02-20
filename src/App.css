@@ -42,3 +42,33 @@
    border-radius: 10px;
    height: 2px;
  }
+
+ .div-bg-alert {
+   animation: fade-in-bg-color .3s ease-in-out forwards;
+
+ }
+
+ .div-bg-alert-down {
+   animation: fade-in-bg-color-down .3s ease-in-out forwards;
+ }
+
+ @keyframes fade-in-bg-color {
+   from {
+     background-color: transparent;
+   }
+
+   to {
+     background-color: rgba(0, 0, 0, 0.4);
+   }
+ }
+
+ @keyframes fade-in-bg-color-down {
+   from {
+     background-color: rgba(0, 0, 0, 0.4);
+
+   }
+
+   to {
+     background-color: transparent;
+   }
+ }
