@@ -121,9 +121,7 @@ const AlertModal = ({
       const timeoutId = setTimeout(() => {
         setShowAlert({});
         setMoveDown(false);
-        if (showAlert.type === "success") {
-          setDisableButtonMyTurns(false);
-        }
+        setDisableButtonMyTurns(false);
         // Remover la clase alert-open cuando se cierra el alerta
         document.body.classList.remove("alert-open");
       }, 400);
