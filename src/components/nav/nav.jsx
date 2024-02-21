@@ -13,7 +13,7 @@ const Nav = ({ user, homeImages }) => {
   const { darkMode } = useContext(DarkModeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const location = useLocation();
-
+  
   return (
     <>
       {homeImages !== 1 && (
@@ -30,7 +30,7 @@ const Nav = ({ user, homeImages }) => {
               location.pathname === "/"
                 ? "transparent"
                 : darkMode.on
-                ? "#252627"
+                ? darkMode.dark
                 : darkMode.light,
             zIndex: "100",
           }}

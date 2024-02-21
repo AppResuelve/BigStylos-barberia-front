@@ -18,7 +18,11 @@ const Turns = ({ user }) => {
     setShowAlert,
     validateAlertTurns,
     setValidateAlertTurns,
+    validateAlertTurnsWorker,
+    setValidateAlertTurnsWorker,
     refreshWhenCancelTurn,
+    clientName,
+    setClientName,
   } = useContext(DarkModeContext);
 
   const [days, setDays] = useState([]);
@@ -33,20 +37,25 @@ const Turns = ({ user }) => {
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
-    if (validateAlertTurns === true) {
+    if (validateAlertTurns === true || validateAlertTurnsWorker === true) {
       submit();
       setValidateAlertTurns(false);
+      setValidateAlertTurnsWorker(false);
     }
-  }, [validateAlertTurns]);
-  
+  }, [validateAlertTurns, validateAlertTurnsWorker]);
+
   const submit = async () => {
-    const {
+    let {
       dayIsSelected,
       serviceSelected,
       selectedTime,
       workerEmail,
       userEmail,
     } = detailTurn;
+
+    if (clientName !== "" && user.worker) {
+      userEmail = clientName;
+    }
 
     try {
       const response = await axios.put(`${VITE_BACKEND_URL}/workdays/turn`, {
@@ -57,10 +66,10 @@ const Turns = ({ user }) => {
         user: userEmail,
       });
       const { data } = response;
+
       // Recuperar datos existentes del localStorage
       const existingTurns =
         JSON.parse(localStorage.getItem("turnServices")) || [];
-
       // Crear un nuevo objeto con la estructura deseada
       const newTurn = {
         [serviceSelected]: {
@@ -69,12 +78,11 @@ const Turns = ({ user }) => {
           ini: selectedTime,
         },
       };
-
       // Agregar el nuevo objeto a la lista
       existingTurns.push(newTurn);
-
       // Guardar en el localStorage
       localStorage.setItem("turnServices", JSON.stringify(existingTurns));
+
       setDetailTurn({});
       setTimeout(() => {
         setShowAlert({
@@ -140,23 +148,43 @@ const Turns = ({ user }) => {
 
   useEffect(() => {
     if (Object.keys(detailTurn).length > 0) {
-      setShowAlert({
-        isOpen: true,
-        message: `Turno para ${detailTurn.serviceSelected} el dia ${
-          detailTurn.dayIsSelected[0]
-        }/${detailTurn.dayIsSelected[1]} a las ${formatHour(
-          detailTurn.selectedTime
-        )}`,
-        type: "warning",
-        button1: {
-          text: "confirmar turno",
-          action: "handleActionProp",
-        },
-        buttonClose: {
-          text: "cancelar",
-        },
-        stateName: "validateAlertTurns",
-      });
+      if (Object.keys(user).length > 0 && user.worker) {
+        setShowAlert({
+          isOpen: true,
+          message: `Turno para ${detailTurn.serviceSelected} el dia ${
+            detailTurn.dayIsSelected[0]
+          }/${detailTurn.dayIsSelected[1]} a las ${formatHour(
+            detailTurn.selectedTime
+          )}.`,
+          type: "warning",
+          button1: {
+            text: "confirmar turno",
+            action: "handleActionProp",
+          },
+          buttonClose: {
+            text: "cancelar",
+          },
+          stateName: "validateAlertTurnsWorker",
+        });
+      } else {
+        setShowAlert({
+          isOpen: true,
+          message: `Turno para ${detailTurn.serviceSelected} el dia ${
+            detailTurn.dayIsSelected[0]
+          }/${detailTurn.dayIsSelected[1]} a las ${formatHour(
+            detailTurn.selectedTime
+          )}.`,
+          type: "warning",
+          button1: {
+            text: "confirmar turno",
+            action: "handleActionProp",
+          },
+          buttonClose: {
+            text: "cancelar",
+          },
+          stateName: "validateAlertTurns",
+        });
+      }
     }
   }, [detailTurn]);
 

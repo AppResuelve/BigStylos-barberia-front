@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { DarkModeContext } from "../../App";
 import { Button, Box } from "@mui/material";
 import { WhatsApp } from "@mui/icons-material";
+import noUserImg from "../../assets/icons/noUser.png";
 import formatHour from "../../functions/formatHour";
 import axios from "axios";
 import "./whoIsComing.css";
@@ -55,6 +56,7 @@ const WhoIsComingAdmin = () => {
         );
         const { data } = response;
         setCount(data);
+        setSelectedDay(data[0]);
       } catch (error) {
         console.error("Error al obtener el count.", error);
       }
@@ -173,7 +175,7 @@ const WhoIsComingAdmin = () => {
 
         <Box
           style={{
-            display:"flex",
+            display: "flex",
             width: "100%",
             maxWidth: "900px",
             overflow: "auto",
@@ -202,7 +204,7 @@ const WhoIsComingAdmin = () => {
                     handleChangeDay(element);
                   }}
                 >
-                  {element}
+                  {index === 0 ? "HOY" : element}
                 </Button>
               );
             })}
@@ -233,13 +235,13 @@ const WhoIsComingAdmin = () => {
                         color: darkMode.on ? "white" : darkMode.dark,
                       }}
                     >
-                      <h3 className="h-email-hic">Email</h3>
+                      <h3 className="h-name-hic">Nombre</h3>
                       <hr />
                       <h3 className="h-time-hic">Horario</h3>
                       <hr />
                       <h3 className="h-phone-hic">Celular</h3>
                       <hr />
-                      <h3 className="h-name-hic">Nombre</h3>
+                      <h3 className="h-email-hic">Email</h3>
                     </Box>
                     <hr className="hr-hic" />
                   </Box>
@@ -250,7 +252,29 @@ const WhoIsComingAdmin = () => {
                     color: darkMode.on ? "white" : darkMode.dark,
                   }}
                 >
-                  <h4 className="h-email-hic">{element.email}</h4>
+                  <Box
+                    className="h-name-hic"
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <h4>{element.name}</h4>
+                    <img
+                      src={element.image ? element.image : noUserImg}
+                      alt="imagen de perfil"
+                      style={{
+                        width: "30px",
+                        borderRadius: "50px",
+                        backgroundColor: element.image
+                          ? ""
+                          : darkMode.on
+                          ? "white"
+                          : "",
+                      }}
+                    ></img>
+                  </Box>
                   <hr />
                   <h4 className="h-time-hic">
                     {`${formatHour(element.ini)} - ${formatHour(element.fin)}`}
@@ -259,48 +283,45 @@ const WhoIsComingAdmin = () => {
                   <Box
                     className={darkMode.on ? "h-phone-hic-dark" : "h-phone-hic"}
                   >
-                    <a
-                      href={`whatsapp://send?phone=${element.phone}&text=Recuerda que tienes reserva en la barbería, revisa en la página, sección "Mis Turnos".e`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        textDecoration: "none",
-                      }}
-                    >
-                      <button
-                        className={
-                          element.phone === "no requerido"
-                            ? "btn-wsp-ctfw-false"
-                            : "btn-wsp-ctfw"
-                        }
+                    {element.phone ? (
+                      <a
+                        href={`whatsapp://send?phone=${element.phone}&text=Recuerda que tienes reserva en la barbería, revisa en la página, sección "Mis Turnos".e`}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         style={{
-                          fontFamily: "Jost, sans-serif",
-                          fontWeight: "bold",
-                          border: "none",
-                          cursor: "pointer",
-                          width: "100%",
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
+                          textDecoration: "none",
                         }}
                       >
-                        <h4>{element.phone}</h4>
-                        {element.phone !== "no requerido" && (
-                          <WhatsApp color="success" />
-                        )}
-                      </button>
-                    </a>
+                        <button
+                          className={
+                            element.phone === "no requerido"
+                              ? "btn-wsp-ctfw-false"
+                              : "btn-wsp-ctfw"
+                          }
+                          style={{
+                            fontFamily: "Jost, sans-serif",
+                            fontWeight: "bold",
+                            border: "none",
+                            cursor: "pointer",
+                            width: "100%",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
+                        >
+                          <h4>{element.phone}</h4>
+                          {element.phone !== "no requerido" && (
+                            <WhatsApp color="success" />
+                          )}
+                        </button>
+                      </a>
+                    ) : (
+                      <h5>No disponible</h5>
+                    )}
                   </Box>
 
                   <hr />
-                  <Box style={{ display: "flex", alignItems: "center" }}>
-                    <img
-                      src={element.image}
-                      alt="imagen de perfil"
-                      style={{ width: "30px", borderRadius: "50px" }}
-                    ></img>
-                    <h4 className="h-name-hic">{element.name}</h4>
-                  </Box>
+                  <h4 className="h-email-hic">{element.email}</h4>
                 </Box>
                 <hr className="hr-hic" />
               </Box>
