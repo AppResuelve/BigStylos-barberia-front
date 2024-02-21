@@ -322,7 +322,7 @@ const WorkerAcordeon = ({ user }) => {
                   : "white",
               }}
             >
-              Quien viene?
+              Agenda de turnos
             </h2>
           </AccordionSummary>
           <AccordionDetails>

@@ -18,6 +18,7 @@ const AlertModal = ({
   setAlertDelete,
   setValidateAlert,
   setValidateAlertTurns,
+  setValidateAlertTurnsWorker,
   setRefreshUser,
 }) => {
   const {
@@ -25,6 +26,8 @@ const AlertModal = ({
     moveDown,
     setMoveDown,
     setDisableButtonMyTurns,
+    clientName,
+    setClientName,
   } = useContext(DarkModeContext);
   const { loginWithRedirect } = useAuth0();
   const [newPhoneNumber, setNewPhoneNumber] = useState("");
@@ -32,6 +35,7 @@ const AlertModal = ({
   const [open, setOpen] = useState(false);
   const [showAlertSnack, setShowAlertSnack] = useState({});
 
+  /* inicio del codigo del alert input phone number */
   const handleKeyDown = (e) => {
     // Manejar el evento cuando se presiona Enter
     if (e.keyCode === 13) {
@@ -87,6 +91,7 @@ const AlertModal = ({
       }
     }
   };
+  /* fin del codigo del alert input phone number */
 
   let handleActionProp;
   switch (showAlert.stateName) {
@@ -104,18 +109,19 @@ const AlertModal = ({
     case "validateAlertTurns":
       handleActionProp = setValidateAlertTurns;
       break;
-
+    case "validateAlertTurnsWorker":
+      handleActionProp = setValidateAlertTurnsWorker;
+      break;
     default:
     // Código a ejecutar si ninguno de los casos anteriores se cumple
   }
+
   useEffect(() => {
     if (moveDown) {
       const timeoutId = setTimeout(() => {
         setShowAlert({});
         setMoveDown(false);
-        if (showAlert.type === "success") {
-          setDisableButtonMyTurns(false);
-        }
+        setDisableButtonMyTurns(false);
         // Remover la clase alert-open cuando se cierra el alerta
         document.body.classList.remove("alert-open");
       }, 400);
@@ -224,19 +230,24 @@ const AlertModal = ({
               />
             )}
             {/* ///// fin del area de botones para el alerta que pide el phone ///// */}
-            {/* {showAlert.buttonClose.text !== "" &&
-                showAlert.buttonClose.text !== "phone" && (
-                  <Button
-                    variant="outlined"
-                    onClick={() => setMoveDown(true)}
-                    style={{
-                      fontFamily: "Jost, sans-serif",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {showAlert.buttonClose.text}
-                  </Button>
-                )} */}
+            {showAlert.stateName === "validateAlertTurnsWorker" && (
+              <Input
+                type="text"
+                value={clientName}
+                placeholder="Nombre del cliente"
+                // onKeyDown={handleKeyDown}
+                onChange={(e) => setClientName(e.target.value)}
+                sx={{
+                  paddingLeft: "10px",
+                  fontFamily: "Jost, sans-serif",
+                  fontWeight: "bold",
+                  fontSize: "15px",
+                  height: "35px",
+                  borderRadius: "5px",
+                  bgcolor: "#d6d6d5",
+                }}
+              />
+            )}
             {showAlert.button1.text !== "" && (
               <Button
                 disabled={

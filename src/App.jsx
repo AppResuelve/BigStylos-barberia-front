@@ -29,10 +29,12 @@ function App() {
   const [alertDelete, setAlertDelete] = useState(false);
   const [validateAlert, setValidateAlert] = useState(false);
   const [validateAlertTurns, setValidateAlertTurns] = useState(false);
+  const [validateAlertTurnsWorker, setValidateAlertTurnsWorker] = useState(false);
   const [refreshUser, setRefreshUser] = useState(false);
   const [refreshWhenCancelTurn, setRefreshWhenCancelTurn] = useState(false);
   const [refreshPersonalization, setRefreshPersonalization] = useState(false);
   const [disableButtonMyTurns, setDisableButtonMyTurns] = useState(false);
+  const [clientName, setClientName] = useState("");
   const [showAlert, setShowAlert] = useState({});
   const [darkMode, setDarkMode] = useState({
     dark: "#252627",
@@ -141,6 +143,8 @@ function App() {
   return (
     <DarkModeContext.Provider
       value={{
+        clientName, //estado para cuando el worker agenda un turno para un cliente
+        setClientName,
         moveDown,
         setMoveDown,
         darkMode,
@@ -155,6 +159,8 @@ function App() {
         setValidateAlert,
         validateAlertTurns,
         setValidateAlertTurns,
+        validateAlertTurnsWorker,
+        setValidateAlertTurnsWorker,
         refreshPersonalization,
         setRefreshPersonalization,
         refreshForWhoIsComing,
@@ -198,6 +204,7 @@ function App() {
             setAlertDelete={setAlertDelete}
             setValidateAlert={setValidateAlert}
             setValidateAlertTurns={setValidateAlertTurns}
+            setValidateAlertTurnsWorker={setValidateAlertTurnsWorker}
             setRefreshUser={setRefreshUser}
           />
         )}
