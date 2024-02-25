@@ -158,7 +158,7 @@ const Turns = ({ user }) => {
           )}.`,
           type: "warning",
           button1: {
-            text: "confirmar turno",
+            text: "confirmar",
             action: "handleActionProp",
           },
           buttonClose: {
