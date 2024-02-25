@@ -241,10 +241,10 @@ const AlertModal = ({
                   paddingLeft: "10px",
                   fontFamily: "Jost, sans-serif",
                   fontWeight: "bold",
-                  fontSize: "15px",
-                  height: "35px",
+                  fontSize: "18px",
+                  height: "40px",
                   borderRadius: "5px",
-                  bgcolor: "#d6d6d5",
+                  bgcolor: "white",
                 }}
               />
             )}

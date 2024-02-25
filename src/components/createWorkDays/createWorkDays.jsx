@@ -18,6 +18,7 @@ const CreateWorkDays = ({
   user,
   schedule,
   pendingServices,
+  doCeroServices,
   setRefreshForWhoIsComing,
 }) => {
   //informacion del estado global
@@ -36,7 +37,6 @@ const CreateWorkDays = ({
   const [timeSelected, setTimeSelected] = useState([]); //estado de la rama fac, no se para que es aun.
   const [refreshDays, setRefreshDays] = useState(false);
 
-  console.log(dayIsSelected)
 
   /*   dayIsSelected && Object.keys(dayIsSelected).length > 0 && days && Object.keys(days) > 0 && console.log(days[Object.keys(dayIsSelected)[0]][Object.keys(Object.keys(dayIsSelected)[0])[0]])
    */
@@ -105,11 +105,11 @@ const CreateWorkDays = ({
   }, [showEdit]);
 
   const handleEdit = () => {
-    if (pendingServices) {
+    if (pendingServices || doCeroServices) {
       setShowAlert({
         isOpen: true,
         message:
-          "Para crear un día de trabajo no debes tener servicios pendientes de asignación.",
+          "Para crear un día de trabajo debes tener al menos 1 servicio disponible y sin pendientes de asignación.",
         type: "warning",
         button1: {
           text: "Mis servicios",
