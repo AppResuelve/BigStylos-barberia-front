@@ -17,7 +17,6 @@ const WhoIsComingWorker = ({
 }) => {
   const { darkMode } = useContext(DarkModeContext);
   const [turns, setTurns] = useState([]);
-  const [todayButton, setTodayButton] = useState(false);
 
   /*  turns contiene:
   {
@@ -79,7 +78,7 @@ const WhoIsComingWorker = ({
   const handleChangeDay = (element) => {
     setSelectedDay(element);
   };
-  console.log(turns);
+
   return (
     <div>
       <hr
@@ -140,7 +139,7 @@ const WhoIsComingWorker = ({
                 color: darkMode.on ? "white" : darkMode.dark,
               }}
             >
-              Todavía no tienes dias
+              Todavía no tienes días
             </h2>
           )}
         </Box>
@@ -239,12 +238,14 @@ const WhoIsComingWorker = ({
                       </button>
                     </a>
                   ) : (
-                    <h5>No disponible</h5>
+                    <h5>--------------</h5>
                   )}
                 </Box>
 
                 <hr />
-                <h4 className="h-email-hic">{element.email}</h4>
+                <h4 className="h-email-hic">
+                  {element.email ? element.email : "--------------"}
+                </h4>
               </Box>
               <hr className="hr-hic" />
             </Box>

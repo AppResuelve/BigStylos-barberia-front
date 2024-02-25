@@ -212,7 +212,14 @@ const MyServices = ({
                           <h3 style={{ color: "red" }}>Pendiente</h3>
                         )}
                       {timeEdit[element[0]].duration == 0 ? (
-                        <h3 style={{ marginRight: "40px" }}>-----</h3>
+                        <h3
+                          style={{
+                            marginRight: "40px",
+                            color: darkMode.on ? "white" : darkMode.dark,
+                          }}
+                        >
+                          -----
+                        </h3>
                       ) : (
                         <Select
                           key={index + 40}

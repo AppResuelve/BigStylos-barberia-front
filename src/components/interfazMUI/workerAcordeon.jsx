@@ -28,6 +28,7 @@ const WorkerAcordeon = ({ user }) => {
   const [workerData, setWorkerData] = useState({});
   const [refresh, setRefresh] = useState(false);
   const [pendingServices, setPendingServices] = useState(false);
+  const [doCeroServices, setDoCeroServices] = useState(false);
   /* estados locales del componente myServices */
   const [services, setServices] = useState(1);
   const [serviceStatus, setServiceStatus] = useState({});
@@ -44,16 +45,25 @@ const WorkerAcordeon = ({ user }) => {
     if (timeEdit && Object.keys(timeEdit).length > 0) {
       if (services && services.length > 0) {
         let aux = false;
+        let secondaryAux = false;
+
         for (const prop in timeEdit) {
           if (services.some((serviceArr) => serviceArr[0] === prop)) {
             if (timeEdit[prop].duration === null) {
               aux = true;
               setPendingServices(aux);
               return;
+            } else if (timeEdit[prop].duration === 0) {
+              secondaryAux = true;
+
+              setDoCeroServices(secondaryAux);
+              return;
             } else {
               aux = false;
+              secondaryAux = false;
             }
             setPendingServices(aux);
+            setDoCeroServices(secondaryAux);
           }
         }
       }
@@ -128,6 +138,7 @@ const WorkerAcordeon = ({ user }) => {
     setExpanded(isExpanded ? panel : false);
     setRedirectToMyServices(false);
   };
+
   return (
     <div
       style={{
@@ -167,11 +178,14 @@ const WorkerAcordeon = ({ user }) => {
           >
             <h2
               style={{
-                color: !darkMode.on
-                  ? darkMode.dark
-                  : expanded === "panel1"
-                  ? darkMode.dark
-                  : "white",
+                color:
+                  redirectToMyServices && darkMode.on
+                    ? "white"
+                    : !darkMode.on
+                    ? darkMode.dark
+                    : expanded === "panel1"
+                    ? darkMode.dark
+                    : "white",
               }}
             >
               Dias de trabajo
@@ -185,6 +199,7 @@ const WorkerAcordeon = ({ user }) => {
                   user={workerData}
                   schedule={schedule}
                   pendingServices={pendingServices}
+                  doCeroServices={doCeroServices}
                   setRefreshForWhoIsComing={setRefreshForWhoIsComing}
                 />
               )}
