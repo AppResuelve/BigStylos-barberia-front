@@ -1,7 +1,10 @@
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 
 const alertSnackBar = ({ showAlertSnack, open, setOpen }) => {
+  const { xs, sm, md, lg, xl } = useMediaQueryHook();
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -13,8 +16,9 @@ const alertSnackBar = ({ showAlertSnack, open, setOpen }) => {
       onClose={handleClose}
       sx={{
         zIndex: "100000",
-        display: "flex",
-        justifyContent: "center",
+        width: "100%",
+        marginBottom: sm ? "30px" : "",
+        justifyContent: sm ? "start" : "center",
       }}
     >
       <Alert
@@ -22,7 +26,7 @@ const alertSnackBar = ({ showAlertSnack, open, setOpen }) => {
         severity={showAlertSnack.type}
         variant="filled"
         sx={{
-          // width: "100%",
+          display: "flex",
           fontFamily: "Jost,sans-serif",
           fontWeight: "bold",
           borderRadius: showAlertSnack.type === "success" ? "50px" : "",

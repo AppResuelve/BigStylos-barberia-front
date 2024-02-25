@@ -172,17 +172,18 @@ const AlertModal = ({
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
-      <AlertSnackBar
-        showAlertSnack={showAlertSnack}
-        setShowAlertSnack={setShowAlertSnack}
-        open={open}
-        setOpen={setOpen}
-      />
+        <AlertSnackBar
+          showAlertSnack={showAlertSnack}
+          setShowAlertSnack={setShowAlertSnack}
+          open={open}
+          setOpen={setOpen}
+        />
       {Object.keys(showAlert).length > 0 && (
         <Alert
           className={`alert-container ${moveDown ? "exit" : ""}`}
           severity={type[0]}
           style={{
+            display: "flex",
             backgroundColor: type[1],
             borderRadius: "10px",
             boxShadow: "0px 45px 22px -34px rgba(0, 0, 0, 0.57)",
@@ -206,7 +207,11 @@ const AlertModal = ({
           <Box
             sx={{
               display: "flex",
-              justifyContent: "space-between",
+              justifyContent:
+                showAlert.buttonClose.text === "phone" ||
+                showAlert.stateName === "validateAlertTurnsWorker"
+                  ? "space-between"
+                  : "center",
               marginTop: "12px",
             }}
           >
