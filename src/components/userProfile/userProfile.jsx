@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { DarkModeContext } from "../../App";
 import { useAuth0 } from "@auth0/auth0-react";
-import { CircularProgress, Skeleton, Box } from "@mui/material";
+import { CircularProgress, Box } from "@mui/material";
 import noUser from "../../assets/icons/noUser.png";
 import ModalMUI from "../interfazMUI/userModal";
 import "./userProfile.css";

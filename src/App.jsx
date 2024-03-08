@@ -19,7 +19,6 @@ function App() {
   const { user } = useAuth0();
   const location = useLocation();
   const [userData, setUserData] = useState(1);
-  const [userAuth, setUserAuth] = useState(false);
   const [colors, setColors] = useState("");
   const [homeImages, setHomeImages] = useState(1); //images del home
   /* estados locales para el contexto global */
@@ -184,11 +183,11 @@ function App() {
           <Route path="/turns" element={<Turns user={userData} />} />
           <Route
             path="/admin"
-            element={<Admin userData={userData} userAuth={userAuth} />}
+            element={<Admin userData={userData}  />}
           />
           <Route
             path="/worker"
-            element={<Worker userData={userData} userAuth={userAuth} />}
+            element={<Worker userData={userData} />}
           />
           <Route
             path="/requestDenied401"
