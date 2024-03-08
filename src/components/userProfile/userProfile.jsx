@@ -6,6 +6,7 @@ import noUser from "../../assets/icons/noUser.png";
 import ModalMUI from "../interfazMUI/userModal";
 import "./userProfile.css";
 
+
 const Profile = ({ userData }) => {
   const { darkMode } = useContext(DarkModeContext);
   const { user, isAuthenticated, isLoading } = useAuth0();
