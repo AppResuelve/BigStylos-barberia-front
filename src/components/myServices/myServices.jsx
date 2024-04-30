@@ -30,37 +30,36 @@ const MyServices = ({
   setShowEdit,
 }) => {
   const { darkMode } = useContext(DarkModeContext);
-
   const [loading, setLoading] = useState(true);
   const [inputService, setInputService] = useState("");
-
   const [searchValue, setSearchValue] = useState("");
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-
   const [auxState, setAuxState] = useState([]);
 
   const timeArray = [
     0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210, 225, 240,
     255, 270,
   ];
-
+  console.log(timeEdit);
   useEffect(() => {
-    if (serviceStatus[auxState[0]] && auxState !== false) {
-      setTimeEdit((prevState) => ({
-        ...prevState,
-        [auxState[0]]: {
-          ...prevState[auxState[0]],
-          duration: null,
-        },
-      }));
-    } else if (!serviceStatus[auxState[0]] && auxState !== false) {
-      setTimeEdit((prevState) => ({
-        ...prevState,
-        [auxState[0]]: {
-          ...prevState[auxState[0]],
-          duration: 0,
-        },
-      }));
+    if (timeEdit) { //condicional de estado 0 de la app
+      if (serviceStatus[auxState[0]] && auxState !== false) {
+        setTimeEdit((prevState) => ({
+          ...prevState,
+          [auxState[0]]: {
+            ...prevState[auxState[0]],
+            duration: null,
+          },
+        }));
+      } else if (!serviceStatus[auxState[0]] && auxState !== false) {
+        setTimeEdit((prevState) => ({
+          ...prevState,
+          [auxState[0]]: {
+            ...prevState[auxState[0]],
+            duration: 0,
+          },
+        }));
+      }
     }
   }, [auxState]);
 
