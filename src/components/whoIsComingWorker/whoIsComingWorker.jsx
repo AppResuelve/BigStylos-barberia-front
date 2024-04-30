@@ -17,6 +17,8 @@ const WhoIsComingWorker = ({
 }) => {
   const { darkMode } = useContext(DarkModeContext);
   const [turns, setTurns] = useState([]);
+  const [count, setCount] = useState([]);
+  const [selectedDay, setSelectedDay] = useState("");
 
   /*  turns contiene:
   {
@@ -27,8 +29,6 @@ const WhoIsComingWorker = ({
     phone: su cel
     image: su imagen
   } */
-  const [count, setCount] = useState([]);
-  const [selectedDay, setSelectedDay] = useState("");
 
   const date = new Date();
   const currentDay = date.getDate();
@@ -52,7 +52,7 @@ const WhoIsComingWorker = ({
       setRefreshForWhoIsComing(false);
     }
   }, [refreshForWhoIsComing]);
-
+  console.log(selectedDay);
   useEffect(() => {
     const fetchTurns = async () => {
       const [numberDay, numberMonth] = selectedDay.split("/").map(Number);
@@ -67,7 +67,8 @@ const WhoIsComingWorker = ({
         console.error("Error al obtener los dias con turnos.", error);
       }
     };
-    if (selectedDay.length > 0) {
+    //condicional de estado 0 de la app (undefined)
+    if (selectedDay !== "" && selectedDay !== undefined) {
       fetchTurns();
     }
     if (refreshForWhoIsComing == true) {

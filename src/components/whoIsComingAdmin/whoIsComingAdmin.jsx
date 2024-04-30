@@ -83,7 +83,8 @@ const WhoIsComingAdmin = () => {
         console.error("Error al obtener los dias cancelados.", error);
       }
     };
-    if (selectedDay.length > 0) {
+    //condicional de estado 0 de la app (undefined)
+    if (selectedDay !== undefined) {
       fetchTurns();
     }
     if (refreshForWhoIsComing == true) {
