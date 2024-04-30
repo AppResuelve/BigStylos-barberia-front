@@ -12,6 +12,7 @@ import { useMediaQueryHook } from "./useMediaQuery";
 import MyServices from "../myServices/myServices";
 import CancelledTurnsForWorker from "../cancelledTurnsForWorker/cancelledTurnsForWorker";
 import WhoIsComingWorker from "../whoIsComingWorker/whoIsComingWorker";
+import time from "../../helpers/arrayTime";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const WorkerAcordeon = ({ user }) => {
@@ -40,7 +41,7 @@ const WorkerAcordeon = ({ user }) => {
   useEffect(() => {
     setTimeEdit(workerData.services);
   }, [workerData]);
-
+  
   useEffect(() => {
     if (timeEdit && Object.keys(timeEdit).length > 0) {
       if (services && services.length > 0) {
@@ -55,9 +56,7 @@ const WorkerAcordeon = ({ user }) => {
               return;
             } else if (timeEdit[prop].duration === 0) {
               secondaryAux = true;
-
               setDoCeroServices(secondaryAux);
-              return;
             } else {
               aux = false;
               secondaryAux = false;
