@@ -12,6 +12,7 @@ import { dark } from "@mui/material/styles/createPalette";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction={"up"} ref={ref} {...props} />;
 });
+
 const SliderModal = ({
   user,
   isOpen,
@@ -26,6 +27,8 @@ const SliderModal = ({
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [timeResult, setTimeResult] = useState([]); // aca estaran los values convertidos a time de back
   const handleClose = () => setIsOpen(false);
+
+  console.log(timeSelected, "esto es lo que tiene timeaSelected");
 
   const obtenerDuracionMaxima = (obj) => {
     let duracionMaxima = 0;
@@ -57,21 +60,18 @@ const SliderModal = ({
   }, [openClose]);
 
   useEffect(() => {
-    let array = new Array(1441).fill(null);
-    let contador = 0;
-    for (let i = array.length; i > 0; i--) {
-      if ((contador = 0)) {
-        contador++;
-      }
+    let array = new Array(1440).fill(null).map(() => ({
+      applicant: null,
+      requiredService: null,
+      ini: null,
+      end: null,
+    }));
+    for (let i = 0; array.length > i; i++) {
       if (
-        (i <= values[1][1] && i >= values[1][0]) ||
-        (i <= values[0][1] && i >= values[0][0])
+        (i <= values[1][1] && i >= values[1][0]) || // values 30 , 0
+        (i <= values[0][1] && i >= values[0][0]) // values 30 , 0
       ) {
-        array[i] = "free";
-        contador = 0;
-      }
-      if (contador > 0 && contador <= 30) {
-        array[i] = "free";
+        array[i].applicant = "free";
       }
     }
     setTimeSelected(array);
@@ -105,7 +105,7 @@ const SliderModal = ({
           },
         }}
       >
-        <Box /* container */
+        <Box
           sx={{
             height: sm ? "100vh" : "500px",
             backgroundColor: darkMode.on ? darkMode.dark : "white",
@@ -188,7 +188,6 @@ const SliderModal = ({
                                     ) && !darkMode.on
                                   ? "white"
                                   : darkMode.dark,
-                              /* writingMode: sm ? "horizontal" : "vertical-lr", */
                               backgroundColor:
                                 values.some(
                                   ([start, end]) =>
@@ -228,7 +227,6 @@ const SliderModal = ({
               height: sm ? "100%" : "40%",
             }}
           >
-            {/* render de una copia del titulo para reoganizar mobile */}
             {sm && (
               <Box
                 sx={{
@@ -253,7 +251,6 @@ const SliderModal = ({
                 </Box>
               </Box>
             )}
-            {/* fin de render de una copia del titulo para reoganizar mobile */}
             <Grid
               container
               gap={sm ? 5 : 0}
@@ -285,7 +282,6 @@ const SliderModal = ({
                   <h2>{formatHour(values[0][1])}</h2>
                 </Box>
               </Grid>
-              {/*---------------------  mostrar condicionalmente el segundo grid si hay 2 valores para mostrar -----------*/}
               <Grid
                 item
                 xs={12}

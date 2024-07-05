@@ -1,22 +1,51 @@
 import { useEffect, useState, useContext } from "react";
+import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { DarkModeContext } from "../../App";
-import axios from "axios";
-import { Box, Button, Grid, Input } from "@mui/material";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { Box, Button, TextField } from "@mui/material";
 import LinearProgress from "@mui/material/LinearProgress";
+import Autocomplete from "@mui/material/Autocomplete";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import axios from "axios";
+import convertToCategoryArray from "../../helpers/convertToCategoryArray";
+import DeleteServicesModal from "./deleteServicesModal";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Services = ({
-  services,
   refreshServices,
   setRefreshServices,
   loadingServices,
+  services,
+  setServices,
   setLoadingServices,
 }) => {
+  const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const { darkMode } = useContext(DarkModeContext);
-  const [newService, setNewService] = useState("");
+  const [serviceInput, setServiceInput] = useState("");
+  const [categoryInput, setCategoryInput] = useState("");
+  const [categoryList, setCategoryList] = useState([]);
+  const [serviceList, setServiceList] = useState([]);
   const [searchValue, setSearchValue] = useState("");
+  const [categoryServices, setCategoryServices] = useState([]);
+  const [showEdit, setShowEdit] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+
+  useEffect(() => {
+    if (services) {
+      const categoryArray = convertToCategoryArray(services);
+
+      const extractedCategories = Object.keys(services);
+      const extractedServices = [];
+
+      for (const category of extractedCategories) {
+        extractedServices.push(...Object.keys(services[category]));
+      }
+      setCategoryServices(categoryArray);
+      setCategoryList(extractedCategories);
+      setServiceList(extractedServices);
+    }
+  }, [services]);
 
   const handleKeyDown = (e) => {
     // Manejar el evento cuando se presiona Enter
@@ -26,17 +55,16 @@ const Services = ({
     }
   };
 
-  const handleAddService = async () => {
+  const handleAddServiceCategory = async () => {
     try {
-      if (newService !== "") {
+      if (serviceInput !== "" && categoryInput !== "") {
         // Verifica si el nuevo servicio no está vacío
         await axios.post(`${VITE_BACKEND_URL}/services/create`, {
-          service: [newService],
+          service: serviceInput,
+          category: categoryInput,
         });
 
         // Refresca la lista de servicios después de agregar uno nuevo
-        setNewService("");
-        setSearchValue("");
         setRefreshServices(!refreshServices);
       }
     } catch (error) {
@@ -44,6 +72,9 @@ const Services = ({
       alert("Error al agregar el servicio");
     }
   };
+  // console.log(serviceInput);
+  // console.log(categoryInput);
+  console.log(categoryServices);
 
   const handleDeleteService = async (serviceName) => {
     try {
@@ -59,6 +90,20 @@ const Services = ({
       alert("Error al borrar el servicio");
     }
   };
+
+  const handleCategoryInputChange = (event, newInputValue) => {
+    setCategoryInput(newInputValue);
+  };
+
+  const handleServiceInputChange = (event, newInputValue) => {
+    setServiceInput(newInputValue);
+  };
+
+
+  const handleOpenDelete = () => {
+    setOpenDelete(true);
+  };
+
   return (
     <div
       style={{
@@ -78,103 +123,226 @@ const Services = ({
           }}
         />
       )}
-      <Box
+      <div
         style={{
-          width: "100%",
-          maxWidth: "600px",
           display: "flex",
-          alignSelf: "end",
+          flexDirection: "row",
+          margin: "10px 0px 20px 0px",
+        }}
+      >
+        <span
+          style={{
+            fontSize: "18px",
+            fontWeight: "bold",
+            width: sm ? "100%" : "50%",
+            backgroundColor: "red",
+            marginRight: sm ? "0px" : "5px",
+            padding: "10px",
+            borderRadius: "5px",
+            backgroundColor: "lightgray",
+          }}
+        >
+          Selecciona o agrega categorias o servicios.
+        </span>
+        {!sm && (
+          <>
+            <span
+              style={{
+                fontSize: "18px",
+                fontWeight: "bold",
+                width: "50%",
+                marginLeft: "5px",
+                padding: "10px",
+                borderRadius: "5px",
+                backgroundColor: "lightgray",
+              }}
+            >
+              Ingresa un precio y la seña correspondiente.
+            </span>
+          </>
+        )}
+      </div>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          alignItems: sm ? "" : "center",
+          flexDirection: sm ? "column" : "row",
+          justifyContent: "space-between",
           marginBottom: "15px",
         }}
       >
-        <Input
-          id="input-search-services"
-          type="text"
-          value={newService}
-          placeholder="Puedes buscar"
-          onChange={(e) => {
-            setNewService(e.target.value), setSearchValue(e.target.value);
-          }}
-          onKeyDown={handleKeyDown} // Manejar el evento onKeyDown
+        <div
           style={{
-            fontFamily: "Jost, sans-serif",
-            fontSize: "20px",
-            width: "60%",
-            backgroundColor: darkMode.on ? "white" : "#d6d6d5",
-            fontWeight: "bold",
-            paddingLeft: "10px",
-            borderRadius: "5px",
+            display: "flex",
+            flexDirection: sm ? "column" : "row",
+            width: sm ? "100%" : "50%",
+            marginRight: "5px",
           }}
-        />
-        <Button
-          onClick={handleAddService}
-          variant="contained"
-          style={{ width: "40%", borderRadius: "5px 5px 5px 0px" }}
         >
-          <h4 style={{ fontFamily: "Jost, sans-serif" }}>Agregar</h4>
-        </Button>
-      </Box>
-      <Grid
-        container
-        spacing={1}
-        style={{
-          width: "100%",
-          display: "flex",
-          overflow: "scroll",
-          alignSelf: "end",
-          maxHeight: "300px",
-        }}
-      >
-        {services.length > 0 ? (
-          services
-            .filter((service) =>
-              service[0].toLowerCase().includes(searchValue.toLowerCase())
-            )
-            .map((element, index) => (
-              <Grid
-                item
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  overflow: "auto",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-                xs={12}
-                sm={6}
-                md={4}
-                key={index}
-              >
-                <h3 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
-                  {element[0]}
-                </h3>
-                <Box style={{ display: "flex" }}>
-                  <Button
-                    onClick={() => handleDeleteService(element[0])}
-                    style={{ color: "red", borderRadius: "50px" }}
-                  >
-                    <DeleteOutlineIcon />
-                  </Button>
-                </Box>
-              </Grid>
-            ))
-        ) : (
-          <Grid
+          <Autocomplete
+            options={categoryList}
             sx={{
               width: "100%",
-              display: "flex",
-              justifyContent: "center",
-              paddingTop: "15px",
+              fontFamily: "Jost, sans-serif",
+              fontWeight: "bold",
+            }}
+            value={categoryInput}
+            onInputChange={handleCategoryInputChange}
+            isOptionEqualToValue={(option, value) =>
+              option.value === value.value
+            }
+            renderInput={(params) => (
+              <TextField {...params} label="Categoría" />
+            )}
+          />
+
+          <Autocomplete
+            options={serviceList}
+            sx={{
+              width: "100%",
+
+              margin: sm ? "10px 0px 0px 0px " : "0px 0px 0px 10px",
+              fontFamily: "Jost, sans-serif",
+              fontWeight: "bold",
+            }}
+            value={serviceInput}
+            onInputChange={handleServiceInputChange}
+            isOptionEqualToValue={(option, value) => true}
+            renderInput={(params) => <TextField {...params} label="Servicio" />}
+          />
+        </div>
+        {sm && (
+          <span
+            style={{
+              padding: "10px",
+              margin: "25px 0px 20px 0px",
+              fontSize: "18px",
+              fontWeight: "bold",
+              backgroundColor: "lightgray",
+              borderRadius: "5px",
             }}
           >
-            <h2 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
-              {loadingServices
-                ? "Cargando servicios"
-                : "No hay servicios todavía"}
-            </h2>
-          </Grid>
+            Ingresa un precio y la seña correspondiente.
+          </span>
         )}
-      </Grid>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: sm ? "column" : "row",
+            width: sm ? "100%" : "50%",
+            marginLeft: sm ? "0px" : "5px",
+          }}
+        >
+          <TextField
+            sx={{
+              width: "100%",
+            }}
+            id="filled-number"
+            label="Seña"
+            type="number"
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+          <TextField
+            sx={{
+              width: "100%",
+
+              margin: sm ? "10px 0px 0px 0px " : "0px 0px 0px 10px",
+            }}
+            id="filled-number"
+            label="Precio"
+            type="number"
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+        </div>
+      </Box>
+      <Button
+        onClick={handleAddServiceCategory}
+        variant="contained"
+        sx={{
+          display: "flex",
+          alignSelf: "flex-end",
+          height: "40px",
+          width: "150px",
+          fontFamily: "Jost, sans-serif",
+          fontWeight: "bold",
+        }}
+      >
+        Agregar
+      </Button>
+      <hr
+        style={{
+          width: "100%",
+          border: "2px solid lightgray",
+          borderRadius: "10px",
+          margin: "20px 0px 20px 0px",
+        }}
+      />
+      <div style={{ marginTop: "10px" }}>
+        <div style={{ width: "100%", display: "flex" }}>
+          <span style={{ width: "40%", fontWeight: "bold", fontSize: "18px" }}>
+            Categorias y servicios
+          </span>
+          <hr />
+          <span style={{ width: "30%", fontWeight: "bold", fontSize: "18px" }}>
+            Precio
+          </span>
+          <hr />
+          <span style={{ width: "30%", fontWeight: "bold", fontSize: "18px" }}>
+            Seña
+          </span>
+        </div>
+        <hr />
+        {categoryServices.map((elem, index) => {
+          return (
+            <div key={index}>
+              <span style={{ fontWeight: "bold", fontSize: "18px" }}>
+                {elem.category}
+              </span>
+              <hr />
+              {elem.services.map((service, index) => {
+                return (
+                  <div style={{ display: "flex", width: "100%" }}>
+                    <span style={{ width: "40%" }}>{service.name}</span>
+                    <hr />
+                    <span style={{ width: "30%" }}>${service.price}</span>
+                    <hr />
+                    <span style={{ width: "30%" }}>${service.sing}</span>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          width: "100%",
+          marginTop: "15px",
+        }}
+      >
+        <div style={{ display: "flex" }}>
+          <Button
+            disabled={showEdit ? true : false}
+            onClick={handleOpenDelete}
+            color="error"
+          >
+            <DeleteRoundedIcon />
+          </Button>
+          <DeleteServicesModal
+            categoryServices={categoryServices}
+            openDelete={openDelete}
+            setOpenDelete={setOpenDelete}
+            setRefreshServices={setRefreshServices}
+          />
+        </div>
+      </Box>
     </div>
   );
 };

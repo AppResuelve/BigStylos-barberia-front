@@ -19,7 +19,7 @@ import axios from "axios";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const AdminAcordeon = () => {
-  const { darkMode } = useContext(DarkModeContext);
+  const { darkMode,setShowAlert } = useContext(DarkModeContext);
   const [expanded, setExpanded] = useState(false);
   const [schedule, setSchedule] = useState({});
   const [refresh, setRefresh] = useState(false);
@@ -28,7 +28,8 @@ const AdminAcordeon = () => {
   const [loading, setLoading] = useState(true);
   const [loadingServices, setLoadingServices] = useState(true);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-  const [services, setServices] = useState([]);
+  const [changeNoSaved, setChangeNoSaved] = useState(false)
+  const [services, setServices] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -73,9 +74,24 @@ const AdminAcordeon = () => {
       setRemaining(aux);
     }
   }, [schedule]);
-
+console.log("lei el admin acordeor");
   const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
+    if (changeNoSaved) {
+       setShowAlert({
+         isOpen: true,
+         message: "Tienes cambios sin guardar.",
+         type: "warning",
+         button1: {
+           text: "",
+           action: "",
+         },
+         buttonClose: {
+           text: "OK",
+         },
+       });
+    } else {
+      setExpanded(isExpanded ? panel : false);
+    }
   };
 
   return (
@@ -121,12 +137,13 @@ const AdminAcordeon = () => {
                   : "white",
               }}
             >
-              Servicios
+              Categorias y servicios
             </h2>
           </AccordionSummary>
           <AccordionDetails>
             <Services
               services={services}
+              setServices={setServices}
               refreshServices={refreshServices}
               setRefreshServices={setRefreshServices}
               loadingServices={loadingServices}
@@ -176,6 +193,7 @@ const AdminAcordeon = () => {
                 setSchedule={setSchedule}
                 refresh={refresh}
                 setRefresh={setRefresh}
+                setChangeNoSaved={setChangeNoSaved}
               />
             ) : (
               <LinearProgress sx={{ height: "2px", marginBottom: "15px" }} />

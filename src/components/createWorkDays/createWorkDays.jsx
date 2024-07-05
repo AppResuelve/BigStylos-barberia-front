@@ -1,16 +1,16 @@
 import { useEffect, useState, useContext } from "react";
 import { DarkModeContext } from "../../App";
 import CustomCalendar from "../customCalendar/customCalendar";
-import axios from "axios";
 import SelectedDay from "../selectedDay/selectedDay";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import SliderModal from "../interfazMUI/sliderModal";
 import { Grid, Box, Button, LinearProgress } from "@mui/material";
-import "./createWorkDays.css";
 import getCurrentMonth from "../../functions/getCurrentMonth";
 import durationMax from "../../helpers/durationMax";
 import shouldDisableButton from "../../helpers/shouldDisableButton";
+import axios from "axios";
+import "./createWorkDays.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 

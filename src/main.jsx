@@ -2,23 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
-import { Auth0Provider } from "@auth0/auth0-react";
-// import "./index.css";
 
-const domain = import.meta.env.VITE_AUTH0_DOMAIN;
-const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 ReactDOM.render(
-  <Auth0Provider
-    domain={domain}
-    clientId={clientId}
-    authorizationParams={{
-      redirect_uri: window.location.origin,
-    }}
-  >
+  <GoogleOAuthProvider clientId="75961716499-7v8lchvq0ahu3ukknidea4lb428l730v.apps.googleusercontent.com">
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </Auth0Provider>,
+  </GoogleOAuthProvider>,
+
   document.getElementById("root")
 );

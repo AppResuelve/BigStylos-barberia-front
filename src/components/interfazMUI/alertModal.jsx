@@ -118,8 +118,8 @@ const AlertModal = ({
 
   useEffect(() => {
     if (moveDown) {
+      setShowAlert({});
       const timeoutId = setTimeout(() => {
-        setShowAlert({});
         setMoveDown(false);
         setDisableButtonMyTurns(false);
         // Remover la clase alert-open cuando se cierra el alerta
@@ -131,7 +131,6 @@ const AlertModal = ({
       };
     }
   }, [moveDown]);
-
   useEffect(() => {
     // Agregar la clase alert-open cuando se monta el componente y el alerta está presente
     if (Object.keys(showAlert).length > 0) {

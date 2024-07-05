@@ -1,19 +1,23 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { DarkModeContext } from "../../App";
 import Profile from "../userProfile/userProfile";
 import toHome from "../../assets/icons/homeBlack.png";
 import toHome2 from "../../assets/icons/homeWhite.png";
-import DarkMode from "../interfazUiverse.io/darkMode";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
-import { Box } from "@mui/system";
+import { Box, CircularProgress } from "@mui/material";
 import "./nav.css";
+import LoginButton from "../login/login";
+import UserPanelModal from "../interfazMUI/userPanelModal";
 
-const Nav = ({ user, homeImages }) => {
-  const { darkMode } = useContext(DarkModeContext);
+const Nav = ({ homeImages }) => {
+  const { darkMode, userData } = useContext(DarkModeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
+  const [showLoginForm, setShowLoginForm] = useState(false);
+  const [isOpenUserPanel, setIsOpenUserPanel] = useState(false);
+
   const location = useLocation();
-  
+
   return (
     <>
       {homeImages !== 1 && (
@@ -57,8 +61,34 @@ const Nav = ({ user, homeImages }) => {
               alignItems: "center",
             }}
           >
-            <DarkMode />
-            <Profile userData={user} />
+            {userData === 1 ? (
+              <CircularProgress
+                size={43}
+                sx={{ color: "black", display: "flex" }}
+              />
+            ) : userData === false ? (
+              <>
+                <LoginButton
+                  setShowLoginForm={setShowLoginForm}
+                  setIsOpenUserPanel={setIsOpenUserPanel}
+                />
+                <UserPanelModal
+                  isOpen={isOpenUserPanel}
+                  setIsOpen={setIsOpenUserPanel}
+                  userData={userData}
+                  showLoginForm={showLoginForm}
+                  setShowLoginForm={setShowLoginForm}
+                />
+              </>
+            ) : (
+              <Profile
+                userData={userData}
+                isOpenUserPanel={isOpenUserPanel}
+                setIsOpenUserPanel={setIsOpenUserPanel}
+                showLoginForm={showLoginForm}
+                setShowLoginForm={setShowLoginForm}
+              />
+            )}
           </div>
         </div>
       )}

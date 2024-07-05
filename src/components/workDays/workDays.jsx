@@ -8,7 +8,7 @@ import { Box, Button } from "@mui/material";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const WorkDays = ({ schedule, setSchedule, refresh, setRefresh }) => {
+const WorkDays = ({ schedule, refresh, setRefresh, setChangeNoSaved }) => {
   const { darkMode } = useContext(DarkModeContext);
   const [showEdit, setShowEdit] = useState(false);
   const [showAdd, setShowAdd] = useState(null);
@@ -30,6 +30,7 @@ const WorkDays = ({ schedule, setSchedule, refresh, setRefresh }) => {
     setShowAdd(null);
     setShowRemove(null);
     setToggle(null);
+    setChangeNoSaved(false);
   };
 
   const handleShowAddRemove = (value) => {
@@ -39,6 +40,7 @@ const WorkDays = ({ schedule, setSchedule, refresh, setRefresh }) => {
   };
 
   const handleChange = (value, index) => {
+    setChangeNoSaved(true);
     if (value === "add") {
       setTimeEdit((prevState) => ({
         ...prevState,
@@ -68,6 +70,7 @@ const WorkDays = ({ schedule, setSchedule, refresh, setRefresh }) => {
       alert("Error al obtener los horarios");
     }
     setShowEdit(false);
+    setChangeNoSaved(false);
     setToggle(1);
     setShowAdd(null);
     setShowRemove(null);
@@ -172,7 +175,7 @@ const WorkDays = ({ schedule, setSchedule, refresh, setRefresh }) => {
                 borderRadius: "50px",
                 border: "2px solid",
                 fontFamily: "Jost, sans-serif",
-                fontWeight:"bold"
+                fontWeight: "bold",
               }}
             >
               Volver
