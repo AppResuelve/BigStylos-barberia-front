@@ -74,7 +74,7 @@ const AdminAcordeon = () => {
       setRemaining(aux);
     }
   }, [schedule]);
-console.log("lei el admin acordeor");
+  
   const handleChange = (panel) => (event, isExpanded) => {
     if (changeNoSaved) {
        setShowAlert({

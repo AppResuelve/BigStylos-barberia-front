@@ -1,14 +1,13 @@
 import { useEffect, useState, useContext } from "react";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { DarkModeContext } from "../../App";
+import { convertToCategoryArray } from "../../helpers/convertCategoryService";
 import { Box, Button, TextField } from "@mui/material";
 import LinearProgress from "@mui/material/LinearProgress";
 import Autocomplete from "@mui/material/Autocomplete";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
-import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
+import EditServicesModal from "./editServicesModal";
 import axios from "axios";
-import convertToCategoryArray from "../../helpers/convertToCategoryArray";
-import DeleteServicesModal from "./deleteServicesModal";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -22,14 +21,20 @@ const Services = ({
 }) => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const { darkMode } = useContext(DarkModeContext);
-  const [serviceInput, setServiceInput] = useState("");
-  const [categoryInput, setCategoryInput] = useState("");
   const [categoryList, setCategoryList] = useState([]);
   const [serviceList, setServiceList] = useState([]);
-  const [searchValue, setSearchValue] = useState("");
   const [categoryServices, setCategoryServices] = useState([]);
   const [showEdit, setShowEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+  const [editableCatSer, setEditableCatSer] = useState([]);
+
+  // Estado para los inputs
+  const [inputs, setInputs] = useState({
+    category: "",
+    service: "",
+    price: 0,
+    sing: 0,
+  });
 
   useEffect(() => {
     if (services) {
@@ -41,9 +46,10 @@ const Services = ({
       for (const category of extractedCategories) {
         extractedServices.push(...Object.keys(services[category]));
       }
-      setCategoryServices(categoryArray);
-      setCategoryList(extractedCategories);
-      setServiceList(extractedServices);
+      setCategoryServices(categoryArray); //renderizar
+      setEditableCatSer(categoryArray); //copia para editar
+      setCategoryList(extractedCategories); //array categorias
+      setServiceList(extractedServices); //array servicios
     }
   }, [services]);
 
@@ -57,53 +63,61 @@ const Services = ({
 
   const handleAddServiceCategory = async () => {
     try {
-      if (serviceInput !== "" && categoryInput !== "") {
+      const { service, category, price, sing } = inputs;
+      if (service !== "" && category !== "") {
         // Verifica si el nuevo servicio no está vacío
         await axios.post(`${VITE_BACKEND_URL}/services/create`, {
-          service: serviceInput,
-          category: categoryInput,
+          service,
+          category,
+          price,
+          sing,
         });
 
         // Refresca la lista de servicios después de agregar uno nuevo
         setRefreshServices(!refreshServices);
+        // Limpiar los inputs
+        setInputs({
+          category: "",
+          service: "",
+          price: "",
+          sing: "",
+        });
       }
     } catch (error) {
       console.error("Error al agregar el servicio:", error);
       alert("Error al agregar el servicio");
     }
   };
-  // console.log(serviceInput);
-  // console.log(categoryInput);
-  console.log(categoryServices);
 
-  const handleDeleteService = async (serviceName) => {
-    try {
-      // Lógica para eliminar el servicio por su nombre
-      await axios.post(`${VITE_BACKEND_URL}/services/delete`, {
-        service: serviceName,
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    if (name === "price" || name === "sing") {
+      if (value >= 0) {
+        setInputs({
+          ...inputs,
+          [name]: value,
+        });
+      }
+    } else {
+      setInputs({
+        ...inputs,
+        [name]: value,
       });
-
-      // Refresca la lista de servicios después de eliminar uno
-      setRefreshServices(!refreshServices);
-    } catch (error) {
-      console.error("Error al borrar el servicio:", error);
-      alert("Error al borrar el servicio");
     }
   };
 
   const handleCategoryInputChange = (event, newInputValue) => {
-    setCategoryInput(newInputValue);
+    setInputs({
+      ...inputs,
+      category: newInputValue,
+    });
   };
-
-  const handleServiceInputChange = (event, newInputValue) => {
-    setServiceInput(newInputValue);
-  };
-
 
   const handleOpenDelete = () => {
     setOpenDelete(true);
   };
 
+  console.log(inputs);
   return (
     <div
       style={{
@@ -187,7 +201,7 @@ const Services = ({
               fontFamily: "Jost, sans-serif",
               fontWeight: "bold",
             }}
-            value={categoryInput}
+            value={inputs.category}
             onInputChange={handleCategoryInputChange}
             isOptionEqualToValue={(option, value) =>
               option.value === value.value
@@ -196,20 +210,23 @@ const Services = ({
               <TextField {...params} label="Categoría" />
             )}
           />
-
-          <Autocomplete
-            options={serviceList}
+          <TextField
             sx={{
               width: "100%",
-
               margin: sm ? "10px 0px 0px 0px " : "0px 0px 0px 10px",
               fontFamily: "Jost, sans-serif",
               fontWeight: "bold",
             }}
-            value={serviceInput}
-            onInputChange={handleServiceInputChange}
-            isOptionEqualToValue={(option, value) => true}
-            renderInput={(params) => <TextField {...params} label="Servicio" />}
+            id="filled-text"
+            label="Servicio"
+            type="text"
+            name="service"
+            value={inputs.service}
+            onChange={handleInputChange}
+            placeholder="ej: corte de pelo"
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
         </div>
         {sm && (
@@ -239,8 +256,12 @@ const Services = ({
               width: "100%",
             }}
             id="filled-number"
-            label="Seña"
+            label="Precio"
             type="number"
+            name="price"
+            value={inputs.price}
+            onChange={handleInputChange}
+            InputProps={{ inputProps: { min: 0 } }}
             InputLabelProps={{
               shrink: true,
             }}
@@ -248,12 +269,15 @@ const Services = ({
           <TextField
             sx={{
               width: "100%",
-
               margin: sm ? "10px 0px 0px 0px " : "0px 0px 0px 10px",
             }}
             id="filled-number"
-            label="Precio"
+            label="Seña"
             type="number"
+            name="sing"
+            value={inputs.sing}
+            onChange={handleInputChange}
+            InputProps={{ inputProps: { min: 0 } }}
             InputLabelProps={{
               shrink: true,
             }}
@@ -306,7 +330,7 @@ const Services = ({
               <hr />
               {elem.services.map((service, index) => {
                 return (
-                  <div style={{ display: "flex", width: "100%" }}>
+                  <div style={{ display: "flex", width: "100%" }} key={index}>
                     <span style={{ width: "40%" }}>{service.name}</span>
                     <hr />
                     <span style={{ width: "30%" }}>${service.price}</span>
@@ -319,30 +343,31 @@ const Services = ({
           );
         })}
       </div>
-      <Box
-        sx={{
+      <div
+        style={{
           display: "flex",
-          justifyContent: "space-between",
-          width: "100%",
           marginTop: "15px",
+          justifyContent: "flex-end",
         }}
       >
-        <div style={{ display: "flex" }}>
-          <Button
-            disabled={showEdit ? true : false}
-            onClick={handleOpenDelete}
-            color="error"
-          >
-            <DeleteRoundedIcon />
-          </Button>
-          <DeleteServicesModal
-            categoryServices={categoryServices}
-            openDelete={openDelete}
-            setOpenDelete={setOpenDelete}
-            setRefreshServices={setRefreshServices}
-          />
-        </div>
-      </Box>
+        <Button
+          variant="outlined"
+          disabled={showEdit ? true : false}
+          onClick={handleOpenDelete}
+          sx={{ fontFamily: "Jost,sans serif" }}
+        >
+          Edición
+          <CreateRoundedIcon />
+        </Button>
+        <EditServicesModal
+          categoryServices={categoryServices}
+          openDelete={openDelete}
+          setOpenDelete={setOpenDelete}
+          setRefreshServices={setRefreshServices}
+          editableCatSer={editableCatSer}
+          setEditableCatSer={setEditableCatSer}
+        />
+      </div>
     </div>
   );
 };
