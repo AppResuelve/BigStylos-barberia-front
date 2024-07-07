@@ -1,24 +1,32 @@
 import React from "react";
-import { useAuth0 } from "@auth0/auth0-react";
 import { Button } from "@mui/material";
 import "../login/login-logout.css";
-
+import { deleteCookie } from "../../helpers/cookies";
+import { useContext } from "react";
+import { DarkModeContext } from "../../App";
 const LogoutButton = () => {
-  const { logout } = useAuth0();
+  const { setRefreshStatusSession } = useContext(DarkModeContext);
 
+  const handleLogOut = () => {
+    deleteCookie("IDSESSION");
+    setRefreshStatusSession((prev) => {
+      const prevStatusSession = prev;
+      return !prevStatusSession;
+    });
+  };
   return (
     <Button
       className="btn-loginout-login"
       variant="contained"
       style={{
+        position: "absolute",
+        bottom: "calc(0% + 20px)",
+        left: "calc(0% + 20px)",
         borderRadius: "50px",
-        boxShadow: "0px 10px 17px 0px rgba(0,0,0,0.75)",
         fontFamily: "Jost, sans-serif",
-        fontSize: "22px",
+        fontSize: "18px",
       }}
-      onClick={() =>
-        logout({ logoutParams: { returnTo: window.location.origin } })
-      }
+      onClick={handleLogOut}
     >
       Salir
     </Button>

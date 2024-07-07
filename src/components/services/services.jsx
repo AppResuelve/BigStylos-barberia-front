@@ -1,22 +1,58 @@
 import { useEffect, useState, useContext } from "react";
+import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { DarkModeContext } from "../../App";
-import axios from "axios";
-import { Box, Button, Grid, Input } from "@mui/material";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { convertToCategoryArray } from "../../helpers/convertCategoryService";
+import { Box, Button, MenuItem, Select, TextField } from "@mui/material";
 import LinearProgress from "@mui/material/LinearProgress";
+import Autocomplete from "@mui/material/Autocomplete";
+import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
+import EditServicesModal from "./editServicesModal";
+import axios from "axios";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Services = ({
-  services,
   refreshServices,
   setRefreshServices,
   loadingServices,
+  services,
+  setServices,
   setLoadingServices,
 }) => {
+  const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const { darkMode } = useContext(DarkModeContext);
-  const [newService, setNewService] = useState("");
-  const [searchValue, setSearchValue] = useState("");
+  const [categoryList, setCategoryList] = useState([]);
+  const [serviceList, setServiceList] = useState([]);
+  const [categoryServices, setCategoryServices] = useState([]);
+  const [editableCatSer, setEditableCatSer] = useState([]);
+  const [showEdit, setShowEdit] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+
+  // Estado para los inputs
+  const [inputs, setInputs] = useState({
+    category: "",
+    service: "",
+    price: 0,
+    sing: 0,
+    type: "$",
+  });
+
+  useEffect(() => {
+    if (services) {
+      const categoryArray = convertToCategoryArray(services);
+
+      const extractedCategories = Object.keys(services);
+      const extractedServices = [];
+
+      for (const category of extractedCategories) {
+        extractedServices.push(...Object.keys(services[category]));
+      }
+      setCategoryServices(categoryArray); //renderizar
+      setEditableCatSer(categoryArray); //copia para editar
+      setCategoryList(extractedCategories); //array categorias
+      setServiceList(extractedServices); //array servicios
+    }
+  }, [services]);
 
   const handleKeyDown = (e) => {
     // Manejar el evento cuando se presiona Enter
@@ -26,18 +62,28 @@ const Services = ({
     }
   };
 
-  const handleAddService = async () => {
+  const handleAddServiceCategory = async () => {
     try {
-      if (newService !== "") {
+      const { service, category, price, sing, type } = inputs;
+      if (service !== "" && category !== "") {
         // Verifica si el nuevo servicio no está vacío
         await axios.post(`${VITE_BACKEND_URL}/services/create`, {
-          service: [newService],
+          service,
+          category,
+          price,
+          sing,
+          type,
         });
 
         // Refresca la lista de servicios después de agregar uno nuevo
-        setNewService("");
-        setSearchValue("");
         setRefreshServices(!refreshServices);
+        // Limpiar los inputs
+        setInputs({
+          category: "",
+          service: "",
+          price: "",
+          sing: "",
+        });
       }
     } catch (error) {
       console.error("Error al agregar el servicio:", error);
@@ -45,20 +91,34 @@ const Services = ({
     }
   };
 
-  const handleDeleteService = async (serviceName) => {
-    try {
-      // Lógica para eliminar el servicio por su nombre
-      await axios.post(`${VITE_BACKEND_URL}/services/delete`, {
-        service: serviceName,
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    if (name === "price" || name === "sing") {
+      if (value >= 0) {
+        setInputs({
+          ...inputs,
+          [name]: value,
+        });
+      }
+    } else {
+      setInputs({
+        ...inputs,
+        [name]: value,
       });
-
-      // Refresca la lista de servicios después de eliminar uno
-      setRefreshServices(!refreshServices);
-    } catch (error) {
-      console.error("Error al borrar el servicio:", error);
-      alert("Error al borrar el servicio");
     }
   };
+
+  const handleCategoryInputChange = (event, newInputValue) => {
+    setInputs({
+      ...inputs,
+      category: newInputValue,
+    });
+  };
+
+  const handleOpenDelete = () => {
+    setOpenDelete(true);
+  };
+
   return (
     <div
       style={{
@@ -78,103 +138,258 @@ const Services = ({
           }}
         />
       )}
-      <Box
+      <div
         style={{
-          width: "100%",
-          maxWidth: "600px",
           display: "flex",
-          alignSelf: "end",
-          marginBottom: "15px",
+          flexDirection: "column",
+          width: "100%",
+          margin: "10px 0px 0px 0px",
         }}
       >
-        <Input
-          id="input-search-services"
-          type="text"
-          value={newService}
-          placeholder="Puedes buscar"
-          onChange={(e) => {
-            setNewService(e.target.value), setSearchValue(e.target.value);
-          }}
-          onKeyDown={handleKeyDown} // Manejar el evento onKeyDown
+        <span
           style={{
-            fontFamily: "Jost, sans-serif",
-            fontSize: "20px",
-            width: "60%",
-            backgroundColor: darkMode.on ? "white" : "#d6d6d5",
+            fontSize: "18px",
             fontWeight: "bold",
-            paddingLeft: "10px",
+            width: "100%",
+            backgroundColor: "red",
+            padding: "10px",
+            borderRadius: "5px",
+            backgroundColor: "lightgray",
+          }}
+        >
+          Selecciona o agrega categorias o servicios.
+        </span>
+        <div style={{ display: "flex", flexDirection: sm ? "column" : "row" }}>
+          <Autocomplete
+            options={categoryList}
+            sx={{
+              width: sm ? "100%" : "50%",
+              margin: "20px 5px 0px 0px",
+              fontFamily: "Jost, sans-serif",
+              fontWeight: "bold",
+            }}
+            value={inputs.category}
+            onInputChange={handleCategoryInputChange}
+            isOptionEqualToValue={(option, value) =>
+              option.value === value.value
+            }
+            renderInput={(params) => (
+              <TextField {...params} label="Categoría" />
+            )}
+          />
+          <TextField
+            sx={{
+              width: sm ? "100%" : "50%",
+              margin: sm ? "20px 0px 0px 0px" : "20px 0px 0px 5px",
+              fontFamily: "Jost, sans-serif",
+              fontWeight: "bold",
+            }}
+            id="filled-text"
+            label="Servicio"
+            type="text"
+            name="service"
+            value={inputs.service}
+            onChange={handleInputChange}
+            placeholder="ej: corte de pelo"
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+        </div>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          width: "100%",
+          margin: "10px 0px 20px 0px",
+        }}
+      >
+        <span
+          style={{
+            padding: "10px",
+            margin: "20px 0px 20px 0px",
+            fontSize: "18px",
+            fontWeight: "bold",
+            backgroundColor: "lightgray",
             borderRadius: "5px",
           }}
-        />
-        <Button
-          onClick={handleAddService}
-          variant="contained"
-          style={{ width: "40%", borderRadius: "5px 5px 5px 0px" }}
         >
-          <h4 style={{ fontFamily: "Jost, sans-serif" }}>Agregar</h4>
-        </Button>
-      </Box>
-      <Grid
-        container
-        spacing={1}
-        style={{
-          width: "100%",
+          Ingresa un precio y la seña correspondiente.
+        </span>
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+          }}
+        >
+          <TextField
+            sx={{
+              width: "40%",
+            }}
+            id="filled-number"
+            label="Precio"
+            type="number"
+            name="price"
+            value={inputs.price}
+            onChange={handleInputChange}
+            InputProps={{ inputProps: { min: 0 } }}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+          <TextField
+            sx={{
+              width: "calc(40% - 10px)",
+              margin: "0px 0px 0px 10px ",
+            }}
+            id="filled-number"
+            label="Seña"
+            type="number"
+            name="sing"
+            value={inputs.sing}
+            onChange={handleInputChange}
+            InputProps={{ inputProps: { min: 0 } }}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+          <Select
+            sx={{
+              width: sm ? "calc(20% - 10px)" : "20%",
+              margin: "0px 0px 0px 10px ",
+            }}
+            label=""
+            name="type"
+            value={inputs.type}
+            onChange={handleInputChange}
+          >
+            <MenuItem
+              value="$"
+              style={{
+                fontFamily: "Jost, sans-serif",
+                fontWeight: "bold",
+              }}
+            >
+              $
+            </MenuItem>
+            <MenuItem
+              value="%"
+              style={{
+                fontFamily: "Jost, sans-serif",
+                fontWeight: "bold",
+              }}
+            >
+              %
+            </MenuItem>
+          </Select>
+        </div>
+      </div>
+      <Button
+        onClick={handleAddServiceCategory}
+        variant="contained"
+        sx={{
           display: "flex",
-          overflow: "scroll",
-          alignSelf: "end",
-          maxHeight: "300px",
+          alignSelf: "flex-end",
+          height: "40px",
+          width: "150px",
+          fontFamily: "Jost, sans-serif",
+          fontWeight: "bold",
         }}
       >
-        {services.length > 0 ? (
-          services
-            .filter((service) =>
-              service[0].toLowerCase().includes(searchValue.toLowerCase())
-            )
-            .map((element, index) => (
-              <Grid
-                item
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  overflow: "auto",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-                xs={12}
-                sm={6}
-                md={4}
-                key={index}
-              >
-                <h3 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
-                  {element[0]}
-                </h3>
-                <Box style={{ display: "flex" }}>
-                  <Button
-                    onClick={() => handleDeleteService(element[0])}
-                    style={{ color: "red", borderRadius: "50px" }}
-                  >
-                    <DeleteOutlineIcon />
-                  </Button>
-                </Box>
-              </Grid>
-            ))
-        ) : (
-          <Grid
-            sx={{
-              width: "100%",
-              display: "flex",
-              justifyContent: "center",
-              paddingTop: "15px",
-            }}
-          >
-            <h2 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
-              {loadingServices
-                ? "Cargando servicios"
-                : "No hay servicios todavía"}
-            </h2>
-          </Grid>
-        )}
-      </Grid>
+        Agregar
+      </Button>
+      <hr
+        style={{
+          width: "100%",
+          border: "2px solid lightgray",
+          borderRadius: "10px",
+          margin: "20px 0px 20px 0px",
+        }}
+      />
+      <div style={{ marginTop: "10px" }}>
+        <div style={{ width: "100%", display: "flex" }}>
+          <span style={{ width: "40%", fontWeight: "bold", fontSize: "18px" }}>
+            Categorias y servicios
+          </span>
+          <hr />
+          <span style={{ width: "30%", fontWeight: "bold", fontSize: "18px" }}>
+            Precio
+          </span>
+          <hr />
+          <span style={{ width: "30%", fontWeight: "bold", fontSize: "18px" }}>
+            Seña
+          </span>
+        </div>
+        <hr />
+        {categoryServices.map((elem, index) => {
+          return (
+            <div key={index} style={{ marginTop: "10px" }}>
+              <span style={{ fontWeight: "bold", fontSize: "18px" }}>
+                {elem.category}
+              </span>
+              <hr />
+              {elem.services.map((service, index) => {
+                return (
+                  <>
+                    <div style={{ display: "flex", width: "100%" }} key={index}>
+                      <span style={{ width: "40%", margin: "5px" }}>
+                        {service.name}
+                      </span>
+                      <hr />
+                      <span
+                        style={{
+                          width: "30%",
+                          margin: "5px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        ${service.price}
+                      </span>
+                      <hr />
+                      <span
+                        style={{
+                          width: "30%",
+                          margin: "5px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        ${service.sing}
+                      </span>
+                    </div>
+                    <hr />
+                  </>
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
+      <div
+        style={{
+          display: "flex",
+          marginTop: "15px",
+          justifyContent: "flex-end",
+        }}
+      >
+        <Button
+          variant="outlined"
+          disabled={showEdit ? true : false}
+          onClick={handleOpenDelete}
+          sx={{ fontFamily: "Jost,sans serif" }}
+        >
+          Edición
+          <CreateRoundedIcon />
+        </Button>
+        <EditServicesModal
+          categoryServices={categoryServices}
+          openDelete={openDelete}
+          setOpenDelete={setOpenDelete}
+          setRefreshServices={setRefreshServices}
+          editableCatSer={editableCatSer}
+          setEditableCatSer={setEditableCatSer}
+        />
+      </div>
     </div>
   );
 };

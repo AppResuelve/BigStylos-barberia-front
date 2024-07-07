@@ -1,43 +1,38 @@
 import { useState, useContext } from "react";
 import { DarkModeContext } from "../../App";
-import { useAuth0 } from "@auth0/auth0-react";
-import { CircularProgress, Box } from "@mui/material";
+import UserPanelModal from "../interfazMUI/userPanelModal";
 import noUser from "../../assets/icons/noUser.png";
-import ModalMUI from "../interfazMUI/userModal";
 import "./userProfile.css";
 
-
-const Profile = ({ userData }) => {
+const Profile = ({
+  userData,
+  isOpenUserPanel,
+  setIsOpenUserPanel,
+  showLoginForm,
+  setShowLoginForm ,
+}) => {
   const { darkMode } = useContext(DarkModeContext);
-  const { user, isAuthenticated, isLoading } = useAuth0();
-  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div >
+    <div>
       <button
-        style={{cursor:isLoading? "auto":"pointer"}}
+        style={{ cursor: userData === 1 ? "auto" : "pointer" }}
         className="btn-userProfile"
-        disabled={isLoading ? true : false}
-        onClick={() => setIsOpen(true)}
+        disabled={userData === 1 ? true : false}
+        onClick={() => setIsOpenUserPanel(true)}
       >
-        {!isLoading ? (
-          <img
-            className="img-user-nav"
-            src={user ? user.picture : noUser}
-            alt="mi perfil"
-          />
-        ) : (
-          <Box>
-              <CircularProgress size={43} sx={{color:"black",display:"flex"}} />
-          </Box>
-        )}
+        <img
+          className="img-user-nav"
+          src={userData?.image ? userData.image : noUser} // verificar linea
+          alt="mi perfil"
+        />
       </button>
-      <ModalMUI
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        isAuthenticated={isAuthenticated}
-        googleImage={isAuthenticated ? user.picture : null}
+      <UserPanelModal
+        isOpen={isOpenUserPanel}
+        setIsOpen={setIsOpenUserPanel}
         userData={userData}
+        showLoginForm={showLoginForm}
+        setShowLoginForm={setShowLoginForm}
       />
     </div>
   );

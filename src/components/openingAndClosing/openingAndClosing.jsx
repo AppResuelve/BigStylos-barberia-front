@@ -7,12 +7,7 @@ import { Box, Button, MenuItem, Select } from "@mui/material";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const OpeningAndClosing = ({
-  schedule,
-  refresh,
-  setRefresh,
-  setRemaining,
-}) => {
+const OpeningAndClosing = ({ schedule, refresh, setRefresh, setRemaining }) => {
   const { darkMode, setShowAlert } = useContext(DarkModeContext);
   const [showEdit, setShowEdit] = useState(false);
   const [timeEdit, setTimeEdit] = useState({});

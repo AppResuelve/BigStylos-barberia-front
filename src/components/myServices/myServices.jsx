@@ -28,6 +28,7 @@ const MyServices = ({
   setTimeEdit,
   showEdit,
   setShowEdit,
+  setChangeNoSaved,
 }) => {
   const { darkMode } = useContext(DarkModeContext);
   const [loading, setLoading] = useState(true);
@@ -41,7 +42,8 @@ const MyServices = ({
     255, 270,
   ];
   useEffect(() => {
-    if (timeEdit) { //condicional de estado 0 de la app
+    if (timeEdit) {
+      //condicional de estado 0 de la app
       if (serviceStatus[auxState[0]] && auxState !== false) {
         setTimeEdit((prevState) => ({
           ...prevState,
@@ -63,6 +65,7 @@ const MyServices = ({
   }, [auxState]);
 
   const handleServiceStatus = (element) => {
+    setChangeNoSaved(true)
     setServiceStatus((prevState) => {
       let newState = { ...prevState };
       newState[element] = !newState[element];
@@ -72,6 +75,7 @@ const MyServices = ({
   };
 
   const handleSelectChange = (event, element) => {
+    setChangeNoSaved(true);
     const value = event.target.value;
     setTimeEdit((prevState) => ({
       ...prevState,
@@ -89,6 +93,7 @@ const MyServices = ({
   const handleCancel = () => {
     setShowEdit(false);
     setTimeEdit(workerData);
+    setChangeNoSaved(false);
   };
 
   const handleSubmit = async () => {
@@ -103,6 +108,8 @@ const MyServices = ({
       alert("Error al actulizar los servicios");
     }
     setShowEdit(false);
+    setChangeNoSaved(false);
+
   };
 
   return (

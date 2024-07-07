@@ -1,26 +1,23 @@
 import { useEffect, useState, useContext } from "react";
 import { DarkModeContext } from "../../App";
-import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
-import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import { Box, Button, Input } from "@mui/material";
+import { Box, Button, Input, Collapse, List } from "@mui/material";
 import axios from "axios";
 import AlertSnackBar from "./alertSnackBar";
 import MyTurns from "../myTurns/myTurns";
 import "./clientNestedList.css";
+import InputTel from "../inputTel/inputTel";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const ClientNestedList = ({ userData }) => {
   const { darkMode } = useContext(DarkModeContext);
-  const [clientData, setClientData] = useState(null);
-  const [currentPhoneNumber, setCurrentPhoneNumber] = useState("");
-  const [newPhoneNumber, setNewPhoneNumber] = useState("");
+  const [newPhoneNumber, setNewPhoneNumber] = useState(userData?.phone ?? "");
   const [refresh, setRefresh] = useState(false);
   const [error, setError] = useState("");
   const [showAlertSnack, setShowAlertSnack] = useState({});
@@ -30,6 +27,7 @@ const ClientNestedList = ({ userData }) => {
     telefono: false,
     turnos: false,
   });
+
   const handleSectionClick = (section) => {
     setOpenSection((prevSections) => {
       // Si la sección clicada es "miperfil", establece todas las demás secciones en false
@@ -52,53 +50,26 @@ const ClientNestedList = ({ userData }) => {
       } else if (section === "turnos") {
         updatedSections.telefono = false;
       }
-      setNewPhoneNumber(currentPhoneNumber);
+
       return updatedSections;
     });
   };
 
-  useEffect(() => {
-    const fetchClientData = async () => {
-      try {
-        const response = await axios.post(`${VITE_BACKEND_URL}/users/byemail`, {
-          email: userData.email,
-        });
-        const { data } = response;
-        setClientData(data);
-        setCurrentPhoneNumber(data.phone);
-        handleSetPhoneState(data.phone);
-        //   setLoading(false);
-      } catch (error) {
-        console.error("Error al obtener los horarios", error);
-        alert("Error al obtener los horarios");
-      }
-    };
-    fetchClientData();
-  }, [refresh]);
+  // const handleSetPhoneState = async (value) => {
+  //   // Expresión regular que solo permite números, "+", "(", ")" y "-"
+  //   const allowedCharacters = /^[0-9+()-]*$/;
 
-  const handleKeyDown = (e) => {
-    // Manejar el evento cuando se presiona Enter
-    if (e.keyCode === 13) {
-      e.preventDefault(); // Evitar que se agregue un salto de línea en el Input
-      handleUpdatePhone();
-    }
-  };
+  //   // Verificar si el valor cumple con la expresión regular y no excede los 20 caracteres
+  //   if (allowedCharacters.test(value) && value.length < 8) {
+  //     setNewPhoneNumber(value);
 
-  const handleSetPhoneState = async (value) => {
-    // Expresión regular que solo permite números, "+", "(", ")" y "-"
-    const allowedCharacters = /^[0-9+()-]*$/;
-
-    // Verificar si el valor cumple con la expresión regular y no excede los 20 caracteres
-    if (allowedCharacters.test(value) && value.length < 8) {
-      setNewPhoneNumber(value);
-
-      // Actualizar el estado solo si el valor cumple con las validaciones
-      setError("Debe ser mayor a 8 caracteres");
-    } else if (allowedCharacters.test(value) && value.length <= 20) {
-      setError("");
-      setNewPhoneNumber(value);
-    }
-  };
+  //     // Actualizar el estado solo si el valor cumple con las validaciones
+  //     setError("Debe ser mayor a 8 caracteres");
+  //   } else if (allowedCharacters.test(value) && value.length <= 20) {
+  //     setError("");
+  //     setNewPhoneNumber(value);
+  //   }
+  // };
 
   const handleUpdatePhone = async () => {
     if (error !== "") {
@@ -112,7 +83,7 @@ const ClientNestedList = ({ userData }) => {
         if (newPhoneNumber !== "") {
           // Verifica si el nuevo telefono no está vacío
           await axios.put(`${VITE_BACKEND_URL}/users/update`, {
-            email: clientData.email,
+            email: userData.email,
             newPhoneNumber,
           });
           setShowAlertSnack({
@@ -168,6 +139,59 @@ const ClientNestedList = ({ userData }) => {
         timeout="auto"
         unmountOnExit
       >
+        {/* ////// contenido de seccion telefono dentro de miperfil ////// */}
+        <ListItemButton
+          className="listItembtn-nestedList"
+          onClick={() => handleSectionClick("telefono")}
+        >
+          <Box sx={{ display: "flex", width: "100%" }}>
+            <LocalPhoneIcon
+              sx={{
+                marginRight: "5px",
+                color: darkMode.on ? "white" : darkMode.dark,
+              }}
+            />
+            <h3
+              className="h3-nestedList"
+              style={{
+                color: darkMode.on ? "white" : darkMode.dark,
+              }}
+            >
+              Teléfono
+            </h3>
+          </Box>
+          {openSection.telefono ? (
+            <ExpandLess sx={{ color: darkMode.on ? "white" : darkMode.dark }} />
+          ) : (
+            <ExpandMore sx={{ color: "#2196f3" }} />
+          )}
+        </ListItemButton>
+        <Collapse
+          in={openSection.telefono ? true : false}
+          timeout="auto"
+          unmountOnExit
+        >
+          <List component="div" disablePadding sx={{ marginBottom: "10px" }}>
+            <div className="div-container-tel">
+              <InputTel
+                newPhoneNumber={newPhoneNumber}
+                setNewPhoneNumber={setNewPhoneNumber}
+              />
+              <button
+                className="btn-update-turn-nestedList"
+                onClick={handleUpdatePhone}
+              >
+                <DoneOutlineIcon sx={{ color: "white" }} />
+              </button>
+            </div>
+          </List>
+        </Collapse>
+        <hr
+          className="hr-nestedList"
+          style={{
+            backgroundColor: darkMode.on ? "white" : darkMode.dark,
+          }}
+        />
         {/*////// contenido de seccion turnos dentro de miperfil //////*/}
         <ListItemButton
           className="listItembtn-nestedList"
@@ -204,90 +228,13 @@ const ClientNestedList = ({ userData }) => {
             <MyTurns userData={userData} />
           </List>
         </Collapse>
-        {!openSection.turnos && (
-          <hr
-            className="hr-nestedList"
-            style={{
-              backgroundColor: darkMode.on ? "white" : darkMode.dark,
-            }}
-          />
-        )}
-        {/* ////// contenido de seccion telefono dentro de miperfil ////// */}
-        <ListItemButton
-          className="listItembtn-nestedList"
-          onClick={() => handleSectionClick("telefono")}
-        >
-          <Box sx={{ display: "flex", width: "100%" }}>
-            <LocalPhoneIcon
-              sx={{
-                marginRight: "5px",
-                color: darkMode.on ? "white" : darkMode.dark,
-              }}
-            />
-            <h3
-              className="h3-nestedList"
-              style={{
-                color: darkMode.on ? "white" : darkMode.dark,
-              }}
-            >
-              Teléfono
-            </h3>
-          </Box>
-          {openSection.telefono ? (
-            <ExpandLess sx={{ color: darkMode.on ? "white" : darkMode.dark }} />
-          ) : (
-            <ExpandMore sx={{ color: "#2196f3" }} />
-          )}
-        </ListItemButton>
-        <Collapse
-          in={openSection.telefono ? true : false}
-          timeout="auto"
-          unmountOnExit
-        >
-          <List component="div" disablePadding sx={{ marginBottom: "10px" }}>
-            <Box
-              sx={{
-                width: "100%",
-                display: "flex",
-              }}
-            >
-              <Input
-                className="input-tel-nestedList"
-                id="input-telephone-myProfile"
-                type="tel"
-                value={newPhoneNumber}
-                placeholder="ej: 01149352 ..."
-                onChange={(e) => handleSetPhoneState(e.target.value)}
-                onKeyDown={handleKeyDown} // Manejar el evento onKeyDown
-                sx={{
-                  fontFamily: "Jost, sans-serif",
-                  fontWeight: "bold",
-                  fontSize: "15px",
-                  bgcolor: darkMode.on ? "white" : "#d6d6d5",
-                }}
-              />
-              <Button
-                className="btn-update-turn-nestedList"
-                variant="contained"
-                color="success"
-                onClick={handleUpdatePhone}
-              >
-                <DoneOutlineIcon sx={{ color: "white" }} />
-              </Button>
-            </Box>
-          </List>
-        </Collapse>
-        {!openSection.telefono && (
-          <hr
-            style={{
-              border: "none",
-              height: "1px", // Altura de la línea
-              backgroundColor: darkMode.on ? "white" : darkMode.dark,
-              marginBottom: "10px",
-              // marginTop: "10px",
-            }}
-          />
-        )}
+
+        <hr
+          className="hr-nestedList"
+          style={{
+            backgroundColor: darkMode.on ? "white" : darkMode.dark,
+          }}
+        />
       </Collapse>
     </div>
   );

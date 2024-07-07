@@ -12,8 +12,9 @@ import "./turns.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const Turns = ({ user }) => {
+const Turns = () => {
   const {
+    userData,
     darkMode,
     setShowAlert,
     validateAlertTurns,

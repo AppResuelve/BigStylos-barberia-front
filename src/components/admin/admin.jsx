@@ -1,15 +1,13 @@
 import { useEffect, useContext } from "react";
 import { DarkModeContext } from "../../App";
 import { useNavigate } from "react-router-dom";
-import AdminAcordeon from "../interfazMUI/adminAcordeon";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { Skeleton, Stack } from "@mui/material";
-import { useAuth0 } from "@auth0/auth0-react";
+import AdminAcordeon from "../interfazMUI/adminAcordeon";
 
 const Admin = () => {
   const { darkMode, userData } = useContext(DarkModeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-  const { isLoading, isAuthenticated } = useAuth0();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,13 +15,11 @@ const Admin = () => {
       if (!userData.admin) {
         navigate("/requestDenied401");
       }
-    } else if (!isLoading&& !isAuthenticated) {
+    } else if (userData === false) {
       navigate("/requestDenied401");
-    } else {
-      return;
     }
-  }, [userData, isLoading]);
-
+  }, [userData]);
+  
   return (
     <div
       style={{
@@ -36,7 +32,7 @@ const Admin = () => {
         paddingTop: "70px",
       }}
     >
-      {isLoading ? (
+      {userData === 1 ? (
         <Stack spacing={1} style={{ display: "flex", alignItems: "center" }}>
           <Skeleton
             variant="text"

@@ -1,32 +1,24 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { DarkModeContext } from "../../App";
-import Backdrop from "@mui/material/Backdrop";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import noUser from "../../assets/icons/noUser.png";
-import Slide from "@mui/material/Slide";
-import LoginButton from "../login/login";
 import LogoutButton from "../logout/logout";
-import { Dialog } from "@mui/material";
-import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
+import { Dialog, Backdrop, Slide, Box, Button } from "@mui/material";
+import { useMediaQueryHook } from "./useMediaQuery";
 import { NavLink } from "react-router-dom";
 import ClientNestedList from "./clientNestedList";
-import "./userModal.css";
+import DarkMode from "../interfazUiverse.io/darkMode";
+import "./userPanelModal.css";
+
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction={"left"} ref={ref} {...props} />;
 });
-const ModalMUI = ({
-  isOpen,
-  setIsOpen,
-  isAuthenticated,
-  googleImage,
-  userData,
-}) => {
+
+const UserPanelModal = ({ isOpen, setIsOpen, userData }) => {
   const { darkMode } = useContext(DarkModeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-  const handleClose = () => setIsOpen(false);
 
+  const handleClose = () => setIsOpen(false);
   return (
     <Dialog
       style={{
@@ -68,33 +60,24 @@ const ModalMUI = ({
             >
               <h2
                 className="h2"
-                style={{ color: darkMode.on ? "white" : darkMode.dark }}
+                style={{
+                  color: darkMode.on ? "white" : darkMode.dark,
+                  fontSize: "30px",
+                }}
               >
-                {userData !== 1 ? userData.name : "Inicia sesión"}
+                {userData?.name}
               </h2>
 
-              {userData !== 1 ? (
-                <img
-                  className="img-user-userModal"
-                  src={googleImage}
-                  alt="mi perfil"
-                  style={{
-                    border: `solid 2px ${
-                      darkMode.on ? "transparent" : darkMode.dark
-                    }`,
-                  }}
-                />
-              ) : (
-                <img
-                  className="img-user-userModal"
-                  src={noUser}
-                  alt="mi perfil"
-                  style={{
-                    border: darkMode.on ? "" : "solid 2px black",
-                    backgroundColor: "white",
-                  }}
-                />
-              )}
+              <img
+                className="img-user-userModal"
+                src={userData?.image ? userData.image : noUser}
+                alt="mi perfil"
+                style={{
+                  border: `solid 2px ${
+                    darkMode.on ? "transparent" : darkMode.dark
+                  }`,
+                }}
+              />
             </div>
             <hr
               className="hr-userModal"
@@ -163,19 +146,17 @@ const ModalMUI = ({
               </NavLink>
             )}
           </Box>
-          <Box>
-            {/* seccion del cliente la cual van a poder acceder todos los tipos de usuarios */}
-            {userData !== 1 && <ClientNestedList userData={userData} />}
-          </Box>
+          {/* seccion del cliente la cual van a poder acceder todos los tipos de usuarios */}
+          <ClientNestedList userData={userData} />
         </Box>
+        <DarkMode />
         <Box>
           <div className="box-login-logout-userModal">
-            {isAuthenticated ? <LogoutButton /> : <LoginButton />}
+            {userData !== 1 && userData !== false && <LogoutButton />}
           </div>
         </Box>
       </Box>
     </Dialog>
   );
 };
-
-export default ModalMUI;
+export default UserPanelModal;

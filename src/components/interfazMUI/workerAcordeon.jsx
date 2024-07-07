@@ -7,12 +7,11 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import LinearProgress from "@mui/material/LinearProgress";
 import { Box } from "@mui/material";
 import CreateWorkDays from "../createWorkDays/createWorkDays";
-import axios from "axios";
 import { useMediaQueryHook } from "./useMediaQuery";
 import MyServices from "../myServices/myServices";
 import CancelledTurnsForWorker from "../cancelledTurnsForWorker/cancelledTurnsForWorker";
 import WhoIsComingWorker from "../whoIsComingWorker/whoIsComingWorker";
-import time from "../../helpers/arrayTime";
+import axios from "axios";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const WorkerAcordeon = ({ user }) => {
@@ -22,8 +21,9 @@ const WorkerAcordeon = ({ user }) => {
     setRedirectToMyServices,
     refreshForWhoIsComing,
     setRefreshForWhoIsComing,
+    setShowAlert,
   } = useContext(DarkModeContext);
-  const [loading, setLoading] = useState(true);
+  const [changeNoSaved, setChangeNoSaved] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [schedule, setSchedule] = useState({});
   const [workerData, setWorkerData] = useState({});
@@ -41,30 +41,24 @@ const WorkerAcordeon = ({ user }) => {
   useEffect(() => {
     setTimeEdit(workerData.services);
   }, [workerData]);
-  
+
   useEffect(() => {
     if (timeEdit && Object.keys(timeEdit).length > 0) {
       if (services && services.length > 0) {
-        let aux = false;
-        let secondaryAux = false;
+        let hasNull = false;
+        let allZero = true;
 
         for (const prop in timeEdit) {
           if (services.some((serviceArr) => serviceArr[0] === prop)) {
             if (timeEdit[prop].duration === null) {
-              aux = true;
-              setPendingServices(aux);
-              return;
-            } else if (timeEdit[prop].duration === 0) {
-              secondaryAux = true;
-              setDoCeroServices(secondaryAux);
-            } else {
-              aux = false;
-              secondaryAux = false;
+              hasNull = true;
+            } else if (timeEdit[prop].duration !== 0) {
+              allZero = false;
             }
-            setPendingServices(aux);
-            setDoCeroServices(secondaryAux);
           }
         }
+        setPendingServices(hasNull);
+        setDoCeroServices(allZero);
       }
     }
   }, [timeEdit, services]);
@@ -134,8 +128,24 @@ const WorkerAcordeon = ({ user }) => {
   }, [refresh]);
 
   const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-    setRedirectToMyServices(false);
+    if (changeNoSaved) {
+      setShowAlert({
+        isOpen: true,
+        message:
+          "Tienes cambios sin guardar.",
+        type: "warning",
+        button1: {
+          text: "",
+          action: "",
+        },
+        buttonClose: {
+          text: "OK",
+        },
+      });
+    } else {
+      setExpanded(isExpanded ? panel : false);
+      setRedirectToMyServices(false);
+    }
   };
 
   return (
@@ -298,6 +308,7 @@ const WorkerAcordeon = ({ user }) => {
                 setTimeEdit={setTimeEdit}
                 showEdit={showEdit}
                 setShowEdit={setShowEdit}
+                setChangeNoSaved={setChangeNoSaved}
               />
             )}
           </AccordionDetails>

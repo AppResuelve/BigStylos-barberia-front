@@ -1,7 +1,9 @@
 @media (min-width:500px) and (max-height: 800px) {
       .btn-loginout-login {
             width: 100px;
-            height: 45px;
+            height: 35px;
+            font-size: "22px",
+
       }
 
 }
@@ -9,16 +11,20 @@
 
 @media (min-width:500px) and (min-height: 801px) and (max-height: 1000px) {
       .btn-loginout-login {
-            width: 120px;
-            height: 45px;
+            width: 100px;
+            height: 35px;
+            font-size: "22px",
+
       }
 
 }
 
 @media (max-width:500px) and (max-height: 1000px) {
       .btn-loginout-login {
-            width: 120px;
-            height: 45px;
+            width: 100px;
+            height: 35px;
+            font-size: "22px",
+
       }
 
 }

@@ -15,20 +15,21 @@ import Personalization from "../personalization/personalization";
 import WhoIsComingAdmin from "../whoIsComingAdmin/whoIsComingAdmin";
 import CancelledTurnsForAdmin from "../cancelledTurnsForAdmin/cancelledTurnsForAdmin";
 import axios from "axios";
+import PriceAndSing from "../priceAndSing/priceAndSing";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const AdminAcordeon = () => {
-  const { darkMode } = useContext(DarkModeContext);
+  const { darkMode, setShowAlert } = useContext(DarkModeContext);
   const [expanded, setExpanded] = useState(false);
   const [schedule, setSchedule] = useState({});
   const [refresh, setRefresh] = useState(false);
   const [refreshServices, setRefreshServices] = useState(false);
   const [remaining, setRemaining] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [loadingServices, setLoadingServices] = useState(true);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-  const [services, setServices] = useState([]);
+  const [changeNoSaved, setChangeNoSaved] = useState(false);
+  const [services, setServices] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,7 +37,6 @@ const AdminAcordeon = () => {
         const response = await axios.get(`${VITE_BACKEND_URL}/services`);
         const { data } = response;
         setServices(data);
-        setLoadingServices(false);
       } catch (error) {
         console.error("Error al obtener los servicios:", error);
         alert("Error al obtener los servicios");
@@ -46,20 +46,20 @@ const AdminAcordeon = () => {
     fetchData();
   }, [refreshServices]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${VITE_BACKEND_URL}/schedule`);
-        const { data } = response;
-        setSchedule(data.businessSchedule);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error al obtener los horarios", error);
-        alert("Error al obtener los horarios");
-      }
-    };
-    fetchData();
-  }, [refresh]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(`${VITE_BACKEND_URL}/schedule`);
+  //       const { data } = response;
+  //       setSchedule(data.businessSchedule);
+  //       setLoading(false);
+  //     } catch (error) {
+  //       console.error("Error al obtener los horarios", error);
+  //       alert("Error al obtener los horarios");
+  //     }
+  //   };
+  //   fetchData();
+  // }, [refresh]);
 
   useEffect(() => {
     let aux = false;
@@ -75,7 +75,22 @@ const AdminAcordeon = () => {
   }, [schedule]);
 
   const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
+    if (changeNoSaved) {
+      setShowAlert({
+        isOpen: true,
+        message: "Tienes cambios sin guardar.",
+        type: "warning",
+        button1: {
+          text: "",
+          action: "",
+        },
+        buttonClose: {
+          text: "OK",
+        },
+      });
+    } else {
+      setExpanded(isExpanded ? panel : false);
+    }
   };
 
   return (
@@ -121,16 +136,17 @@ const AdminAcordeon = () => {
                   : "white",
               }}
             >
-              Servicios
+              Categorias y servicios
             </h2>
           </AccordionSummary>
           <AccordionDetails>
             <Services
               services={services}
+              // setServices={setServices}
               refreshServices={refreshServices}
               setRefreshServices={setRefreshServices}
-              loadingServices={loadingServices}
-              setLoadingServices={setLoadingServices}
+              // loadingServices={loadingServices}
+              // setLoadingServices={setLoadingServices}
             />
           </AccordionDetails>
         </Accordion>
@@ -176,6 +192,7 @@ const AdminAcordeon = () => {
                 setSchedule={setSchedule}
                 refresh={refresh}
                 setRefresh={setRefresh}
+                setChangeNoSaved={setChangeNoSaved}
               />
             ) : (
               <LinearProgress sx={{ height: "2px", marginBottom: "15px" }} />
@@ -417,15 +434,13 @@ const AdminAcordeon = () => {
               Agenda de turnos
             </h2>
           </AccordionSummary>
-          <AccordionDetails>
-            <WhoIsComingAdmin />
-          </AccordionDetails>
+          <AccordionDetails>{/* <WhoIsComingAdmin /> */}</AccordionDetails>
         </Accordion>
         {/* ********************************************************************************************************* */}
         <Accordion
           style={{
             borderRadius: "0px 0px 5px 5px",
-            marginBottom: "30px",
+            marginBottom: "5px",
             boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
             backgroundColor: !darkMode.on ? darkMode.light : darkMode.dark,
 
@@ -460,7 +475,52 @@ const AdminAcordeon = () => {
             </h2>
           </AccordionSummary>
           <AccordionDetails>
-            <CancelledTurnsForAdmin />
+            {/* <CancelledTurnsForAdmin /> */}
+          </AccordionDetails>
+        </Accordion>
+        {/* ********************************************************************************************************* */}
+        <Accordion
+          style={{
+            borderRadius: "0px 0px 5px 5px",
+            marginBottom: "30px",
+            boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
+            backgroundColor: !darkMode.on ? darkMode.light : darkMode.dark,
+
+            border: "none",
+          }}
+          expanded={expanded === "panel9"}
+          onChange={handleChange("panel9")}
+        >
+          <AccordionSummary
+            sx={{
+              backgroundColor: expanded === "panel9" ? "#d6d6d5" : "",
+              borderRadius: "2px",
+            }}
+            expandIcon={
+              <ExpandMoreIcon
+                sx={{ color: expanded === "panel9" ? "" : "#2196f3" }}
+              />
+            }
+            aria-controls="panel9bh-content"
+            id="panel9bh-header"
+          >
+            <h2
+              style={{
+                color: !darkMode.on
+                  ? darkMode.dark
+                  : expanded === "panel9"
+                  ? darkMode.dark
+                  : "white",
+              }}
+            >
+              Precios y señas
+            </h2>
+          </AccordionSummary>
+          <AccordionDetails>
+            <PriceAndSing
+              services={services}
+              setRefreshServices={setRefreshServices}
+            />
           </AccordionDetails>
         </Accordion>
       </Box>
