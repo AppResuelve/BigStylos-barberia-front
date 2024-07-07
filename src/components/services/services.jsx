@@ -2,7 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { DarkModeContext } from "../../App";
 import { convertToCategoryArray } from "../../helpers/convertCategoryService";
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, MenuItem, Select, TextField } from "@mui/material";
 import LinearProgress from "@mui/material/LinearProgress";
 import Autocomplete from "@mui/material/Autocomplete";
 import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
@@ -24,9 +24,9 @@ const Services = ({
   const [categoryList, setCategoryList] = useState([]);
   const [serviceList, setServiceList] = useState([]);
   const [categoryServices, setCategoryServices] = useState([]);
+  const [editableCatSer, setEditableCatSer] = useState([]);
   const [showEdit, setShowEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
-  const [editableCatSer, setEditableCatSer] = useState([]);
 
   // Estado para los inputs
   const [inputs, setInputs] = useState({
@@ -34,6 +34,7 @@ const Services = ({
     service: "",
     price: 0,
     sing: 0,
+    type: "$",
   });
 
   useEffect(() => {
@@ -63,7 +64,7 @@ const Services = ({
 
   const handleAddServiceCategory = async () => {
     try {
-      const { service, category, price, sing } = inputs;
+      const { service, category, price, sing, type } = inputs;
       if (service !== "" && category !== "") {
         // Verifica si el nuevo servicio no está vacío
         await axios.post(`${VITE_BACKEND_URL}/services/create`, {
@@ -71,6 +72,7 @@ const Services = ({
           category,
           price,
           sing,
+          type,
         });
 
         // Refresca la lista de servicios después de agregar uno nuevo
@@ -117,7 +119,6 @@ const Services = ({
     setOpenDelete(true);
   };
 
-  console.log(inputs);
   return (
     <div
       style={{
@@ -140,17 +141,17 @@ const Services = ({
       <div
         style={{
           display: "flex",
-          flexDirection: "row",
-          margin: "10px 0px 20px 0px",
+          flexDirection: "column",
+          width: "100%",
+          margin: "10px 0px 0px 0px",
         }}
       >
         <span
           style={{
             fontSize: "18px",
             fontWeight: "bold",
-            width: sm ? "100%" : "50%",
+            width: "100%",
             backgroundColor: "red",
-            marginRight: sm ? "0px" : "5px",
             padding: "10px",
             borderRadius: "5px",
             backgroundColor: "lightgray",
@@ -158,46 +159,12 @@ const Services = ({
         >
           Selecciona o agrega categorias o servicios.
         </span>
-        {!sm && (
-          <>
-            <span
-              style={{
-                fontSize: "18px",
-                fontWeight: "bold",
-                width: "50%",
-                marginLeft: "5px",
-                padding: "10px",
-                borderRadius: "5px",
-                backgroundColor: "lightgray",
-              }}
-            >
-              Ingresa un precio y la seña correspondiente.
-            </span>
-          </>
-        )}
-      </div>
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          alignItems: sm ? "" : "center",
-          flexDirection: sm ? "column" : "row",
-          justifyContent: "space-between",
-          marginBottom: "15px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: sm ? "column" : "row",
-            width: sm ? "100%" : "50%",
-            marginRight: "5px",
-          }}
-        >
+        <div style={{ display: "flex", flexDirection: sm ? "column" : "row" }}>
           <Autocomplete
             options={categoryList}
             sx={{
-              width: "100%",
+              width: sm ? "100%" : "50%",
+              margin: "20px 5px 0px 0px",
               fontFamily: "Jost, sans-serif",
               fontWeight: "bold",
             }}
@@ -212,8 +179,8 @@ const Services = ({
           />
           <TextField
             sx={{
-              width: "100%",
-              margin: sm ? "10px 0px 0px 0px " : "0px 0px 0px 10px",
+              width: sm ? "100%" : "50%",
+              margin: sm ? "20px 0px 0px 0px" : "20px 0px 0px 5px",
               fontFamily: "Jost, sans-serif",
               fontWeight: "bold",
             }}
@@ -229,31 +196,36 @@ const Services = ({
             }}
           />
         </div>
-        {sm && (
-          <span
-            style={{
-              padding: "10px",
-              margin: "25px 0px 20px 0px",
-              fontSize: "18px",
-              fontWeight: "bold",
-              backgroundColor: "lightgray",
-              borderRadius: "5px",
-            }}
-          >
-            Ingresa un precio y la seña correspondiente.
-          </span>
-        )}
+      </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          width: "100%",
+          margin: "10px 0px 20px 0px",
+        }}
+      >
+        <span
+          style={{
+            padding: "10px",
+            margin: "20px 0px 20px 0px",
+            fontSize: "18px",
+            fontWeight: "bold",
+            backgroundColor: "lightgray",
+            borderRadius: "5px",
+          }}
+        >
+          Ingresa un precio y la seña correspondiente.
+        </span>
         <div
           style={{
             display: "flex",
-            flexDirection: sm ? "column" : "row",
-            width: sm ? "100%" : "50%",
-            marginLeft: sm ? "0px" : "5px",
+            width: "100%",
           }}
         >
           <TextField
             sx={{
-              width: "100%",
+              width: "40%",
             }}
             id="filled-number"
             label="Precio"
@@ -268,8 +240,8 @@ const Services = ({
           />
           <TextField
             sx={{
-              width: "100%",
-              margin: sm ? "10px 0px 0px 0px " : "0px 0px 0px 10px",
+              width: "calc(40% - 10px)",
+              margin: "0px 0px 0px 10px ",
             }}
             id="filled-number"
             label="Seña"
@@ -282,8 +254,37 @@ const Services = ({
               shrink: true,
             }}
           />
+          <Select
+            sx={{
+              width: sm ? "calc(20% - 10px)" : "20%",
+              margin: "0px 0px 0px 10px ",
+            }}
+            label=""
+            name="type"
+            value={inputs.type}
+            onChange={handleInputChange}
+          >
+            <MenuItem
+              value="$"
+              style={{
+                fontFamily: "Jost, sans-serif",
+                fontWeight: "bold",
+              }}
+            >
+              $
+            </MenuItem>
+            <MenuItem
+              value="%"
+              style={{
+                fontFamily: "Jost, sans-serif",
+                fontWeight: "bold",
+              }}
+            >
+              %
+            </MenuItem>
+          </Select>
         </div>
-      </Box>
+      </div>
       <Button
         onClick={handleAddServiceCategory}
         variant="contained"
@@ -323,20 +324,41 @@ const Services = ({
         <hr />
         {categoryServices.map((elem, index) => {
           return (
-            <div key={index}>
+            <div key={index} style={{ marginTop: "10px" }}>
               <span style={{ fontWeight: "bold", fontSize: "18px" }}>
                 {elem.category}
               </span>
               <hr />
               {elem.services.map((service, index) => {
                 return (
-                  <div style={{ display: "flex", width: "100%" }} key={index}>
-                    <span style={{ width: "40%" }}>{service.name}</span>
+                  <>
+                    <div style={{ display: "flex", width: "100%" }} key={index}>
+                      <span style={{ width: "40%", margin: "5px" }}>
+                        {service.name}
+                      </span>
+                      <hr />
+                      <span
+                        style={{
+                          width: "30%",
+                          margin: "5px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        ${service.price}
+                      </span>
+                      <hr />
+                      <span
+                        style={{
+                          width: "30%",
+                          margin: "5px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        ${service.sing}
+                      </span>
+                    </div>
                     <hr />
-                    <span style={{ width: "30%" }}>${service.price}</span>
-                    <hr />
-                    <span style={{ width: "30%" }}>${service.sing}</span>
-                  </div>
+                  </>
                 );
               })}
             </div>

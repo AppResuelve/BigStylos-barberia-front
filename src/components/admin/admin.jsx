@@ -9,9 +9,7 @@ const Admin = () => {
   const { darkMode, userData } = useContext(DarkModeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const navigate = useNavigate();
-  console.log(userData);
 
-  
   useEffect(() => {
     if (userData !== 1) {
       if (!userData.admin) {
