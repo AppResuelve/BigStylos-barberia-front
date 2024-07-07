@@ -14,8 +14,8 @@ import Users from "../users/users";
 import Personalization from "../personalization/personalization";
 import WhoIsComingAdmin from "../whoIsComingAdmin/whoIsComingAdmin";
 import CancelledTurnsForAdmin from "../cancelledTurnsForAdmin/cancelledTurnsForAdmin";
-import axios from "axios";
 import PriceAndSing from "../priceAndSing/priceAndSing";
+import axios from "axios";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 

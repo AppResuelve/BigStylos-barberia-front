@@ -173,7 +173,7 @@ const MyServices = ({
         {services && services.length > 0 ? (
           services
             .filter((service) =>
-              service[0].toLowerCase().includes(searchValue.toLowerCase())
+              service.name.toLowerCase().includes(searchValue.toLowerCase())
             )
 
             .map((element, index) => {
@@ -189,7 +189,7 @@ const MyServices = ({
                   }}
                 >
                   <h3 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
-                    {element[0]}
+                    {element.name}
                   </h3>
                   <Box
                     style={{
@@ -201,7 +201,7 @@ const MyServices = ({
                     {/* //// IOSSwicth //// */}
                     <IosSwitch
                       index={index}
-                      element={element[0]}
+                      element={element.name}
                       timeEdit={timeEdit}
                       showEdit={showEdit}
                       serviceStatus={serviceStatus}
@@ -212,11 +212,11 @@ const MyServices = ({
                     <Box sx={{ display: "flex", alignItems: "center" }}>
                       {timeEdit &&
                         Object.keys(timeEdit).length > 0 &&
-                        timeEdit[element[0]].duration === null &&
+                        timeEdit[element.name].duration === null &&
                         serviceStatus && (
                           <h3 style={{ color: "red" }}>Pendiente</h3>
                         )}
-                      {timeEdit[element[0]].duration == 0 ? (
+                      {timeEdit[element.name].duration == 0 ? (
                         <h3
                           style={{
                             marginRight: "40px",
@@ -239,12 +239,12 @@ const MyServices = ({
                           }}
                           disabled={showEdit ? false : true}
                           value={
-                            timeEdit[element[0]].duration === null
+                            timeEdit[element.name].duration === null
                               ? 0
-                              : timeEdit[element[0]].duration
+                              : timeEdit[element.name].duration
                           }
                           onChange={(event) =>
-                            handleSelectChange(event, element[0])
+                            handleSelectChange(event, element.name)
                           }
                         >
                           {timeArray.map((minute, index) => (

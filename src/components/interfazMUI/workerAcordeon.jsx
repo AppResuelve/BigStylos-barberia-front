@@ -12,6 +12,7 @@ import MyServices from "../myServices/myServices";
 import CancelledTurnsForWorker from "../cancelledTurnsForWorker/cancelledTurnsForWorker";
 import WhoIsComingWorker from "../whoIsComingWorker/whoIsComingWorker";
 import axios from "axios";
+import { convertToServicesArray } from "../../helpers/convertCategoryService";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const WorkerAcordeon = ({ user }) => {
@@ -49,7 +50,7 @@ const WorkerAcordeon = ({ user }) => {
         let allZero = true;
 
         for (const prop in timeEdit) {
-          if (services.some((serviceArr) => serviceArr[0] === prop)) {
+          if (services.some((serviceArr) => serviceArr.name === prop)) {
             if (timeEdit[prop].duration === null) {
               hasNull = true;
             } else if (timeEdit[prop].duration !== 0) {
@@ -67,7 +68,8 @@ const WorkerAcordeon = ({ user }) => {
     let objNewServicies = {};
     if (services && services.length > 0) {
       for (const prop in workerData.services) {
-        if (services.some((serviceArr) => serviceArr[0] === prop)) {
+        console.log(prop, "este es el prop");
+        if (services.some((serviceArr) => serviceArr.name === prop)) {
           if (workerData.services[prop].duration === null) {
             objNewServicies[prop] = true;
           } else if (workerData.services[prop].duration === 0) {
@@ -88,7 +90,8 @@ const WorkerAcordeon = ({ user }) => {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/services/`);
         const { data } = response;
-        setServices(data);
+        const arrServices = convertToServicesArray(data); //pasamos a array de obj servicio antes de setear
+        setServices(arrServices);
       } catch (error) {
         console.error("Error al obtener los servicios:", error);
         alert("Error al obtener los servicios");
@@ -131,8 +134,7 @@ const WorkerAcordeon = ({ user }) => {
     if (changeNoSaved) {
       setShowAlert({
         isOpen: true,
-        message:
-          "Tienes cambios sin guardar.",
+        message: "Tienes cambios sin guardar.",
         type: "warning",
         button1: {
           text: "",

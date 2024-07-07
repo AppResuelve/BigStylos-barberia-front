@@ -40,3 +40,14 @@ export const filterDeletedItems = (array) => {
       services: category.services.filter((service) => !service.deleted),
     }));
 };
+
+export const convertToServicesArray = (obj) => {
+  const servicesArray = [];
+
+  for (const category in obj) {
+    for (const service in obj[category]) {
+      servicesArray.push({ name: service, duration: null, available: false });
+    }
+  }
+  return servicesArray;
+};

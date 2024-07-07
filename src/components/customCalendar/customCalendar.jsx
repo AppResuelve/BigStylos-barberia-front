@@ -5,8 +5,9 @@ import getToday from "../../functions/getToday";
 import obtainDayName from "../../functions/obtainDayName";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import "./customCalendar.css";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import axios from "axios";
+import { width } from "@mui/system";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const CustomCalendar = ({
@@ -18,30 +19,16 @@ const CustomCalendar = ({
   setDays,
   schedule,
   loading,
+  noWork
 }) => {
   const { darkMode } = useContext(DarkModeContext);
   const daysCalendarCustom = daysMonthCalendarCustom(amountOfDays, false);
   let { currentMonth, nextMonth, currentYear, nextYear, month1, month2 } =
     daysCalendarCustom;
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
-  const getDayPosition =  getToday() + 1
+  const getDayPosition = getToday() + 1;
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [exist50, setExist50] = useState(false);
-  const [noWork, setNoWork] = useState({});
-
-  useEffect(() => {
-    const fetchNoWorkDays = async () => {
-      try {
-        const response = await axios.get(`${VITE_BACKEND_URL}/schedule/`);
-        const { data } = response;
-        setNoWork(data.noWorkDays);
-      } catch (error) {
-        console.error("Error al obtener los dias:", error);
-        alert("Error al obtener los dias");
-      }
-    };
-    fetchNoWorkDays();
-  }, []);
 
   const handleDay = (day, month) => {
     if (dayIsSelected[month] && dayIsSelected[month][day]) {
@@ -345,6 +332,16 @@ const CustomCalendar = ({
           </Box>
         </Box>
       </Box>
+      {md && (
+        <hr
+          style={{
+            width: "100%",
+            border: "2px solid lightgray",
+            borderRadius: "10px",
+            marginBottom: "10px",
+          }}
+        />
+      )}
     </div>
   );
 };
