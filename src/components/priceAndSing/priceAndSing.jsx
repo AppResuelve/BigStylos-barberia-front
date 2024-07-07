@@ -22,14 +22,18 @@ const PriceAndSing = ({ services, setRefreshServices }) => {
     name: null,
   });
 
-  useEffect(() => {
-    if (Object.keys(services).length > 0) {
-      const categoryArray = convertToCategoryArray(services);
+useEffect(() => {
+  if (Object.keys(services).length > 0) {
+    const categoryArray = convertToCategoryArray(services);
 
-      setCategoryServices(categoryArray); //renderizar
-      setEditableCatSer(categoryArray); //copia para editar
-    }
-  }, [services]);
+    setCategoryServices(categoryArray); // Renderizar
+
+    // Clonar el array para editar
+    const editableCopy = JSON.parse(JSON.stringify(categoryArray));
+    setEditableCatSer(editableCopy);
+  }
+}, [services]);
+
 
   const handleSaveCatSer = async () => {
     const catSerObj = convertToCategoryObj(editableCatSer);
@@ -231,7 +235,7 @@ const PriceAndSing = ({ services, setRefreshServices }) => {
                             )
                           }
                         >
-                          ${service.sing}
+                        {`${service.type}${service.sing}`}
                         </span>
                       )}
                       <hr />
