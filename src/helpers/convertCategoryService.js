@@ -1,4 +1,4 @@
-export const convertToCategoryArray = (obj) => {
+export const convertToCategoryServiceArray = (obj) => {
   return Object.entries(obj).map(([category, services]) => {
     const servicesArray = Object.entries(services).map(([name, details]) => ({
       name,
@@ -13,7 +13,7 @@ export const convertToCategoryArray = (obj) => {
   });
 };
 
-export const convertToCategoryObj = (array) => {
+export const convertToCategoryServiceObj = (array) => {
   const formattedData = {};
 
   array.forEach((category) => {
@@ -46,7 +46,21 @@ export const convertToServicesArray = (obj) => {
 
   for (const category in obj) {
     for (const service in obj[category]) {
-      servicesArray.push({ name: service, duration: null, available: false });
+      servicesArray.push({
+        name: service,
+        duration: null,
+        available: false,
+      });
+    }
+  }
+  return servicesArray;
+};
+
+export const convertToServicesImgArray = (obj) => {
+  const servicesArray = [];
+  for (const category in obj) {
+    for (const service in obj[category]) {
+      servicesArray.push([service, obj[category][service].img]);
     }
   }
   return servicesArray;

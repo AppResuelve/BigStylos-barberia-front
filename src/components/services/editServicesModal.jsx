@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import capitalizeFirstLetter from "../../helpers/capitalizeFirstLetter";
 import {
-  convertToCategoryObj,
+  convertToCategoryServiceObj,
   filterDeletedItems,
 } from "../../helpers/convertCategoryService";
 import axios from "axios";
@@ -22,11 +22,10 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const EditServicesModal = ({
   categoryServices,
-  setCategoryServices,
   editableCatSer,
   setEditableCatSer,
-  openDelete,
-  setOpenDelete,
+  openEdition,
+  setOpenEdition,
   setRefreshServices,
 }) => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
@@ -36,10 +35,10 @@ const EditServicesModal = ({
     categoryIndex: null,
     serviceIndex: null,
   });
-
+console.log(editableCatSer);
   const handleSaveCatSer = async () => {
     const filteredArray = filterDeletedItems(editableCatSer);
-    const catSerObj = convertToCategoryObj(filteredArray);
+    const catSerObj = convertToCategoryServiceObj(filteredArray);
 
     try {
       const result = await axios.put(`${VITE_BACKEND_URL}/services/update`, {
@@ -52,7 +51,7 @@ const EditServicesModal = ({
   };
 
   const handleClose = () => {
-    setOpenDelete(false);
+    setOpenEdition(false);
   };
 
   const handleSelectInput = (categoryIndex, serviceIndex = null) => {
@@ -139,7 +138,7 @@ const EditServicesModal = ({
         fullScreen={sm ? true : false}
         fullWidth={true}
         maxWidth="sm"
-        open={openDelete}
+        open={openEdition}
         keepMounted
         onClose={handleClose}
         aria-describedby="alert-dialog-description"

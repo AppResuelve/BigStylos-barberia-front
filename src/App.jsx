@@ -10,7 +10,9 @@ import Worker from "./components/worker/worker";
 import NotFound from "./components/pageNotFound/pageNotFound";
 import AlertModal from "./components/interfazMUI/alertModal";
 import "./App.css";
+import axios from "axios";
 
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const DarkModeContext = createContext();
 
@@ -35,11 +37,12 @@ function App() {
   const [clientName, setClientName] = useState("");
   const [showAlert, setShowAlert] = useState({});
   const [darkMode, setDarkMode] = useState({
-    dark: "#252627",
+    dark: "#000214",
     light: colors,
     on: false,
   });
 
+  
   /* función para el dark mode */
   const toggleDarkMode = () => {
     setDarkMode((prevMode) => ({
@@ -48,22 +51,22 @@ function App() {
     }));
   };
 
-  // useEffect(() => {
-  //   const fetchImages = async () => {
-  //     try {
-  //       const response = await axios.get(`${VITE_BACKEND_URL}/personalization`);
-  //       const { data } = response;
-  //       setHomeImages(data.allImages);
-  //       setColors(data.allColors[0]);
-  //     } catch (error) {
-  //       console.error("Error al obtener los datos de personalizacion:", error);
-  //       alert("Error al obtener los datos de personalizacion");
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const response = await axios.get(`${VITE_BACKEND_URL}/personalization`);
+        const { data } = response;
+        console.log(data,"este es el data de get personalization");
+        // setHomeImages(data.allImages);
+        // setColors(data.allColors[0]);
+      } catch (error) {
+        console.error("Error al obtener los datos de personalizacion:", error);
+        alert("Error al obtener los datos de personalizacion");
+      }
+    };
 
-  //   fetchImages();
-  // }, [refreshPersonalization]);
-
+    fetchImages();
+  }, [refreshPersonalization]);
   useEffect(() => {
     // Actualizar el estado del modo oscuro después de obtener el color
     setDarkMode((prevMode) => ({

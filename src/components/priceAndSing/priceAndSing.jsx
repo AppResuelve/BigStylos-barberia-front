@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import React,{ useEffect, useState } from "react";
 import { Box, Button } from "@mui/material";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import {
-  convertToCategoryArray,
-  convertToCategoryObj,
+  convertToCategoryServiceArray,
+  convertToCategoryServiceObj,
 } from "../../helpers/convertCategoryService";
 import capitalizeFirstLetter from "../../helpers/capitalizeFirstLetter";
 import axios from "axios"; // Asegúrate de importar axios
@@ -24,7 +24,7 @@ const PriceAndSing = ({ services, setRefreshServices }) => {
 
 useEffect(() => {
   if (Object.keys(services).length > 0) {
-    const categoryArray = convertToCategoryArray(services);
+    const categoryArray = convertToCategoryServiceArray(services);
 
     setCategoryServices(categoryArray); // Renderizar
 
@@ -36,7 +36,7 @@ useEffect(() => {
 
 
   const handleSaveCatSer = async () => {
-    const catSerObj = convertToCategoryObj(editableCatSer);
+    const catSerObj = convertToCategoryServiceObj(editableCatSer);
 
     try {
       const result = await axios.put(`${VITE_BACKEND_URL}/services/update`, {
@@ -70,7 +70,6 @@ useEffect(() => {
       return updatedCatSer;
     });
   };
-  console.log(editableCatSer);
   return (
     <div>
       <div style={{ marginTop: "10px", overflow: "scroll" }}>
@@ -122,18 +121,20 @@ useEffect(() => {
         <hr style={{ width: sm ? "100vw" : "100%" }} />
         {editableCatSer.map((elem, categoryIndex) => {
           return (
-            <div key={categoryIndex} style={{ marginTop: "10px" }}>
+            <div
+              key={`category-${categoryIndex}`}
+              style={{ marginTop: "10px" }}
+            >
               <span style={{ fontWeight: "bold", fontSize: "18px" }}>
                 {capitalizeFirstLetter(elem.category)}
               </span>
               <hr style={{ width: sm ? "100vw" : "100%" }} />
               {elem.services.map((service, serviceIndex) => {
                 return (
-                  <>
-                    <div
-                      style={{ display: "flex", width: "100%" }}
-                      key={serviceIndex}
-                    >
+                  <React.Fragment
+                    key={`service-${categoryIndex}-${serviceIndex}`}
+                  >
+                    <div style={{ display: "flex", width: "100%" }}>
                       <span style={{ minWidth: "200px", width: "40%" }}>
                         {service.name}
                       </span>
@@ -168,7 +169,6 @@ useEffect(() => {
                         <span
                           style={{
                             minWidth: "100px",
-
                             width: "25%",
                             margin: "1px",
                             padding: "5px",
@@ -216,7 +216,6 @@ useEffect(() => {
                         <span
                           style={{
                             minWidth: "100px",
-
                             width: "25%",
                             margin: "1px",
                             padding: "5px",
@@ -235,7 +234,7 @@ useEffect(() => {
                             )
                           }
                         >
-                        {`${service.type}${service.sing}`}
+                          {`${service.type}${service.sing}`}
                         </span>
                       )}
                       <hr />
@@ -290,7 +289,7 @@ useEffect(() => {
                       )}
                     </div>
                     <hr style={{ width: sm ? "100vw" : "100%" }} />
-                  </>
+                  </React.Fragment>
                 );
               })}
             </div>

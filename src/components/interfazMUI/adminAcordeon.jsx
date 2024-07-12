@@ -39,27 +39,26 @@ const AdminAcordeon = () => {
         setServices(data);
       } catch (error) {
         console.error("Error al obtener los servicios:", error);
-        alert("Error al obtener los servicios");
       }
     };
 
     fetchData();
   }, [refreshServices]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get(`${VITE_BACKEND_URL}/schedule`);
-  //       const { data } = response;
-  //       setSchedule(data.businessSchedule);
-  //       setLoading(false);
-  //     } catch (error) {
-  //       console.error("Error al obtener los horarios", error);
-  //       alert("Error al obtener los horarios");
-  //     }
-  //   };
-  //   fetchData();
-  // }, [refresh]);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${VITE_BACKEND_URL}/schedule`);
+        const { data } = response;
+        setSchedule(data.businessSchedule);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error al obtener los horarios", error);
+        alert("Error al obtener los horarios");
+      }
+    };
+    fetchData();
+  }, [refresh]);
 
   useEffect(() => {
     let aux = false;
@@ -142,7 +141,6 @@ const AdminAcordeon = () => {
           <AccordionDetails>
             <Services
               services={services}
-              // setServices={setServices}
               refreshServices={refreshServices}
               setRefreshServices={setRefreshServices}
               // loadingServices={loadingServices}
@@ -434,7 +432,7 @@ const AdminAcordeon = () => {
               Agenda de turnos
             </h2>
           </AccordionSummary>
-          <AccordionDetails>{/* <WhoIsComingAdmin /> */}</AccordionDetails>
+          <AccordionDetails><WhoIsComingAdmin /></AccordionDetails>
         </Accordion>
         {/* ********************************************************************************************************* */}
         <Accordion
@@ -475,7 +473,7 @@ const AdminAcordeon = () => {
             </h2>
           </AccordionSummary>
           <AccordionDetails>
-            {/* <CancelledTurnsForAdmin /> */}
+            <CancelledTurnsForAdmin />
           </AccordionDetails>
         </Accordion>
         {/* ********************************************************************************************************* */}

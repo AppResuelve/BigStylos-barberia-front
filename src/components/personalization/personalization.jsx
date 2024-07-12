@@ -11,6 +11,7 @@ import noImageLogotipeLight from "../../assets/icons/no-image-logotipe-light.png
 import FormatPaintOutlinedIcon from "@mui/icons-material/FormatPaintOutlined";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import "./personalization.css";
+import { convertToServicesImgArray } from "../../helpers/convertCategoryService";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const VITE_CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
@@ -29,9 +30,10 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
   useEffect(() => {
-    setImgServices(services);
+    const servicesImg = convertToServicesImgArray(services);
+    setImgServices(servicesImg);
   }, [services]);
-  
+  console.log(imgServices, "este es el img services");
   useEffect(() => {
     const fetchImages = async () => {
       try {
@@ -44,7 +46,6 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
         //  setLoading(false);
       } catch (error) {
         console.error("Error al obtener los servicios:", error);
-        alert("Error al obtener los servicios");
       }
     };
 
@@ -132,7 +133,6 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
     setImgServices(services);
     setAuxHomeImages(homeImages);
     setColorSelected(colors);
-    // setRefresh(!refresh);
   };
 
   const handleSubmit = async () => {
@@ -143,10 +143,8 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
           servicesWithImg: imgServices,
         }
       );
-      // setRefresh(!refresh);
     } catch (error) {
       console.error("Error al actulizar los servicios", error);
-      alert("Error al actulizar los servicios");
     }
     try {
       const response = await axios.put(
@@ -159,7 +157,6 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
       // setRefresh(!refresh);
     } catch (error) {
       console.error("Error al actulizar las imgenes", error);
-      alert("Error al actulizar las imgenes");
     }
     setRefreshPersonalization(!refreshPersonalization);
     setRefreshServices(!refreshServices);

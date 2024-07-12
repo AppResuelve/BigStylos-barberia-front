@@ -4,8 +4,10 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
+const VITE_GOOGLE_OAUTH_CLIENT_ID = import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID;
+
 ReactDOM.render(
-  <GoogleOAuthProvider clientId="75961716499-7v8lchvq0ahu3ukknidea4lb428l730v.apps.googleusercontent.com">
+  <GoogleOAuthProvider clientId={VITE_GOOGLE_OAUTH_CLIENT_ID}>
     <BrowserRouter>
       <App />
     </BrowserRouter>

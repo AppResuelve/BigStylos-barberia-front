@@ -68,7 +68,6 @@ const WorkerAcordeon = ({ user }) => {
     let objNewServicies = {};
     if (services && services.length > 0) {
       for (const prop in workerData.services) {
-        console.log(prop, "este es el prop");
         if (services.some((serviceArr) => serviceArr.name === prop)) {
           if (workerData.services[prop].duration === null) {
             objNewServicies[prop] = true;

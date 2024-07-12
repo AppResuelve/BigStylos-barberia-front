@@ -10,6 +10,7 @@ import silkey from "../../assets/images/silkey.png";
 import babyliss from "../../assets/images/babyliss.png";
 import pantene from "../../assets/images/pantene.png";
 import { Box } from "@mui/material";
+import Maps from "../maps/maps";
 import "./footer.css";
 
 const Footer = () => {
@@ -19,10 +20,7 @@ const Footer = () => {
   useEffect(() => {
     // Función para convertir el color a formato RGB
     const convertToRGB = (color) => {
-      // Lógica para convertir el color a formato RGB
-      // Puedes utilizar bibliotecas como 'tinycolor2' para esto
       const rgbColor = tinycolor(color).toRgb();
-      // Retorna el valor transformado
       return rgbColor;
     };
     let color;
@@ -58,146 +56,194 @@ const Footer = () => {
     <div
       style={{
         display: "flex",
+        position: "relative",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        position: "absolute",
         top: "100%",
         width: "100%",
-        height: "250px",
+        height: "100%",
         overflow: "hidden",
-        zIndex: 1000,
-        backgroundColor: "white",
       }}
     >
-      <Box
-        sx={{
-          position: "relative",
-          display: "flex",
-          flexDirection: "column",
-          height: "100px",
-          width: "100%",
-          maxWidth: "900px",
-          pointerEvents: "none",
+      {/* Sección svg y div */}
+      <div
+        className="div-container-custom-shape-divider-and-div"
+        style={{
+          backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
         }}
       >
-        {/* Degradado a la izquierda */}
-        <div
-          style={{
-            zIndex: 1000,
-            position: "absolute",
-            top: 0,
-            bottom: 0,
-            left: 0,
-            width: "100px", // Ancho de la sombra
-            height: "100px",
-            background: `linear-gradient(to left, rgba(255,255,255,0), rgba(255,255,255,1))`,
-          }}
-        ></div>
-
-        {/* Carrusel */}
-        <Slider {...settings}>
+        <svg
+          data-name="Layer 1"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1200 120"
+          preserveAspectRatio="none"
+        >
           <div
             style={{
-              display: "flex",
-              width: "20%",
+              width: "100%",
+              height: "20px",
+              backgroundColor: "white",
             }}
-          >
-            <img
-              className="img-carousel-footer"
-              src={loreal}
-              alt="Imagen 1"
-              style={{
-                height: "100px",
-                objectFit: "contain",
-                margin: "0 auto",
-                /*   filter: darkMode.on
-                  ? "none"
-                  : "drop-shadow(0px 5px 15px rgba(255, 255, 255, 1))",
-              */
-              }}
-            />
-          </div>
-          <div style={{ display: "flex", width: "20%" }}>
-            <img
-              className="img-carousel-footer"
-              src={gama}
-              alt="Imagen 2"
-              style={{
-                height: "100px",
-                objectFit: "contain",
-                margin: "0 auto",
-                /*   filter: darkMode.on
-                  ? "none"
-                  : "drop-shadow(0px 5px 15px rgba(255, 255, 255, 1))",
-              */
-              }}
-            />
-          </div>
-          <div style={{ display: "flex", width: "20%" }}>
-            <img
-              className="img-carousel-footer"
-              src={pantene}
-              alt="Imagen 3"
-              style={{
-                height: "100px",
-                objectFit: "cover",
-                margin: "0 auto",
-                /*  filter: darkMode.on
-                  ? "none"
-                  : "drop-shadow(0px 5px 15px rgba(255, 255, 255, 1))",
-              */
-              }}
-            />
-          </div>
-          <div style={{ display: "flex", width: "20%" }}>
-            <img
-              className="img-carousel-footer"
-              src={silkey}
-              alt="Imagen 4"
-              style={{
-                height: "100px",
-                objectFit: "cover",
-                margin: "0 auto",
-                /*    filter: darkMode.on
-                  ? "none"
-                  : "drop-shadow(0px 5px 15px rgba(255, 255, 255, 1))",
-              */
-              }}
-            />
-          </div>
-          <div style={{ display: "flex", width: "20%" }}>
-            <img
-              className="img-carousel-footer"
-              src={babyliss}
-              alt="Imagen 5"
-              style={{
-                height: "100px",
-                objectFit: "contain",
-                margin: "0 auto",
-                /*    filter: darkMode.on
-                  ? "none"
-                  : "drop-shadow(0px 5px 15px rgba(255, 255, 255, 1))",
-              */
-              }}
-            />
-          </div>
-          {/* Agrega más elementos según sea necesario */}
-        </Slider>
-        {/* Degradado a la derecha */}
-        <div
+          ></div>
+          <path
+            d="M600,112.77C268.63,112.77,0,65.52,0,7.23V120H1200V7.23C1200,65.52,931.37,112.77,600,112.77Z"
+            style={{ fill: "white" }}
+          ></path>
+        </svg>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          width: "100%",
+          marginTop: "calc(0% + 90px)",
+        }}
+      >
+        <span
           style={{
-            zIndex: 1000,
-            position: "absolute",
-            top: 0,
-            bottom: 0,
-            right: 0,
-            width: "100px", // Ancho de la sombra
-            height: "100px",
-            background: `linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,1))`,
+            display: "flex",
+            alignSelf: "center",
+            fontSize: "20px",
+            marginBottom: "10px",
           }}
-        ></div>
-      </Box>
+        >
+          Algunas de las marcas con las que trabajamos
+        </span>
+
+        <Box
+          sx={{
+            position: "relative",
+            display: "flex",
+            alignSelf: "center",
+            flexDirection: "column",
+            height: "100px",
+            width: "100%",
+            maxWidth: "900px",
+            pointerEvents: "none",
+          }}
+        >
+          {/* Degradado a la izquierda */}
+          <div
+            style={{
+              zIndex: 1000,
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              left: 0,
+              width: "150px", // Ancho de la sombra
+              height: "100px",
+              background: `linear-gradient(to left, rgba(255,255,255,0), rgba(255,255,255,1))`,
+            }}
+          ></div>
+
+          {/* Carrusel */}
+          <Slider {...settings}>
+            <div
+              style={{
+                display: "flex",
+                width: "20%",
+              }}
+            >
+              <img
+                className="img-carousel-footer"
+                src={loreal}
+                alt="Imagen 1"
+                style={{
+                  height: "100px",
+                  objectFit: "contain",
+                  margin: "0 auto",
+                }}
+              />
+            </div>
+            <div style={{ display: "flex", width: "20%" }}>
+              <img
+                className="img-carousel-footer"
+                src={gama}
+                alt="Imagen 2"
+                style={{
+                  height: "100px",
+                  objectFit: "contain",
+                  margin: "0 auto",
+                }}
+              />
+            </div>
+            <div style={{ display: "flex", width: "20%" }}>
+              <img
+                className="img-carousel-footer"
+                src={pantene}
+                alt="Imagen 3"
+                style={{
+                  height: "100px",
+                  objectFit: "cover",
+                  margin: "0 auto",
+                }}
+              />
+            </div>
+            <div style={{ display: "flex", width: "20%" }}>
+              <img
+                className="img-carousel-footer"
+                src={silkey}
+                alt="Imagen 4"
+                style={{
+                  height: "100px",
+                  objectFit: "cover",
+                  margin: "0 auto",
+                }}
+              />
+            </div>
+            <div style={{ display: "flex", width: "20%" }}>
+              <img
+                className="img-carousel-footer"
+                src={babyliss}
+                alt="Imagen 5"
+                style={{
+                  height: "100px",
+                  objectFit: "contain",
+                  margin: "0 auto",
+                }}
+              />
+            </div>
+          </Slider>
+          {/* Degradado a la derecha */}
+          <div
+            style={{
+              zIndex: 1000,
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              right: 0,
+              width: "100px", // Ancho de la sombra
+              height: "100px",
+              background: `linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,1))`,
+            }}
+          ></div>
+        </Box>
+      </div>
+
+      <hr
+        style={{
+          width: "90%",
+          maxWidth: "900px",
+          border: "1px solid lightgray",
+          borderRadius: "10px",
+          margin: "30px",
+        }}
+      />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          width: "90%",
+          maxWidth: "900px",
+        }}
+      >
+        <span style={{ margin: "10px 0px 5px 0px" }}>
+          Puedes encontrarnos aquí:
+        </span>
+        <Maps />
+      </div>
       <Box
         style={{
           display: "flex",

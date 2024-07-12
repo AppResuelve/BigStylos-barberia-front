@@ -2,13 +2,13 @@ import { NavLink, useLocation } from "react-router-dom";
 import { useContext, useState } from "react";
 import { DarkModeContext } from "../../App";
 import Profile from "../userProfile/userProfile";
-import toHome from "../../assets/icons/homeBlack.png";
+import toHome from "../../assets/icons/home.png";
 import toHome2 from "../../assets/icons/homeWhite.png";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { Box, CircularProgress } from "@mui/material";
-import "./nav.css";
 import LoginButton from "../login/login";
 import UserPanelModal from "../interfazMUI/userPanelModal";
+import "./nav.css";
 
 const Nav = ({ homeImages }) => {
   const { darkMode, userData } = useContext(DarkModeContext);
@@ -21,40 +21,17 @@ const Nav = ({ homeImages }) => {
   return (
     <>
       {homeImages !== 1 && (
-        <div
-          className="container-nav"
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            position: "fixed",
-            width: "100%",
-            backgroundColor:
-              (location.pathname === "/turns" && md) ||
-              location.pathname === "/"
-                ? "transparent"
-                : darkMode.on
-                ? darkMode.dark
-                : darkMode.light,
-            zIndex: "100",
-          }}
-        >
-          <div>
-            <NavLink to="/">
-              <Box
-                className="box-container-img-home-nav"
-                sx={{
-                  backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
-                }}
-              >
-                <img
-                  className="img-home-nav"
-                  src={darkMode.on ? toHome2 : toHome}
-                  alt="inicio"
-                />
-              </Box>
-            </NavLink>
-          </div>
+        <div className="container-nav">
+          <NavLink to="/" style={{ textDecoration: "none" }}>
+            <button className="btn-img-home-nav">
+              <img
+                className="img-home-nav"
+                src={darkMode.on ? toHome2 : toHome}
+                alt="inicio"
+              />
+              <span className="span-btn-nav">volver a inicio</span>
+            </button>
+          </NavLink>
           <div
             style={{
               display: "flex",
@@ -68,10 +45,7 @@ const Nav = ({ homeImages }) => {
               />
             ) : userData === false ? (
               <>
-                <LoginButton
-                  setShowLoginForm={setShowLoginForm}
-                  setIsOpenUserPanel={setIsOpenUserPanel}
-                />
+                <LoginButton />
                 <UserPanelModal
                   isOpen={isOpenUserPanel}
                   setIsOpen={setIsOpenUserPanel}

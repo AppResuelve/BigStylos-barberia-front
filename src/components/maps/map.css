@@ -1,0 +1,22 @@
+/* styles.css */
+.custom-popup .mapboxgl-popup-close-button {
+      font-size: 20px;
+      margin: 4px 10px 0px 0px ;
+height: 10px;
+width: 10px;
+      /* Ajusta el tamaño de la "x" */
+      color: red;
+      /* Cambia el color de la "x" */
+      background: none;
+      /* Elimina el fondo del botón */
+      border: none;
+      /* Elimina el borde del botón */
+}
+
+.custom-popup .mapboxgl-popup-content {
+      border-radius: 20px;
+      padding: 20px;
+      /* Cambia el borde del popup */
+      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+      /* Ajusta la sombra del popup */
+}
