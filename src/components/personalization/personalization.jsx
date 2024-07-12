@@ -11,7 +11,10 @@ import noImageLogotipeLight from "../../assets/icons/no-image-logotipe-light.png
 import FormatPaintOutlinedIcon from "@mui/icons-material/FormatPaintOutlined";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import "./personalization.css";
-import { convertToServicesImgArray } from "../../helpers/convertCategoryService";
+import {
+  convertToServicesImgArray,
+  filterImgServicesToUpdate,
+} from "../../helpers/convertCategoryService";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const VITE_CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
@@ -33,7 +36,7 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
     const servicesImg = convertToServicesImgArray(services);
     setImgServices(servicesImg);
   }, [services]);
-  console.log(imgServices, "este es el img services");
+
   useEffect(() => {
     const fetchImages = async () => {
       try {
@@ -64,19 +67,18 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
     // Si el servicio existe, actualiza la secure_url en la segunda posición
     if (serviceIndex !== -1) {
       updatedImgServices[serviceIndex][1] = secureUrl;
-
       // Actualiza el estado con el nuevo array
       setImgServices(updatedImgServices);
     }
   };
-
+  console.log(auxHomeImages);
   const uploadImage = async (event) => {
     const name = event.target.name;
     const files = event.target.files;
     if (name === "fondo-central" || name === "fondo-de-pantalla") {
       const data = new FormData();
       data.append("file", files[0]);
-      data.append("upload_preset", "Inicio");
+      data.append("upload_preset", "logotipo");
 
       const res = await axios.post(
         `https://api.cloudinary.com/v1_1/${VITE_CLOUDINARY_CLOUD_NAME}/image/upload`,
@@ -92,6 +94,7 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
           copyOfArray = [
             secure_url,
             ...(prevImages.length > 0 ? [prevImages[1]] : []),
+            true,
           ];
         } else {
           copyOfArray = [
@@ -105,7 +108,7 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
     } else {
       const data = new FormData();
       data.append("file", files[0]);
-      data.append("upload_preset", "Mis servicios");
+      data.append("upload_preset", "services");
 
       const res = await axios.post(
         `https://api.cloudinary.com/v1_1/${VITE_CLOUDINARY_CLOUD_NAME}/image/upload`,
@@ -134,17 +137,19 @@ const Personalization = ({ services, refreshServices, setRefreshServices }) => {
     setAuxHomeImages(homeImages);
     setColorSelected(colors);
   };
-
   const handleSubmit = async () => {
-    try {
-      const response = await axios.post(
-        `${VITE_BACKEND_URL}/services/updateimg`,
-        {
-          servicesWithImg: imgServices,
-        }
-      );
-    } catch (error) {
-      console.error("Error al actulizar los servicios", error);
+    const someServiceToUpdate = filterImgServicesToUpdate(imgServices);
+    if (someServiceToUpdate) {
+      try {
+        const response = await axios.post(
+          `${VITE_BACKEND_URL}/services/updateimg`,
+          {
+            servicesWithImg: someServiceToUpdate,
+          }
+        );
+      } catch (error) {
+        console.error("Error al actulizar los servicios", error);
+      }
     }
     try {
       const response = await axios.put(

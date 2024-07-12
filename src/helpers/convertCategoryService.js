@@ -65,3 +65,9 @@ export const convertToServicesImgArray = (obj) => {
   }
   return servicesArray;
 };
+
+export const filterImgServicesToUpdate = (array) => {
+  const filteredArray = array.filter((service) => service[1] !== "");
+  if (filteredArray.length < 1) return false;
+  return filteredArray;
+};

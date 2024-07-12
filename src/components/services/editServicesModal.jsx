@@ -35,7 +35,7 @@ const EditServicesModal = ({
     categoryIndex: null,
     serviceIndex: null,
   });
-console.log(editableCatSer);
+  
   const handleSaveCatSer = async () => {
     const filteredArray = filterDeletedItems(editableCatSer);
     const catSerObj = convertToCategoryServiceObj(filteredArray);
