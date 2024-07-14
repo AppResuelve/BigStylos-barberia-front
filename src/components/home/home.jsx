@@ -12,9 +12,9 @@ import "./home.css";
 
 const Home = ({ homeImages }) => {
   const { darkMode } = useContext(DarkModeContext);
-
+  
   return (
-    <div >
+    <>
       {homeImages === 1 ? (
         <Box
           style={{
@@ -49,10 +49,9 @@ const Home = ({ homeImages }) => {
               backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
             }}
           >
-           
-            <Box style={{ height: "50vh" }}>
+            <Box style={{ height: "30%" }}>
               {homeImages === 1 ? (
-                <Box className="img-logotipo-home">
+                <Box >
                   <Skeleton
                     style={{
                       width: "100%",
@@ -67,8 +66,8 @@ const Home = ({ homeImages }) => {
                 <img
                   className="img-logotipo-home"
                   src={
-                    homeImages[0]
-                      ? homeImages[0]
+                    homeImages.length > 0 && homeImages[0][1]
+                      ? homeImages[0][1]
                       : darkMode.on
                       ? defaultImgLight
                       : defaultImg
@@ -84,13 +83,12 @@ const Home = ({ homeImages }) => {
               )}
             </Box>
             <Box
-              style={{
+              sx={{
                 position: "relative",
                 width: "100%",
-                height: "40vh",
+                height: "30%",
                 display: "flex",
-                justifyContent: "space-between",
-                // padding: "10px",
+                  justifyContent: "space-between",
               }}
             >
               <Box
@@ -176,7 +174,7 @@ const Home = ({ homeImages }) => {
           <Footer />
         </>
       )}
-    </div>
+    </>
   );
 };
 export default Home;

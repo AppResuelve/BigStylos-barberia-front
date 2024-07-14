@@ -1,10 +1,13 @@
 import { useEffect, useState, useContext } from "react";
 import { DarkModeContext } from "../../App";
 import { useMediaQueryHook } from "./useMediaQuery";
-import Accordion from "@mui/material/Accordion";
-import { Box, LinearProgress } from "@mui/material";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  LinearProgress,
+} from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Services from "../services/services";
 import WorkDays from "../workDays/workDays";
@@ -28,7 +31,7 @@ const AdminAcordeon = () => {
   const [remaining, setRemaining] = useState(false);
   const [loading, setLoading] = useState(true);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-  const [changeNoSaved, setChangeNoSaved] = useState(false);
+  const [changeNoSaved, setChangeNoSaved] = useState({}); //estado para alertar cuando hay cambios sin guardar en cualquiera de los componentes
   const [services, setServices] = useState({});
 
   useEffect(() => {
@@ -44,7 +47,7 @@ const AdminAcordeon = () => {
 
     fetchData();
   }, [refreshServices]);
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -73,18 +76,31 @@ const AdminAcordeon = () => {
     }
   }, [schedule]);
 
+  const panelNames = {
+    panel1: "Categorías y servicios",
+    panel2: "Días laborales",
+    panel3: "Apertura y cierre",
+    panel4: "Cierre programado",
+    panel5: "Usuarios",
+    panel6: "Personalización",
+    panel7: "Agenda de turnos",
+    panel8: "Turnos cancelados",
+    panel9: "Precios y señas",
+  };
+  
   const handleChange = (panel) => (event, isExpanded) => {
-    if (changeNoSaved) {
+     const panelName = panelNames[expanded];
+    if (Object.keys(changeNoSaved).length > 0) {
       setShowAlert({
         isOpen: true,
-        message: "Tienes cambios sin guardar.",
+        message: `Tienes cambios sin guardar en la sección ${panelName}`,
         type: "warning",
         button1: {
           text: "",
           action: "",
         },
         buttonClose: {
-          text: "OK",
+          text: "Entendido",
         },
       });
     } else {
@@ -392,6 +408,8 @@ const AdminAcordeon = () => {
               services={services}
               refreshServices={refreshServices}
               setRefreshServices={setRefreshServices}
+              changeNoSaved={changeNoSaved}
+              setChangeNoSaved={setChangeNoSaved}
             />
           </AccordionDetails>
         </Accordion>
@@ -432,7 +450,9 @@ const AdminAcordeon = () => {
               Agenda de turnos
             </h2>
           </AccordionSummary>
-          <AccordionDetails><WhoIsComingAdmin /></AccordionDetails>
+          <AccordionDetails>
+            <WhoIsComingAdmin />
+          </AccordionDetails>
         </Accordion>
         {/* ********************************************************************************************************* */}
         <Accordion

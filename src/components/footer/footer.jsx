@@ -96,6 +96,7 @@ const Footer = () => {
         style={{
           display: "flex",
           flexDirection: "column",
+          justifyContent: "center",
           width: "100%",
           marginTop: "calc(0% + 90px)",
         }}
@@ -104,11 +105,12 @@ const Footer = () => {
           style={{
             display: "flex",
             alignSelf: "center",
+            width: "90%",
             fontSize: "20px",
             marginBottom: "10px",
           }}
         >
-          Algunas de las marcas con las que trabajamos
+          Algunas de las marcas con las que trabajamos:
         </span>
 
         <Box

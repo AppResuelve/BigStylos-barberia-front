@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import Map, { Marker, Popup } from "react-map-gl";
-import "./map.css"; // Importa tu archivo de estilos
+import "./map.css";
 
 const VITE_MAPBOX_MAPS_API_KEY = import.meta.env.VITE_MAPBOX_MAPS_API_KEY;
 
@@ -36,7 +36,7 @@ const Maps = () => {
       initialViewState={viewport}
       style={{
         width: "100%",
-        height: sm ? "600px" : "400px",
+        height: sm ? "400px" : "300px",
         boxShadow: "0px 0px 10px 0px rgb(0,0,0,0.5)",
         borderRadius: "16px",
       }}

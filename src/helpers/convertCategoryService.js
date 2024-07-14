@@ -66,8 +66,27 @@ export const convertToServicesImgArray = (obj) => {
   return servicesArray;
 };
 
-export const filterImgServicesToUpdate = (array) => {
-  const filteredArray = array.filter((service) => service[1] !== "");
-  if (filteredArray.length < 1) return false;
-  return filteredArray;
+export const filterImgServicesToUpdate = (newArray,originalArray) => {
+  const modifiedArray = newArray.filter((newItem) => {
+    const originalItem = originalArray.find(
+      (origItem) => origItem[0] === newItem[0]
+    );
+
+    // Si no se encuentra el servicio en el array original, se ignora
+    if (!originalItem) return false;
+
+    // Si la URL está vacía o la URL es igual que en el array original, no lo incluimos
+    if (newItem[1] === "" || newItem[1] === originalItem[1]) {
+      return false;
+    }
+
+    return true;
+  });
+
+  // Si no hay elementos modificados, retornar false
+  if (modifiedArray.length === 0) {
+    return false;
+  }
+
+  return modifiedArray;
 };

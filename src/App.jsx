@@ -32,7 +32,10 @@ function App() {
     useState(false);
   const [refreshStatusSession, setRefreshStatusSession] = useState(false);
   const [refreshWhenCancelTurn, setRefreshWhenCancelTurn] = useState(false);
-  const [refreshPersonalization, setRefreshPersonalization] = useState(false);
+  const [refreshPersonalization, setRefreshPersonalization] = useState({
+    home: false,
+    colors: false,
+  });
   const [disableButtonMyTurns, setDisableButtonMyTurns] = useState(false);
   const [clientName, setClientName] = useState("");
   const [showAlert, setShowAlert] = useState({});
@@ -42,7 +45,6 @@ function App() {
     on: false,
   });
 
-  
   /* función para el dark mode */
   const toggleDarkMode = () => {
     setDarkMode((prevMode) => ({
@@ -56,9 +58,10 @@ function App() {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/personalization`);
         const { data } = response;
-        console.log(data,"este es el data de get personalization");
-        // setHomeImages(data.allImages);
-        // setColors(data.allColors[0]);
+        setHomeImages(data.allImages);
+        setColors(data.allColors[0]);
+
+        // setRefreshPersonalization({ home: false, colors: false });
       } catch (error) {
         console.error("Error al obtener los datos de personalizacion:", error);
         alert("Error al obtener los datos de personalizacion");
@@ -67,6 +70,7 @@ function App() {
 
     fetchImages();
   }, [refreshPersonalization]);
+
   useEffect(() => {
     // Actualizar el estado del modo oscuro después de obtener el color
     setDarkMode((prevMode) => ({
@@ -176,7 +180,6 @@ function App() {
             setValidateAlert={setValidateAlert}
             setValidateAlertTurns={setValidateAlertTurns}
             setValidateAlertTurnsWorker={setValidateAlertTurnsWorker}
-            setRefreshUser={setRefreshUser}
           />
         )}
         {/* este y el de abajo son las cortinas de back drop de la alerta, entrada-salida */}
