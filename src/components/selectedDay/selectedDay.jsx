@@ -1,14 +1,17 @@
 import { useEffect, useState, useContext } from "react";
 import { DarkModeContext } from "../../App";
 import timeForRenderedStructure from "../../functions/timeForRenderedStructure";
+import { Button } from "@mui/material";
 
 const SelectedDay = ({
+  selectAllDays,
+  deselectAllDays,
   firstMonth,
   firstDay,
   days,
   dayIsSelected,
-  setDayIsSelected,
-  schedule,
+  md,
+  sm,
 }) => {
   const { darkMode } = useContext(DarkModeContext);
   const [renderedStructure, setRenderedStructure] = useState([]);
@@ -44,13 +47,43 @@ const SelectedDay = ({
       style={{
         display: "flex",
         flexDirection: "column",
-        maxHeight: "350px",
+        maxHeight: md ? "250px" : "350px",
+        marginBottom: "10px",
       }}
     >
+      <div stule={{ width: "100%" }}>
+        <Button
+          variant="outlined"
+          sx={{
+            width: "calc(50% - 5px)",
+            marginRight: "5px",
+            fontSize: sm ? "12px" : "14px",
+            height: "35px",
+            fontFamily: "Jost, sans serif",
+          }}
+          onClick={()=>selectAllDays()}
+        >
+          Seleccionar todo
+        </Button>
+        <Button
+          variant="outlined"
+          sx={{
+            width: "calc(50% - 5px)",
+            marginLeft: "5px",
+            fontSize: sm ? "12px" : "14px",
+            lineHeight: "1",
+            height: "35px",
+            fontFamily: "Jost, sans serif",
+          }}
+          onClick={()=>deselectAllDays()}
+        >
+          Deseleccionar todo
+        </Button>
+      </div>
       <h2
         style={{
           width: "100%",
-          marginBottom: "12px",
+          margin: "10px 0px 12px 0px",
           color: darkMode.on ? "white" : darkMode.dark,
         }}
       >
@@ -58,42 +91,40 @@ const SelectedDay = ({
         {renderedStructure.length > 0 ? renderedStructure.length : 0}
       </h2>
       {/* Renderizamos cada elemento del resultado */}
-      <div style={{ overflow: "scroll" }}>
+      <div
+        style={{
+          overflow: "scroll",
+          display: "flex",
+          flexWrap: "wrap",
+        }}
+      >
         {renderedStructure.map((item, index) => (
           <div
             key={index}
-            sx={{
+            style={{
               display: "flex",
-              width: "100%",
-              flexDirection: "column",
+              flex: "0 0 48%",
+              padding: "5px",
+              margin: "1%",
+              justifyContent: "space-between",
+              alignItems: "center",
+              border: "1px solid #2196f3",
+              borderRadius: "10px",
             }}
           >
-            <div
-              sx={{
-                display: "flex",
-              }}
-            >
-              <h2
-                style={{
-                  marginRight: "10px",
-                  color: darkMode.on ? "white" : darkMode.dark,
-                }}
-              >
-                {item}
-              </h2>
-              {days && days[firstMonth] && days[firstMonth][firstDay] ? (
-                <h4 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
-                  {timeForRenderedStructure(days[firstMonth][firstDay].time)}
-                </h4>
-              ) : null}
-            </div>
-            <hr
+            <h2
               style={{
-                width: "100%",
-                marginBottom: "10px",
+                marginRight: "10px",
                 color: darkMode.on ? "white" : darkMode.dark,
               }}
-            />
+            >
+              {item}
+            </h2>
+            {days && days[firstMonth] && days[firstMonth][firstDay] ? (
+              <h4 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
+                {timeForRenderedStructure(days[firstMonth][firstDay].time)}
+              </h4>
+            ) : null}
           </div>
         ))}
       </div>

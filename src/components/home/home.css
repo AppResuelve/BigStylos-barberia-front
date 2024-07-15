@@ -36,17 +36,21 @@
 
 
 /* ////////////////////////////////// */
+.container-home {
+      padding-top: 40px;
+}
 
 .img-whatsapp-home {
-      transition: .3s;
+      width: 45px;
+      height: 45px;
+      margin-right: 10px;
+      transition: .3s ease-in-out;
 }
 
 .img-whatsapp-home:hover {
       cursor: pointer;
       transform: translateY(-2px);
-      filter: drop-shadow(0px 5px 1px #000000);
-      /* -webkit-filter: drop-shadow(0px 10px 8px #000000);
-      -moz-filter: drop-shadow(0px 10px 8px #000000); */
+
 }
 
 .img-social-home {
@@ -56,21 +60,15 @@
 .img-social-home:hover {
       cursor: pointer;
       transform: translateY(-2px);
-      filter: drop-shadow(0px 5px 1px #000000);
-      /* -webkit-filter: drop-shadow(0px 10px 8px #000000);
-      -moz-filter: drop-shadow(0px 10px 8px #000000); */
+
+}
+
+.img-logotipo-home {
+      /* width: ; */
+      height:100%;
 }
 
 @media (min-width:500px) and (max-height: 800px) {
-      .container-home {
-            padding-top: 40px;
-      }
-
-      .img-logotipo-home {
-            width: 300px;
-            height: 300px;
-      }
-
       .btn-reservar-home {
             height: 40px;
             width: 120px;
@@ -94,12 +92,6 @@
             height: 30px;
             margin-bottom: 10px;
 
-      }
-
-      .img-whatsapp-home {
-            width: 40px;
-            height: 40px;
-            margin-right: 10px;
       }
 
       .img-whatsapp-home-link {
@@ -110,15 +102,6 @@
 
 
 @media (min-width:500px) and (min-height: 801px) and (max-height: 1000px) {
-      .container-home {
-            padding-top: 50px;
-      }
-
-      .img-logotipo-home {
-            width: 380px;
-            height: 380px;
-      }
-
       .btn-reservar-home {
             height: 50px;
             width: 140px;
@@ -144,12 +127,6 @@
             border-radius: 50px;
             margin-bottom: 10px;
 
-      }
-
-      .img-whatsapp-home {
-            width: 55px;
-            height: 55px;
-            margin-right: 10px;
       }
 
       .img-whatsapp-home-link {
@@ -159,15 +136,6 @@
 }
 
 @media (max-width:500px) and (max-height: 1000px) {
-      .container-home {
-            padding-top: 50px;
-      }
-
-      .img-logotipo-home {
-            width: 380px;
-            height: 380px;
-      }
-
       .btn-reservar-home {
             height: 50px;
             width: 140px;
@@ -194,43 +162,8 @@
 
       }
 
-      .img-whatsapp-home {
-            width: 45px;
-            height: 45px;
-            margin-right: 10px;
-      }
-
       .img-whatsapp-home-link {
             width: 45px;
             height: 45px;
-      }
-}
-
-
-
-
-
-.custom-shape-divider-bottom-1707002929 {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      overflow: hidden;
-      line-height: 0;
-      filter: drop-shadow(0px -2px 5px rgba(0, 0, 0, 0.75));
-}
-
-.custom-shape-divider-bottom-1707002929 svg {
-      position: relative;
-      display: block;
-      width: calc(100% + 1.3px);
-      height: 55px;
-}
-
-/** For mobile devices **/
-@media (max-width: 767px) {
-      .custom-shape-divider-bottom-1707002929 svg {
-            width: calc(100% + 1.3px);
-            height: 70px;
       }
 }

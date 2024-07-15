@@ -52,7 +52,7 @@ const WhoIsComingWorker = ({
       setRefreshForWhoIsComing(false);
     }
   }, [refreshForWhoIsComing]);
-  
+  console.log(turns);
   useEffect(() => {
     const fetchTurns = async () => {
       const [numberDay, numberMonth] = selectedDay.split("/").map(Number);

@@ -1,9 +1,9 @@
-import React from "react";
-import { Button } from "@mui/material";
-import "../login/login-logout.css";
 import { deleteCookie } from "../../helpers/cookies";
 import { useContext } from "react";
 import { DarkModeContext } from "../../App";
+import logOutIcon from "../../assets/icons/log-out.png"
+import "../login/login-logout.css";
+
 const LogoutButton = () => {
   const { setRefreshStatusSession } = useContext(DarkModeContext);
 
@@ -15,21 +15,18 @@ const LogoutButton = () => {
     });
   };
   return (
-    <Button
+    <button
       className="btn-loginout-login"
-      variant="contained"
       style={{
-        position: "absolute",
         bottom: "calc(0% + 20px)",
         left: "calc(0% + 20px)",
         borderRadius: "50px",
-        fontFamily: "Jost, sans-serif",
-        fontSize: "18px",
       }}
       onClick={handleLogOut}
     >
-      Salir
-    </Button>
+      <img src={logOutIcon} alt="logout" width={30} />
+      <span className="span-btn-nav">Salir</span>
+    </button>
   );
 };
 

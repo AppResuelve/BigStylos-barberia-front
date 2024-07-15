@@ -10,7 +10,9 @@ import Worker from "./components/worker/worker";
 import NotFound from "./components/pageNotFound/pageNotFound";
 import AlertModal from "./components/interfazMUI/alertModal";
 import "./App.css";
+import axios from "axios";
 
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const DarkModeContext = createContext();
 
@@ -30,12 +32,15 @@ function App() {
     useState(false);
   const [refreshStatusSession, setRefreshStatusSession] = useState(false);
   const [refreshWhenCancelTurn, setRefreshWhenCancelTurn] = useState(false);
-  const [refreshPersonalization, setRefreshPersonalization] = useState(false);
+  const [refreshPersonalization, setRefreshPersonalization] = useState({
+    home: false,
+    colors: false,
+  });
   const [disableButtonMyTurns, setDisableButtonMyTurns] = useState(false);
   const [clientName, setClientName] = useState("");
   const [showAlert, setShowAlert] = useState({});
   const [darkMode, setDarkMode] = useState({
-    dark: "#252627",
+    dark: "#000214",
     light: colors,
     on: false,
   });
@@ -48,21 +53,23 @@ function App() {
     }));
   };
 
-  // useEffect(() => {
-  //   const fetchImages = async () => {
-  //     try {
-  //       const response = await axios.get(`${VITE_BACKEND_URL}/personalization`);
-  //       const { data } = response;
-  //       setHomeImages(data.allImages);
-  //       setColors(data.allColors[0]);
-  //     } catch (error) {
-  //       console.error("Error al obtener los datos de personalizacion:", error);
-  //       alert("Error al obtener los datos de personalizacion");
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const response = await axios.get(`${VITE_BACKEND_URL}/personalization`);
+        const { data } = response;
+        setHomeImages(data.allImages);
+        setColors(data.allColors[0]);
 
-  //   fetchImages();
-  // }, [refreshPersonalization]);
+        // setRefreshPersonalization({ home: false, colors: false });
+      } catch (error) {
+        console.error("Error al obtener los datos de personalizacion:", error);
+        alert("Error al obtener los datos de personalizacion");
+      }
+    };
+
+    fetchImages();
+  }, [refreshPersonalization]);
 
   useEffect(() => {
     // Actualizar el estado del modo oscuro después de obtener el color
@@ -173,7 +180,6 @@ function App() {
             setValidateAlert={setValidateAlert}
             setValidateAlertTurns={setValidateAlertTurns}
             setValidateAlertTurnsWorker={setValidateAlertTurnsWorker}
-            setRefreshUser={setRefreshUser}
           />
         )}
         {/* este y el de abajo son las cortinas de back drop de la alerta, entrada-salida */}

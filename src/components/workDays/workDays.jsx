@@ -30,7 +30,7 @@ const WorkDays = ({ schedule, refresh, setRefresh, setChangeNoSaved }) => {
     setShowAdd(null);
     setShowRemove(null);
     setToggle(null);
-    setChangeNoSaved(false);
+    setChangeNoSaved({});
   };
 
   const handleShowAddRemove = (value) => {
@@ -40,7 +40,7 @@ const WorkDays = ({ schedule, refresh, setRefresh, setChangeNoSaved }) => {
   };
 
   const handleChange = (value, index) => {
-    setChangeNoSaved(true);
+    setChangeNoSaved({ component: true });
     if (value === "add") {
       setTimeEdit((prevState) => ({
         ...prevState,
@@ -70,7 +70,7 @@ const WorkDays = ({ schedule, refresh, setRefresh, setChangeNoSaved }) => {
       alert("Error al obtener los horarios");
     }
     setShowEdit(false);
-    setChangeNoSaved(false);
+    setChangeNoSaved({});
     setToggle(1);
     setShowAdd(null);
     setShowRemove(null);

@@ -19,7 +19,7 @@ const Admin = () => {
       navigate("/requestDenied401");
     }
   }, [userData]);
-  
+
   return (
     <div
       style={{

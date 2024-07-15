@@ -1,7 +1,7 @@
-import { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { DarkModeContext } from "../../App";
-import { convertToCategoryArray } from "../../helpers/convertCategoryService";
+import { convertToCategoryServiceArray } from "../../helpers/convertCategoryService";
 import { Box, Button, MenuItem, Select, TextField } from "@mui/material";
 import LinearProgress from "@mui/material/LinearProgress";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -12,7 +12,6 @@ import axios from "axios";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Services = ({
-  refreshServices,
   setRefreshServices,
   loadingServices,
   services,
@@ -26,7 +25,7 @@ const Services = ({
   const [categoryServices, setCategoryServices] = useState([]);
   const [editableCatSer, setEditableCatSer] = useState([]);
   const [showEdit, setShowEdit] = useState(false);
-  const [openDelete, setOpenDelete] = useState(false);
+  const [openEdition, setOpenEdition] = useState(false);
 
   // Estado para los inputs
   const [inputs, setInputs] = useState({
@@ -39,7 +38,7 @@ const Services = ({
 
   useEffect(() => {
     if (services) {
-      const categoryArray = convertToCategoryArray(services);
+      const categoryArray = convertToCategoryServiceArray(services);
 
       const extractedCategories = Object.keys(services);
       const extractedServices = [];
@@ -76,7 +75,7 @@ const Services = ({
         });
 
         // Refresca la lista de servicios después de agregar uno nuevo
-        setRefreshServices(!refreshServices);
+        setRefreshServices((prevState) => !prevState);
         // Limpiar los inputs
         setInputs({
           category: "",
@@ -116,7 +115,7 @@ const Services = ({
   };
 
   const handleOpenDelete = () => {
-    setOpenDelete(true);
+    setOpenEdition(true);
   };
 
   return (
@@ -151,7 +150,6 @@ const Services = ({
             fontSize: "18px",
             fontWeight: "bold",
             width: "100%",
-            backgroundColor: "red",
             padding: "10px",
             borderRadius: "5px",
             backgroundColor: "lightgray",
@@ -322,48 +320,62 @@ const Services = ({
           </span>
         </div>
         <hr />
-        {categoryServices.map((elem, index) => {
-          return (
-            <div key={index} style={{ marginTop: "10px" }}>
-              <span style={{ fontWeight: "bold", fontSize: "18px" }}>
-                {elem.category}
-              </span>
-              <hr />
-              {elem.services.map((service, index) => {
-                return (
-                  <>
-                    <div style={{ display: "flex", width: "100%" }} key={index}>
-                      <span style={{ width: "40%", margin: "5px" }}>
-                        {service.name}
-                      </span>
+        {categoryServices.length < 1 ? (
+          <span
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "40px",
+              fontSize: "18px",
+            }}
+          >
+            No tienes servicios aún
+          </span>
+        ) : (
+          categoryServices.map((elem, index) => {
+            return (
+              <div key={index} style={{ marginTop: "10px" }}>
+                <span style={{ fontWeight: "bold", fontSize: "18px" }}>
+                  {elem.category}
+                </span>
+                <hr />
+                {elem.services.map((service, index) => {
+                  return (
+                    <React.Fragment key={index}>
+                      <div style={{ display: "flex", width: "100%" }}>
+                        <span style={{ width: "40%", margin: "5px" }}>
+                          {service.name}
+                        </span>
+                        <hr />
+                        <span
+                          style={{
+                            width: "30%",
+                            margin: "5px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          ${service.price}
+                        </span>
+                        <hr />
+                        <span
+                          style={{
+                            width: "30%",
+                            margin: "5px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          ${service.sing}
+                        </span>
+                      </div>
                       <hr />
-                      <span
-                        style={{
-                          width: "30%",
-                          margin: "5px",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        ${service.price}
-                      </span>
-                      <hr />
-                      <span
-                        style={{
-                          width: "30%",
-                          margin: "5px",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        ${service.sing}
-                      </span>
-                    </div>
-                    <hr />
-                  </>
-                );
-              })}
-            </div>
-          );
-        })}
+                    </React.Fragment>
+                  );
+                })}
+              </div>
+            );
+          })
+        )}
       </div>
       <div
         style={{
@@ -374,7 +386,7 @@ const Services = ({
       >
         <Button
           variant="outlined"
-          disabled={showEdit ? true : false}
+          disabled={categoryServices.length < 1 ? true : false}
           onClick={handleOpenDelete}
           sx={{ fontFamily: "Jost,sans serif" }}
         >
@@ -383,8 +395,8 @@ const Services = ({
         </Button>
         <EditServicesModal
           categoryServices={categoryServices}
-          openDelete={openDelete}
-          setOpenDelete={setOpenDelete}
+          openEdition={openEdition}
+          setOpenEdition={setOpenEdition}
           setRefreshServices={setRefreshServices}
           editableCatSer={editableCatSer}
           setEditableCatSer={setEditableCatSer}

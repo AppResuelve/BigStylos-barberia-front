@@ -11,6 +11,8 @@ import durationMax from "../../helpers/durationMax";
 import shouldDisableButton from "../../helpers/shouldDisableButton";
 import axios from "axios";
 import "./createWorkDays.css";
+import daysMonthCalendarCustom from "../../functions/daysMonthCalendarCustom";
+import obtainDayName from "../../functions/obtainDayName";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -21,7 +23,7 @@ const CreateWorkDays = ({
   doCeroServices,
   setRefreshForWhoIsComing,
 }) => {
-  //informacion del estado global
+ 
   const { darkMode, setShowAlert, alertDelete, setAlertDelete } =
     useContext(DarkModeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
@@ -36,6 +38,7 @@ const CreateWorkDays = ({
   const [loading, setLoading] = useState(false);
   const [timeSelected, setTimeSelected] = useState([]); //estado de la rama fac, no se para que es aun.
   const [refreshDays, setRefreshDays] = useState(false);
+  const [noWork, setNoWork] = useState({});
 
   /*   dayIsSelected && Object.keys(dayIsSelected).length > 0 && days && Object.keys(days) > 0 && console.log(days[Object.keys(dayIsSelected)[0]][Object.keys(Object.keys(dayIsSelected)[0])[0]])
    */
@@ -73,6 +76,21 @@ const CreateWorkDays = ({
     fetchData();
     setRefreshDays(false);
   }, [refreshDays]);
+
+   useEffect(() => {
+     const fetchNoWorkDays = async () => {
+       console.log("pase por el nowork");
+       try {
+         const response = await axios.get(`${VITE_BACKEND_URL}/schedule/`);
+         const { data } = response;
+         setNoWork(data.noWorkDays);
+       } catch (error) {
+         console.error("Error al obtener los dias:", error);
+         alert("Error al obtener los dias");
+       }
+     };
+     fetchNoWorkDays();
+   }, []);
 
   // Lógica para obtener el primer valor de month y day
   useEffect(() => {
@@ -266,6 +284,7 @@ const CreateWorkDays = ({
       handleDeleteSubmit();
     }
   };
+
   const handleDeleteSubmit = async () => {
     try {
       const response = await axios.post(`${VITE_BACKEND_URL}/workdays/delete`, {
@@ -280,6 +299,43 @@ const CreateWorkDays = ({
     } catch (error) {
       console.error("Error al borrar el dia:", error);
     }
+  };
+
+  const selectAllDays = () => {
+    const allDaysSelected = {};
+    const daysCalendarCustom = daysMonthCalendarCustom(27, false);
+    const { currentMonth, nextMonth, currentYear, nextYear, month1, month2 } =
+      daysCalendarCustom;
+
+    const selectDays = (month, days) => {
+      allDaysSelected[month] = {};
+      days.forEach((day) => {
+        let dayName = obtainDayName(day, month, currentYear);
+        let disabled = false;
+
+        if (
+          !schedule[dayName] ||
+          (schedule[dayName].open === 0 && schedule[dayName].close === 1440)
+        ) {
+          disabled = true;
+        }
+        if (noWork[month] && noWork[month][day]) {
+          disabled = true;
+        }
+        if (!disabled) {
+          allDaysSelected[month][day] = {};
+        }
+      });
+    };
+
+    selectDays(currentMonth, month1);
+    selectDays(nextMonth, month2);
+
+    setDayIsSelected(allDaysSelected);
+  };
+
+  const deselectAllDays = () => {
+    setDayIsSelected({});
   };
 
   return (
@@ -316,6 +372,7 @@ const CreateWorkDays = ({
             schedule={schedule}
             showEdit={showEdit}
             loading={loading}
+            noWork={noWork}
           />
         </Grid>
         <Grid
@@ -328,12 +385,16 @@ const CreateWorkDays = ({
         >
           {showEdit && (
             <SelectedDay
+              selectAllDays={selectAllDays}
+              deselectAllDays={deselectAllDays}
               firstMonth={firstMonth}
               firstDay={firstDay}
               days={days}
               dayIsSelected={dayIsSelected}
               setDayIsSelected={setDayIsSelected}
               schedule={schedule}
+              md={md}
+              sm={sm}
             />
           )}
           {Object.keys(days).length > 0 &&
