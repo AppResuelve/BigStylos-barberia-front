@@ -29,7 +29,7 @@ const Nav = ({ homeImages }) => {
                 src={darkMode.on ? toHome2 : toHome}
                 alt="inicio"
               />
-              <span className="span-btn-nav">volver a inicio</span>
+              <span className="span-btn-nav">{location.pathname!=="/"?"volver a inicio":"estás en inicio"}</span>
             </button>
           </NavLink>
           <div

@@ -3,9 +3,12 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/bootstrap.css";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 
-const InputTel = ({ newPhoneNumber, setNewPhoneNumber }) => {
+const InputTel = ({
+  newPhoneNumber,
+  setNewPhoneNumber,
+  setInputTelError,
+}) => {
   const [country, setCountry] = useState("ar"); // país predeterminado
-  const [error, setError] = useState("");
 
   const handleKeyDown = (e) => {
     // Manejar el evento cuando se presiona Enter
@@ -28,17 +31,16 @@ const InputTel = ({ newPhoneNumber, setNewPhoneNumber }) => {
         countryCode.toUpperCase()
       );
       if (!phoneNumber || !phoneNumber.isValid()) {
-        setError("El número de teléfono no es válido.");
+        setInputTelError("El número de teléfono no es válido.");
       } else {
-        setError("");
+        setInputTelError("");
       }
-    } catch (error) {
-      setError("El número de teléfono no es válido.");
+    } catch (inputTelError) {
+      setInputTelError("El número de teléfono no es válido.");
     }
   };
 
   return (
-    <>
       <PhoneInput
         inputProps={{
           name: "phone",
@@ -56,10 +58,9 @@ const InputTel = ({ newPhoneNumber, setNewPhoneNumber }) => {
           fontFamily: "Jost",
           fontWeight: "bold",
           fontSize: "18px",
+          marginBottom:"5px"
         }}
       />
-      {error && <div style={{ color: "red" }}>{error}</div>}
-    </>
   );
 };
 

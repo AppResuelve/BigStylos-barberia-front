@@ -19,7 +19,6 @@ const ClientNestedList = ({ userData }) => {
   const { darkMode } = useContext(DarkModeContext);
   const [newPhoneNumber, setNewPhoneNumber] = useState(userData?.phone ?? "");
   const [refresh, setRefresh] = useState(false);
-  const [error, setError] = useState("");
   const [showAlertSnack, setShowAlertSnack] = useState({});
   const [open, setOpen] = useState(false);
   const [openSection, setOpenSection] = useState({
@@ -27,6 +26,7 @@ const ClientNestedList = ({ userData }) => {
     telefono: false,
     turnos: false,
   });
+  const[inputTelError, setInputTelError]=useState("")
 
   const handleSectionClick = (section) => {
     setOpenSection((prevSections) => {
@@ -72,7 +72,7 @@ const ClientNestedList = ({ userData }) => {
   // };
 
   const handleUpdatePhone = async () => {
-    if (error !== "") {
+    if (inputTelError !== "") {
       setShowAlertSnack({
         message: error,
         type: "error",
@@ -173,12 +173,25 @@ const ClientNestedList = ({ userData }) => {
         >
           <List component="div" disablePadding sx={{ marginBottom: "10px" }}>
             <div className="div-container-tel">
-              <InputTel
-                newPhoneNumber={newPhoneNumber}
-                setNewPhoneNumber={setNewPhoneNumber}
-              />
+              <div>
+                <InputTel
+                  newPhoneNumber={newPhoneNumber}
+                  setNewPhoneNumber={setNewPhoneNumber}
+                  inputTelError={inputTelError}
+                  setInputTelError={setInputTelError}
+                />
+                {inputTelError && (
+                  <span className="spanErrorInputTel">{inputTelError}</span>
+                )}
+              </div>
+
               <button
-                className="btn-update-turn-nestedList"
+                className={
+                  inputTelError
+                    ? "my-button-disabled-upadatephone"
+                    : "my-button-upadatephone"
+                }
+                disabled={inputTelError ? true : false}
                 onClick={handleUpdatePhone}
               >
                 <DoneOutlineIcon sx={{ color: "white" }} />

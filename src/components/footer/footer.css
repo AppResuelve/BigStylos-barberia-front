@@ -35,7 +35,6 @@
       width: calc(100% + 1.3px);
       height: 55px;
       z-index: 1;
-      filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.5));
 
 }
 
@@ -43,8 +42,8 @@
 
 /** For mobile devices **/
 @media (max-width: 767px) {
-      .div-container-custom-shape-divider-and-div svg {
+      /* .div-container-custom-shape-divider-and-div svg {
             width: calc(100% + 1.3px);
             height: 70px;
-      }
+      } */
 }

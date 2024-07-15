@@ -1,6 +1,5 @@
 import { useEffect, useState, useContext } from "react";
 import { DarkModeContext } from "../../App";
-import tinycolor from "tinycolor2";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -12,24 +11,27 @@ import pantene from "../../assets/images/pantene.png";
 import { Box } from "@mui/material";
 import Maps from "../maps/maps";
 import "./footer.css";
+import { convertToRGB } from "../../helpers/convertColorToRgb";
+import { color } from "@mui/system";
 
 const Footer = () => {
   const { darkMode } = useContext(DarkModeContext);
   const [colorRGB, setColorRGB] = useState("");
+  const [invertedColorRGB, setInvertedColorRGB] = useState("");
 
   useEffect(() => {
-    // Función para convertir el color a formato RGB
-    const convertToRGB = (color) => {
-      const rgbColor = tinycolor(color).toRgb();
-      return rgbColor;
-    };
+    let invertedColor;
     let color;
     if (darkMode.on) {
-      color = convertToRGB(darkMode.light);
-      setColorRGB(color);
-    } else {
       color = convertToRGB(darkMode.dark);
+      invertedColor = convertToRGB(darkMode.light);
       setColorRGB(color);
+      setInvertedColorRGB(invertedColor);
+    } else {
+      color = convertToRGB(darkMode.light);
+      invertedColor = convertToRGB(darkMode.dark);
+      setColorRGB(color);
+      setInvertedColorRGB(invertedColor);
     }
   }, [darkMode]);
 
@@ -51,7 +53,7 @@ const Footer = () => {
       },
     ],
   };
-
+  
   return (
     <div
       style={{
@@ -64,6 +66,7 @@ const Footer = () => {
         width: "100%",
         height: "100%",
         overflow: "hidden",
+        backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
       }}
     >
       {/* Sección svg y div */}
@@ -78,6 +81,9 @@ const Footer = () => {
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1200 120"
           preserveAspectRatio="none"
+          style={{
+            filter: `drop-shadow(0px 0px 4px rgba(${invertedColorRGB.r},${invertedColorRGB.g},${invertedColorRGB.b}, 0.7))`,
+          }}
         >
           <div
             style={{
@@ -88,7 +94,7 @@ const Footer = () => {
           ></div>
           <path
             d="M600,112.77C268.63,112.77,0,65.52,0,7.23V120H1200V7.23C1200,65.52,931.37,112.77,600,112.77Z"
-            style={{ fill: "white" }}
+            style={{ fill: darkMode.on ? darkMode.dark : darkMode.light }}
           ></path>
         </svg>
       </div>
@@ -97,45 +103,60 @@ const Footer = () => {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
+          alignItems: "center",
           width: "100%",
-          marginTop: "calc(0% + 90px)",
+          marginTop: "calc(0% + 120px)",
         }}
       >
         <span
           style={{
             display: "flex",
+            justifyContent: "center",
             alignSelf: "center",
             width: "90%",
             fontSize: "20px",
             marginBottom: "10px",
+            color: darkMode.on ? "#e6e6e6" : "black",
           }}
         >
           Algunas de las marcas con las que trabajamos:
         </span>
-
+        <hr
+          style={{
+            width: "100%",
+            maxWidth: "900px",
+            border: "1px solid lightgray",
+            borderRadius: "10px",
+            margin: "30px 0px 10px 0px",
+          }}
+        />
         <Box
           sx={{
             position: "relative",
             display: "flex",
             alignSelf: "center",
             flexDirection: "column",
-            height: "100px",
+            justifyContent: "center",
+            height: "140px",
             width: "100%",
             maxWidth: "900px",
             pointerEvents: "none",
+            bgcolor: darkMode.on ? darkMode.light : "",
           }}
         >
           {/* Degradado a la izquierda */}
           <div
             style={{
-              zIndex: 1000,
+              display: "flex",
+              alignSelf: "center",
+              zIndex: 1,
               position: "absolute",
               top: 0,
               bottom: 0,
               left: 0,
               width: "150px", // Ancho de la sombra
-              height: "100px",
-              background: `linear-gradient(to left, rgba(255,255,255,0), rgba(255,255,255,1))`,
+              height: "165px",
+              background: `linear-gradient(to left, rgba(${colorRGB.r},${colorRGB.g},${colorRGB.b},0), rgba(${colorRGB.r},${colorRGB.g},${colorRGB.b},1))`,
             }}
           ></div>
 
@@ -210,14 +231,16 @@ const Footer = () => {
           {/* Degradado a la derecha */}
           <div
             style={{
-              zIndex: 1000,
+              display: "flex",
+              alignSelf: "center",
+              zIndex: 1,
               position: "absolute",
               top: 0,
               bottom: 0,
               right: 0,
-              width: "100px", // Ancho de la sombra
-              height: "100px",
-              background: `linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,1))`,
+              width: "150px", // Ancho de la sombra
+              height: "165px",
+              background: `linear-gradient(to right, rgba(${colorRGB.r},${colorRGB.g},${colorRGB.b},0), rgba(${colorRGB.r},${colorRGB.g},${colorRGB.b},1))`,
             }}
           ></div>
         </Box>
@@ -225,11 +248,11 @@ const Footer = () => {
 
       <hr
         style={{
-          width: "90%",
+          width: "100%",
           maxWidth: "900px",
           border: "1px solid lightgray",
           borderRadius: "10px",
-          margin: "30px",
+          margin: "10px 0px 50px 0px",
         }}
       />
       <div
@@ -241,12 +264,17 @@ const Footer = () => {
           maxWidth: "900px",
         }}
       >
-        <span style={{ margin: "10px 0px 5px 0px" }}>
+        <span
+          style={{
+            margin: "10px 0px 5px 0px",
+            color: darkMode.on ? "#e6e6e6" : "black",
+          }}
+        >
           Puedes encontrarnos aquí:
         </span>
         <Maps />
       </div>
-      <Box
+      <div
         style={{
           display: "flex",
           flexDirection: "column",
@@ -255,11 +283,12 @@ const Footer = () => {
           width: "100%",
           height: "100px",
           padding: "15px",
+          color: darkMode.on ? "#e6e6e6" : "black",
         }}
       >
         <h4>Olavarria, Bs As, Argentina</h4>
         <h4>Todos los derechos reservados @2024 </h4>
-      </Box>
+      </div>
     </div>
   );
 };
