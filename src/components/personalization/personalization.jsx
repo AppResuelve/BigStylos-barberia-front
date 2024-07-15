@@ -88,7 +88,7 @@ const Personalization = ({
         // Actualizar estado dependiendo de si hay cambios
         if (someServiceToUpdate) {
           setDisableSaveBtn((prevState) => {
-            const saveBtn = { ...prevState };
+            let saveBtn = { ...prevState };
             saveBtn.services = false;
             return saveBtn;
           });
@@ -99,7 +99,7 @@ const Personalization = ({
           });
         } else {
           setDisableSaveBtn((prevState) => {
-            const saveBtn = { ...prevState };
+            let saveBtn = { ...prevState };
             saveBtn.services = true;
             return saveBtn;
           });
@@ -107,7 +107,7 @@ const Personalization = ({
             let copyState = { ...prevState };
 
             copyState.services = false;
-            const check = checkChangeToSave(copyState);
+            let check = checkChangeToSave(copyState);
             if (!check) copyState = {};
             return copyState;
           });
@@ -118,7 +118,7 @@ const Personalization = ({
           auxHomeImages[1][1] !== homeImages[1][1]
         ) {
           setDisableSaveBtn((prevState) => {
-            const saveBtn = { ...prevState };
+            let saveBtn = { ...prevState };
             saveBtn.home = false;
             return saveBtn;
           });
@@ -129,14 +129,14 @@ const Personalization = ({
           });
         } else {
           setDisableSaveBtn((prevState) => {
-            const saveBtn = { ...prevState };
+            let saveBtn = { ...prevState };
             saveBtn.home = true;
             return saveBtn;
           });
           setChangeNoSaved((prevState) => {
             let copyState = { ...prevState };
             copyState.home = false;
-            const check = checkChangeToSave(copyState);
+            let check = checkChangeToSave(copyState);
             if (!check) copyState = {};
             return copyState;
           });
@@ -144,7 +144,7 @@ const Personalization = ({
       } else if (toggle.colors) {
         if (auxColorSelected[0] !== colors[0]) {
           setDisableSaveBtn((prevState) => {
-            const saveBtn = { ...prevState };
+            let saveBtn = { ...prevState };
             saveBtn.colors = false;
             return saveBtn;
           });
@@ -162,7 +162,7 @@ const Personalization = ({
           setChangeNoSaved((prevState) => {
             let copyState = { ...prevState };
             copyState.colors = false;
-            const check = checkChangeToSave(copyState);
+            let check = checkChangeToSave(copyState);
             if (!check) copyState = {};
             return copyState;
           });
@@ -213,8 +213,8 @@ const Personalization = ({
       });
     } else {
       setAuxColorSelected((prevState) => {
-        const copyState = [...prevState];
-        copyState = [secure_url];
+        let copyState = [...prevState];
+        copyState = secure_url;
         return copyState;
       });
     }
