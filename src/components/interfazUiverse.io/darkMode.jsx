@@ -6,6 +6,8 @@ const DarkMode = () => {
   const { darkMode, toggleDarkMode } = useContext(DarkModeContext);
   
   return (
+    <div className="container-toggle-darkmode">
+
     <div className={!darkMode.on ? "toggle-switch" : "toggle-switch-dark"}>
       <label className={!darkMode.on ? "switch-label" : "switch-label-dark"}>
         <input
@@ -15,6 +17,7 @@ const DarkMode = () => {
         />
         <span className={!darkMode.on ? "slider" : "slider-dark"}></span>
       </label>
+    </div>
     </div>
   );
 };
