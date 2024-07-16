@@ -8,6 +8,8 @@ import Autocomplete from "@mui/material/Autocomplete";
 import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
 import EditServicesModal from "./editServicesModal";
 import axios from "axios";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -60,7 +62,7 @@ const Services = ({
       handleAddService();
     }
   };
-
+  console.log(editableCatSer);
   const handleAddServiceCategory = async () => {
     try {
       const { service, category, price, sing, type } = inputs;
@@ -380,28 +382,51 @@ const Services = ({
       <div
         style={{
           display: "flex",
-          marginTop: "15px",
-          justifyContent: "flex-end",
+          width: "100%",
+          marginTop: "10px",
+          justifyContent: "space-between",
         }}
       >
+        {showEdit === false ? (
+          <Button
+            onClick={() => {
+              setShowEdit(true);
+            }}
+          >
+            <CreateRoundedIcon />
+          </Button>
+        ) : (
+          <Button
+            onClick={() => {
+              setShowEdit(false);
+              // setSelectedInput({
+              //   categoryIndex: null,
+              //   serviceIndex: null,
+              // });
+              setEditableCatSer(categoryServices);
+            }}
+            variant="outlined"
+          >
+            <h4 style={{ fontFamily: "Jost, sans-serif" }}>Descartar</h4>
+          </Button>
+        )}
         <Button
-          variant="outlined"
+          color="error"
           disabled={categoryServices.length < 1 ? true : false}
           onClick={handleOpenDelete}
           sx={{ fontFamily: "Jost,sans serif" }}
         >
-          Edición
-          <CreateRoundedIcon />
+          <DeleteRoundedIcon />
         </Button>
-        <EditServicesModal
-          categoryServices={categoryServices}
-          openEdition={openEdition}
-          setOpenEdition={setOpenEdition}
-          setRefreshServices={setRefreshServices}
-          editableCatSer={editableCatSer}
-          setEditableCatSer={setEditableCatSer}
-        />
       </div>
+      <EditServicesModal
+        categoryServices={categoryServices}
+        openEdition={openEdition}
+        setOpenEdition={setOpenEdition}
+        setRefreshServices={setRefreshServices}
+        editableCatSer={editableCatSer}
+        setEditableCatSer={setEditableCatSer}
+      />
     </div>
   );
 };

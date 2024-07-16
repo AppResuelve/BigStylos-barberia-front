@@ -32,14 +32,14 @@ export const convertToCategoryServiceObj = (array) => {
   return formattedData;
 };
 
-export const filterDeletedItems = (array) => {
-  return array
-    .filter((category) => !category.deleted)
-    .map((category) => ({
-      ...category,
-      services: category.services.filter((service) => !service.deleted),
-    }));
-};
+// export const filterDeletedItems = (array) => {
+//   return array
+//     .filter((category) => category.deleted)
+//     .map((category) => ({
+//       ...category,
+//       services: category.services.filter((service) => service.deleted),
+//     }));
+// };
 
 export const convertToServicesArray = (obj) => {
   const servicesArray = [];

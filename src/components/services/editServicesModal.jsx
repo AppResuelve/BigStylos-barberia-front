@@ -3,7 +3,6 @@ import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { IconButton } from "@mui/material";
 import closeBtn from "../../assets/icons/close.png";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
 import {
   Box,
   Dialog,
@@ -12,10 +11,6 @@ import {
   Button,
 } from "@mui/material";
 import capitalizeFirstLetter from "../../helpers/capitalizeFirstLetter";
-import {
-  convertToCategoryServiceObj,
-  filterDeletedItems,
-} from "../../helpers/convertCategoryService";
 import axios from "axios";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -30,35 +25,80 @@ const EditServicesModal = ({
 }) => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [showEdit, setShowEdit] = useState(false);
-  const [showDelete, setShowDelete] = useState(false);
+  const [showDelete, setShowDelete] = useState(true);
   const [selectedInput, setSelectedInput] = useState({
     categoryIndex: null,
     serviceIndex: null,
   });
-  
-  const handleSaveCatSer = async () => {
-    const filteredArray = filterDeletedItems(editableCatSer);
-    const catSerObj = convertToCategoryServiceObj(filteredArray);
+  const [servicesToDelete, setServicesToDetele] = useState([]);
 
+  const handleSaveCatSer = async () => {
     try {
-      const result = await axios.put(`${VITE_BACKEND_URL}/services/update`, {
-        services: catSerObj,
+      const result = await axios.post(`${VITE_BACKEND_URL}/services/delete`, {
+        services: servicesToDelete,
       });
-      setRefreshServices((prevState) => !prevState);
+      //en vez de hacer refresh se puede setear los estados servicios
+      //con el result.(luego de ejecutar la funcion convertCategoryService)
+      setRefreshServices((prevState) => {
+       let copyState = !prevState;
+        return copyState;
+      });
     } catch (error) {
       console.log(error);
     }
   };
-
+console.log(servicesToDelete);
   const handleClose = () => {
     setOpenEdition(false);
+    setServicesToDetele([]);
+    setEditableCatSer(categoryServices);
   };
 
   const handleSelectInput = (categoryIndex, serviceIndex = null) => {
     if (showEdit) setSelectedInput({ categoryIndex, serviceIndex });
   };
 
-  const handleCheckboxChange = (categoryName, serviceName) => {
+  const handleCheckboxChange = (e, category, serviceName) => {
+    let categoryName = category.category;
+    let checked = e.target.checked;
+    if (e.target.name === "") {
+      setServicesToDetele((prevState) => {
+        let copyState = [...prevState];
+        if (checked) {
+          copyState.push(serviceName);
+          return copyState;
+        } else {
+          let filteredCopy = copyState.filter(
+            (service) => service === serviceName
+          );
+          return filteredCopy;
+        }
+      });
+    } else {
+      if (!checked) {
+        setServicesToDetele((prevState) => {
+          let copyState = [...prevState];
+          for (const service of category.services) {
+            let filter = copyState.filter((ser) => ser === service.name);
+            copyState = filter;
+          }
+          return copyState;
+        });
+      } else {
+        setServicesToDetele((prevState) => {
+          let copyState = [...prevState];
+          for (const service of category.services) {
+            let esta = false;
+            for (const serv of copyState) {
+              if (service.name === serv) esta = true;
+            }
+            if (!esta) copyState.push(service.name);
+          }
+          return copyState;
+        });
+      }
+    }
+
     const updatedCategoryServices = editableCatSer.map((category) => {
       if (category.category === categoryName) {
         if (serviceName === undefined) {
@@ -244,13 +284,14 @@ const EditServicesModal = ({
                       <input
                         type="checkbox"
                         checked={elem.deleted}
+                        name="category"
                         style={{
                           width: "22px",
                           height: "22px",
                           accentColor: "red",
                           cursor: "pointer",
                         }}
-                        onChange={() => handleCheckboxChange(elem.category)}
+                        onChange={(e) => handleCheckboxChange(e, elem)}
                       />
                     )}
                   </div>
@@ -343,11 +384,8 @@ const EditServicesModal = ({
                                 accentColor: "red",
                                 cursor: "pointer",
                               }}
-                              onChange={() =>
-                                handleCheckboxChange(
-                                  elem.category,
-                                  service.name
-                                )
+                              onChange={(e) =>
+                                handleCheckboxChange(e, elem, service.name)
                               }
                             />
                           )}
@@ -372,33 +410,6 @@ const EditServicesModal = ({
             }}
           >
             <div style={{ display: "flex" }}>
-              {showEdit === false ? (
-                <Button
-                  onClick={() => {
-                    setShowEdit(true);
-                    setShowDelete(false);
-                    setEditableCatSer(categoryServices);
-                  }}
-                  disabled={showDelete ? true : false}
-                >
-                  <BorderColorIcon />
-                </Button>
-              ) : (
-                <Button
-                  onClick={() => {
-                    setShowEdit(false);
-                    setSelectedInput({
-                      categoryIndex: null,
-                      serviceIndex: null,
-                    });
-                    setEditableCatSer(categoryServices);
-                  }}
-                  variant="outlined"
-                  style={{ border: "2px solid " }}
-                >
-                  <h4 style={{ fontFamily: "Jost, sans-serif" }}>Descartar</h4>
-                </Button>
-              )}
               {showDelete === false ? (
                 <Button
                   onClick={() => {
@@ -417,7 +428,9 @@ const EditServicesModal = ({
               ) : (
                 <Button
                   onClick={() => {
-                    setShowDelete(false), setEditableCatSer(categoryServices);
+                    setShowDelete(false),
+                      setEditableCatSer(categoryServices),
+                      setServicesToDetele([]);
                   }}
                   variant="outlined"
                   style={{ border: "2px solid " }}

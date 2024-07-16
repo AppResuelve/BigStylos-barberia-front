@@ -10,8 +10,8 @@ import { Box, Button, Input, Collapse, List } from "@mui/material";
 import axios from "axios";
 import AlertSnackBar from "./alertSnackBar";
 import MyTurns from "../myTurns/myTurns";
-import "./clientNestedList.css";
 import InputTel from "../inputTel/inputTel";
+import "./clientNestedList.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -111,6 +111,11 @@ const ClientNestedList = ({ userData }) => {
       <ListItemButton
         className="listItembtn-nestedList"
         onClick={() => handleSectionClick("miperfil")}
+        sx={{
+          borderBottom: darkMode.on
+            ? `1px solid ${"white"} `
+            : `1px solid ${darkMode.dark}`,
+        }}
       >
         <Box sx={{ width: "100%" }}>
           <h3
@@ -128,12 +133,7 @@ const ClientNestedList = ({ userData }) => {
           <ExpandMore sx={{ color: "#2196f3" }} />
         )}
       </ListItemButton>
-      <hr
-        className="hr-nestedList"
-        style={{
-          backgroundColor: darkMode.on ? "white" : darkMode.dark,
-        }}
-      />
+
       <Collapse
         in={openSection.miperfil ? true : false}
         timeout="auto"
@@ -143,6 +143,11 @@ const ClientNestedList = ({ userData }) => {
         <ListItemButton
           className="listItembtn-nestedList"
           onClick={() => handleSectionClick("telefono")}
+          sx={{
+            borderBottom: darkMode.on
+              ? `1px solid ${"white"} `
+              : `1px solid ${darkMode.dark}`,
+          }}
         >
           <Box sx={{ display: "flex", width: "100%" }}>
             <LocalPhoneIcon
@@ -199,16 +204,16 @@ const ClientNestedList = ({ userData }) => {
             </div>
           </List>
         </Collapse>
-        <hr
-          className="hr-nestedList"
-          style={{
-            backgroundColor: darkMode.on ? "white" : darkMode.dark,
-          }}
-        />
+
         {/*////// contenido de seccion turnos dentro de miperfil //////*/}
         <ListItemButton
           className="listItembtn-nestedList"
           onClick={() => handleSectionClick("turnos")}
+          sx={{
+            borderBottom: darkMode.on
+              ? `1px solid ${"white"} `
+              : `1px solid ${darkMode.dark}`,
+          }}
         >
           <Box sx={{ display: "flex", width: "100%" }}>
             <CalendarMonthIcon
@@ -241,13 +246,6 @@ const ClientNestedList = ({ userData }) => {
             <MyTurns userData={userData} />
           </List>
         </Collapse>
-
-        <hr
-          className="hr-nestedList"
-          style={{
-            backgroundColor: darkMode.on ? "white" : darkMode.dark,
-          }}
-        />
       </Collapse>
     </div>
   );
