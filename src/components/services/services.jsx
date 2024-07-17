@@ -2,14 +2,13 @@ import React, { useEffect, useState, useContext } from "react";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { DarkModeContext } from "../../App";
 import { convertToCategoryServiceArray } from "../../helpers/convertCategoryService";
-import { Box, Button, MenuItem, Select, TextField } from "@mui/material";
+import { Button, MenuItem, Select, TextField } from "@mui/material";
 import LinearProgress from "@mui/material/LinearProgress";
 import Autocomplete from "@mui/material/Autocomplete";
 import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
 import EditServicesModal from "./editServicesModal";
 import axios from "axios";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -23,20 +22,23 @@ const Services = ({
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const { darkMode } = useContext(DarkModeContext);
   const [categoryList, setCategoryList] = useState([]);
-  const [serviceList, setServiceList] = useState([]);
+  // const [serviceList, setServiceList] = useState([]);
   const [categoryServices, setCategoryServices] = useState([]);
   const [editableCatSer, setEditableCatSer] = useState([]);
   const [showEdit, setShowEdit] = useState(false);
   const [openEdition, setOpenEdition] = useState(false);
 
-  // Estado para los inputs
+  // Estado para los inputs de creacion
   const [inputs, setInputs] = useState({
     category: "",
     service: "",
-    price: 0,
-    sing: 0,
+    price: "",
+    sing: "",
     type: "$",
   });
+  // Estado para los inputs de actualizacion
+  const [categoryName, setCategoryName] = useState({});
+  const [serviceRow, setServiceRow] = useState({});
 
   useEffect(() => {
     if (services) {
@@ -51,18 +53,10 @@ const Services = ({
       setCategoryServices(categoryArray); //renderizar
       setEditableCatSer(categoryArray); //copia para editar
       setCategoryList(extractedCategories); //array categorias
-      setServiceList(extractedServices); //array servicios
+      // setServiceList(extractedServices); //array servicios
     }
   }, [services]);
 
-  const handleKeyDown = (e) => {
-    // Manejar el evento cuando se presiona Enter
-    if (e.keyCode === 13) {
-      e.preventDefault(); // Evitar que se agregue un salto de línea en el Input
-      handleAddService();
-    }
-  };
-  console.log(editableCatSer);
   const handleAddServiceCategory = async () => {
     try {
       const { service, category, price, sing, type } = inputs;
@@ -84,11 +78,56 @@ const Services = ({
           service: "",
           price: "",
           sing: "",
+          type: "$",
         });
       }
     } catch (error) {
       console.error("Error al agregar el servicio:", error);
       alert("Error al agregar el servicio");
+    }
+  };
+
+  const handleUpdateCategoryName = async () => {
+    let { prev, current } = categoryName;
+    try {
+      const response = await axios.put(
+        `${VITE_BACKEND_URL}/services/updatecategory`,
+        {
+          prev,
+          current,
+        }
+      );
+
+      // Refresca la lista de servicios después de agregar uno nuevo
+      setRefreshServices((prevState) => !prevState);
+      setCategoryName({});
+      setShowEdit(false);
+    } catch (error) {
+      console.error("Error al actualizar la categoria:", error);
+    }
+  };
+
+  const handleUpdateServiceRow = async () => {
+    let { category, prev, current, price, sing, type } = serviceRow;
+    try {
+      const response = await axios.put(
+        `${VITE_BACKEND_URL}/services/updateservice`,
+        {
+          category,
+          prev,
+          current,
+          price,
+          sing,
+          type,
+        }
+      );
+
+      // Refresca la lista de servicios después de agregar uno nuevo
+      setRefreshServices((prevState) => !prevState);
+      setServiceRow({});
+      setShowEdit(false);
+    } catch (error) {
+      console.error("Error al actualizar el servicio:", error);
     }
   };
 
@@ -118,6 +157,52 @@ const Services = ({
 
   const handleOpenDelete = () => {
     setOpenEdition(true);
+  };
+
+  const handleCategoryName = (categoryName) => {
+    if (showEdit && Object.keys(serviceRow).length < 1) {
+      setCategoryName({
+        prev: categoryName,
+        current: categoryName,
+      });
+    }
+  };
+
+  const handleRowService = (service, category) => {
+    if (
+      showEdit &&
+      Object.keys(categoryName).length < 1 &&
+      Object.keys(serviceRow).length < 1
+    ) {
+      setServiceRow({
+        category: category,
+        prev: service.name,
+        current: service.name,
+        price: service.price,
+        sing: service.sing,
+        type: service.type,
+      });
+    }
+  };
+
+  const handleChangeCategoryName = (e) => {
+    let value = e.target.value;
+
+    setCategoryName((prevState) => {
+      let copyState = { ...prevState };
+      copyState.current = value;
+      return copyState;
+    });
+  };
+
+  const handleChangeRowService = (field, e) => {
+    let value = e.target.value;
+
+    setServiceRow((prevState) => {
+      let copyState = { ...prevState };
+      copyState[field] = value;
+      return copyState;
+    });
   };
 
   return (
@@ -189,8 +274,8 @@ const Services = ({
             type="text"
             name="service"
             value={inputs.service}
-            onChange={handleInputChange}
             placeholder="ej: corte de pelo"
+            onChange={handleInputChange}
             InputLabelProps={{
               shrink: true,
             }}
@@ -232,6 +317,7 @@ const Services = ({
             type="number"
             name="price"
             value={inputs.price}
+            placeholder="0"
             onChange={handleInputChange}
             InputProps={{ inputProps: { min: 0 } }}
             InputLabelProps={{
@@ -248,6 +334,7 @@ const Services = ({
             type="number"
             name="sing"
             value={inputs.sing}
+            placeholder="0"
             onChange={handleInputChange}
             InputProps={{ inputProps: { min: 0 } }}
             InputLabelProps={{
@@ -308,20 +395,53 @@ const Services = ({
         }}
       />
       <div style={{ marginTop: "10px" }}>
-        <div style={{ width: "100%", display: "flex" }}>
-          <span style={{ width: "40%", fontWeight: "bold", fontSize: "18px" }}>
+        <div
+          style={{ width: "100%", display: "flex", borderBottom: "2px solid" }}
+        >
+          <span
+            style={{
+              width: "40%",
+              fontWeight: "bold",
+              fontSize: "18px",
+              padding: "2px",
+            }}
+          >
             Categorias y servicios
           </span>
-          <hr />
-          <span style={{ width: "30%", fontWeight: "bold", fontSize: "18px" }}>
+          <span
+            style={{
+              width: "30%",
+              fontWeight: "bold",
+              fontSize: "18px",
+              borderLeft: "1px solid",
+              padding: "2px",
+            }}
+          >
             Precio
           </span>
-          <hr />
-          <span style={{ width: "30%", fontWeight: "bold", fontSize: "18px" }}>
+          <span
+            style={{
+              width: "20%",
+              fontWeight: "bold",
+              fontSize: "18px",
+              borderLeft: "1px solid",
+              padding: "2px",
+            }}
+          >
             Seña
           </span>
+          <span
+            style={{
+              width: "10%",
+              fontWeight: "bold",
+              fontSize: "18px",
+              borderLeft: "1px solid",
+              padding: "2px",
+            }}
+          >
+            Tipo
+          </span>
         </div>
-        <hr />
         {categoryServices.length < 1 ? (
           <span
             style={{
@@ -338,39 +458,243 @@ const Services = ({
           categoryServices.map((elem, index) => {
             return (
               <div key={index} style={{ marginTop: "10px" }}>
-                <span style={{ fontWeight: "bold", fontSize: "18px" }}>
-                  {elem.category}
-                </span>
-                <hr />
+                {Object.keys(categoryName).length > 0 &&
+                categoryName.prev === elem.category ? (
+                  <input
+                    type="text"
+                    value={
+                      categoryName.current
+                        ? categoryName.current
+                        : elem.category
+                    }
+                    onChange={(e) => handleChangeCategoryName(e)}
+                  />
+                ) : (
+                  <span
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "18px",
+                      padding: "2px",
+                      backgroundColor: showEdit ? "lightgray" : "transparent",
+                      cursor:
+                        !showEdit ||
+                        ((Object.keys(categoryName).length > 0 ||
+                          Object.keys(serviceRow).length > 0) &&
+                          serviceRow.prev !== elem.category)
+                          ? "default"
+                          : "pointer",
+                      filter:
+                        (Object.keys(categoryName).length > 0 ||
+                          Object.keys(serviceRow).length > 0) &&
+                        categoryName !== elem.category
+                          ? "blur(2px)"
+                          : "",
+                    }}
+                    onClick={() => handleCategoryName(elem.category)}
+                  >
+                    {elem.category}
+                  </span>
+                )}
+                <hr style={{ border: "1px solid" }} />
                 {elem.services.map((service, index) => {
                   return (
                     <React.Fragment key={index}>
-                      <div style={{ display: "flex", width: "100%" }}>
-                        <span style={{ width: "40%", margin: "5px" }}>
-                          {service.name}
-                        </span>
-                        <hr />
-                        <span
-                          style={{
-                            width: "30%",
-                            margin: "5px",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          ${service.price}
-                        </span>
-                        <hr />
-                        <span
-                          style={{
-                            width: "30%",
-                            margin: "5px",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          ${service.sing}
-                        </span>
+                      <div
+                        style={{
+                          display: "flex",
+                          width: "100%",
+                          borderBottom: "1px solid",
+                        }}
+                      >
+                        {Object.keys(serviceRow).length > 0 &&
+                        serviceRow.category === elem.category &&
+                        serviceRow.prev === service.name ? (
+                          <>
+                            <input
+                              type="text"
+                              style={{
+                                width: "40%",
+                                padding: "5px",
+                              }}
+                              value={
+                                serviceRow.prev === service.name &&
+                                serviceRow.current
+                                  ? serviceRow.current
+                                  : service.name
+                              }
+                              onChange={(e) =>
+                                handleChangeRowService("current", e)
+                              }
+                            />
+                            <input
+                              type="number"
+                              style={{
+                                width: "30%",
+                                padding: "5px",
+                              }}
+                              value={
+                                serviceRow.prev === service.name &&
+                                serviceRow.price
+                                  ? serviceRow.price
+                                  : service.price
+                              }
+                              onChange={(e) =>
+                                handleChangeRowService("price", e)
+                              }
+                            />
+                            <input
+                              type="number"
+                              style={{
+                                width: "20%",
+                                padding: "5px",
+                              }}
+                              value={
+                                serviceRow.prev === service.name &&
+                                serviceRow.sing
+                                  ? serviceRow.sing
+                                  : service.sing
+                              }
+                              onChange={(e) =>
+                                handleChangeRowService("sing", e)
+                              }
+                            />
+                            <input
+                              type="text"
+                              style={{
+                                width: "10%",
+                                padding: "5px",
+                              }}
+                              value={
+                                serviceRow.prev === service.name &&
+                                serviceRow.type
+                                  ? serviceRow.type
+                                  : service.type
+                              }
+                              onChange={(e) =>
+                                handleChangeRowService("type", e)
+                              }
+                            />
+                          </>
+                        ) : (
+                          <>
+                            <span
+                              style={{
+                                width: "40%",
+                                padding: "5px",
+                                backgroundColor: showEdit
+                                  ? "lightgray"
+                                  : "transparent",
+                                cursor:
+                                  !showEdit ||
+                                  ((Object.keys(categoryName).length > 0 ||
+                                    Object.keys(serviceRow).length > 0) &&
+                                    serviceRow.prev !== service.name)
+                                    ? "default"
+                                    : "pointer",
+                                filter:
+                                  (Object.keys(categoryName).length > 0 ||
+                                    Object.keys(serviceRow).length > 0) &&
+                                  serviceRow.prev !== service.name
+                                    ? "blur(2px)"
+                                    : "",
+                              }}
+                              onClick={() =>
+                                handleRowService(service, elem.category)
+                              }
+                            >
+                              {service.name}
+                            </span>
+                            <span
+                              style={{
+                                width: "30%",
+                                padding: "5px",
+                                fontWeight: "bold",
+                                borderLeft: "1px solid",
+                                backgroundColor: showEdit
+                                  ? "lightgray"
+                                  : "transparent",
+                                cursor:
+                                  !showEdit ||
+                                  ((Object.keys(categoryName).length > 0 ||
+                                    Object.keys(serviceRow).length > 0) &&
+                                    serviceRow.prev !== service.name)
+                                    ? "default"
+                                    : "pointer",
+                                filter:
+                                  (Object.keys(categoryName).length > 0 ||
+                                    Object.keys(serviceRow).length > 0) &&
+                                  serviceRow.prev !== service.name
+                                    ? "blur(2px)"
+                                    : "",
+                              }}
+                              onClick={() =>
+                                handleRowService(service, elem.category)
+                              }
+                            >
+                              ${service.price}
+                            </span>
+
+                            <span
+                              style={{
+                                width: "20%",
+                                padding: "5px",
+                                fontWeight: "bold",
+                                borderLeft: "1px solid",
+                                backgroundColor: showEdit
+                                  ? "lightgray"
+                                  : "transparent",
+                                cursor:
+                                  !showEdit ||
+                                  ((Object.keys(categoryName).length > 0 ||
+                                    Object.keys(serviceRow).length > 0) &&
+                                    serviceRow.prev !== service.name)
+                                    ? "default"
+                                    : "pointer",
+                                filter:
+                                  (Object.keys(categoryName).length > 0 ||
+                                    Object.keys(serviceRow).length > 0) &&
+                                  serviceRow.prev !== service.name
+                                    ? "blur(2px)"
+                                    : "",
+                              }}
+                              onClick={() =>
+                                handleRowService(service, elem.category)
+                              }
+                            >
+                              {`${service.sing}${service.type}`}
+                            </span>
+                            <span
+                              style={{
+                                width: "10%",
+                                padding: "5px",
+                                fontWeight: "bold",
+                                borderLeft: "1px solid",
+                                backgroundColor: showEdit
+                                  ? "lightgray"
+                                  : "transparent",
+                                cursor:
+                                  !showEdit ||
+                                  ((Object.keys(categoryName).length > 0 ||
+                                    Object.keys(serviceRow).length > 0) &&
+                                    serviceRow.prev !== service.name)
+                                    ? "default"
+                                    : "pointer",
+                                filter:
+                                  (Object.keys(categoryName).length > 0 ||
+                                    Object.keys(serviceRow).length > 0) &&
+                                  serviceRow.prev !== service.name
+                                    ? "blur(2px)"
+                                    : "",
+                              }}
+                              onClick={() =>
+                                handleRowService(service, elem.category)
+                              }
+                            >
+                              {service.type}
+                            </span>
+                          </>
+                        )}
                       </div>
-                      <hr />
                     </React.Fragment>
                   );
                 })}
@@ -382,43 +706,87 @@ const Services = ({
       <div
         style={{
           display: "flex",
-          width: "100%",
-          marginTop: "10px",
           justifyContent: "space-between",
+          marginTop: "10px",
+          width: "100%",
         }}
       >
-        {showEdit === false ? (
+        <div
+          style={{
+            display: "flex",
+          }}
+        >
+          {showEdit === false ? (
+            <Button
+              disabled={categoryServices.length < 1 ? true : false}
+              onClick={() => {
+                setShowEdit(true);
+              }}
+            >
+              <CreateRoundedIcon />
+            </Button>
+          ) : (
+            <Button
+              onClick={() => {
+                setShowEdit(false);
+                // setSelectedInput({
+                //   categoryIndex: null,
+                //   serviceIndex: null,
+                // });
+                setEditableCatSer(categoryServices);
+                setCategoryName({});
+                setServiceRow({});
+              }}
+              variant="outlined"
+            >
+              <h4 style={{ fontFamily: "Jost, sans-serif" }}>Descartar</h4>
+            </Button>
+          )}
           <Button
-            onClick={() => {
-              setShowEdit(true);
-            }}
+            color="error"
+            disabled={categoryServices.length < 1 ? true : false}
+            onClick={handleOpenDelete}
+            sx={{ fontFamily: "Jost,sans serif" }}
           >
-            <CreateRoundedIcon />
+            <DeleteRoundedIcon />
+          </Button>
+        </div>
+        {Object.keys(categoryName).length > 0 ? (
+          <Button
+            variant="contained"
+            // disabled={categoryServices.length < 1 ? true : false}
+            onClick={handleUpdateCategoryName}
+            sx={{ fontFamily: "Jost,sans serif" }}
+          >
+            Guardar categoria
+          </Button>
+        ) : Object.keys(serviceRow).length > 0 ? (
+          <Button
+            variant="contained"
+            // disabled={categoryServices.length < 1 ? true : false}
+            onClick={handleUpdateServiceRow}
+            sx={{ fontFamily: "Jost,sans serif" }}
+          >
+            Guardar fila
           </Button>
         ) : (
           <Button
-            onClick={() => {
-              setShowEdit(false);
-              // setSelectedInput({
-              //   categoryIndex: null,
-              //   serviceIndex: null,
-              // });
-              setEditableCatSer(categoryServices);
-            }}
-            variant="outlined"
+            variant="contained"
+            disabled={
+              showEdit &&
+              Object.keys(serviceRow).length > 0 &&
+              Object.keys(serviceRow).length > 0
+                ? false
+                : true
+            }
+            onClick={handleUpdateServiceRow}
+            sx={{ fontFamily: "Jost,sans serif" }}
           >
-            <h4 style={{ fontFamily: "Jost, sans-serif" }}>Descartar</h4>
+            Guardar
           </Button>
         )}
-        <Button
-          color="error"
-          disabled={categoryServices.length < 1 ? true : false}
-          onClick={handleOpenDelete}
-          sx={{ fontFamily: "Jost,sans serif" }}
-        >
-          <DeleteRoundedIcon />
-        </Button>
       </div>
+
       <EditServicesModal
         categoryServices={categoryServices}
         openEdition={openEdition}
