@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import Map, { Marker, Popup } from "react-map-gl";
 import "./map.css";
+import { DarkModeContext } from "../../App";
 
 const VITE_MAPBOX_MAPS_API_KEY = import.meta.env.VITE_MAPBOX_MAPS_API_KEY;
 
 const Maps = () => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
+  const { darkMode } = useContext(DarkModeContext);
+
   const [viewport, setViewport] = useState({
     longitude: -58.994893588103295,
     latitude: -27.467508847351258,
@@ -40,7 +43,11 @@ const Maps = () => {
         boxShadow: "0px 0px 10px 0px rgb(0,0,0,0.5)",
         borderRadius: "16px",
       }}
-      mapStyle="mapbox://styles/mapbox/streets-v12"
+      mapStyle={
+        darkMode.on
+          ? "mapbox://styles/mapbox/dark-v10"
+          : "mapbox://styles/mapbox/streets-v12"
+      }
     >
       <Marker
         longitude={-58.994893588103295}

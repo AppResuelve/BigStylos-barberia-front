@@ -47,7 +47,7 @@ const EditServicesModal = ({
       console.log(error);
     }
   };
-console.log(servicesToDelete);
+  
   const handleClose = () => {
     setOpenEdition(false);
     setServicesToDetele([]);
