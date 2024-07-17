@@ -51,13 +51,18 @@
 
 .h3-nestedList {
       font-family: Jost, sans-serif;
+      font-size: 18px;
 }
 
 .listItembtn-nestedList {
       display: flex;
       justify-content: space-between;
-      height: 30px;
+      height: 45px;
       border-radius: 4px;
+}
+
+.listItembtn-nestedList:hover {
+     background-color: lightgray !important;
 }
 
 .spanErrorInputTel {
@@ -65,21 +70,9 @@
       font-weight: bold;
 }
 
-@media (min-width:500px) and (max-height: 800px) {
-      .h3-nestedList {
-            font-size: 15px;
-      }
-}
+@media (min-width:500px) and (max-height: 800px) {}
 
 
-@media (min-width:500px) and (min-height: 801px) and (max-height: 1000px) {
-      .h3-nestedList {
-            font-size: 17px;
-      }
-}
+@media (min-width:500px) and (min-height: 801px) and (max-height: 1000px) {}
 
-@media (max-width:500px) and (max-height: 1000px) {
-      .h3-nestedList {
-            font-size: 17px;
-      }
-}
+@media (max-width:500px) and (max-height: 1000px) {}

@@ -24,7 +24,6 @@ const UserPanelModal = ({ isOpen, setIsOpen, userData }) => {
       style={{
         display: "flex",
         justifyContent: "end",
-        height: "100vh",
       }}
       fullScreen={xl}
       TransitionComponent={Transition}
@@ -41,15 +40,15 @@ const UserPanelModal = ({ isOpen, setIsOpen, userData }) => {
         style={{
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
+          // justifyContent: "space-between",
           width: sm ? "340px" : "380px",
           height: "100%",
           paddingBottom: "90px",
           backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
-          p: 0,
+          // p: 0,
         }}
       >
-        <section style={{ padding: "10px" }}>
+        <section style={{ padding: "0px 10px 10px 10px" }}>
           <div
             className="box-subContainer1-userModal"
             style={{
@@ -66,7 +65,6 @@ const UserPanelModal = ({ isOpen, setIsOpen, userData }) => {
               alt="mi perfil"
             />
             <span
-              className="h2"
               style={{
                 color: darkMode.on ? "white" : darkMode.dark,
                 fontSize: "22px",
@@ -76,7 +74,7 @@ const UserPanelModal = ({ isOpen, setIsOpen, userData }) => {
             </span>
             </div>
 
-            <img className="img-close-userModal" src={closeIcon} alt="" />
+            <img className="img-close-userModal" src={closeIcon} alt="" onClick={handleClose } />
           </div>
           <hr
             className="hr-userModal"

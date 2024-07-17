@@ -24,10 +24,9 @@ const Personalization = ({
   services,
   refreshServices,
   setRefreshServices,
-  changeNoSaved,
   setChangeNoSaved,
 }) => {
-  const { darkMode, refreshPersonalization, setRefreshPersonalization } =
+  const { darkMode, setRefreshPersonalization } =
     useContext(DarkModeContext);
   const [imgServices, setImgServices] = useState([]); //images de los services basado en el estado services
   const [auxImgServices, setAuxImgServices] = useState([]); //images de los services basado en el estado services copia

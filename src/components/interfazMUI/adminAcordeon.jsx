@@ -17,7 +17,6 @@ import Users from "../users/users";
 import Personalization from "../personalization/personalization";
 import WhoIsComingAdmin from "../whoIsComingAdmin/whoIsComingAdmin";
 import CancelledTurnsForAdmin from "../cancelledTurnsForAdmin/cancelledTurnsForAdmin";
-import PriceAndSing from "../priceAndSing/priceAndSing";
 import axios from "axios";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -87,9 +86,9 @@ const AdminAcordeon = () => {
     panel8: "Turnos cancelados",
     panel9: "Precios y señas",
   };
-  
+
   const handleChange = (panel) => (event, isExpanded) => {
-     const panelName = panelNames[expanded];
+    const panelName = panelNames[expanded];
     if (Object.keys(changeNoSaved).length > 0) {
       setShowAlert({
         isOpen: true,
@@ -497,50 +496,6 @@ const AdminAcordeon = () => {
           </AccordionDetails>
         </Accordion>
         {/* ********************************************************************************************************* */}
-        <Accordion
-          style={{
-            borderRadius: "0px 0px 5px 5px",
-            marginBottom: "30px",
-            boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
-            backgroundColor: !darkMode.on ? darkMode.light : darkMode.dark,
-
-            border: "none",
-          }}
-          expanded={expanded === "panel9"}
-          onChange={handleChange("panel9")}
-        >
-          <AccordionSummary
-            sx={{
-              backgroundColor: expanded === "panel9" ? "#d6d6d5" : "",
-              borderRadius: "2px",
-            }}
-            expandIcon={
-              <ExpandMoreIcon
-                sx={{ color: expanded === "panel9" ? "" : "#2196f3" }}
-              />
-            }
-            aria-controls="panel9bh-content"
-            id="panel9bh-header"
-          >
-            <h2
-              style={{
-                color: !darkMode.on
-                  ? darkMode.dark
-                  : expanded === "panel9"
-                  ? darkMode.dark
-                  : "white",
-              }}
-            >
-              Precios y señas
-            </h2>
-          </AccordionSummary>
-          <AccordionDetails>
-            <PriceAndSing
-              services={services}
-              setRefreshServices={setRefreshServices}
-            />
-          </AccordionDetails>
-        </Accordion>
       </Box>
     </div>
   );

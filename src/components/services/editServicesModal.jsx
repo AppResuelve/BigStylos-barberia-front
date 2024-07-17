@@ -3,7 +3,6 @@ import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { IconButton } from "@mui/material";
 import closeBtn from "../../assets/icons/close.png";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
 import {
   Box,
   Dialog,
@@ -12,10 +11,6 @@ import {
   Button,
 } from "@mui/material";
 import capitalizeFirstLetter from "../../helpers/capitalizeFirstLetter";
-import {
-  convertToCategoryServiceObj,
-  filterDeletedItems,
-} from "../../helpers/convertCategoryService";
 import axios from "axios";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -30,21 +25,24 @@ const EditServicesModal = ({
 }) => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [showEdit, setShowEdit] = useState(false);
-  const [showDelete, setShowDelete] = useState(false);
+  const [showDelete, setShowDelete] = useState(true);
   const [selectedInput, setSelectedInput] = useState({
     categoryIndex: null,
     serviceIndex: null,
   });
-  
-  const handleSaveCatSer = async () => {
-    const filteredArray = filterDeletedItems(editableCatSer);
-    const catSerObj = convertToCategoryServiceObj(filteredArray);
+  const [servicesToDelete, setServicesToDetele] = useState([]);
 
+  const handleSaveCatSer = async () => {
     try {
-      const result = await axios.put(`${VITE_BACKEND_URL}/services/update`, {
-        services: catSerObj,
+      const result = await axios.post(`${VITE_BACKEND_URL}/services/delete`, {
+        services: servicesToDelete,
       });
-      setRefreshServices((prevState) => !prevState);
+      //en vez de hacer refresh se puede setear los estados servicios
+      //con el result.(luego de ejecutar la funcion convertCategoryService)
+      setRefreshServices((prevState) => {
+        let copyState = !prevState;
+        return copyState;
+      });
     } catch (error) {
       console.log(error);
     }
@@ -52,13 +50,55 @@ const EditServicesModal = ({
 
   const handleClose = () => {
     setOpenEdition(false);
+    setServicesToDetele([]);
+    setEditableCatSer(categoryServices);
   };
 
   const handleSelectInput = (categoryIndex, serviceIndex = null) => {
     if (showEdit) setSelectedInput({ categoryIndex, serviceIndex });
   };
 
-  const handleCheckboxChange = (categoryName, serviceName) => {
+  const handleCheckboxChange = (e, category, serviceName) => {
+    let categoryName = category.category;
+    let checked = e.target.checked;
+    if (e.target.name === "") {
+      setServicesToDetele((prevState) => {
+        let copyState = [...prevState];
+        if (checked) {
+          copyState.push(serviceName);
+          return copyState;
+        } else {
+          let filteredCopy = copyState.filter(
+            (service) => service === serviceName
+          );
+          return filteredCopy;
+        }
+      });
+    } else {
+      if (!checked) {
+        setServicesToDetele((prevState) => {
+          let copyState = [...prevState];
+          for (const service of category.services) {
+            let filter = copyState.filter((ser) => ser === service.name);
+            copyState = filter;
+          }
+          return copyState;
+        });
+      } else {
+        setServicesToDetele((prevState) => {
+          let copyState = [...prevState];
+          for (const service of category.services) {
+            let esta = false;
+            for (const serv of copyState) {
+              if (service.name === serv) esta = true;
+            }
+            if (!esta) copyState.push(service.name);
+          }
+          return copyState;
+        });
+      }
+    }
+
     const updatedCategoryServices = editableCatSer.map((category) => {
       if (category.category === categoryName) {
         if (serviceName === undefined) {
@@ -188,176 +228,189 @@ const EditServicesModal = ({
           }}
         >
           <section>
-            {editableCatSer.map((elem, categoryIndex) => {
-              return (
-                <div key={categoryIndex} style={{ marginBottom: "15px" }}>
-                  <div
-                    style={{
-                      display: "flex",
-                      width: "100%",
-                      justifyContent: "space-between",
-                      borderBottom: "1px solid",
-                    }}
-                  >
-                    {showEdit &&
-                    selectedInput.categoryIndex === categoryIndex &&
-                    selectedInput.serviceIndex === null ? (
-                      <input
-                        type="text"
-                        style={{
-                          width: "50%",
-                          height: "30px",
-                          fontFamily: "Jost, sans serif",
-                          fontWeight: "bold",
-                          fontSize: "18px",
-                          border: "2px solid",
-                          borderRadius: "4px",
-                          paddingLeft: "2px",
-                        }}
-                        value={elem.category}
-                        onChange={(e) =>
-                          handleCategoryNameChange(
-                            categoryIndex,
-                            e.target.value
-                          )
-                        }
-                      />
-                    ) : (
-                      <span
-                        style={{
-                          fontWeight: "bold",
-                          fontSize: "18px",
-                          width: "170px",
-                          backgroundColor: showEdit
-                            ? "lightgray"
-                            : "transparent",
-                          borderRadius: "3px",
-                          cursor: showEdit ? "pointer" : "default",
-                          padding: "2px",
-                        }}
-                        onClick={() => handleSelectInput(categoryIndex)}
-                      >
-                        {capitalizeFirstLetter(elem.category)}
-                      </span>
-                    )}
-                    {showDelete && (
-                      <input
-                        type="checkbox"
-                        checked={elem.deleted}
-                        style={{
-                          width: "22px",
-                          height: "22px",
-                          accentColor: "red",
-                          cursor: "pointer",
-                        }}
-                        onChange={() => handleCheckboxChange(elem.category)}
-                      />
-                    )}
-                  </div>
-                  {elem.services.map((service, serviceIndex) => {
-                    let lastService = elem.services.length - 1 === serviceIndex;
-                    return (
-                      <div
-                        key={serviceIndex}
-                        style={{
-                          display: "flex",
-                          width: "100%",
-                          paddingTop: serviceIndex === 0 ? "5px" : 0,
-                        }}
-                      >
-                        <hr
+            {categoryServices.length < 1 ? (
+              <span
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  height: "40px",
+                  fontSize: "18px",
+                }}
+              >
+                No tienes servicios aún
+              </span>
+            ) : (
+              editableCatSer.map((elem, categoryIndex) => {
+                return (
+                  <div key={categoryIndex} style={{ marginBottom: "15px" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        width: "100%",
+                        justifyContent: "space-between",
+                        borderBottom: "1px solid",
+                      }}
+                    >
+                      {showEdit &&
+                      selectedInput.categoryIndex === categoryIndex &&
+                      selectedInput.serviceIndex === null ? (
+                        <input
+                          type="text"
                           style={{
-                            border: "1px solid",
-                            width: "1px",
-                            height: lastService ? "25px" : "40px",
+                            width: "50%",
+                            height: "30px",
+                            fontFamily: "Jost, sans serif",
+                            fontWeight: "bold",
+                            fontSize: "18px",
+                            border: "2px solid",
+                            borderRadius: "4px",
+                            paddingLeft: "2px",
                           }}
+                          value={elem.category}
+                          onChange={(e) =>
+                            handleCategoryNameChange(
+                              categoryIndex,
+                              e.target.value
+                            )
+                          }
                         />
-                        <hr
+                      ) : (
+                        <span
                           style={{
-                            border: "1px solid",
-                            transform: "rotateZ(90deg)",
-                            margin: "19px 15px 10px 4px",
-                            height: "10px",
+                            fontWeight: "bold",
+                            fontSize: "18px",
+                            width: "170px",
+                            backgroundColor: showEdit
+                              ? "lightgray"
+                              : "transparent",
+                            borderRadius: "3px",
+                            cursor: showEdit ? "pointer" : "default",
+                            padding: "2px",
                           }}
+                          onClick={() => handleSelectInput(categoryIndex)}
+                        >
+                          {capitalizeFirstLetter(elem.category)}
+                        </span>
+                      )}
+                      {showDelete && (
+                        <input
+                          type="checkbox"
+                          checked={elem.deleted}
+                          name="category"
+                          style={{
+                            width: "22px",
+                            height: "22px",
+                            accentColor: "red",
+                            cursor: "pointer",
+                          }}
+                          onChange={(e) => handleCheckboxChange(e, elem)}
                         />
+                      )}
+                    </div>
+                    {elem.services.map((service, serviceIndex) => {
+                      let lastService =
+                        elem.services.length - 1 === serviceIndex;
+                      return (
                         <div
+                          key={serviceIndex}
                           style={{
                             display: "flex",
                             width: "100%",
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            alignItems: "center",
+                            paddingTop: serviceIndex === 0 ? "5px" : 0,
                           }}
                         >
-                          {showEdit &&
-                          selectedInput.categoryIndex === categoryIndex &&
-                          selectedInput.serviceIndex === serviceIndex ? (
-                            <input
-                              type="text"
-                              style={{
-                                height: "30px",
-                                width: "50%",
-                                marginBottom: "2px",
-                                fontFamily: "Jost, sans serif",
-                                fontWeight: "bold",
-                                fontSize: "17px",
-                                border: "2px solid",
-                                borderRadius: "4px",
-                                paddingLeft: "2px",
-                              }}
-                              value={service.name}
-                              onChange={(e) =>
-                                handleServiceNameChange(
-                                  categoryIndex,
-                                  serviceIndex,
-                                  e.target.value
-                                )
-                              }
-                            />
-                          ) : (
-                            <span
-                              style={{
-                                width: "fit-content",
-                                fontWeight: "bold",
-                                backgroundColor: showEdit
-                                  ? "lightgray"
-                                  : "transparent",
-                                borderRadius: "3px",
-                                cursor: showEdit ? "pointer" : "default",
-                                padding: "4px",
-                              }}
-                              onClick={() =>
-                                handleSelectInput(categoryIndex, serviceIndex)
-                              }
-                            >
-                              {service.name}
-                            </span>
-                          )}
-                          {showDelete && (
-                            <input
-                              type="checkbox"
-                              checked={service.deleted}
-                              style={{
-                                width: "22px",
-                                height: "22px",
-                                accentColor: "red",
-                                cursor: "pointer",
-                              }}
-                              onChange={() =>
-                                handleCheckboxChange(
-                                  elem.category,
-                                  service.name
-                                )
-                              }
-                            />
-                          )}
+                          <hr
+                            style={{
+                              border: "1px solid",
+                              width: "1px",
+                              height: lastService ? "25px" : "40px",
+                            }}
+                          />
+                          <hr
+                            style={{
+                              border: "1px solid",
+                              transform: "rotateZ(90deg)",
+                              margin: "19px 15px 10px 4px",
+                              height: "10px",
+                            }}
+                          />
+                          <div
+                            style={{
+                              display: "flex",
+                              width: "100%",
+                              flexDirection: "row",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                            }}
+                          >
+                            {showEdit &&
+                            selectedInput.categoryIndex === categoryIndex &&
+                            selectedInput.serviceIndex === serviceIndex ? (
+                              <input
+                                type="text"
+                                style={{
+                                  height: "30px",
+                                  width: "50%",
+                                  marginBottom: "2px",
+                                  fontFamily: "Jost, sans serif",
+                                  fontWeight: "bold",
+                                  fontSize: "17px",
+                                  border: "2px solid",
+                                  borderRadius: "4px",
+                                  paddingLeft: "2px",
+                                }}
+                                value={service.name}
+                                onChange={(e) =>
+                                  handleServiceNameChange(
+                                    categoryIndex,
+                                    serviceIndex,
+                                    e.target.value
+                                  )
+                                }
+                              />
+                            ) : (
+                              <span
+                                style={{
+                                  width: "fit-content",
+                                  fontWeight: "bold",
+                                  backgroundColor: showEdit
+                                    ? "lightgray"
+                                    : "transparent",
+                                  borderRadius: "3px",
+                                  cursor: showEdit ? "pointer" : "default",
+                                  padding: "4px",
+                                }}
+                                onClick={() =>
+                                  handleSelectInput(categoryIndex, serviceIndex)
+                                }
+                              >
+                                {service.name}
+                              </span>
+                            )}
+                            {showDelete && (
+                              <input
+                                type="checkbox"
+                                checked={service.deleted}
+                                style={{
+                                  width: "22px",
+                                  height: "22px",
+                                  accentColor: "red",
+                                  cursor: "pointer",
+                                }}
+                                onChange={(e) =>
+                                  handleCheckboxChange(e, elem, service.name)
+                                }
+                              />
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              );
-            })}
+                      );
+                    })}
+                  </div>
+                );
+              })
+            )}
           </section>
         </DialogContent>
         <DialogActions
@@ -372,33 +425,6 @@ const EditServicesModal = ({
             }}
           >
             <div style={{ display: "flex" }}>
-              {showEdit === false ? (
-                <Button
-                  onClick={() => {
-                    setShowEdit(true);
-                    setShowDelete(false);
-                    setEditableCatSer(categoryServices);
-                  }}
-                  disabled={showDelete ? true : false}
-                >
-                  <BorderColorIcon />
-                </Button>
-              ) : (
-                <Button
-                  onClick={() => {
-                    setShowEdit(false);
-                    setSelectedInput({
-                      categoryIndex: null,
-                      serviceIndex: null,
-                    });
-                    setEditableCatSer(categoryServices);
-                  }}
-                  variant="outlined"
-                  style={{ border: "2px solid " }}
-                >
-                  <h4 style={{ fontFamily: "Jost, sans-serif" }}>Descartar</h4>
-                </Button>
-              )}
               {showDelete === false ? (
                 <Button
                   onClick={() => {
@@ -417,7 +443,9 @@ const EditServicesModal = ({
               ) : (
                 <Button
                   onClick={() => {
-                    setShowDelete(false), setEditableCatSer(categoryServices);
+                    setShowDelete(false),
+                      setEditableCatSer(categoryServices),
+                      setServicesToDetele([]);
                   }}
                   variant="outlined"
                   style={{ border: "2px solid " }}
