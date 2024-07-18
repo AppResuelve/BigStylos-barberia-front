@@ -38,29 +38,26 @@ const WorkerAcordeon = ({ user }) => {
   const [showEdit, setShowEdit] = useState(false);
 
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-
+console.log(user);
   useEffect(() => {
     setTimeEdit(workerData.services);
   }, [workerData]);
 
   useEffect(() => {
+    let hasNull = false;
+    let allZero = true;
     if (timeEdit && Object.keys(timeEdit).length > 0) {
-      if (services && services.length > 0) {
-        let hasNull = false;
-        let allZero = true;
-
-        for (const prop in timeEdit) {
-          if (services.some((serviceArr) => serviceArr.name === prop)) {
-            if (timeEdit[prop].duration === null) {
-              hasNull = true;
-            } else if (timeEdit[prop].duration !== 0) {
-              allZero = false;
-            }
+      if (services && Object.keys(services).length > 0) {
+          for (const prop in timeEdit) {
+              if (timeEdit[prop].duration === null) {
+                hasNull = true;
+              } else if (timeEdit[prop].duration !== 0) {
+                allZero = false;
+              }
           }
-        }
-        setPendingServices(hasNull);
-        setDoCeroServices(allZero);
       }
+      setPendingServices(hasNull);
+      setDoCeroServices(allZero);
     }
   }, [timeEdit, services]);
 
@@ -89,6 +86,7 @@ const WorkerAcordeon = ({ user }) => {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/services/`);
         const { data } = response;
+        console.log(data, "esto es el data");
         const arrServices = convertToServicesArray(data); //pasamos a array de obj servicio antes de setear
         setServices(arrServices);
       } catch (error) {
@@ -128,7 +126,7 @@ const WorkerAcordeon = ({ user }) => {
     };
     fetchWorker();
   }, [refresh]);
-
+console.log(services, " estos son sosdf serlkjsgt");
   const handleChange = (panel) => (event, isExpanded) => {
     if (changeNoSaved) {
       setShowAlert({
