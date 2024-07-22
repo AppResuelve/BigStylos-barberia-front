@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { DarkModeContext } from "../../App";
-import { Box, Skeleton } from "@mui/material";
+import { Box } from "@mui/material";
 import daysMonthCalendarCustom from "../../functions/daysMonthCalendarCustom";
 import getToday from "../../functions/getToday";
 import obtainDayName from "../../functions/obtainDayName";
@@ -14,13 +14,12 @@ const CustomCalendarTurns = ({
   days,
   dayIsSelected,
   setDayIsSelected,
-  amountOfDays,
   serviceSelected,
   setIsOpen,
   user,
 }) => {
   const { darkMode, setShowAlert } = useContext(DarkModeContext);
-  const daysCalendarCustom = daysMonthCalendarCustom(amountOfDays, true);
+  const daysCalendarCustom = daysMonthCalendarCustom(27, true);
   const { currentMonth, nextMonth, currentYear, nextYear, month1, month2 } =
     daysCalendarCustom;
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
@@ -44,21 +43,21 @@ const CustomCalendarTurns = ({
   }, []);
 
   const handleDay = (day, month) => {
-    if (Object.keys(user).length > 0 && user.phone === "") {
-      setShowAlert({
-        isOpen: true,
-        message: "Por única vez debes ingresar tu numero de celular",
-        type: "info",
-        button1: {
-          text: "aceptar",
-          action: "submit",
-        },
-        buttonClose: {
-          text: "phone",
-        },
-      });
-    } else if (Object.keys(user).length > 0 && user.isDelete === false) {
-      setIsOpen(true);
+    // if (Object.keys(user).length > 0 && user.phone === "") {
+    //   setShowAlert({
+    //     isOpen: true,
+    //     message: "Por única vez debes ingresar tu numero de celular",
+    //     type: "info",
+    //     button1: {
+    //       text: "aceptar",
+    //       action: "submit",
+    //     },
+    //     buttonClose: {
+    //       text: "phone",
+    //     },
+    //   });
+    // } else if (Object.keys(user).length > 0 && user.isDelete === false) {
+    //   setIsOpen(true);
       setDayIsSelected((prevState) => {
         let newState = { ...prevState };
         if (prevState[1] == month && prevState[0] == day) {
@@ -68,33 +67,33 @@ const CustomCalendarTurns = ({
         }
         return newState;
       });
-    } else if (user.isDelete === true) {
-      setShowAlert({
-        isOpen: true,
-        message: "Has sido inhabilitado por incumplir las normas",
-        type: "error",
-        button1: {
-          text: "",
-          action: "",
-        },
-        buttonClose: {
-          text: "aceptar",
-        },
-      });
-    } else if (user===false) {
-      setShowAlert({
-        isOpen: true,
-        message: "Debes estar loggeado para agendar un turno",
-        type: "warning",
-        button1: {
-          text: "login",
-          action: "login",
-        },
-        buttonClose: {
-          text: "cancelar",
-        },
-      });
-    }
+    // } else if (user.isDelete === true) {
+    //   setShowAlert({
+    //     isOpen: true,
+    //     message: "Has sido inhabilitado por incumplir las normas",
+    //     type: "error",
+    //     button1: {
+    //       text: "",
+    //       action: "",
+    //     },
+    //     buttonClose: {
+    //       text: "aceptar",
+    //     },
+    //   });
+    // } else if (user === false) {
+    //   setShowAlert({
+    //     isOpen: true,
+    //     message: "Debes estar loggeado para agendar un turno",
+    //     type: "warning",
+    //     button1: {
+    //       text: "login",
+    //       action: "login",
+    //     },
+    //     buttonClose: {
+    //       text: "cancelar",
+    //     },
+    //   });
+    // }
   };
 
   return (
@@ -105,6 +104,7 @@ const CustomCalendarTurns = ({
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
+          marginTop: "50px",
         }}
       >
         <Box className={"line7day-query600px"}>
