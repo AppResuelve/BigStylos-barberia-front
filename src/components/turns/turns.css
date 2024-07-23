@@ -37,17 +37,43 @@
 
 }
 
+.container-workers-turns {
+      display: flex;
+      justify-content: space-around;
+}
+
 .select-workers-turns {
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 8px;
+      border-radius: 20px;
+      width: 80px;
+      cursor: pointer;
+      transition: .3s;
 }
+
+.select-workers-turns:hover {
+      background-color: rgba(255, 255, 255, 0.48);
+}
+
 
 .select-workers-turns img {
       border-radius: 100%;
-      width: 60px;
+      width: 50px;
 }
 
+.select-cualquiera-turns {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+}
+
+.select-cualquiera-turns img {
+      border-radius: 100%;
+      width: 50px;
+}
 
 .element {
       bottom: calc(0% - 140px);

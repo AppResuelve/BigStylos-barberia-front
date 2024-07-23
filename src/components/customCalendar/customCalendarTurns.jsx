@@ -11,12 +11,12 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const CustomCalendarTurns = ({
   sm,
+  setIsOpen,
   days,
   dayIsSelected,
   setDayIsSelected,
   serviceSelected,
-  setIsOpen,
-  user,
+  selectedWorker,
 }) => {
   const { darkMode, setShowAlert } = useContext(DarkModeContext);
   const daysCalendarCustom = daysMonthCalendarCustom(27, true);
@@ -42,59 +42,66 @@ const CustomCalendarTurns = ({
     fetchData();
   }, []);
 
-  const handleDay = (day, month) => {
-    // if (Object.keys(user).length > 0 && user.phone === "") {
-    //   setShowAlert({
-    //     isOpen: true,
-    //     message: "Por única vez debes ingresar tu numero de celular",
-    //     type: "info",
-    //     button1: {
-    //       text: "aceptar",
-    //       action: "submit",
-    //     },
-    //     buttonClose: {
-    //       text: "phone",
-    //     },
-    //   });
-    // } else if (Object.keys(user).length > 0 && user.isDelete === false) {
-    //   setIsOpen(true);
-      setDayIsSelected((prevState) => {
-        let newState = { ...prevState };
-        if (prevState[1] == month && prevState[0] == day) {
-          newState = [];
-        } else {
-          newState = [day, month];
+  const getTime = async (day, month) => {
+    setDayIsSelected([day, month]);
+    try {
+      const response = await axios.post(
+        `${VITE_BACKEND_URL}/workdays/dayforturns`,
+        {
+          dayForTurns: [day, month],
+          worker: selectedWorker.email,
+          service: serviceSelected,
         }
-        return newState;
-      });
-    // } else if (user.isDelete === true) {
-    //   setShowAlert({
-    //     isOpen: true,
-    //     message: "Has sido inhabilitado por incumplir las normas",
-    //     type: "error",
-    //     button1: {
-    //       text: "",
-    //       action: "",
-    //     },
-    //     buttonClose: {
-    //       text: "aceptar",
-    //     },
-    //   });
-    // } else if (user === false) {
-    //   setShowAlert({
-    //     isOpen: true,
-    //     message: "Debes estar loggeado para agendar un turno",
-    //     type: "warning",
-    //     button1: {
-    //       text: "login",
-    //       action: "login",
-    //     },
-    //     buttonClose: {
-    //       text: "cancelar",
-    //     },
-    //   });
-    // }
+      );
+      const { data } = response;
+      console.log(data, "este es el data");
+    } catch (error) {
+      console.error("Error al obtener los horarios", error);
+      alert("Error al obtener los horarios");
+    }
   };
+  // if (Object.keys(user).length > 0 && user.phone === "") {
+  //   setShowAlert({
+  //     isOpen: true,
+  //     message: "Por única vez debes ingresar tu numero de celular",
+  //     type: "info",
+  //     button1: {
+  //       text: "aceptar",
+  //       action: "submit",
+  //     },
+  //     buttonClose: {
+  //       text: "phone",
+  //     },
+  //   });
+  // } else if (Object.keys(user).length > 0 && user.isDelete === false) {
+  //   setIsOpen(true);
+  // } else if (user.isDelete === true) {
+  //   setShowAlert({
+  //     isOpen: true,
+  //     message: "Has sido inhabilitado por incumplir las normas",
+  //     type: "error",
+  //     button1: {
+  //       text: "",
+  //       action: "",
+  //     },
+  //     buttonClose: {
+  //       text: "aceptar",
+  //     },
+  //   });
+  // } else if (user === false) {
+  //   setShowAlert({
+  //     isOpen: true,
+  //     message: "Debes estar loggeado para agendar un turno",
+  //     type: "warning",
+  //     button1: {
+  //       text: "login",
+  //       action: "login",
+  //     },
+  //     buttonClose: {
+  //       text: "cancelar",
+  //     },
+  //   });
+  // }
 
   return (
     <>
@@ -142,7 +149,7 @@ const CustomCalendarTurns = ({
               <button
                 key={index}
                 className={disable ? "month1-false" : "month1"}
-                onClick={() => handleDay(day, currentMonth)}
+                onClick={() => getTime(day, currentMonth)}
                 disabled={disable}
                 style={{
                   gridColumnStart: index === 0 ? getDayPosition : "auto",
@@ -198,7 +205,7 @@ const CustomCalendarTurns = ({
               <button
                 key={index + 100}
                 className={disable ? "month2-false" : "month2"}
-                onClick={() => handleDay(day, nextMonth)}
+                onClick={() => getTime(day, nextMonth)}
                 disabled={disable}
                 style={{
                   gridColumnStart:
