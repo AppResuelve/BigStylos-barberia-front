@@ -7,6 +7,7 @@ import CustomCalendarTurns from "../customCalendar/customCalendarTurns";
 import obtainMonthName from "../../functions/obtainMonthName";
 import leftArrowBack from "../../assets/icons/left-arrow.png";
 import { TurnsButtonsSkeleton } from "../skeletons/skeletons";
+import formatHour from "../../functions/formatHour";
 import "./turns.css";
 import axios from "axios";
 
@@ -330,7 +331,69 @@ const Turns = () => {
               } de ${obtainMonthName(dayIsSelected[1])}`}</span>
             </section>
             {turnsButtons.length > 1 ? (
-              <section>aca mostramos los botones</section>
+              <section>
+                <div style={{ marginBottom: "35px" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      margin: "10px",
+                      gap: "5px",
+                    }}
+                  >
+                    {turnsButtons.map((btn, index) => {
+                      if (btn.ini >= 720) return;
+                      return (
+                        <React.Fragment key={index}>
+                          <button
+                            style={{
+                              width: "70px",
+                              height: "40px",
+                              borderRadius: "8px",
+                            }}
+                          >
+                            {formatHour(btn.ini)}
+                          </button>
+                        </React.Fragment>
+                      );
+                    })}
+                  </div>
+                </div>
+                <hr
+                  style={{
+                    border: "1px solid #d8d8d8",
+                    width: "100%",
+                    borderRadius: "10px",
+                  }}
+                />
+                <div style={{ margin: "35px 0px 35px 0px" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      margin: "10px",
+                      gap: "5px",
+                    }}
+                  >
+                    {turnsButtons.map((btn, index) => {
+                      if (btn.ini < 720) return;
+                      return (
+                        <React.Fragment key={index}>
+                          <button
+                            style={{
+                              width: "70px",
+                              height: "40px",
+                              borderRadius: "8px",
+                            }}
+                          >
+                            {formatHour(btn.ini)}
+                          </button>
+                        </React.Fragment>
+                      );
+                    })}
+                  </div>
+                </div>
+              </section>
             ) : (
               <TurnsButtonsSkeleton />
             )}
