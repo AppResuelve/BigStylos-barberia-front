@@ -4,19 +4,19 @@ import { Box } from "@mui/material";
 import daysMonthCalendarCustom from "../../functions/daysMonthCalendarCustom";
 import getToday from "../../functions/getToday";
 import obtainDayName from "../../functions/obtainDayName";
-import "./customCalendar.css";
+import "./customCalendar2.css";
 import axios from "axios";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const CustomCalendarTurns = ({
   sm,
-  setIsOpen,
   days,
   dayIsSelected,
   setDayIsSelected,
   serviceSelected,
   selectedWorker,
+  setTurnsButtons,
 }) => {
   const { darkMode, setShowAlert } = useContext(DarkModeContext);
   const daysCalendarCustom = daysMonthCalendarCustom(27, true);
@@ -54,6 +54,7 @@ const CustomCalendarTurns = ({
         }
       );
       const { data } = response;
+      setTurnsButtons(data);
       console.log(data, "este es el data");
     } catch (error) {
       console.error("Error al obtener los horarios", error);
@@ -104,17 +105,22 @@ const CustomCalendarTurns = ({
   // }
 
   return (
-    <>
-      <Box
+    <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+      <div
         style={{
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
+          width: "100%",
+          maxWidth: "550px",
+          height: "",
+          padding: "10px",
           alignItems: "center",
           marginTop: "50px",
+          borderRadius: "30px",
         }}
       >
-        <Box className={"line7day-query600px"}>
+        <div className="line7day">
           {daysOfWeek.map((day) => (
             <h4
               key={day}
@@ -123,15 +129,15 @@ const CustomCalendarTurns = ({
               {day}
             </h4>
           ))}
-        </Box>
-        <Box className={"line7-query600px"}>
+        </div>
+        <div className="line7-calendar">
           {daysCalendarCustom.month1.map((day, index) => {
             let dayName = obtainDayName(day, currentMonth, currentYear);
             let colorDay = "#e8e8e8"; // Inicializar colorDay fuera del mapeo
             let disable = true;
             if (days[currentMonth] && days[currentMonth][day]) {
               disable = false;
-              colorDay = "#5bfd33d0";
+              colorDay = "#2688ff";
             }
             if (noWork[currentMonth] && noWork[currentMonth][day]) {
               disable = true;
@@ -148,7 +154,7 @@ const CustomCalendarTurns = ({
             return (
               <button
                 key={index}
-                className={disable ? "month1-false" : "month1"}
+                className={disable ? "month1-false-turns" : "month1-turns"}
                 onClick={() => getTime(day, currentMonth)}
                 disabled={disable}
                 style={{
@@ -159,13 +165,7 @@ const CustomCalendarTurns = ({
                     dayIsSelected[1] == currentMonth
                       ? "#2196f3"
                       : colorDay,
-                  color: disable
-                    ? "#9f9f9f"
-                    : dayIsSelected.length > 0 &&
-                      dayIsSelected[0] == day &&
-                      dayIsSelected[1] == currentMonth
-                    ? "white"
-                    : "",
+                  color: disable ? "#9f9f9f" : "white",
                   fontSize:
                     dayIsSelected.length > 0 &&
                     dayIsSelected[0] == day &&
@@ -186,7 +186,7 @@ const CustomCalendarTurns = ({
             let disable = true;
             if (days[nextMonth] && days[nextMonth][day]) {
               disable = false;
-              colorDay = "#5bfd33d0";
+              colorDay = "#2688ff";
             }
             if (noWork[nextMonth] && noWork[nextMonth][day]) {
               disable = true;
@@ -204,7 +204,7 @@ const CustomCalendarTurns = ({
             return (
               <button
                 key={index + 100}
-                className={disable ? "month2-false" : "month2"}
+                className={disable ? "month2-false-turns" : "month2-turns"}
                 onClick={() => getTime(day, nextMonth)}
                 disabled={disable}
                 style={{
@@ -216,13 +216,8 @@ const CustomCalendarTurns = ({
                     dayIsSelected[1] == nextMonth
                       ? "#2196f3"
                       : colorDay,
-                  color: disable
-                    ? "#727591"
-                    : dayIsSelected.length > 0 &&
-                      dayIsSelected[0] == day &&
-                      dayIsSelected[1] == nextMonth
-                    ? "white"
-                    : "",
+                  color: disable ? "#9f9f9f" : "white",
+
                   fontSize:
                     dayIsSelected.length > 0 &&
                     dayIsSelected[0] == day &&
@@ -236,9 +231,9 @@ const CustomCalendarTurns = ({
               </button>
             );
           })}
-        </Box>
-      </Box>
-    </>
+        </div>
+      </div>
+    </div>
   );
 };
 
