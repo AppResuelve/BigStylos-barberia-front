@@ -91,6 +91,7 @@ function App() {
           }
         })
         .catch((error) => {
+          setUserData(false);
           console.log(error);
         });
     };

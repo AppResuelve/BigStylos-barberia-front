@@ -15,7 +15,6 @@ const Nav = ({ homeImages }) => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [isOpenUserPanel, setIsOpenUserPanel] = useState(false);
-
   const location = useLocation();
 
   return (

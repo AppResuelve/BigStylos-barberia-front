@@ -48,8 +48,8 @@ export const convertToServicesArray = (obj) => {
     for (const service in obj[category]) {
       servicesArray.push({
         name: service,
-        duration: null,
-        available: false,
+        // duration: null,
+        // available: false,
       });
     }
   }

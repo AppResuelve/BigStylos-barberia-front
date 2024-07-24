@@ -23,7 +23,6 @@ const CreateWorkDays = ({
   doCeroServices,
   setRefreshForWhoIsComing,
 }) => {
- 
   const { darkMode, setShowAlert, alertDelete, setAlertDelete } =
     useContext(DarkModeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
@@ -77,20 +76,20 @@ const CreateWorkDays = ({
     setRefreshDays(false);
   }, [refreshDays]);
 
-   useEffect(() => {
-     const fetchNoWorkDays = async () => {
-       console.log("pase por el nowork");
-       try {
-         const response = await axios.get(`${VITE_BACKEND_URL}/schedule/`);
-         const { data } = response;
-         setNoWork(data.noWorkDays);
-       } catch (error) {
-         console.error("Error al obtener los dias:", error);
-         alert("Error al obtener los dias");
-       }
-     };
-     fetchNoWorkDays();
-   }, []);
+  useEffect(() => {
+    const fetchNoWorkDays = async () => {
+      console.log("pase por el nowork");
+      try {
+        const response = await axios.get(`${VITE_BACKEND_URL}/schedule/`);
+        const { data } = response;
+        setNoWork(data.noWorkDays);
+      } catch (error) {
+        console.error("Error al obtener los dias:", error);
+        alert("Error al obtener los dias");
+      }
+    };
+    fetchNoWorkDays();
+  }, []);
 
   // Lógica para obtener el primer valor de month y day
   useEffect(() => {
@@ -307,12 +306,14 @@ const CreateWorkDays = ({
     const { currentMonth, nextMonth, currentYear, nextYear, month1, month2 } =
       daysCalendarCustom;
 
-    const selectDays = (month, days) => {
+    const selectDays = (month, daysOfMonth) => {
       allDaysSelected[month] = {};
-      days.forEach((day) => {
+      daysOfMonth.forEach((day) => {
         let dayName = obtainDayName(day, month, currentYear);
         let disabled = false;
-
+        if (days && days[month] && days[month][day]) {
+          disabled = true;
+        }
         if (
           !schedule[dayName] ||
           (schedule[dayName].open === 0 && schedule[dayName].close === 1440)

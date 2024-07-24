@@ -1,11 +1,13 @@
 import { deleteCookie } from "../../helpers/cookies";
 import { useContext } from "react";
 import { DarkModeContext } from "../../App";
-import logOutIcon from "../../assets/icons/log-out.png"
+import logOutIcon from "../../assets/icons/log-out.png";
 import "../login/login-logout.css";
+import { useNavigate } from "react-router-dom";
 
 const LogoutButton = () => {
   const { setRefreshStatusSession } = useContext(DarkModeContext);
+  const navigate = useNavigate();
 
   const handleLogOut = () => {
     deleteCookie("IDSESSION");
@@ -13,6 +15,7 @@ const LogoutButton = () => {
       const prevStatusSession = prev;
       return !prevStatusSession;
     });
+    navigate("/");
   };
   return (
     <button
