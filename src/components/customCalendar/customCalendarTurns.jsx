@@ -50,12 +50,11 @@ const CustomCalendarTurns = ({
         {
           dayForTurns: [day, month],
           worker: selectedWorker.email,
-          service: serviceSelected,
+          service: serviceSelected.name,
         }
       );
       const { data } = response;
       setTurnsButtons(data);
-      console.log(data, "este es el data");
     } catch (error) {
       console.error("Error al obtener los horarios", error);
       alert("Error al obtener los horarios");
@@ -114,9 +113,9 @@ const CustomCalendarTurns = ({
           width: "100%",
           maxWidth: "550px",
           height: "",
-          padding: "10px",
+          // padding: "10px",
           alignItems: "center",
-          marginTop: "50px",
+          margin: "50px 0px 50px 0px",
           borderRadius: "30px",
         }}
       >
