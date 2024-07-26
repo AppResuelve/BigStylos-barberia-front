@@ -11,6 +11,7 @@ import NotFound from "./components/pageNotFound/pageNotFound";
 import AlertModal from "./components/interfazMUI/alertModal";
 import "./App.css";
 import axios from "axios";
+import TurnsCartFooter from "./components/turnsCartFooter/turnsCartFooter";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -171,6 +172,9 @@ function App() {
             element={<NotFound user={userData} />}
           />
         </Routes>
+
+        {location.pathname !== "/requestDenied401" && <TurnsCartFooter />}
+
         {Object.keys(showAlert).length > 0 && (
           <AlertModal
             userData={userData}
