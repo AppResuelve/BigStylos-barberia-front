@@ -65,6 +65,11 @@ const Turns = () => {
         setWorkers(workers);
         setDays(result);
         setWorkerDays(result);
+        setSelectedWorker({
+          email: "cualquiera",
+          name: "cualquiera",
+          image: cualquieraImg,
+        })
         // setWorkerDays(JSON.parse(JSON.stringify(result)));
       } catch (error) {
         console.error("Error al obtener los servicios:", error);
