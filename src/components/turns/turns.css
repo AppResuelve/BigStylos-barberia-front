@@ -4,7 +4,7 @@
       height: 100%;
       display: flex;
       justify-content: center;
-      margin-bottom: 80px;
+      margin-bottom: 85px;
 }
 
 .subcontainer-turns {
@@ -19,11 +19,12 @@
       width: 97%;
       max-width: 900px;
       margin-top: 20px;
-      height: calc(100vh - 80px);
-      border-radius: 25px 25px 0px 0px;
+      height: calc(100vh - 175px);
+      border-radius: 25px;
       box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.57);
       padding: 6px;
-      position: fixed;
+      overflow: hidden;
+      /* position: fixed; */
 }
 
 .btn-services-turns {
@@ -52,17 +53,21 @@
 
 .container-workers-turns {
       display: flex;
-      justify-content: space-around;
+      flex-wrap: wrap;
+      /* flex-direction: column; */
+      gap: 10px;
+      /* justify-content: space-around; */
 }
 
 .select-workers-turns {
       display: flex;
-      flex-direction: column;
+      /* flex-direction: column; */
       align-items: center;
-      text-align: center;
-      padding: 8px;
-      border-radius: 20px;
-      width: 80px;
+      /* text-align: center; */
+      padding: 12px;
+      /* width: 100%; */
+      height: 60px;
+      border-radius: 60px;
       cursor: pointer;
       background-color: rgba(255, 255, 255, 0.48);
       box-shadow: 0px 2px 5px -2px;
@@ -77,6 +82,7 @@
 .select-workers-turns img {
       border-radius: 100%;
       width: 40px;
+      margin-right: 10px;
 }
 
 .select-cualquiera-turns {
@@ -86,33 +92,11 @@
 }
 
 .select-cualquiera-turns img {
-      border-radius: 100%;
+      border-radius: 40px;
       width: 40px;
       margin-right: 15px;
 }
 
-.element {
-      bottom: calc(0% - 140px);
-      left: 0;
-      position: absolute;
-      width: 100%;
-      height: 120px;
-      z-index: 30;
-      background-color: rgb(0, 140, 255);
-      clip-path: polygon(0% 20%, 0% 100%, 100% 100%, 100% 20%, 90% 20%, 80% 0%, 70% 20%);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.element2 {
-      bottom: calc(0% - 10px);
-      left: 0;
-      position: absolute;
-      width: 100%;
-      height: 120px;
-      background-color: #d8d8d8;
-      clip-path: polygon(0% 20%, 0% 100%, 100% 100%, 100% 20%, 90% 20%, 80% 0%, 70% 20%);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
 
 .btn-img-back-turns {
       display: flex;
@@ -147,12 +131,13 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 10px;
+      padding-bottom: 8px;
 }
 
 .section-turnsbtns-turns {
       overflow-y: scroll;
-      padding-top: 20px;
-      height: calc(100% - 45px);
+      height: 100%;
+      padding: 5px 0px 35px 0px;
 }
 
 .img-service-turns {
@@ -165,12 +150,21 @@
 }
 
 .img-service-selected-turns {
-      width: 45px;
-      height: 45px;
+      width: 40px;
+      height: 40px;
       border-radius: 45px;
       object-fit: cover;
       object-position: center;
       margin-right: 15px;
+}
+
+.turnsbtn-turns {
+      width: 70px;
+      height: 40px;
+      border-radius: 15px;
+      border: none;
+      box-shadow: 0px 3px 4px -4px rgb(0, 0, 0, 0.5);
+      cursor: pointer;
 }
 
 @media (min-width:500px) and (max-height: 800px) {
@@ -179,7 +173,7 @@
             width: 100%;
             max-width: 900px;
       }
-
+      
       .img-calendar-turns {
             filter: grayscale(100%);
             width: 250px;
@@ -194,7 +188,7 @@
             width: 100%;
             max-width: 900px;
       }
-
+      
       .img-calendar-turns {
             filter: grayscale(100%);
             width: 350px;
@@ -208,10 +202,33 @@
             width: 100%;
             max-width: 900px;
       }
-
+      
       .img-calendar-turns {
             filter: grayscale(100%);
             width: 90%;
             height: 90%;
       }
+}
+
+.element {
+      bottom: calc(0% - 140px);
+      left: 0;
+      position: absolute;
+      width: 100%;
+      height: 120px;
+      z-index: 30;
+      background-color: rgb(0, 140, 255);
+      clip-path: polygon(0% 20%, 0% 100%, 100% 100%, 100% 20%, 90% 20%, 80% 0%, 70% 20%);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.element2 {
+      bottom: calc(0% - 10px);
+      left: 0;
+      position: absolute;
+      width: 100%;
+      height: 120px;
+      background-color: #d8d8d8;
+      clip-path: polygon(0% 20%, 0% 100%, 100% 100%, 100% 20%, 90% 20%, 80% 0%, 70% 20%);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }

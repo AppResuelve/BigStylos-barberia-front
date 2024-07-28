@@ -1,7 +1,7 @@
 import { useEffect, useState, createContext } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import authenticateUsers from "./helpers/authenticateUsers";
-import { setCookie } from "./helpers/cookies";
+import { getCookie, setCookie } from "./helpers/cookies";
 import Nav from "./components/nav/nav";
 import Home from "./components/home/home";
 import Turns from "./components/turns/turns";
@@ -45,7 +45,7 @@ function App() {
     light: colors,
     on: false,
   });
-
+  const [turnsCart, setTurnsCart] = useState([]);
   /* función para el dark mode */
   const toggleDarkMode = () => {
     setDarkMode((prevMode) => ({
@@ -153,6 +153,8 @@ function App() {
         disableButtonMyTurns,
         setDisableButtonMyTurns,
         setRefreshStatusSession,
+        turnsCart,
+        setTurnsCart,
       }}
     >
       <div style={{ position: "relative" }} onClick={handleSetMoveDown}>
@@ -173,7 +175,9 @@ function App() {
           />
         </Routes>
 
-        {location.pathname !== "/requestDenied401" && <TurnsCartFooter />}
+        {location.pathname !== "/requestDenied401" && turnsCart.length > 0 && (
+          <TurnsCartFooter turnsCart={turnsCart} setTurnsCart={setTurnsCart} />
+        )}
 
         {Object.keys(showAlert).length > 0 && (
           <AlertModal

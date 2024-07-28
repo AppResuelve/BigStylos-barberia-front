@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
 import { DarkModeContext } from "../../App";
 import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
-import cualquieraImg from "../../assets/icons/noUser.png";
+import cualquieraImg from "../../assets/icons/user.png";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CustomCalendarTurns from "../customCalendar/customCalendarTurns";
 import obtainMonthName from "../../functions/obtainMonthName";
@@ -15,7 +15,7 @@ import axios from "axios";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Turns = () => {
-  const { darkMode } = useContext(DarkModeContext);
+  const { darkMode, turnsCart, setTurnsCart } = useContext(DarkModeContext);
   const [catServices, setCatServices] = useState({});
   const [serviceSelected, setServiceSelected] = useState({});
   const [expanded, setExpanded] = useState(false);
@@ -29,6 +29,8 @@ const Turns = () => {
   const [days, setDays] = useState({});
   const [dayIsSelected, setDayIsSelected] = useState([]);
   const [turnsButtons, setTurnsButtons] = useState([]);
+  const [auxCart, setAuxCart] = useState({});
+
   // Referencias para los acordeones
   const serviceAccordionRef = useRef(null);
   const workerAccordionRef = useRef(null);
@@ -46,6 +48,7 @@ const Turns = () => {
     };
     fetchServices();
   }, []);
+
   useEffect(() => {
     const fetchServices = async () => {
       try {
@@ -54,7 +57,7 @@ const Turns = () => {
           { servicesForTurns: serviceSelected.name }
         );
         const { workers, result } = response.data;
-        workers.push({
+        workers.unshift({
           email: "cualquiera",
           name: "cualquiera",
           image: cualquieraImg,
@@ -66,7 +69,7 @@ const Turns = () => {
           email: "cualquiera",
           name: "cualquiera",
           image: cualquieraImg,
-        })
+        });
         // setWorkerDays(JSON.parse(JSON.stringify(result)));
       } catch (error) {
         console.error("Error al obtener los servicios:", error);
@@ -74,7 +77,7 @@ const Turns = () => {
       }
     };
 
-    if (serviceSelected !== "") fetchServices();
+    if (Object.keys(serviceSelected).length > 0) fetchServices();
   }, [serviceSelected]);
 
   const handleServiceChange = (service, img) => {
@@ -123,6 +126,35 @@ const Turns = () => {
         window.scrollBy(0, -60); // Ajustar el scroll por la altura de la navegación
       }
     }
+  };
+  console.log(turnsButtons);
+
+  const handleSelectTime = (btn) => {
+    setTurnsCart((prevState) => {
+      // Si ya hay 3 elementos, no hacer nada
+      if (prevState.length >= 3) return prevState;
+      let copyState = [...prevState];
+      copyState.push({
+        id: `${dayIsSelected[0]}+${dayIsSelected[1]}+${serviceSelected.name}+${btn.ini}`,
+        worker: btn.worker,
+        ini: btn.ini,
+        end: btn.end,
+        day: dayIsSelected[0],
+        month: dayIsSelected[1],
+        service: serviceSelected,
+      });
+      return copyState;
+    });
+    // setAuxCart((prevState) => {
+    //   let copyState = { ...prevState };
+    //   copyState[btn.ini] = {
+    //     worker: btn.worker,
+    //     day: dayIsSelected[0],
+    //     month: dayIsSelected[1],
+    //     service: serviceSelected.name,
+    //   };
+    //   return copyState;
+    // });
   };
   return (
     <div className="container-turns">
@@ -177,10 +209,6 @@ const Turns = () => {
                       }
                       alt="service-selected-icon"
                       className="img-service-selected-turns"
-                      // style={{
-                      //   width: "40px",
-                      //   marginRight: "15px",
-                      // }}
                     />
                     <span
                       style={{
@@ -235,8 +263,6 @@ const Turns = () => {
                         borderRadius: "40px",
                         justifyContent: "center",
                       }}
-                      value={category}
-                      disabled
                     >
                       {category}
                     </span>
@@ -249,13 +275,17 @@ const Turns = () => {
                               className="btn-services-turns"
                               style={{
                                 backgroundColor:
-                                  serviceSelected === service
+                                  serviceSelected.name === service
                                     ? "#2688ff"
                                     : "rgba(255, 255, 255, 0.48)",
                                 color:
-                                  serviceSelected === service
+                                  serviceSelected.name === service
                                     ? "white"
                                     : "black",
+                                pointerEvents:
+                                  serviceSelected.name === service
+                                    ? "none"
+                                    : "",
                               }}
                               onClick={() =>
                                 handleServiceChange(
@@ -320,7 +350,7 @@ const Turns = () => {
                 id="panel2bh-header"
               >
                 <div className="select-cualquiera-turns">
-                  <img src={selectedWorker.image} alt="" />
+                  <img src={selectedWorker.image} alt="worker-seleccionado" />
                   <span>
                     {selectedWorker.name === "cualquiera"
                       ? "Sin preferencia"
@@ -332,15 +362,32 @@ const Turns = () => {
                 <div className="container-workers-turns">
                   {workers.length > 0 &&
                     workers.map((worker, index) => {
-                      if (selectedWorker.email === worker.email) return;
                       return (
                         <div
                           key={index}
                           className="select-workers-turns"
                           onClick={() => handleSelectWorker(worker)}
+                          style={{
+                            backgroundColor:
+                              selectedWorker.email === worker.email
+                                ? "#2688ff"
+                                : "rgba(255, 255, 255, 0.48)",
+                            color:
+                              selectedWorker.email === worker.email
+                                ? "white"
+                                : "black",
+                            pointerEvents:
+                              selectedWorker.email === worker.email
+                                ? "none"
+                                : "",
+                          }}
                         >
                           <img src={worker.image} alt={worker.name} />
-                          <span>{worker.name}</span>
+                          <span>
+                            {worker.name === "cualquiera"
+                              ? "Sin preferencia"
+                              : worker.name}
+                          </span>
                         </div>
                       );
                     })}
@@ -384,24 +431,34 @@ const Turns = () => {
                     display: "flex",
                     flexWrap: "wrap",
                     margin: "10px",
-                    gap: "6px",
+                    gap: "8px",
                   }}
                 >
                   {turnsButtons.length > 0 &&
                     turnsButtons.map((btn, index) => {
                       if (btn.ini >= 720) return;
+                      // let dayInCart = false;
+                      // if (
+                      //   auxCart[btn.ini] &&
+                      //   auxCart[btn.ini].day === btn.day &&
+                      //   auxCart[btn.ini].month === btn.month &&
+                      //   auxCart[btn.ini].service === btn.service
+                      // ) {
+                      //   dayInCart = true;
+                      // }
                       return (
-                        <React.Fragment key={index}>
-                          <button
-                            style={{
-                              width: "70px",
-                              height: "40px",
-                              borderRadius: "8px",
-                            }}
-                          >
-                            {formatHour(btn.ini)}
-                          </button>
-                        </React.Fragment>
+                        <button
+                          key={index}
+                          // style={{
+                          //   backgroundColor: dayInCart ? "#2688ff" : "",
+                          //   color: dayInCart ? "white" : "",
+                          //   pointerEvents: dayInCart ?"none":""
+                          // }}
+                          className="turnsbtn-turns"
+                          onClick={() => handleSelectTime(btn)}
+                        >
+                          {formatHour(btn.ini)}
+                        </button>
                       );
                     })}
                 </div>
@@ -419,24 +476,20 @@ const Turns = () => {
                     display: "flex",
                     flexWrap: "wrap",
                     margin: "10px",
-                    gap: "5px",
+                    gap: "8px",
                   }}
                 >
                   {turnsButtons.length > 0 &&
                     turnsButtons.map((btn, index) => {
                       if (btn.ini < 720) return;
                       return (
-                        <React.Fragment key={index}>
-                          <button
-                            style={{
-                              width: "70px",
-                              height: "40px",
-                              borderRadius: "8px",
-                            }}
-                          >
-                            {formatHour(btn.ini)}
-                          </button>
-                        </React.Fragment>
+                        <button
+                          key={index}
+                          className="turnsbtn-turns"
+                          onClick={() => handleSelectTime(btn)}
+                        >
+                          {formatHour(btn.ini)}
+                        </button>
                       );
                     })}
                 </div>
