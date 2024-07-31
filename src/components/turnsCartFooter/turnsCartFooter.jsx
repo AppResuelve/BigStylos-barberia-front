@@ -94,38 +94,42 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart }) => {
                 ? `Turnos seleccionados: ${turnsCart.length}`
                 : "Turnos seleccionados: 0"}
             </span>
-            <button onClick={handleOpenCart}>Continuar</button>
+            <button onClick={handleOpenCart}>Desplegar</button>
           </>
         ) : (
-          turnsCart.map((turn, index) => {
-            return (
-              <div key={index} className="container-each-turn">
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <span>{turn.service.name}</span>
-                  <span>
-                    {`${turn.day}/${turn.month} a las ${formatHour(turn.ini)}`}
-                  </span>
+          <section>
+            {turnsCart.map((turn, index) => {
+              return (
+                <div key={index} className="container-each-turn">
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <span>{turn.service.name}</span>
+                    <span>
+                      {`${turn.day}/${turn.month} a las ${formatHour(
+                        turn.ini
+                      )}`}
+                    </span>
+                  </div>
+                  <div>
+                    <button onClick={() => handleSubtract(turn)}>-</button>
+                    <span>{turn.quantity || 1}</span>
+                    <button onClick={() => handleAdd(turn)}>+</button>
+                  </div>
                 </div>
-                <div>
-                  <button onClick={() => handleSubtract(turn)}>-</button>
-                  <span>{turn.quantity || 1}</span>
-                  <button onClick={() => handleAdd(turn)}>+</button>
-                  <button onClick={handleBuy}>Señar/Agendar</button>
-                  {preferenceId && (
-                    <wallet
-                      initialization={{
-                        preferenceId: preferenceId,
-                        redirectMode: "self",
-                      }}
-                      // onReady={() => {}}
-                      // onError={() => {}}
-                      // onSubmit={() => {}}
-                    />
-                  )}
-                </div>
-              </div>
-            );
-          })
+              );
+            })}
+            <button onClick={handleBuy}>Señar/Agendar</button>
+            {preferenceId && (
+              <wallet
+                initialization={{
+                  preferenceId: preferenceId,
+                  redirectMode: "self",
+                }}
+                // onReady={() => {}}
+                // onError={() => {}}
+                // onSubmit={() => {}}
+              />
+            )}
+          </section>
         )}
       </div>
     </div>
