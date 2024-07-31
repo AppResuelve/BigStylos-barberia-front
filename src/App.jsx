@@ -1,7 +1,7 @@
 import { useEffect, useState, createContext } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import authenticateUsers from "./helpers/authenticateUsers";
-import { setCookie } from "./helpers/cookies";
+import { getCookie, setCookie } from "./helpers/cookies";
 import Nav from "./components/nav/nav";
 import Home from "./components/home/home";
 import Turns from "./components/turns/turns";
@@ -11,6 +11,7 @@ import NotFound from "./components/pageNotFound/pageNotFound";
 import AlertModal from "./components/interfazMUI/alertModal";
 import "./App.css";
 import axios from "axios";
+import TurnsCartFooter from "./components/turnsCartFooter/turnsCartFooter";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -44,7 +45,7 @@ function App() {
     light: colors,
     on: false,
   });
-
+  const [turnsCart, setTurnsCart] = useState([]);
   /* función para el dark mode */
   const toggleDarkMode = () => {
     setDarkMode((prevMode) => ({
@@ -152,6 +153,8 @@ function App() {
         disableButtonMyTurns,
         setDisableButtonMyTurns,
         setRefreshStatusSession,
+        turnsCart,
+        setTurnsCart,
       }}
     >
       <div style={{ position: "relative" }} onClick={handleSetMoveDown}>
@@ -171,6 +174,11 @@ function App() {
             element={<NotFound user={userData} />}
           />
         </Routes>
+
+        {location.pathname !== "/requestDenied401" && turnsCart.length > 0 && (
+          <TurnsCartFooter turnsCart={turnsCart} setTurnsCart={setTurnsCart} />
+        )}
+
         {Object.keys(showAlert).length > 0 && (
           <AlertModal
             userData={userData}
