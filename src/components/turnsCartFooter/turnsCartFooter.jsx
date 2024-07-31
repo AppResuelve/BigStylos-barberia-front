@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
 import formatHour from "../../functions/formatHour";
 import "./turnsCartFooter.css";
@@ -6,22 +6,46 @@ import axios from "axios";
 
 const VITE_MERCADO_PAGO_PUBLIC_KEY = import.meta.env
   .VITE_MERCADO_PAGO_PUBLIC_KEY;
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const TurnsCartFooter = ({ turnsCart, setTurnsCart }) => {
   const [openCart, setOpenCart] = useState(false);
   const [currentTurnsNumber, setCurrentTurnsNumber] = useState({});
   const [preferenceId, setPreferenceId] = useState(null);
-  initMercadoPago({ VITE_MERCADO_PAGO_PUBLIC_KEY }),
+  initMercadoPago(VITE_MERCADO_PAGO_PUBLIC_KEY),
     {
       locale: "es-AR",
     };
 
-  const handleOpenCart = () => {
-    setOpenCart(true);
-  };
+ const handleOpenCart = () => {
+   setOpenCart(true);
+   // Añadir un nuevo estado al historial del navegador
+   window.history.pushState({ openCart: true }, "");
+ };
   const handleCloseCart = () => {
     setOpenCart(false);
+    // Añadir un nuevo estado al historial del navegador
+    window.history.pushState({ openCart: false }, "");
   };
+
+  useEffect(() => {
+    // Manejar el evento de popstate
+    const handlePopState = (event) => {
+      if (event.state && event.state.openCart !== undefined) {
+        setOpenCart(event.state.openCart);
+      } else {
+        setOpenCart(false);
+      }
+    };
+
+    // Escuchar el evento popstate
+    window.addEventListener("popstate", handlePopState);
+
+    // Limpiar el evento al desmontar el componente
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
 
   const handleAdd = (turn) => {
     setTurnsCart((prevState) => {
@@ -35,7 +59,6 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart }) => {
     });
   };
 
-
   const handleSubtract = (turn) => {
     setTurnsCart((prevState) => {
       return prevState.map((t) => {
@@ -48,29 +71,28 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart }) => {
     });
   };
 
-  const createPreference = async () => {
-    
+  const handleBuy = async () => {
     try {
-      response = await axios.post(
-        "http://localhost:3000/create_preference",
+      const response = await axios.post(
+        `${VITE_BACKEND_URL}/mercadopago/create_preference`,
         {
-
+          arrayItems: turnsCart,
         }
       );
-      const { id } = response.data;
-      return id;
+      setPreferenceId(response.data);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleBuy = async () => {
-    const id = await createPreference();
-    if (id) {
-      setPreferenceId(id);
-    }
-  };
+  // const handleBuy = async () => {
+  //   const id = await createPreference();
+  //   console.log(id);
+  //   if (id) {
 
+  //   }
+  // };
+  console.log(preferenceId);
   return (
     <div
       className={
@@ -97,7 +119,7 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart }) => {
             <button onClick={handleOpenCart}>Desplegar</button>
           </>
         ) : (
-          <section>
+          <>
             {turnsCart.map((turn, index) => {
               return (
                 <div key={index} className="container-each-turn">
@@ -117,9 +139,13 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart }) => {
                 </div>
               );
             })}
-            <button onClick={handleBuy}>Señar/Agendar</button>
+              <div
+                className="div-btns-pay-mp"
+                >
+
+            <button onClick={handleBuy} className="btn-sing-pay">Señar/Agendar</button>
             {preferenceId && (
-              <wallet
+              <Wallet
                 initialization={{
                   preferenceId: preferenceId,
                   redirectMode: "self",
@@ -129,7 +155,8 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart }) => {
                 // onSubmit={() => {}}
               />
             )}
-          </section>
+              </div>
+          </>
         )}
       </div>
     </div>
