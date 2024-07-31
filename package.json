@@ -14,6 +14,7 @@
     "@auth0/auth0-react": "^2.2.4",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
+    "@mercadopago/sdk-react": "^0.0.19",
     "@mui/icons-material": "^5.15.3",
     "@mui/material": "^5.15.3",
     "@mui/system": "^5.15.4",

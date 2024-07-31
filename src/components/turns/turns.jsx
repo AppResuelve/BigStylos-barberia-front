@@ -11,6 +11,7 @@ import { TurnsButtonsSkeleton } from "../skeletons/skeletons";
 import formatHour from "../../functions/formatHour";
 import "./turns.css";
 import axios from "axios";
+import { calculateSing } from "../../helpers/calculateSing";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -48,7 +49,7 @@ const Turns = () => {
     };
     fetchServices();
   }, []);
-
+  console.log(catServices);
   useEffect(() => {
     const fetchServices = async () => {
       try {
@@ -80,13 +81,35 @@ const Turns = () => {
     if (Object.keys(serviceSelected).length > 0) fetchServices();
   }, [serviceSelected]);
 
-  const handleServiceChange = (service, img) => {
-    setServiceSelected({
-      name: service,
-      img,
-    });
+  const handleServiceChange = (serviceName, service) => {
+    console.log(service);
+    let singCalculated;
+    if (service.sing !== 0 && service.type === "%") {
+      singCalculated = calculateSing(service.price, service.sing);
+      setServiceSelected({
+        name: serviceName,
+        img: service.img,
+        price: service.price,
+        sing: singCalculated,
+      });
+    } else if (service.sing !== 0 && service.type === "$") {
+      setServiceSelected({
+        name: serviceName,
+        img: service.img,
+        price: service.price,
+        sing: service.sing,
+      });
+    } else {
+      setServiceSelected({
+        name: serviceName,
+        img: service.img,
+        price: service.price,
+        sing: null,
+      });
+    }
     setExpanded(false);
   };
+  console.log(serviceSelected);
 
   const handleSelectWorker = (worker) => {
     setSelectedWorker(worker);
@@ -127,7 +150,6 @@ const Turns = () => {
       }
     }
   };
-  console.log(turnsButtons);
 
   const handleSelectTime = (btn) => {
     setTurnsCart((prevState) => {
@@ -142,20 +164,24 @@ const Turns = () => {
         day: dayIsSelected[0],
         month: dayIsSelected[1],
         service: serviceSelected,
+        quantity: 1,
       });
       return copyState;
     });
-    // setAuxCart((prevState) => {
-    //   let copyState = { ...prevState };
-    //   copyState[btn.ini] = {
-    //     worker: btn.worker,
-    //     day: dayIsSelected[0],
-    //     month: dayIsSelected[1],
-    //     service: serviceSelected.name,
-    //   };
-    //   return copyState;
-    // });
+    setAuxCart((prevState) => {
+      if (Object.keys(prevState).length >= 3) return prevState;
+
+      let copyState = { ...prevState };
+      // Crear una clave única usando los valores seleccionados
+      const uniqueKey = `${dayIsSelected[0]}+${dayIsSelected[1]}+${serviceSelected.name}+${btn.ini}`;
+      // Añadir o actualizar la entrada en el objeto de estado
+      copyState[uniqueKey] = btn.worker;
+
+      return copyState;
+    });
   };
+
+  console.log(auxCart);
   return (
     <div className="container-turns">
       {dayIsSelected.length < 1 ? (
@@ -290,7 +316,7 @@ const Turns = () => {
                               onClick={() =>
                                 handleServiceChange(
                                   service,
-                                  catServices[category][service].img
+                                  catServices[category][service]
                                 )
                               }
                             >
@@ -437,23 +463,19 @@ const Turns = () => {
                   {turnsButtons.length > 0 &&
                     turnsButtons.map((btn, index) => {
                       if (btn.ini >= 720) return;
-                      // let dayInCart = false;
-                      // if (
-                      //   auxCart[btn.ini] &&
-                      //   auxCart[btn.ini].day === btn.day &&
-                      //   auxCart[btn.ini].month === btn.month &&
-                      //   auxCart[btn.ini].service === btn.service
-                      // ) {
-                      //   dayInCart = true;
-                      // }
+                      let dayInCart = false;
+                      let uniqueKey = `${dayIsSelected[0]}+${dayIsSelected[1]}+${serviceSelected.name}+${btn.ini}`;
+                      if (auxCart[uniqueKey]) {
+                        dayInCart = true;
+                      }
                       return (
                         <button
                           key={index}
-                          // style={{
-                          //   backgroundColor: dayInCart ? "#2688ff" : "",
-                          //   color: dayInCart ? "white" : "",
-                          //   pointerEvents: dayInCart ?"none":""
-                          // }}
+                          style={{
+                            backgroundColor: dayInCart ? "#2688ff" : "",
+                            color: dayInCart ? "white" : "",
+                            pointerEvents: dayInCart ? "none" : "",
+                          }}
                           className="turnsbtn-turns"
                           onClick={() => handleSelectTime(btn)}
                         >
@@ -482,9 +504,19 @@ const Turns = () => {
                   {turnsButtons.length > 0 &&
                     turnsButtons.map((btn, index) => {
                       if (btn.ini < 720) return;
+                      let dayInCart = false;
+                      let uniqueKey = `${dayIsSelected[0]}+${dayIsSelected[1]}+${serviceSelected.name}+${btn.ini}`;
+                      if (auxCart[uniqueKey]) {
+                        dayInCart = true;
+                      }
                       return (
                         <button
                           key={index}
+                          style={{
+                            backgroundColor: dayInCart ? "#2688ff" : "",
+                            color: dayInCart ? "white" : "",
+                            pointerEvents: dayInCart ? "none" : "",
+                          }}
                           className="turnsbtn-turns"
                           onClick={() => handleSelectTime(btn)}
                         >

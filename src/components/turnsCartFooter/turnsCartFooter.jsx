@@ -1,10 +1,20 @@
 import { useState } from "react";
-import "./turnsCartFooter.css";
+import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
 import formatHour from "../../functions/formatHour";
+import "./turnsCartFooter.css";
+import axios from "axios";
+
+const VITE_MERCADO_PAGO_PUBLIC_KEY = import.meta.env
+  .VITE_MERCADO_PAGO_PUBLIC_KEY;
 
 const TurnsCartFooter = ({ turnsCart, setTurnsCart }) => {
   const [openCart, setOpenCart] = useState(false);
   const [currentTurnsNumber, setCurrentTurnsNumber] = useState({});
+  const [preferenceId, setPreferenceId] = useState(null);
+  initMercadoPago({ VITE_MERCADO_PAGO_PUBLIC_KEY }),
+    {
+      locale: "es-AR",
+    };
 
   const handleOpenCart = () => {
     setOpenCart(true);
@@ -14,29 +24,53 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart }) => {
   };
 
   const handleAdd = (turn) => {
-    if (currentTurnsNumber[turn.id] === turn.worker.length) return;
-    setCurrentTurnsNumber((prevState) => {
-      let copyState = { ...prevState };
-
-      copyState[turn.id] = (copyState[turn.id] || 1) + 1;
-
-      return copyState;
+    setTurnsCart((prevState) => {
+      return prevState.map((t) => {
+        if (t.id === turn.id) {
+          if (t.quantity === t.worker.length) return t; // No incrementar si ya se alcanzó el límite
+          return { ...t, quantity: (t.quantity || 0) + 1 };
+        }
+        return t;
+      });
     });
   };
+
 
   const handleSubtract = (turn) => {
-    if (!currentTurnsNumber[turn.id] || currentTurnsNumber[turn.id] <= 1)
-      return;
-    setCurrentTurnsNumber((prevState) => {
-      let copyState = { ...prevState };
-
-      copyState[turn.id] = copyState[turn.id] - 1;
-
-      return copyState;
+    setTurnsCart((prevState) => {
+      return prevState.map((t) => {
+        if (t.id === turn.id) {
+          if (t.quantity <= 1) return t; // No decrementar si ya es 1 o menos
+          return { ...t, quantity: t.quantity - 1 };
+        }
+        return t;
+      });
     });
   };
 
-  console.log(turnsCart);
+  const createPreference = async () => {
+    
+    try {
+      response = await axios.post(
+        "http://localhost:3000/create_preference",
+        {
+
+        }
+      );
+      const { id } = response.data;
+      return id;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleBuy = async () => {
+    const id = await createPreference();
+    if (id) {
+      setPreferenceId(id);
+    }
+  };
+
   return (
     <div
       className={
@@ -74,9 +108,20 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart }) => {
                 </div>
                 <div>
                   <button onClick={() => handleSubtract(turn)}>-</button>
-                  <span>{currentTurnsNumber[turn.id] || 1}</span>
+                  <span>{turn.quantity || 1}</span>
                   <button onClick={() => handleAdd(turn)}>+</button>
-                  <button>Señar/Agendar</button>
+                  <button onClick={handleBuy}>Señar/Agendar</button>
+                  {preferenceId && (
+                    <wallet
+                      initialization={{
+                        preferenceId: preferenceId,
+                        redirectMode: "self",
+                      }}
+                      // onReady={() => {}}
+                      // onError={() => {}}
+                      // onSubmit={() => {}}
+                    />
+                  )}
                 </div>
               </div>
             );

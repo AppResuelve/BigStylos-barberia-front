@@ -43,7 +43,6 @@ const CustomCalendarTurns = ({
   }, []);
 
   const getTime = async (day, month) => {
-    setDayIsSelected([day, month]);
     try {
       const response = await axios.post(
         `${VITE_BACKEND_URL}/workdays/dayforturns`,
@@ -55,6 +54,7 @@ const CustomCalendarTurns = ({
       );
       const { data } = response;
       setTurnsButtons(data);
+      setDayIsSelected([day, month]);
     } catch (error) {
       console.error("Error al obtener los horarios", error);
       alert("Error al obtener los horarios");
