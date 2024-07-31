@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
 import formatHour from "../../functions/formatHour";
 import "./turnsCartFooter.css";
@@ -12,16 +12,18 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart }) => {
   const [openCart, setOpenCart] = useState(false);
   const [currentTurnsNumber, setCurrentTurnsNumber] = useState({});
   const [preferenceId, setPreferenceId] = useState(null);
-  initMercadoPago(VITE_MERCADO_PAGO_PUBLIC_KEY),
-    {
-      locale: "es-AR",
-    };
+  const containerRef = useRef(null);
 
- const handleOpenCart = () => {
-   setOpenCart(true);
-   // Añadir un nuevo estado al historial del navegador
-   window.history.pushState({ openCart: true }, "");
- };
+  initMercadoPago(VITE_MERCADO_PAGO_PUBLIC_KEY, {
+    locale: "es-AR",
+  });
+
+  const handleOpenCart = () => {
+    setOpenCart(true);
+    // Añadir un nuevo estado al historial del navegador
+    window.history.pushState({ openCart: true }, "");
+  };
+
   const handleCloseCart = () => {
     setOpenCart(false);
     // Añadir un nuevo estado al historial del navegador
@@ -44,6 +46,30 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart }) => {
     // Limpiar el evento al desmontar el componente
     return () => {
       window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (containerRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
+        if (scrollTop > 30) {
+          setOpenCart(false);
+        } else if (scrollTop < 30) {
+          setOpenCart(true);
+        }
+      }
+    };
+
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener("scroll", handleScroll);
+    }
+
+    return () => {
+      if (container) {
+        container.removeEventListener("scroll", handleScroll);
+      }
     };
   }, []);
 
@@ -85,16 +111,9 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart }) => {
     }
   };
 
-  // const handleBuy = async () => {
-  //   const id = await createPreference();
-  //   console.log(id);
-  //   if (id) {
-
-  //   }
-  // };
-  console.log(preferenceId);
   return (
     <div
+      ref={containerRef}
       className={
         openCart
           ? "container-turnscartfooter-open"
@@ -108,7 +127,7 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart }) => {
             : "subcontainer-turnscartfooter"
         }
       >
-        <div className="extend-cart-btn"></div>
+        <div className="extend-cart-btn" onClick={handleCloseCart}></div>
         {!openCart ? (
           <>
             <span>
@@ -139,23 +158,22 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart }) => {
                 </div>
               );
             })}
-              <div
-                className="div-btns-pay-mp"
-                >
-
-            <button onClick={handleBuy} className="btn-sing-pay">Señar/Agendar</button>
-            {preferenceId && (
-              <Wallet
-                initialization={{
-                  preferenceId: preferenceId,
-                  redirectMode: "self",
-                }}
-                // onReady={() => {}}
-                // onError={() => {}}
-                // onSubmit={() => {}}
-              />
-            )}
-              </div>
+            <div className="div-btns-pay-mp">
+              <button onClick={handleBuy} className="btn-sing-pay">
+                Señar/Agendar
+              </button>
+              {preferenceId && (
+                <Wallet
+                  initialization={{
+                    preferenceId: preferenceId,
+                    redirectMode: "self",
+                  }}
+                  // onReady={() => {}}
+                  // onError={() => {}}
+                  // onSubmit={() => {}}
+                />
+              )}
+            </div>
           </>
         )}
       </div>
