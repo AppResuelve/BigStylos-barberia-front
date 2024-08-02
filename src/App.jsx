@@ -183,9 +183,8 @@ function App() {
             element={<NotFound user={userData} />}
           />
         </Routes>
-        {location.pathname === "/turns" &&
-          location.pathname === "/" &&
-          turnsCart.length > 0 && (
+        {turnsCart.length > 0 &&
+          (location.pathname === "/" || location.pathname === "/turns") && (
             <TurnsCartFooter
               turnsCart={turnsCart}
               setTurnsCart={setTurnsCart}
