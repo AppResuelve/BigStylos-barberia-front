@@ -47,6 +47,7 @@ function App() {
   });
   const [turnsCart, setTurnsCart] = useState([]);
   const [auxCart, setAuxCart] = useState({});
+  const [isOpenUserPanel, setIsOpenUserPanel] = useState(false);
 
   /* función para el dark mode */
   const toggleDarkMode = () => {
@@ -155,6 +156,8 @@ function App() {
         disableButtonMyTurns,
         setDisableButtonMyTurns,
         setRefreshStatusSession,
+        isOpenUserPanel,
+        setIsOpenUserPanel,
       }}
     >
       <div style={{ position: "relative" }} onClick={handleSetMoveDown}>

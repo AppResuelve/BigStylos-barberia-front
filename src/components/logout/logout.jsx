@@ -6,7 +6,8 @@ import "../login/login-logout.css";
 import { useNavigate } from "react-router-dom";
 
 const LogoutButton = () => {
-  const { setRefreshStatusSession } = useContext(DarkModeContext);
+  const { setRefreshStatusSession, setIsOpenUserPanel } =
+    useContext(DarkModeContext);
   const navigate = useNavigate();
 
   const handleLogOut = () => {
@@ -15,6 +16,7 @@ const LogoutButton = () => {
       const prevStatusSession = prev;
       return !prevStatusSession;
     });
+    setIsOpenUserPanel(false);
     navigate("/");
   };
   return (

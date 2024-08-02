@@ -11,10 +11,10 @@ import UserPanelModal from "../interfazMUI/userPanelModal";
 import "./nav.css";
 
 const Nav = ({ homeImages }) => {
-  const { darkMode, userData } = useContext(DarkModeContext);
+  const { darkMode, userData, isOpenUserPanel, setIsOpenUserPanel } =
+    useContext(DarkModeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [showLoginForm, setShowLoginForm] = useState(false);
-  const [isOpenUserPanel, setIsOpenUserPanel] = useState(false);
   const location = useLocation();
 
   return (
