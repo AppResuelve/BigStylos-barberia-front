@@ -46,6 +46,8 @@ function App() {
     on: false,
   });
   const [turnsCart, setTurnsCart] = useState([]);
+  const [auxCart, setAuxCart] = useState({});
+
   /* función para el dark mode */
   const toggleDarkMode = () => {
     setDarkMode((prevMode) => ({
@@ -153,8 +155,6 @@ function App() {
         disableButtonMyTurns,
         setDisableButtonMyTurns,
         setRefreshStatusSession,
-        turnsCart,
-        setTurnsCart,
       }}
     >
       <div style={{ position: "relative" }} onClick={handleSetMoveDown}>
@@ -166,7 +166,16 @@ function App() {
             path="/"
             element={<Home user={userData} homeImages={homeImages} />}
           />
-          <Route path="/turns" element={<Turns />} />
+          <Route
+            path="/turns"
+            element={
+              <Turns
+                setTurnsCart={setTurnsCart}
+                auxCart={auxCart}
+                setAuxCart={setAuxCart}
+              />
+            }
+          />
           <Route path="/admin" element={<Admin />} />
           <Route path="/worker" element={<Worker />} />
           <Route
@@ -174,10 +183,15 @@ function App() {
             element={<NotFound user={userData} />}
           />
         </Routes>
-
-        {location.pathname !== "/requestDenied401" && turnsCart.length > 0 && (
-          <TurnsCartFooter turnsCart={turnsCart} setTurnsCart={setTurnsCart} />
-        )}
+        {location.pathname === "/turns" &&
+          location.pathname === "/" &&
+          turnsCart.length > 0 && (
+            <TurnsCartFooter
+              turnsCart={turnsCart}
+              setTurnsCart={setTurnsCart}
+              setAuxCart={setAuxCart}
+            />
+          )}
 
         {Object.keys(showAlert).length > 0 && (
           <AlertModal
