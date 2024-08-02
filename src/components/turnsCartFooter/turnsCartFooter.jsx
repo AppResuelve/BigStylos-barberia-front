@@ -1,6 +1,9 @@
 import { useEffect, useState, useRef } from "react";
 import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
 import formatHour from "../../functions/formatHour";
+import backIcon from "../../assets/icons/back.png";
+import trashIcon from "../../assets/icons/trash.png";
+
 import "./turnsCartFooter.css";
 import axios from "axios";
 
@@ -8,26 +11,21 @@ const VITE_MERCADO_PAGO_PUBLIC_KEY = import.meta.env
   .VITE_MERCADO_PAGO_PUBLIC_KEY;
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const TurnsCartFooter = ({ turnsCart, setTurnsCart }) => {
+const TurnsCartFooter = ({ turnsCart, setTurnsCart, setAuxCart }) => {
   const [openCart, setOpenCart] = useState(false);
-  const [currentTurnsNumber, setCurrentTurnsNumber] = useState({});
   const [preferenceId, setPreferenceId] = useState(null);
-  const containerRef = useRef(null);
+  // const [canSubmit, setCanSubmit] = useState(true);
 
   initMercadoPago(VITE_MERCADO_PAGO_PUBLIC_KEY, {
     locale: "es-AR",
   });
 
-  const handleOpenCart = () => {
-    setOpenCart(true);
-    // Añadir un nuevo estado al historial del navegador
-    window.history.pushState({ openCart: true }, "");
-  };
-
-  const handleCloseCart = () => {
-    setOpenCart(false);
-    // Añadir un nuevo estado al historial del navegador
-    window.history.pushState({ openCart: false }, "");
+  const handleToggleCart = () => {
+    setOpenCart((prevOpenCart) => {
+      const newOpenCart = !prevOpenCart;
+      window.history.pushState({ openCart: newOpenCart }, "");
+      return newOpenCart;
+    });
   };
 
   useEffect(() => {
@@ -46,30 +44,6 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart }) => {
     // Limpiar el evento al desmontar el componente
     return () => {
       window.removeEventListener("popstate", handlePopState);
-    };
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (containerRef.current) {
-        const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
-        if (scrollTop > 30) {
-          setOpenCart(false);
-        } else if (scrollTop < 30) {
-          setOpenCart(true);
-        }
-      }
-    };
-
-    const container = containerRef.current;
-    if (container) {
-      container.addEventListener("scroll", handleScroll);
-    }
-
-    return () => {
-      if (container) {
-        container.removeEventListener("scroll", handleScroll);
-      }
     };
   }, []);
 
@@ -97,6 +71,16 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart }) => {
     });
   };
 
+  const handleDeleteTurn = (turn) => {
+    setTurnsCart((prevState) => {
+      return prevState.filter((t) => t.id !== turn.id);
+    });
+    setAuxCart((prevState) => {
+      const { [turn.id]: _, ...rest } = prevState;
+      return rest;
+    });
+  };
+
   const handleBuy = async () => {
     try {
       const response = await axios.post(
@@ -111,9 +95,12 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart }) => {
     }
   };
 
+  const handleContinue = () => {
+    setPreferenceId(null);
+  };
+
   return (
     <div
-      ref={containerRef}
       className={
         openCart
           ? "container-turnscartfooter-open"
@@ -127,7 +114,23 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart }) => {
             : "subcontainer-turnscartfooter"
         }
       >
-        <div className="extend-cart-btn" onClick={handleCloseCart}></div>
+        <div
+          className="extend-cart-btn"
+          onClick={handleToggleCart}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: openCart ? "center" : "",
+          }}
+        >
+          <img
+            src={backIcon}
+            alt="expand"
+            style={{
+              rotate: openCart ? "-90deg" : "90deg",
+            }}
+          />
+        </div>
         {!openCart ? (
           <>
             <span>
@@ -135,7 +138,7 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart }) => {
                 ? `Turnos seleccionados: ${turnsCart.length}`
                 : "Turnos seleccionados: 0"}
             </span>
-            <button onClick={handleOpenCart}>Desplegar</button>
+            <button onClick={handleToggleCart}>Desplegar</button>
           </>
         ) : (
           <>
@@ -150,8 +153,17 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart }) => {
                       )}`}
                     </span>
                   </div>
-                  <div>
-                    <button onClick={() => handleSubtract(turn)}>-</button>
+                  <div id="minor-plas">
+                    {turn.quantity < 2 ? (
+                      <button
+                        id="deleteturn-button"
+                        onClick={() => handleDeleteTurn(turn)}
+                      >
+                        <img src={trashIcon} alt="delete turno" />
+                      </button>
+                    ) : (
+                      <button onClick={() => handleSubtract(turn)}>-</button>
+                    )}
                     <span>{turn.quantity || 1}</span>
                     <button onClick={() => handleAdd(turn)}>+</button>
                   </div>
@@ -159,18 +171,30 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart }) => {
               );
             })}
             <div className="div-btns-pay-mp">
-              <button onClick={handleBuy} className="btn-sing-pay">
-                Señar/Agendar
-              </button>
+              {preferenceId ? (
+                <button onClick={handleContinue} className="btn-sing-pay">
+                  Seguir agendando
+                </button>
+              ) : (
+                <button onClick={handleBuy} className="btn-sing-pay">
+                  Señar/Agendar
+                </button>
+              )}
               {preferenceId && (
                 <Wallet
                   initialization={{
                     preferenceId: preferenceId,
                     redirectMode: "self",
                   }}
-                  // onReady={() => {}}
-                  // onError={() => {}}
-                  // onSubmit={() => {}}
+                  // onReady={() => {
+                  //   if (!canSubmit) {
+                  //     alert("onready false");
+                  //     // Prevent Wallet from executing
+                  //     // Clear preferenceId or reset the Wallet component here if necessary
+                  //   }
+                  // }}
+
+                  onSubmit={true}
                 />
               )}
             </div>
