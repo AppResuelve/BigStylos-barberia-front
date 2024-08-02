@@ -15,8 +15,8 @@ import { calculateSing } from "../../helpers/calculateSing";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const Turns = () => {
-  const { darkMode, turnsCart, setTurnsCart } = useContext(DarkModeContext);
+const Turns = ({ setTurnsCart,auxCart,setAuxCart }) => {
+  const { darkMode } = useContext(DarkModeContext);
   const [catServices, setCatServices] = useState({});
   const [serviceSelected, setServiceSelected] = useState({});
   const [expanded, setExpanded] = useState(false);
@@ -30,7 +30,6 @@ const Turns = () => {
   const [days, setDays] = useState({});
   const [dayIsSelected, setDayIsSelected] = useState([]);
   const [turnsButtons, setTurnsButtons] = useState([]);
-  const [auxCart, setAuxCart] = useState({});
 
   // Referencias para los acordeones
   const serviceAccordionRef = useRef(null);
@@ -49,7 +48,7 @@ const Turns = () => {
     };
     fetchServices();
   }, []);
-  console.log(catServices);
+
   useEffect(() => {
     const fetchServices = async () => {
       try {
@@ -82,7 +81,6 @@ const Turns = () => {
   }, [serviceSelected]);
 
   const handleServiceChange = (serviceName, service) => {
-    console.log(service);
     let singCalculated;
     if (service.sing !== 0 && service.type === "%") {
       singCalculated = calculateSing(service.price, service.sing);
@@ -109,7 +107,6 @@ const Turns = () => {
     }
     setExpanded(false);
   };
-  console.log(serviceSelected);
 
   const handleSelectWorker = (worker) => {
     setSelectedWorker(worker);
@@ -181,7 +178,6 @@ const Turns = () => {
     });
   };
 
-  console.log(auxCart);
   return (
     <div className="container-turns">
       {dayIsSelected.length < 1 ? (
