@@ -1,0 +1,124 @@
+/* From Uiverse.io by satyamchaudharydev */
+.container-all-loadertobuy {
+      width: 100%;
+}
+
+.container-all-loadertobuy span {
+      display: flex;
+      justify-content: center;
+}
+
+.container-loadertobuy {
+      display: flex;
+      height: 15%;
+      width: 100%;
+      border-radius: 8px;
+      overflow: hidden;
+      /* box-shadow: 0px -15px 5px -15px rgb(0, 0, 0, 0.5)inset, 0px 15px 5px -15px rgb(0, 0, 0, 0.5); */
+}
+
+.loadertobuy {
+      display: block;
+      --height-of-loader: 100%;
+      --loader-color: #0071e2;
+      width: 100%;
+      height: var(--height-of-loader);
+      background-color: #4ba5ff;
+
+      position: relative;
+
+}
+
+.loadertobuy::before {
+      content: "";
+      position: absolute;
+      background: var(--loader-color);
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 100%;
+      border-radius: 5px;
+      /* box-shadow: 0px -15px 5px -15px rgb(0, 0, 0, 0.5)inset; */
+      animation: moving 1.5s ease-in-out infinite;
+
+}
+
+@keyframes moving {
+      50% {
+            width: 100%;
+      }
+
+      100% {
+            width: 0;
+            right: 0;
+            left: unset;
+      }
+}
+
+.container-loadertobuy-redirect {
+      position: relative;
+      display: flex;
+      align-self: flex-end;
+      height: 15%;
+      width: 100%;
+      border-radius: 8px;
+      background-color: #4ba5ff;
+
+
+      overflow: hidden;
+      box-shadow: 0px -15px 5px -15px rgb(0, 0, 0, 0.5)inset, 0px 15px 5px -15px rgb(0, 0, 0, 0.5);
+      animation: expand-height .3s ease-in-out forwards;
+}
+
+.loadertobuy-redirect {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 5%;
+      height: 100%;
+      animation: expand-width 3s ease-in-out forwards;
+      background-color: #0071e2;
+
+      font-size: 15px;
+      font-weight: bold;
+}
+
+.container-loadertobuy-redirect div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 5px;
+      color: white;
+      top: 0;
+      left: 0;
+
+}
+
+.container-loadertobuy-redirect img {
+    margin: 5px;
+    width: 35px;
+}
+
+@keyframes expand-height {
+      0% {
+            height: 15%;
+      }
+
+      100% {
+
+            height: 100%;
+      }
+}
+
+@keyframes expand-width {
+      0% {
+            width: 5%;
+      }
+
+      100% {
+            width: 100%;
+      }
+}

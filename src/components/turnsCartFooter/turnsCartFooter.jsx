@@ -3,18 +3,20 @@ import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
 import formatHour from "../../functions/formatHour";
 import backIcon from "../../assets/icons/back.png";
 import trashIcon from "../../assets/icons/trash.png";
-
 import "./turnsCartFooter.css";
 import axios from "axios";
+import { LoaderToBuy } from "../loaders/loaders";
+import { useNavigate } from "react-router-dom";
 
 const VITE_MERCADO_PAGO_PUBLIC_KEY = import.meta.env
   .VITE_MERCADO_PAGO_PUBLIC_KEY;
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const TurnsCartFooter = ({ turnsCart, setTurnsCart, setAuxCart }) => {
+  const navigate = useNavigate();
   const [openCart, setOpenCart] = useState(false);
-  const [preferenceId, setPreferenceId] = useState(null);
-  // const [canSubmit, setCanSubmit] = useState(true);
+  const [urlInitPoint, setUrlInitPoint] = useState(null);
+  const [loader, setLoader] = useState(false);
 
   initMercadoPago(VITE_MERCADO_PAGO_PUBLIC_KEY, {
     locale: "es-AR",
@@ -82,23 +84,59 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart, setAuxCart }) => {
   };
 
   const handleBuy = async () => {
-    try {
-      const response = await axios.post(
-        `${VITE_BACKEND_URL}/mercadopago/create_preference`,
-        {
-          arrayItems: turnsCart,
-        }
-      );
-      setPreferenceId(response.data);
-    } catch (error) {
-      console.log(error);
+    let cartWithSing = [];
+    let cartNoSing = [];
+    turnsCart.map((turn) => {
+      if (turn.service.price !== "") {
+        cartWithSing.push(turn);
+      } else {
+        cartNoSing.push(turn);
+      }
+    });
+    console.log(cartWithSing);
+    console.log(cartNoSing);
+    setLoader(true);
+    if (cartWithSing.length > 0) {
+      try {
+        setTimeout(async () => {
+          const response = await axios.post(
+            `${VITE_BACKEND_URL}/mercadopago/create_preference`,
+            {
+              arrayItems: turnsCart,
+              // cartWithSing,
+              // cartNoSing,
+            }
+          );
+          setUrlInitPoint(response.data);
+          setLoader(false);
+          setTimeout(() => {
+            window.location.href = response.data;
+          }, 600000);
+        }, 10000);
+        // Redirigir después de establecer la URL de redirección
+      } catch (error) {
+        setLoader(false);
+        console.log(error);
+      }
+    } else {
+      try {
+        const response = await axios.post(
+          `${VITE_BACKEND_URL}/workdays/nosequepinga`,
+          {
+            arrayItems: cartNoSing,
+          }
+        );
+        setLoader(false);
+
+        //si sale bien alerta con success turnos
+      } catch (error) {
+        setLoader(false);
+        console.log(error);
+      }
     }
   };
 
-  const handleContinue = () => {
-    setPreferenceId(null);
-  };
-
+  console.log(loader);
   return (
     <div
       className={
@@ -171,31 +209,16 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart, setAuxCart }) => {
               );
             })}
             <div className="div-btns-pay-mp">
-              {preferenceId ? (
-                <button onClick={handleContinue} className="btn-sing-pay">
-                  Seguir agendando
-                </button>
+              {loader ? (
+                <LoaderToBuy redirect={false} />
+              ) : urlInitPoint ? (
+                <>
+                  <LoaderToBuy redirect={true} />
+                </>
               ) : (
                 <button onClick={handleBuy} className="btn-sing-pay">
-                  Señar/Agendar
+                  Agendar y Señar
                 </button>
-              )}
-              {preferenceId && (
-                <Wallet
-                  initialization={{
-                    preferenceId: preferenceId,
-                    redirectMode: "self",
-                  }}
-                  // onReady={() => {
-                  //   if (!canSubmit) {
-                  //     alert("onready false");
-                  //     // Prevent Wallet from executing
-                  //     // Clear preferenceId or reset the Wallet component here if necessary
-                  //   }
-                  // }}
-
-                  onSubmit={true}
-                />
               )}
             </div>
           </>

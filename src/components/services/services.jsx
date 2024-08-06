@@ -375,6 +375,9 @@ const Services = ({
       <Button
         onClick={handleAddServiceCategory}
         variant="contained"
+        disabled={
+          inputs.service !== "" && inputs.category !== "" ? false : true
+        }
         sx={{
           display: "flex",
           alignSelf: "flex-end",
