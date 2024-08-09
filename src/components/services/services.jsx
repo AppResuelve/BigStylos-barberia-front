@@ -60,7 +60,14 @@ const Services = ({
   const handleAddServiceCategory = async () => {
     try {
       const { service, category, price, sing, type } = inputs;
-      if (service !== "" && category !== "") {
+      if (
+        service !== "" &&
+        category !== "" &&
+        ((sing !== "" && price !== "") ||
+          (sing === "" && price === "") ||
+          (price !== "" && sing == ""))
+      ) {
+        console.log("entre");
         // Verifica si el nuevo servicio no está vacío
         await axios.post(`${VITE_BACKEND_URL}/services/create`, {
           service,

@@ -1,4 +1,5 @@
 import mercadoPagoIcon from "../../assets/images/mercadopago.png";
+import securePayIcon from "../../assets/icons/secure-pay.png";
 import "./loaders.css";
 const LoaderToBuy = ({ redirect }) => {
   console.log(redirect);
@@ -12,7 +13,7 @@ const LoaderToBuy = ({ redirect }) => {
         <div className={redirect ? "loadertobuy-redirect" : "loadertobuy"}>
           {redirect && (
             <div>
-              <img src={mercadoPagoIcon} alt="mercado pago"  />
+              <img src={mercadoPagoIcon} alt="mercado pago" />
               <span className="span-redirect-mp">
                 Redireccionando a mercado pago
               </span>
@@ -20,7 +21,12 @@ const LoaderToBuy = ({ redirect }) => {
           )}
         </div>
       </div>
-      {redirect && <span>Compra segura</span>}
+      {redirect && (
+        <div className="container-secure-pay">
+          <img src={securePayIcon} alt="compra segura" />
+          <span>Compra segura</span>
+        </div>
+      )}
     </div>
   );
 };

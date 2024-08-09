@@ -24,9 +24,7 @@
       width: 100%;
       height: var(--height-of-loader);
       background-color: #4ba5ff;
-
       position: relative;
-
 }
 
 .loadertobuy::before {
@@ -63,8 +61,6 @@
       width: 100%;
       border-radius: 8px;
       background-color: #4ba5ff;
-
-
       overflow: hidden;
       box-shadow: 0px -15px 5px -15px rgb(0, 0, 0, 0.5)inset, 0px 15px 5px -15px rgb(0, 0, 0, 0.5);
       animation: expand-height .3s ease-in-out forwards;
@@ -83,23 +79,23 @@
       font-weight: bold;
 }
 
-.container-loadertobuy-redirect div {
+.loadertobuy-redirect div {
       display: flex;
       justify-content: center;
       align-items: center;
       position: absolute;
-      width: 100%;
+      width: 280px;
       height: 100%;
       border-radius: 5px;
       color: white;
       top: 0;
-      left: 0;
+      left: calc(50% - 140px);
 
 }
 
-.container-loadertobuy-redirect img {
-    margin: 5px;
-    width: 35px;
+.loadertobuy-redirect img {
+      margin: 5px;
+      width: 35px;
 }
 
 @keyframes expand-height {
@@ -121,4 +117,14 @@
       100% {
             width: 100%;
       }
+}
+
+.container-secure-pay {
+      display: flex;
+      justify-content: center;
+      margin-top: 2px;
+}
+
+.container-secure-pay img {
+      width: 25px;
 }

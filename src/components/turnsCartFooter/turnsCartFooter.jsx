@@ -72,7 +72,6 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart, setAuxCart }) => {
       });
     });
   };
-
   const handleDeleteTurn = (turn) => {
     setTurnsCart((prevState) => {
       return prevState.filter((t) => t.id !== turn.id);
@@ -87,32 +86,28 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart, setAuxCart }) => {
     let cartWithSing = [];
     let cartNoSing = [];
     turnsCart.map((turn) => {
-      if (turn.service.price !== "") {
+      if (turn.service.sing !== "") {
         cartWithSing.push(turn);
       } else {
         cartNoSing.push(turn);
       }
     });
-    console.log(cartWithSing);
-    console.log(cartNoSing);
     setLoader(true);
     if (cartWithSing.length > 0) {
       try {
-        setTimeout(async () => {
-          const response = await axios.post(
-            `${VITE_BACKEND_URL}/mercadopago/create_preference`,
-            {
-              arrayItems: turnsCart,
-              // cartWithSing,
-              // cartNoSing,
-            }
-          );
-          setUrlInitPoint(response.data);
-          setLoader(false);
-          setTimeout(() => {
-            window.location.href = response.data;
-          }, 600000);
-        }, 10000);
+        const response = await axios.post(
+          `${VITE_BACKEND_URL}/mercadopago/create_preference`,
+          {
+            arrayItems: turnsCart,
+            // cartWithSing,
+            // cartNoSing,
+          }
+        );
+        setUrlInitPoint(response.data);
+        setLoader(false);
+        setTimeout(() => {
+          window.location.href = response.data;
+        }, 2500);
         // Redirigir después de establecer la URL de redirección
       } catch (error) {
         setLoader(false);
@@ -120,13 +115,11 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart, setAuxCart }) => {
       }
     } else {
       try {
-        const response = await axios.post(
-          `${VITE_BACKEND_URL}/workdays/nosequepinga`,
-          {
-            arrayItems: cartNoSing,
-          }
-        );
+        const response = await axios.put(`${VITE_BACKEND_URL}/workdays/turn`, {
+          arrayItems: cartNoSing,
+        });
         setLoader(false);
+        console.log(response);
 
         //si sale bien alerta con success turnos
       } catch (error) {
