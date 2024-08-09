@@ -15,8 +15,8 @@ import { calculateSing } from "../../helpers/calculateSing";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const Turns = ({ setTurnsCart,auxCart,setAuxCart }) => {
-  const { darkMode } = useContext(DarkModeContext);
+const Turns = ({ setTurnsCart, auxCart, setAuxCart }) => {
+  const { darkMode, userData } = useContext(DarkModeContext);
   const [catServices, setCatServices] = useState({});
   const [serviceSelected, setServiceSelected] = useState({});
   const [expanded, setExpanded] = useState(false);
@@ -157,7 +157,7 @@ const Turns = ({ setTurnsCart,auxCart,setAuxCart }) => {
         id: `${dayIsSelected[0]}+${dayIsSelected[1]}+${serviceSelected.name}+${btn.ini}`,
         worker: btn.worker,
         ini: btn.ini,
-        end: btn.end,
+        user: userData.email,
         day: dayIsSelected[0],
         month: dayIsSelected[1],
         service: serviceSelected,

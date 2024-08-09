@@ -9,13 +9,11 @@ const authenticateUsers = async () => {
     user: {},
     auth: false,
   };
-  console.log(idSession);
   if (idSession) {
     try {
       const response = await axios.post(`${VITE_BACKEND_URL}/users/byemail`, {
         email: idSession,
       });
-      console.log(response.data);
       objResult.user = response.data;
       objResult.auth = true;
     } catch (error) {
