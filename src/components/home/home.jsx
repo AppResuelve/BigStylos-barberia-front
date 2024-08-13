@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { DarkModeContext } from "../../App";
 import { NavLink } from "react-router-dom";
 import Footer from "../footer/footer";
@@ -8,11 +8,42 @@ import defaultImgLight from "../../assets/icons/no-image-logotipe-light.png";
 import instagram from "../../assets/icons/instagram.png";
 import facebook from "../../assets/icons/facebook.png";
 import whatsapp from "../../assets/icons/whatsapp.png";
+import { verificateFrontResponse } from "../../helpers/verificateFrontResponseMP";
+import { getCookie } from "../../helpers/cookies";
+import axios from "axios";
 import "./home.css";
+
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Home = ({ homeImages }) => {
   const { darkMode } = useContext(DarkModeContext);
-  
+
+  useEffect(async() => {
+    // Extraer la URL y sus parámetros
+    const urlParams = window.location.search;
+    if (urlParams !== "") {
+      // Obtener el preference_id de la cookie
+      const preferenceId = getCookie("PREFERENCE_ID");
+
+      if (preferenceId) {
+        // Verificar los parámetros de la URL
+        const isMatch = verificateFrontResponse(urlParams, preferenceId);
+        if (isMatch) {
+          try {
+            const response = await axios.post(`${VITE_BACKEND_URL}/`,{})
+          } catch (error) {
+            console.log(error);
+          }
+        }
+        console.log("URL Params match with cookie preference_id:", isMatch);
+      } else {
+        console.log("No preference_id found in cookies.");
+      }
+    } else {
+      return;
+    }
+  }, []);
+
   return (
     <>
       {homeImages === 1 ? (
@@ -51,7 +82,7 @@ const Home = ({ homeImages }) => {
           >
             <Box style={{ height: "30%" }}>
               {homeImages === 1 ? (
-                <Box >
+                <Box>
                   <Skeleton
                     style={{
                       width: "100%",
@@ -88,7 +119,7 @@ const Home = ({ homeImages }) => {
                 width: "100%",
                 height: "30%",
                 display: "flex",
-                  justifyContent: "space-between",
+                justifyContent: "space-between",
               }}
             >
               <Box

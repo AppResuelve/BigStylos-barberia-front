@@ -19,7 +19,6 @@ const authenticateUsers = async () => {
     } catch (error) {
       console.log(error);
     }
-  } else {
   }
   return objResult;
 };
