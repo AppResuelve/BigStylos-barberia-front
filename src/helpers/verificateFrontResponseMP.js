@@ -1,6 +1,5 @@
 const verificateFrontResponse = (urlParams, preferenceIdToMatch) => {
   // Parse the URL parameters into an object
-  console.log(preferenceIdToMatch, "preference en el match");
 
   const params = new URLSearchParams(urlParams);
 

@@ -12,13 +12,14 @@ import { verificateFrontResponse } from "../../helpers/verificateFrontResponseMP
 import { getCookie } from "../../helpers/cookies";
 import axios from "axios";
 import "./home.css";
+import { getLocalStorage } from "../../helpers/localStorage";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Home = ({ homeImages }) => {
   const { darkMode } = useContext(DarkModeContext);
 
-  useEffect(async() => {
+  useEffect(async () => {
     // Extraer la URL y sus parámetros
     const urlParams = window.location.search;
     if (urlParams !== "") {
@@ -29,8 +30,12 @@ const Home = ({ homeImages }) => {
         // Verificar los parámetros de la URL
         const isMatch = verificateFrontResponse(urlParams, preferenceId);
         if (isMatch) {
+          const arrayItems = getLocalStorage("CART_ID");
+          
           try {
-            const response = await axios.post(`${VITE_BACKEND_URL}/`,{})
+            await axios.put(`${VITE_BACKEND_URL}/workdays/tofreeturns`, {
+              arrayItems,
+            });
           } catch (error) {
             console.log(error);
           }

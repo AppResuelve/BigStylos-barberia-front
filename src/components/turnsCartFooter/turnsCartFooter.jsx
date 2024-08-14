@@ -7,6 +7,7 @@ import "./turnsCartFooter.css";
 import axios from "axios";
 import { LoaderToBuy } from "../loaders/loaders";
 import { setCookie } from "../../helpers/cookies";
+import { setLocalStorage } from "../../helpers/localStorage";
 
 const VITE_MERCADO_PAGO_PUBLIC_KEY = import.meta.env
   .VITE_MERCADO_PAGO_PUBLIC_KEY;
@@ -101,9 +102,10 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart, setAuxCart }) => {
             cartWithSing,
           }
         );
+
         setUrlInitPoint(response.data.init_point);
+        setLocalStorage("CART_ID", response.data.turns);
         setCookie("PREFERENCE_ID", response.data.preference_id, 4);
-        setCookie("CART_ID", response.data.turns, 4);
 
         setLoader(false);
         setTimeout(() => {
