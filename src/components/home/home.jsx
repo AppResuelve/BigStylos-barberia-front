@@ -40,7 +40,7 @@ const Home = ({ homeImages }) => {
             console.log(error);
           }
         }
-        console.log("URL Params match with cookie preference_id:", isMatch);
+        console.log("URL Params match with cookie preference_id", isMatch);
       } else {
         console.log("No preference_id found in cookies.");
       }
