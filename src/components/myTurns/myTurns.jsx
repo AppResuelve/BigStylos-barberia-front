@@ -21,11 +21,9 @@ const MyTurns = ({ userData }) => {
     setDisableButtonMyTurns,
   } = useContext(DarkModeContext);
   const [listMyTurns, setListMyTurns] = useState(1);
-  const [InfoToSubmit, setInfoToSubmit] = useState({});
+  const [infoToSubmit, setInfoToSubmit] = useState({});
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [refresh, setRefresh] = useState(false);
-
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,7 +33,6 @@ const MyTurns = ({ userData }) => {
           { emailUser: userData.email }
         );
         setListMyTurns(response.data);
-       
       } catch (error) {
         console.log(error);
       }
@@ -53,11 +50,9 @@ const MyTurns = ({ userData }) => {
   }, [validateAlert]);
 
   const handleConfirmCancelTurn = (turn) => {
-    let newTurn = {
-      ...turn,
-      selectedService: turn.service.name,
-    };
-    setInfoToSubmit(newTurn);
+    console.log(turn);
+    
+    setInfoToSubmit(turn);
     setShowAlert({
       isOpen: true,
       message: "Estas a punto de cancelar el turno, deseas continuar?",
@@ -77,28 +72,26 @@ const MyTurns = ({ userData }) => {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(`${VITE_BACKEND_URL}/workdays/cancel`, {
-        month: InfoToSubmit.month,
-        day: InfoToSubmit.day,
-        time: InfoToSubmit.hourTime,
-        emailWorker: InfoToSubmit.worker,
+        month: infoToSubmit.month,
+        day: infoToSubmit.day,
+        ini: infoToSubmit.ini,
+        end: infoToSubmit.end,
+        emailWorker: infoToSubmit.worker.email,
         emailClient: userData.email,
-        selectedService: InfoToSubmit.selectedService,
+        selectedService: infoToSubmit.service.name,
       });
       const { data } = response;
 
-     
-
-      // Filtrar los turnos para eliminar el turno cancelado
-      existingTurns = existingTurns.filter((turn) => {
-        const serviceName = Object.keys(turn)[0];
-        const { month, day, ini } = turn[serviceName];
-        return (
-          month !== InfoToSubmit.month ||
-          day !== InfoToSubmit.day ||
-          ini !== InfoToSubmit.hourTime.ini
-        );
-      });
-
+      // // Filtrar los turnos para eliminar el turno cancelado
+      // existingTurns = existingTurns.filter((turn) => {
+      //   const serviceName = Object.keys(turn)[0];
+      //   const { month, day, ini } = turn[serviceName];
+      //   return (
+      //     month !== infoToSubmit.month ||
+      //     day !== infoToSubmit.day ||
+      //     ini !== infoToSubmit.hourTime.ini
+      //   );
+      // });
 
       setRefresh(!refresh);
       setRefreshWhenCancelTurn(!refreshWhenCancelTurn);
@@ -124,6 +117,7 @@ const MyTurns = ({ userData }) => {
       console.error("Error al cancelar el turno:", error);
     }
   };
+console.log(listMyTurns,"lista de mis turnos");
 
   return (
     <div className="div-container-myturns">
@@ -132,7 +126,6 @@ const MyTurns = ({ userData }) => {
           <Skeleton variant="rounded" height={80} style={{ width: "100%" }} />
         ) : listMyTurns && listMyTurns.length > 0 ? (
           listMyTurns.map((turn, index) => {
-           
             return (
               <Box
                 key={index}
@@ -151,8 +144,7 @@ const MyTurns = ({ userData }) => {
                 >
                   <h3 className="h3-myTurns">{turn.service.name}</h3>
                   <h4 className="h4-myTurns">
-                    El día: {turn.day}/{turn.month} a las{" "}
-                    {formatHour(turn.ini)}
+                    El día: {turn.day}/{turn.month} a las {formatHour(turn.ini)}
                   </h4>
                   <hr style={{ width: "100%" }} />
                 </Box>
@@ -169,7 +161,7 @@ const MyTurns = ({ userData }) => {
                   >
                     <h4 className="h4-myTurns">Profesional:</h4>
                     <h4 className={sm ? "ticker-text" : "h4-myTurns"}>
-                      {turn.worker}
+                      {turn.worker.name}
                     </h4>
                   </Box>
                   <Button

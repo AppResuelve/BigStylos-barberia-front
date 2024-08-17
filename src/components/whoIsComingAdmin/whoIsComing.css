@@ -1,8 +1,7 @@
 .box-container-ctfw {
-
       /* Estilos para motores Webkit y blink (Chrome, Safari, Opera...) */
       *::-webkit-scrollbar {
-            height: 2px;
+            width: 2px;
       }
 
       *::-webkit-scrollbar-thumb {
@@ -25,15 +24,55 @@
       background-color: transparent;
       transition: .3s;
       padding: 3px;
-
 }
 
 .btn-wsp-ctfw:hover {
-      background-color: #d6d6d5;
+      background-color: #727272;
 }
 
 .btn-wsp-ctfw-false {
       background-color: transparent;
+}
+
+.btn-worker-wic {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: none;
+      border-radius: 50px;
+      box-shadow: 0px 2px 5px 0px rgb(0, 0, 0, 0.5);
+      padding: 8px;
+      margin: 5px;
+      width: fit-content;
+      height: fit-content;
+      font-weight: bold;
+      line-height: 1.2;
+      cursor: pointer;
+}
+
+.btn-worker-wic img {
+      width: 30px;
+      border-radius: 100%;
+}
+
+.btn-worker-wic#email {
+      text-transform: lowercase;
+}
+
+.btn-day-wic {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: none;
+      border-radius: 50px;
+      box-shadow: 0px 2px 5px 0px rgb(0, 0, 0, 0.5);
+      margin: 5px;
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      min-height: 40px;
+      font-weight: bold;
+      cursor: pointer;
 }
 
 .h-phone-hic-dark h4 {

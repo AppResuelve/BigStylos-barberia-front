@@ -87,7 +87,9 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart, setAuxCart }) => {
     let cartNoSing = [];
     setLoader(true);
     turnsCart.map((turn) => {
-      if (turn.service.sing !== "") {
+      console.log(turn);
+      
+      if (turn.service.sing != 0) {
         cartWithSing.push(turn);
       } else {
         cartNoSing.push(turn);
