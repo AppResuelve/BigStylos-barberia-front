@@ -117,7 +117,7 @@ const MyTurns = ({ userData }) => {
       console.error("Error al cancelar el turno:", error);
     }
   };
-console.log(listMyTurns,"lista de mis turnos");
+console.log(listMyTurns,"lista de mis turnosssssssssssssss");
 
   return (
     <div className="div-container-myturns">
@@ -144,7 +144,7 @@ console.log(listMyTurns,"lista de mis turnos");
                 >
                   <h3 className="h3-myTurns">{turn.service.name}</h3>
                   <h4 className="h4-myTurns">
-                    El día: {turn.day}/{turn.month} a las {formatHour(turn.ini)}
+                    El día: {turn.day}/{turn.month} desde las {formatHour(turn.ini)} a las {formatHour(turn.end)}
                   </h4>
                   <hr style={{ width: "100%" }} />
                 </Box>
