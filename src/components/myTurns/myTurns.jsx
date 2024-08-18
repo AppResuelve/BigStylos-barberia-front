@@ -68,7 +68,6 @@ const MyTurns = ({ userData }) => {
   };
 
   const handleSubmit = async (turn) => {
-    console.log(turn);
     
     try {
       const response = await axios.post(`${VITE_BACKEND_URL}/workdays/cancel`, {
@@ -115,7 +114,6 @@ const MyTurns = ({ userData }) => {
       console.error("Error al cancelar el turno:", error);
     }
   };
-console.log(listMyTurns,"lista de mis turnosssssssssssssss");
 
   return (
     <div className="div-container-myturns">

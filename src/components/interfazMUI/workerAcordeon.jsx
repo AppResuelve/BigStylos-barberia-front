@@ -38,7 +38,6 @@ const WorkerAcordeon = ({ user }) => {
   const [showEdit, setShowEdit] = useState(false);
 
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-console.log(user);
   useEffect(() => {
     setTimeEdit(workerData.services);
   }, [workerData]);
@@ -86,7 +85,6 @@ console.log(user);
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/services/`);
         const { data } = response;
-        console.log(data, "esto es el data");
         const arrServices = convertToServicesArray(data); //pasamos a array de obj servicio antes de setear
         setServices(arrServices);
       } catch (error) {
@@ -126,7 +124,6 @@ console.log(user);
     };
     fetchWorker();
   }, [refresh]);
-console.log(services, " estos son sosdf serlkjsgt");
   const handleChange = (panel) => (event, isExpanded) => {
     if (changeNoSaved) {
       setShowAlert({

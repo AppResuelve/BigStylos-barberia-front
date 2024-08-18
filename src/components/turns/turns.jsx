@@ -81,7 +81,6 @@ const Turns = ({ setTurnsCart, auxCart, setAuxCart }) => {
   }, [serviceSelected]);
 
   const handleServiceChange = (serviceName, service) => {
-    console.log(service);
 
     let singCalculated;
     if (service.sing != 0 && service.type === "%") {

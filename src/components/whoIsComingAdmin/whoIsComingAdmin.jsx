@@ -262,7 +262,7 @@ const WhoIsComingAdmin = () => {
                   </Box>
                   <hr />
                   <h4 className="h-time-hic">
-                    {`${formatHour(element.ini)} - ${formatHour(element.fin)}`}
+                    {`${formatHour(element.ini)} - ${formatHour(element.end)}`}
                   </h4>
                   <hr />
                   <Box
