@@ -10,21 +10,8 @@ import "./whoIsComing.css";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const WhoIsComingAdmin = () => {
-  const {
-    darkMode,
-    refreshForWhoIsComing,
-    setRefreshForWhoIsComing,
-  } = useContext(DarkModeContext);
+  const { darkMode } = useContext(DarkModeContext);
   const [turns, setTurns] = useState([]);
-  /*  turns contiene:
-  {
-    email: el email del cliente
-    name: el name del cliente
-    ini: el minuto de inicio de su turno
-    fin: minuto final de su turno
-    phone: su cel
-    image: su imagen
-  } */
   const [count, setCount] = useState([]);
   const [selectedDay, setSelectedDay] = useState("");
   const [selectedWorker, setSelectedWorker] = useState("");
@@ -33,16 +20,13 @@ const WhoIsComingAdmin = () => {
   const date = new Date();
   const currentDay = date.getDate();
 
-  useEffect(() => {}, []);
-
   useEffect(() => {
     const fetchWorkers = async () => {
       try {
         const response = await axios.get(
           `${VITE_BACKEND_URL}/users/getworkers`
         );
-        const { data } = response;
-        setWorkers(data);
+        setWorkers(response.data);
       } catch (error) {
         console.error("Error al obtener workers.", error);
       }
@@ -57,20 +41,16 @@ const WhoIsComingAdmin = () => {
           `${VITE_BACKEND_URL}/workdays/countworker`,
           { emailWorker: selectedWorker }
         );
-        const { data } = response;
-        setCount(data);
-        setSelectedDay(data[0]);
+        setCount(response.data);
+        // setSelectedDay(data[0]);
       } catch (error) {
         console.error("Error al obtener el count.", error);
       }
     };
-    if (selectedWorker.length > 0) {
+    if (selectedWorker !== "") {
       fetchCount();
     }
-    if (refreshForWhoIsComing == true) {
-      setRefreshForWhoIsComing(false);
-    }
-  }, [selectedWorker, refreshForWhoIsComing]);
+  }, [selectedWorker]);
 
   useEffect(() => {
     const fetchTurns = async () => {
@@ -80,20 +60,16 @@ const WhoIsComingAdmin = () => {
           `${VITE_BACKEND_URL}/workdays/whoiscoming`,
           { emailWorker: selectedWorker, month: numberMonth, day: numberDay }
         );
-        const { data } = response;
-        setTurns(data);
+        setTurns(response.data);
       } catch (error) {
         console.error("Error al obtener los dias cancelados.", error);
       }
     };
     //condicional de estado 0 de la app (undefined)
-    if (selectedDay !== undefined) {
+    if (selectedDay !== "") {
       fetchTurns();
     }
-    if (refreshForWhoIsComing == true) {
-      setRefreshForWhoIsComing(false);
-    }
-  }, [selectedDay, refreshForWhoIsComing]);
+  }, [selectedDay]);
 
   const handleChangeDay = (element) => {
     setSelectedDay(element);
@@ -101,8 +77,10 @@ const WhoIsComingAdmin = () => {
 
   const handleChangeWorker = (email) => {
     setSelectedDay("");
+    setTurns([]);
     setSelectedWorker(email);
   };
+
   return (
     <div>
       <hr
@@ -113,31 +91,23 @@ const WhoIsComingAdmin = () => {
           backgroundColor: "#2196f3",
         }}
       />
-      <Box
-        className="box-container-ctfw"
-        style={{
-          overFlow: "scroll",
-          marginBottom: "20px",
-        }}
-      >
+      <div className="box-container-ctfw">
         {/* **************** */}
-        <Box
+        <div
           style={{
             display: "flex",
-            width: "100%",
-            overflow: "scroll",
+            flexWrap: "wrap",
+            overflowY: "scroll",
+            maxHeight: "120px",
           }}
         >
           {workers.length > 0 &&
             workers.map((element, index) => {
               return (
-                <Button
-                  variant="contained"
+                <button
+                  className="btn-worker-wic"
                   key={index}
                   style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "start",
                     backgroundColor:
                       selectedWorker == element.email && darkMode.on
                         ? "white"
@@ -148,34 +118,46 @@ const WhoIsComingAdmin = () => {
                       selectedWorker == element.email && darkMode.on
                         ? "black"
                         : "white",
-                    margin: "5px",
-                    minWidth: "180px",
-                    overflow: "hidden",
-                    fontFamily: "Jost, sans-serif",
-                    fontWeight: "bold",
-                    lineHeight: "1.2",
                   }}
                   onClick={() => {
                     handleChangeWorker(element.email);
                   }}
                 >
-                  <h3 style={{ textTransform: "lowercase" }}>
-                    {element.email}
-                  </h3>
-                  <h5
+                  <img src={element.image} alt="trabajador" />
+                  <div
                     style={{
-                      color:
-                        selectedWorker == element.email && darkMode.on
-                          ? "#a3a3a3"
-                          : "#cccaca",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "start",
+                      marginLeft: "5px",
                     }}
                   >
-                    {element.name}
-                  </h5>
-                </Button>
+                    <span
+                      id="email"
+                      style={{
+                        color:
+                          selectedWorker == element.email
+                            ? "#a3a3a3"
+                            : "#727272",
+                      }}
+                    >
+                      {element.email}
+                    </span>
+                    <span
+                      style={{
+                        color:
+                          selectedWorker == element.email
+                            ? "#a3a3a3"
+                            : "#727272",
+                      }}
+                    >
+                      {element.name}
+                    </span>
+                  </div>
+                </button>
               );
             })}
-        </Box>
+        </div>
 
         <Box
           style={{
@@ -183,14 +165,17 @@ const WhoIsComingAdmin = () => {
             width: "100%",
             maxWidth: "900px",
             overflow: "auto",
+            marginTop: "20px",
           }}
         >
           {count.length > 0 &&
             count.map((element, index) => {
+              const [numberDay, numberMonth] = element.split("/");
+
               return (
-                <Button
-                  variant="contained"
+                <button
                   key={index}
+                  className="btn-day-wic"
                   style={{
                     backgroundColor:
                       selectedDay == element && darkMode.on
@@ -198,18 +183,14 @@ const WhoIsComingAdmin = () => {
                         : selectedDay == element && !darkMode.on
                         ? "black"
                         : "",
-                    color:
-                      selectedDay == element && darkMode.on ? "black" : "white",
-                    margin: "5px",
-                    fontFamily: "Jost, sans-serif",
-                    fontWeight: "bold",
+                    color: selectedDay == element ? "white" : "black",
                   }}
                   onClick={() => {
                     handleChangeDay(element);
                   }}
                 >
-                  {index === 0 ? "HOY" : element}
-                </Button>
+                  {currentDay === numberDay ? "HOY" : element}
+                </button>
               );
             })}
           {count.length < 1 && selectedWorker !== "" && (
@@ -320,7 +301,7 @@ const WhoIsComingAdmin = () => {
                         </button>
                       </a>
                     ) : (
-                      <h5>No disponible</h5>
+                      <span>No disponible</span>
                     )}
                   </Box>
 
@@ -344,7 +325,7 @@ const WhoIsComingAdmin = () => {
             </Box>
           )}
         </Box>
-      </Box>
+      </div>
     </div>
   );
 };

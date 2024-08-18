@@ -67,13 +67,12 @@ const Services = ({
           (sing === "" && price === "") ||
           (price !== "" && sing == ""))
       ) {
-        console.log("entre");
         // Verifica si el nuevo servicio no está vacío
         await axios.post(`${VITE_BACKEND_URL}/services/create`, {
           service,
           category,
-          price,
-          sing,
+          price: price == 0 ? 0 : price,
+          sing: sing == 0 ? 0 : sing,
           type,
         });
 
@@ -568,8 +567,7 @@ const Services = ({
                                 handleChangeRowService("sing", e)
                               }
                             />
-                            <input
-                              type="text"
+                            <select
                               style={{
                                 width: "10%",
                                 padding: "5px",
@@ -583,7 +581,10 @@ const Services = ({
                               onChange={(e) =>
                                 handleChangeRowService("type", e)
                               }
-                            />
+                            >
+                              <option value="$">$</option>
+                              <option value="%">%</option>
+                            </select>
                           </>
                         ) : (
                           <>
@@ -671,7 +672,9 @@ const Services = ({
                                 handleRowService(service, elem.category)
                               }
                             >
-                              {`${service.sing}${service.type}`}
+                              {service.type === "$"
+                                ? `${service.type}${service.sing}`
+                                : `${service.sing}${service.type}`}
                             </span>
                             <span
                               style={{

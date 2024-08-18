@@ -81,8 +81,10 @@ const Turns = ({ setTurnsCart, auxCart, setAuxCart }) => {
   }, [serviceSelected]);
 
   const handleServiceChange = (serviceName, service) => {
+    console.log(service);
+
     let singCalculated;
-    if (service.sing !== 0 && service.type === "%") {
+    if (service.sing != 0 && service.type === "%") {
       singCalculated = calculateSing(service.price, service.sing);
       setServiceSelected({
         name: serviceName,
@@ -90,19 +92,12 @@ const Turns = ({ setTurnsCart, auxCart, setAuxCart }) => {
         price: service.price,
         sing: singCalculated,
       });
-    } else if (service.sing !== 0 && service.type === "$") {
-      setServiceSelected({
-        name: serviceName,
-        img: service.img,
-        price: service.price,
-        sing: service.sing,
-      });
     } else {
       setServiceSelected({
         name: serviceName,
         img: service.img,
         price: service.price,
-        sing: null,
+        sing: service.sing,
       });
     }
     setExpanded(false);

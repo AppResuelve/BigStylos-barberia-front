@@ -16,6 +16,8 @@ function decryptData(data) {
 
 // Función para establecer una cookie con expiración
 export function setCookie(name, value, timeToExpiration) {
+  console.log(value);
+  
   try {
     const encryptedValue = encryptData(value);
     Cookies.set(name, encryptedValue, {

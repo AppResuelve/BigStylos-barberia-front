@@ -50,8 +50,6 @@ const MyTurns = ({ userData }) => {
   }, [validateAlert]);
 
   const handleConfirmCancelTurn = (turn) => {
-    console.log(turn);
-    
     setInfoToSubmit(turn);
     setShowAlert({
       isOpen: true,
@@ -69,18 +67,18 @@ const MyTurns = ({ userData }) => {
     setDisableButtonMyTurns(true);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (turn) => {
+    console.log(turn);
+    
     try {
       const response = await axios.post(`${VITE_BACKEND_URL}/workdays/cancel`, {
-        month: infoToSubmit.month,
-        day: infoToSubmit.day,
-        ini: infoToSubmit.ini,
-        end: infoToSubmit.end,
-        emailWorker: infoToSubmit.worker.email,
-        emailClient: userData.email,
-        selectedService: infoToSubmit.service.name,
+        month: turn.month,
+        day: turn.day,
+        ini: turn.ini,
+        end: turn.end,
+        emailWorker: turn.worker.email,
+        emailUser: userData.email,
       });
-      const { data } = response;
 
       // // Filtrar los turnos para eliminar el turno cancelado
       // existingTurns = existingTurns.filter((turn) => {
@@ -95,24 +93,24 @@ const MyTurns = ({ userData }) => {
 
       setRefresh(!refresh);
       setRefreshWhenCancelTurn(!refreshWhenCancelTurn);
-      const timeoutId = setTimeout(() => {
-        setShowAlert({
-          isOpen: true,
-          message: `Su turno ha sido cancelado exitosamente!`,
-          type: "success",
-          button1: {
-            text: "",
-            action: "",
-          },
-          buttonClose: {
-            text: "aceptar",
-          },
-        });
-      }, 450);
+      // const timeoutId = setTimeout(() => {
+      //   setShowAlert({
+      //     isOpen: true,
+      //     message: `Su turno ha sido cancelado exitosamente!`,
+      //     type: "success",
+      //     button1: {
+      //       text: "",
+      //       action: "",
+      //     },
+      //     buttonClose: {
+      //       text: "aceptar",
+      //     },
+      //   });
+      // }, 450);
 
-      return () => {
-        clearTimeout(timeoutId);
-      };
+      // return () => {
+      //   clearTimeout(timeoutId);
+      // };
     } catch (error) {
       console.error("Error al cancelar el turno:", error);
     }
@@ -144,7 +142,7 @@ console.log(listMyTurns,"lista de mis turnosssssssssssssss");
                 >
                   <h3 className="h3-myTurns">{turn.service.name}</h3>
                   <h4 className="h4-myTurns">
-                    El día: {turn.day}/{turn.month} desde las {formatHour(turn.ini)} a las {formatHour(turn.end)}
+                    El día: {turn.day}/{turn.month} a las {formatHour(turn.ini)}
                   </h4>
                   <hr style={{ width: "100%" }} />
                 </Box>
@@ -175,7 +173,7 @@ console.log(listMyTurns,"lista de mis turnosssssssssssssss");
                       color: "red",
                       transition: ".2s",
                     }}
-                    onClick={() => handleConfirmCancelTurn(turn)}
+                    onClick={() => handleSubmit(turn)}
                   >
                     <DeleteOutlineIcon />
                   </Button>
