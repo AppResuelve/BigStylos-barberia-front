@@ -19,7 +19,7 @@ const WhoIsComingWorker = ({
   const [turns, setTurns] = useState([]);
   const [count, setCount] = useState([]);
   const [selectedDay, setSelectedDay] = useState("");
-
+  console.log(turns)
   /*  turns contiene:
   {
     email: el email del cliente
@@ -202,7 +202,7 @@ const WhoIsComingWorker = ({
                 </Box>
                 <hr />
                 <h4 className="h-time-hic">
-                  {`${formatHour(element.ini)} - ${formatHour(element.fin)}`}
+                  {`${formatHour(element.ini)} - ${formatHour(element.end)}`}
                 </h4>
                 <hr />
                 <Box
