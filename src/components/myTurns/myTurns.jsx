@@ -24,6 +24,7 @@ const MyTurns = ({ userData }) => {
   const [infoToSubmit, setInfoToSubmit] = useState({});
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [refresh, setRefresh] = useState(false);
+  console.log(listMyTurns, '<----------listMyTurns')
 
   useEffect(() => {
     const fetchData = async () => {
@@ -76,7 +77,10 @@ const MyTurns = ({ userData }) => {
         ini: turn.ini,
         end: turn.end,
         emailWorker: turn.worker.email,
+        nameWorker: turn.worker.name,
         emailUser: userData.email,
+        nameUser: userData.name,
+        service: turn.service
       });
 
       // // Filtrar los turnos para eliminar el turno cancelado
