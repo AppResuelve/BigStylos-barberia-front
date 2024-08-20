@@ -19,34 +19,52 @@ const CustomCalendarPlannedC = ({
 }) => {
   const { darkMode } = useContext(DarkModeContext);
   const daysCalendarCustom = daysMonthCalendarCustom(amountOfDays, false);
-  let { currentMonth, nextMonth, currentYear, nextYear, month1, month2 } = daysCalendarCustom;
+  let { currentMonth, nextMonth, currentYear, nextYear, month1, month2 } =
+    daysCalendarCustom;
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
   const getDayPosition = getToday() + 1;
+  console.log(dayIsSelected);
 
-  const handleDay = (day, month) => {
-    setDayIsSelected((prevState) => {
-      const newState = { ...prevState };
-
-      if (newState[month] && newState[month][day]) {
-        // Si ya existe en dayIsSelected, lo quitamos
-
-        const { [day]: _, ...rest } = newState[month];
-
-        if (Object.keys(rest).length < 1) {
-          delete newState[month];
-        } else {
-          newState[month] = rest;
-        }
-      } else {
-        // Si no existe, lo agregamos
-        newState[month] = {
-          ...newState[month],
+  const handleDay = (day, month, turn) => {
+    if (turn) {
+      setDayIsSelected({
+        [month]: {
           [day]: {},
-        };
-      }
+        },
+        turn: true,
+      });
+      setDaysWithTurns({
+        month,
+        day,
+      });
+    } else {
+      setDayIsSelected((prevState) => {
+        let newState = {};
+        if (!dayIsSelected.turn) {
+          newState = { ...prevState };
+        }
 
-      return newState;
-    });
+        if (newState[month] && newState[month][day]) {
+          // Si ya existe en dayIsSelected, lo quitamos
+
+          const { [day]: _, ...rest } = newState[month];
+
+          if (Object.keys(rest).length < 1) {
+            delete newState[month];
+          } else {
+            newState[month] = rest;
+          }
+        } else {
+          // Si no existe, lo agregamos
+          newState[month] = {
+            ...newState[month],
+            [day]: {},
+          };
+        }
+
+        return newState;
+      });
+    }
   };
 
   return (
@@ -67,12 +85,14 @@ const CustomCalendarPlannedC = ({
           let dayName = obtainDayName(day, currentMonth, currentYear);
           let disabled = false;
           let colorDay = "#e0e0e0d2";
+          let turn = false;
           if (
             days &&
             days[currentMonth] &&
             days[currentMonth][day] &&
             days[currentMonth][day].turn
           ) {
+            turn = true;
             colorDay = "#e6b226d0";
           }
           if (
@@ -90,7 +110,7 @@ const CustomCalendarPlannedC = ({
               key={index}
               disabled={!showEdit ? true : disabled}
               className={!showEdit || disabled ? "month1-false" : "month1"}
-              onClick={() => handleDay(day, currentMonth)}
+              onClick={() => handleDay(day, currentMonth, turn)}
               style={{
                 gridColumnStart: index === 0 ? getDayPosition : "auto",
                 backgroundColor:
@@ -146,7 +166,8 @@ const CustomCalendarPlannedC = ({
               className={!showEdit || disabled ? "month2-false" : "month2"}
               onClick={() => handleDay(day, nextMonth)}
               style={{
-                gridColumnStart: month1.length < 1 && index === 0 ? getDayPosition : "auto",
+                gridColumnStart:
+                  month1.length < 1 && index === 0 ? getDayPosition : "auto",
                 backgroundColor: colorDay,
                 ...(dayIsSelected[nextMonth] && dayIsSelected[nextMonth][day]
                   ? { backgroundColor: "gray" }
