@@ -38,6 +38,7 @@ const CustomCalendarPlannedC = ({
         day,
       });
     } else {
+      setDaysWithTurns({});
       setDayIsSelected((prevState) => {
         let newState = {};
         if (!dayIsSelected.turn) {
