@@ -41,6 +41,15 @@ const MyServices = ({
     0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210, 225, 240,
     255, 270,
   ];
+
+  console.log(services);
+  console.log();
+  console.log();
+  console.log();
+  console.log();
+  console.log();
+  console.log();
+  
   useEffect(() => {
     if (timeEdit) {
       //condicional de estado 0 de la app

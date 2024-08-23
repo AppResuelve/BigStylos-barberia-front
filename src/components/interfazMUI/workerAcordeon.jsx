@@ -1,18 +1,21 @@
 import { useEffect, useState, useContext } from "react";
-import { DarkModeContext } from "../../App";
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import LinearProgress from "@mui/material/LinearProgress";
-import { Box } from "@mui/material";
-import CreateWorkDays from "../createWorkDays/createWorkDays";
 import { useMediaQueryHook } from "./useMediaQuery";
+import { DarkModeContext } from "../../App";
+import {
+  Box,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  LinearProgress,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import CreateWorkDays from "../createWorkDays/createWorkDays";
 import MyServices from "../myServices/myServices";
 import CancelledTurnsForWorker from "../cancelledTurnsForWorker/cancelledTurnsForWorker";
 import WhoIsComingWorker from "../whoIsComingWorker/whoIsComingWorker";
-import axios from "axios";
 import { convertToServicesArray } from "../../helpers/convertCategoryService";
+import axios from "axios";
+
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const WorkerAcordeon = ({ user }) => {

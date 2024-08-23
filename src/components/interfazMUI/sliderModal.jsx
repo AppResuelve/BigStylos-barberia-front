@@ -28,7 +28,6 @@ const SliderModal = ({
   const [timeResult, setTimeResult] = useState([]); // aca estaran los values convertidos a time de back
   const handleClose = () => setIsOpen(false);
 
-  console.log(timeSelected, "esto es lo que tiene timeaSelected");
 
   const obtenerDuracionMaxima = (obj) => {
     let duracionMaxima = 0;

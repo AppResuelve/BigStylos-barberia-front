@@ -78,7 +78,6 @@ const CreateWorkDays = ({
 
   useEffect(() => {
     const fetchNoWorkDays = async () => {
-      console.log("pase por el nowork");
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/schedule/`);
         const { data } = response;
