@@ -2,13 +2,18 @@ import React, { useEffect, useState, useContext } from "react";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { DarkModeContext } from "../../App";
 import { convertToCategoryServiceArray } from "../../helpers/convertCategoryService";
-import { Button, MenuItem, Select, TextField } from "@mui/material";
-import LinearProgress from "@mui/material/LinearProgress";
-import Autocomplete from "@mui/material/Autocomplete";
-import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
+import {
+  Button,
+  MenuItem,
+  Select,
+  TextField,
+  LinearProgress,
+  Autocomplete,
+} from "@mui/material";
 import EditServicesModal from "./editServicesModal";
-import axios from "axios";
+import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import axios from "axios";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -165,8 +170,9 @@ const Services = ({
     setOpenEdition(true);
   };
 
+  //handle span
   const handleCategoryName = (categoryName) => {
-    if (showEdit && Object.keys(serviceRow).length < 1) {
+    if (showEdit) {
       setCategoryName({
         prev: categoryName,
         current: categoryName,
@@ -174,23 +180,21 @@ const Services = ({
     }
   };
 
+  //handle span
   const handleRowService = (service, category) => {
-    if (
-      showEdit &&
-      Object.keys(categoryName).length < 1 &&
-      Object.keys(serviceRow).length < 1
-    ) {
+    if (showEdit) {
       setServiceRow({
         category: category,
         prev: service.name,
         current: service.name,
-        price: service.price,
-        sing: service.sing,
+        price: service.price === 0 ? "" : service.price,
+        sing: service.sing === 0 ? "" : service.sing,
         type: service.type,
       });
     }
   };
 
+  //handle input
   const handleChangeCategoryName = (e) => {
     let value = e.target.value;
 
@@ -201,6 +205,8 @@ const Services = ({
     });
   };
 
+  console.log(serviceRow);
+  //handle input
   const handleChangeRowService = (field, e) => {
     let value = e.target.value;
 
@@ -209,6 +215,18 @@ const Services = ({
       copyState[field] = value;
       return copyState;
     });
+  };
+
+  const handleDiscard = () => {
+    if (Object.keys(serviceRow).length > 0) {
+      setCategoryName({});
+      setServiceRow({});
+    } else {
+      setShowEdit(false);
+      setEditableCatSer(categoryServices);
+      setCategoryName({});
+      setServiceRow({});
+    }
   };
 
   return (
@@ -471,11 +489,7 @@ const Services = ({
                 categoryName.prev === elem.category ? (
                   <input
                     type="text"
-                    value={
-                      categoryName.current
-                        ? categoryName.current
-                        : elem.category
-                    }
+                    value={categoryName.current}
                     onChange={(e) => handleChangeCategoryName(e)}
                   />
                 ) : (
@@ -497,6 +511,12 @@ const Services = ({
                           Object.keys(serviceRow).length > 0) &&
                         categoryName !== elem.category
                           ? "blur(2px)"
+                          : "",
+                      pointerEvents:
+                        (Object.keys(categoryName).length > 0 ||
+                          Object.keys(serviceRow).length > 0) &&
+                        categoryName !== elem.category
+                          ? "none"
                           : "",
                     }}
                     onClick={() => handleCategoryName(elem.category)}
@@ -528,8 +548,6 @@ const Services = ({
                               value={
                                 serviceRow.prev === service.name &&
                                 serviceRow.current
-                                  ? serviceRow.current
-                                  : service.name
                               }
                               onChange={(e) =>
                                 handleChangeRowService("current", e)
@@ -544,12 +562,11 @@ const Services = ({
                               value={
                                 serviceRow.prev === service.name &&
                                 serviceRow.price
-                                  ? serviceRow.price
-                                  : service.price
                               }
                               onChange={(e) =>
                                 handleChangeRowService("price", e)
                               }
+                              placeholder="0"
                             />
                             <input
                               type="number"
@@ -560,12 +577,11 @@ const Services = ({
                               value={
                                 serviceRow.prev === service.name &&
                                 serviceRow.sing
-                                  ? serviceRow.sing
-                                  : service.sing
                               }
                               onChange={(e) =>
                                 handleChangeRowService("sing", e)
                               }
+                              placeholder="0"
                             />
                             <select
                               style={{
@@ -575,8 +591,6 @@ const Services = ({
                               value={
                                 serviceRow.prev === service.name &&
                                 serviceRow.type
-                                  ? serviceRow.type
-                                  : service.type
                               }
                               onChange={(e) =>
                                 handleChangeRowService("type", e)
@@ -608,6 +622,12 @@ const Services = ({
                                   serviceRow.prev !== service.name
                                     ? "blur(2px)"
                                     : "",
+                                pointerEvents:
+                                  (Object.keys(categoryName).length > 0 ||
+                                    Object.keys(serviceRow).length > 0) &&
+                                  serviceRow.prev !== service.name
+                                    ? "none"
+                                    : "",
                               }}
                               onClick={() =>
                                 handleRowService(service, elem.category)
@@ -636,6 +656,12 @@ const Services = ({
                                     Object.keys(serviceRow).length > 0) &&
                                   serviceRow.prev !== service.name
                                     ? "blur(2px)"
+                                    : "",
+                                pointerEvents:
+                                  (Object.keys(categoryName).length > 0 ||
+                                    Object.keys(serviceRow).length > 0) &&
+                                  serviceRow.prev !== service.name
+                                    ? "none"
                                     : "",
                               }}
                               onClick={() =>
@@ -667,6 +693,12 @@ const Services = ({
                                   serviceRow.prev !== service.name
                                     ? "blur(2px)"
                                     : "",
+                                pointerEvents:
+                                  (Object.keys(categoryName).length > 0 ||
+                                    Object.keys(serviceRow).length > 0) &&
+                                  serviceRow.prev !== service.name
+                                    ? "none"
+                                    : "",
                               }}
                               onClick={() =>
                                 handleRowService(service, elem.category)
@@ -697,6 +729,12 @@ const Services = ({
                                     Object.keys(serviceRow).length > 0) &&
                                   serviceRow.prev !== service.name
                                     ? "blur(2px)"
+                                    : "",
+                                pointerEvents:
+                                  (Object.keys(categoryName).length > 0 ||
+                                    Object.keys(serviceRow).length > 0) &&
+                                  serviceRow.prev !== service.name
+                                    ? "none"
                                     : "",
                               }}
                               onClick={() =>
@@ -739,19 +777,7 @@ const Services = ({
               <CreateRoundedIcon />
             </Button>
           ) : (
-            <Button
-              onClick={() => {
-                setShowEdit(false);
-                // setSelectedInput({
-                //   categoryIndex: null,
-                //   serviceIndex: null,
-                // });
-                setEditableCatSer(categoryServices);
-                setCategoryName({});
-                setServiceRow({});
-              }}
-              variant="outlined"
-            >
+            <Button onClick={handleDiscard} variant="outlined">
               <h4 style={{ fontFamily: "Jost, sans-serif" }}>Descartar</h4>
             </Button>
           )}
@@ -767,7 +793,7 @@ const Services = ({
         {Object.keys(categoryName).length > 0 ? (
           <Button
             variant="contained"
-            // disabled={categoryServices.length < 1 ? true : false}
+            disabled={categoryName.current.length < 1 ? true : false}
             onClick={handleUpdateCategoryName}
             sx={{ fontFamily: "Jost,sans serif" }}
           >
@@ -776,7 +802,7 @@ const Services = ({
         ) : Object.keys(serviceRow).length > 0 ? (
           <Button
             variant="contained"
-            // disabled={categoryServices.length < 1 ? true : false}
+            disabled={serviceRow.current.length < 1 ? true : false}
             onClick={handleUpdateServiceRow}
             sx={{ fontFamily: "Jost,sans serif" }}
           >
@@ -792,7 +818,6 @@ const Services = ({
                 ? false
                 : true
             }
-            onClick={handleUpdateServiceRow}
             sx={{ fontFamily: "Jost,sans serif" }}
           >
             Guardar

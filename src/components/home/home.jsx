@@ -53,7 +53,7 @@ const Home = ({ homeImages }) => {
   }, []);
 
   const handleReserveClick = () => {
-    const isLoggedIn = getCookie("SESSION_ID"); // Verifica si el usuario está logueado (puedes adaptar esta lógica según tu implementación)
+    const isLoggedIn = getCookie("IDSESSION"); // Verifica si el usuario está logueado (puedes adaptar esta lógica según tu implementación)
 
     if (!isLoggedIn) {
       // Mostrar el backdrop y el mensaje de login

@@ -23,7 +23,6 @@ const CustomCalendarPlannedC = ({
     daysCalendarCustom;
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
   const getDayPosition = getToday() + 1;
-  console.log(dayIsSelected);
 
   const handleDay = (day, month, turn) => {
     if (turn) {
