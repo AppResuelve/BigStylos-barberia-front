@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 import CryptoJS from "crypto-js";
 
-const secretKey = "your-secret-key"; // Cambia esto por una clave secreta fuerte
+const secretKey = import.meta.env.VITE_CRYPTOJS_SECRET_KEY;
 
 // Función para cifrar datos
 function encryptData(data) {
@@ -16,8 +16,7 @@ function decryptData(data) {
 
 // Función para establecer una cookie con expiración
 export function setCookie(name, value, timeToExpiration) {
-  console.log(value);
-  
+
   try {
     const encryptedValue = encryptData(value);
     Cookies.set(name, encryptedValue, {

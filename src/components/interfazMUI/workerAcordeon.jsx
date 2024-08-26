@@ -35,60 +35,37 @@ const WorkerAcordeon = ({ user }) => {
   const [pendingServices, setPendingServices] = useState(false);
   const [doCeroServices, setDoCeroServices] = useState(false);
   /* estados locales del componente myServices */
-  const [services, setServices] = useState(1);
-  const [serviceStatus, setServiceStatus] = useState({});
+  const [services, setServices] = useState([]);
   const [timeEdit, setTimeEdit] = useState({});
-  const [showEdit, setShowEdit] = useState(false);
 
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-  useEffect(() => {
-    setTimeEdit(workerData.services);
-  }, [workerData]);
 
   useEffect(() => {
-    let hasNull = false;
-    let allZero = true;
-    if (timeEdit && Object.keys(timeEdit).length > 0) {
-      if (services && Object.keys(services).length > 0) {
-          for (const prop in timeEdit) {
-              if (timeEdit[prop].duration === null) {
-                hasNull = true;
-              } else if (timeEdit[prop].duration !== 0) {
-                allZero = false;
-              }
-          }
+    if (timeEdit && Object.keys(timeEdit).length > 0 && services.length > 0) {
+      let onePending = false;
+      let allZero = true;
+      for (const prop in timeEdit) {
+        console.log(timeEdit[prop]);
+        
+        if (timeEdit[prop].duration === 0) {
+          onePending = true;
+        } else if (
+          timeEdit[prop].duration !== 0 &&
+          timeEdit[prop].duration !== null
+        ) {
+          allZero = false;
+        }
       }
-      setPendingServices(hasNull);
+      setPendingServices(onePending);
       setDoCeroServices(allZero);
     }
   }, [timeEdit, services]);
 
   useEffect(() => {
-    let objNewServicies = {};
-    if (services && services.length > 0) {
-      for (const prop in workerData.services) {
-        if (services.some((serviceArr) => serviceArr.name === prop)) {
-          if (workerData.services[prop].duration === null) {
-            objNewServicies[prop] = true;
-          } else if (workerData.services[prop].duration === 0) {
-            objNewServicies[prop] = false;
-          } else {
-            objNewServicies[prop] = true;
-          }
-        }
-      }
-    }
-    if (!showEdit) {
-      setServiceStatus(objNewServicies);
-    }
-  }, [services, workerData, showEdit]);
-
-  useEffect(() => {
     const fetchServices = async () => {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/services/`);
-        const { data } = response;
-        const arrServices = convertToServicesArray(data); //pasamos a array de obj servicio antes de setear
+        const arrServices = convertToServicesArray(response.data); //pasamos a array de obj servicio antes de setear
         setServices(arrServices);
       } catch (error) {
         console.error("Error al obtener los servicios:", error);
@@ -102,8 +79,7 @@ const WorkerAcordeon = ({ user }) => {
     const fetchSchedule = async () => {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/schedule`);
-        const { data } = response;
-        setSchedule(data.businessSchedule);
+        setSchedule(response.data.businessSchedule);
       } catch (error) {
         console.error("Error al obtener los horarios", error);
         alert("Error al obtener los horarios");
@@ -118,8 +94,8 @@ const WorkerAcordeon = ({ user }) => {
         const response = await axios.post(`${VITE_BACKEND_URL}/users/byemail`, {
           email: user.email,
         });
-        const { data } = response;
-        setWorkerData(data);
+        setWorkerData(response.data);
+        setTimeEdit(response.data.services);
       } catch (error) {
         console.error("Error al obtener los dias:", error);
         alert("Error al obtener los dias");
@@ -127,6 +103,7 @@ const WorkerAcordeon = ({ user }) => {
     };
     fetchWorker();
   }, [refresh]);
+
   const handleChange = (panel) => (event, isExpanded) => {
     if (changeNoSaved) {
       setShowAlert({
@@ -200,17 +177,15 @@ const WorkerAcordeon = ({ user }) => {
             </h2>
           </AccordionSummary>
           <AccordionDetails>
-            {expanded === "panel1" &&
-              Object.keys(workerData).length > 0 &&
-              services.length > 0 && (
-                <CreateWorkDays
-                  user={workerData}
-                  schedule={schedule}
-                  pendingServices={pendingServices}
-                  doCeroServices={doCeroServices}
-                  setRefreshForWhoIsComing={setRefreshForWhoIsComing}
-                />
-              )}
+            {expanded === "panel1" && Object.keys(workerData).length > 0 && (
+              <CreateWorkDays
+                user={workerData}
+                schedule={schedule}
+                pendingServices={pendingServices}
+                doCeroServices={doCeroServices}
+                setRefreshForWhoIsComing={setRefreshForWhoIsComing}
+              />
+            )}
             {expanded === "panel1" && Object.keys(workerData).length < 1 && (
               <LinearProgress />
             )}
@@ -273,7 +248,7 @@ const WorkerAcordeon = ({ user }) => {
               >
                 Mis servicios
               </h2>
-              {pendingServices && (
+              {pendingServices  && (
                 <h4
                   style={{
                     color: "red",
@@ -296,17 +271,12 @@ const WorkerAcordeon = ({ user }) => {
           <AccordionDetails>
             {(expanded === "panel2" || redirectToMyServices) && (
               <MyServices
-                workerData={workerData.services}
-                email={workerData.email}
+                workerData={workerData}
                 refresh={refresh}
                 setRefresh={setRefresh}
                 services={services}
-                serviceStatus={serviceStatus}
-                setServiceStatus={setServiceStatus}
                 timeEdit={timeEdit}
                 setTimeEdit={setTimeEdit}
-                showEdit={showEdit}
-                setShowEdit={setShowEdit}
                 setChangeNoSaved={setChangeNoSaved}
               />
             )}

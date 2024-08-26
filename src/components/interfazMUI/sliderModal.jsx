@@ -6,8 +6,6 @@ import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import time from "../../helpers/arrayTime";
 import HelpIcon from "@mui/icons-material/Help";
 import formatHour from "../../functions/formatHour";
-import durationMax from "../../helpers/durationMax";
-import { dark } from "@mui/material/styles/createPalette";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction={"up"} ref={ref} {...props} />;

@@ -1,5 +1,6 @@
-import { useEffect, useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { DarkModeContext } from "../../App";
+import "../interfazUiverse.io/checkBox.css";
 import axios from "axios";
 import {
   Box,
@@ -11,23 +12,18 @@ import {
 } from "@mui/material";
 import formatHour from "../../functions/formatHour";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
-import IosSwitch from "../interfazMUI/iosSwitch";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
+// import { SectionSwitchSkeleton } from "../skeletons/skeletons";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const MyServices = ({
   workerData,
-  email,
   refresh,
   setRefresh,
   services,
-  serviceStatus,
-  setServiceStatus,
   timeEdit,
   setTimeEdit,
-  showEdit,
-  setShowEdit,
   setChangeNoSaved,
 }) => {
   const { darkMode } = useContext(DarkModeContext);
@@ -35,52 +31,22 @@ const MyServices = ({
   const [inputService, setInputService] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-  const [auxState, setAuxState] = useState([]);
+  const [showEdit, setShowEdit] = useState(false);
 
   const timeArray = [
     0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210, 225, 240,
     255, 270,
   ];
 
-  console.log(services);
-  console.log();
-  console.log();
-  console.log();
-  console.log();
-  console.log();
-  console.log();
-  
-  useEffect(() => {
-    if (timeEdit) {
-      //condicional de estado 0 de la app
-      if (serviceStatus[auxState[0]] && auxState !== false) {
-        setTimeEdit((prevState) => ({
-          ...prevState,
-          [auxState[0]]: {
-            ...prevState[auxState[0]],
-            duration: null,
-          },
-        }));
-      } else if (!serviceStatus[auxState[0]] && auxState !== false) {
-        setTimeEdit((prevState) => ({
-          ...prevState,
-          [auxState[0]]: {
-            ...prevState[auxState[0]],
-            duration: 0,
-          },
-        }));
-      }
-    }
-  }, [auxState]);
-
-  const handleServiceStatus = (element) => {
-    setChangeNoSaved(true)
-    setServiceStatus((prevState) => {
-      let newState = { ...prevState };
-      newState[element] = !newState[element];
-      return newState;
-    });
-    setAuxState([element, !serviceStatus[element]]);
+  const handleServiceStatus = (element, checked) => {
+    setChangeNoSaved(true);
+    setTimeEdit((prevState) => ({
+      ...prevState,
+      [element]: {
+        ...prevState[element],
+        duration: checked ? 0 : null,
+      },
+    }));
   };
 
   const handleSelectChange = (event, element) => {
@@ -101,14 +67,14 @@ const MyServices = ({
 
   const handleCancel = () => {
     setShowEdit(false);
-    setTimeEdit(workerData);
+    setTimeEdit(workerData.services);
     setChangeNoSaved(false);
   };
 
   const handleSubmit = async () => {
     try {
       const response = await axios.put(`${VITE_BACKEND_URL}/users/update`, {
-        email: email,
+        email: workerData.email,
         newServicesDuration: timeEdit,
       });
       setRefresh(!refresh);
@@ -118,7 +84,6 @@ const MyServices = ({
     }
     setShowEdit(false);
     setChangeNoSaved(false);
-
   };
 
   return (
@@ -184,7 +149,6 @@ const MyServices = ({
             .filter((service) =>
               service.name.toLowerCase().includes(searchValue.toLowerCase())
             )
-
             .map((element, index) => {
               return (
                 <Box
@@ -197,38 +161,72 @@ const MyServices = ({
                     marginBottom: sm ? "5px" : "10px",
                   }}
                 >
-                  <h3 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
-                    {element.name}
-                  </h3>
+                  <div style={{ display: "flex", gap: "5px" }}>
+                    <img
+                      src={element.img}
+                      alt="imagen servicio"
+                      style={{
+                        width: "30px",
+                        height: "30px",
+                        borderRadius: "30px",
+                        objectFit: "cover",
+                      }}
+                    />
+                    <h3
+                      style={{ color: darkMode.on ? "white" : darkMode.dark }}
+                    >
+                      {element.name}
+                    </h3>
+                  </div>
                   <Box
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
+                      alignItems: "center",
                       width: sm ? "100%" : "50%",
                     }}
                   >
-                    {/* //// IOSSwicth //// */}
-                    <IosSwitch
-                      index={index}
-                      element={element.name}
-                      timeEdit={timeEdit}
-                      showEdit={showEdit}
-                      serviceStatus={serviceStatus}
-                      setServiceStatus={setServiceStatus}
-                      handleServiceStatus={handleServiceStatus}
-                    />
-
+                    {/* {true ? (
+                      <SectionSwitchSkeleton  />
+                    ) : ( */}
+                    {/* custom switch */}
+                    <div
+                      className={
+                        showEdit
+                          ? "container-switch"
+                          : "container-switch-disabled"
+                      }
+                    >
+                      <input
+                        type="checkbox"
+                        className="checkbox"
+                        id={`checkbox-${index}`} /* ID único basado en el índice */
+                        disabled={showEdit ? false : true}
+                        checked={
+                          timeEdit[element.name].duration === null
+                            ? false
+                            : true
+                        }
+                        onClick={(e) => {
+                          handleServiceStatus(element.name, e.target.checked);
+                        }}
+                      />
+                      <label className="switch" htmlFor={`checkbox-${index}`}>
+                        <span className="slider"></span>
+                      </label>
+                    </div>
+                    {/* )} */}
                     <Box sx={{ display: "flex", alignItems: "center" }}>
                       {timeEdit &&
                         Object.keys(timeEdit).length > 0 &&
-                        timeEdit[element.name].duration === null &&
-                        serviceStatus && (
+                        timeEdit[element.name].duration === 0 && (
                           <h3 style={{ color: "red" }}>Pendiente</h3>
                         )}
-                      {timeEdit[element.name].duration == 0 ? (
+                      {timeEdit[element.name].duration === null ? (
                         <h3
                           style={{
                             marginRight: "40px",
+                            height: "40px",
                             color: darkMode.on ? "white" : darkMode.dark,
                           }}
                         >
@@ -247,11 +245,7 @@ const MyServices = ({
                             fontWeight: "bold",
                           }}
                           disabled={showEdit ? false : true}
-                          value={
-                            timeEdit[element.name].duration === null
-                              ? 0
-                              : timeEdit[element.name].duration
-                          }
+                          value={timeEdit[element.name].duration}
                           onChange={(event) =>
                             handleSelectChange(event, element.name)
                           }

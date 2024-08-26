@@ -476,8 +476,8 @@ const CreateWorkDays = ({
               </Box>
             </Box>
           )}
-          {/* sección del slider */}
         </Grid>
+          {/* sección del slider */}
         <SliderModal
           user={user}
           isOpen={isOpen}

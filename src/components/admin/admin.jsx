@@ -2,8 +2,8 @@ import { useEffect, useContext } from "react";
 import { DarkModeContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
-import { Skeleton, Stack } from "@mui/material";
 import AdminAcordeon from "../interfazMUI/adminAcordeon";
+import { AdminWorkerSkeleton } from "../skeletons/skeletons";
 
 const Admin = () => {
   const { darkMode, userData } = useContext(DarkModeContext);
@@ -33,57 +33,7 @@ const Admin = () => {
       }}
     >
       {userData === 1 ? (
-        <Stack spacing={1} style={{ display: "flex", alignItems: "center" }}>
-          <Skeleton
-            variant="text"
-            height={70}
-            style={{
-              marginBottom: !sm ? "35px" : "",
-              width: "80vw",
-              maxWidth: "340px",
-            }}
-          />
-          <Skeleton
-            variant="rounded"
-            height={58}
-            style={{ width: "95vw", maxWidth: "900px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            height={58}
-            style={{ width: "95vw", maxWidth: "900px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            height={58}
-            style={{ width: "95vw", maxWidth: "900px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            height={58}
-            style={{ width: "95vw", maxWidth: "900px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            height={58}
-            style={{ width: "95vw", maxWidth: "900px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            height={58}
-            style={{ width: "95vw", maxWidth: "900px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            height={58}
-            style={{ width: "95vw", maxWidth: "900px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            height={58}
-            style={{ width: "95vw", maxWidth: "900px" }}
-          />
-        </Stack>
+        <AdminWorkerSkeleton numAcordeon={[1, 2, 3, 4, 5, 6, 7, 8]} />
       ) : userData.admin ? ( // Puedes mostrar un componente de carga o un mensaje mientras se determina el estado de isAdmin
         <div>
           <h1

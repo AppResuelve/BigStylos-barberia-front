@@ -47,7 +47,7 @@ const WhoIsComingWorker = ({
       }
     };
     fetchCount();
-    if (refreshForWhoIsComing == true) {
+    if (refreshForWhoIsComing === true) {
       setRefreshForWhoIsComing(false);
     }
   }, [refreshForWhoIsComing]);

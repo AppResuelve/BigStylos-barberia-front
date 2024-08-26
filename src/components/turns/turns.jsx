@@ -7,7 +7,7 @@ import CustomCalendarTurns from "../customCalendar/customCalendarTurns";
 import obtainMonthName from "../../functions/obtainMonthName";
 import leftArrowBack from "../../assets/icons/left-arrow.png";
 import servicesIcon from "../../assets/icons/review.png";
-import { TurnsButtonsSkeleton } from "../skeletons/skeletons";
+import { turnsButtonsSkeleton } from "../skeletons/skeletons";
 import formatHour from "../../functions/formatHour";
 import "./turns.css";
 import axios from "axios";
@@ -518,7 +518,7 @@ const Turns = ({ setTurnsCart, auxCart, setAuxCart }) => {
               </div>
             </section>
           ) : (
-            <TurnsButtonsSkeleton />
+            <turnsButtonsSkeleton />
           )}
         </div>
       )}
