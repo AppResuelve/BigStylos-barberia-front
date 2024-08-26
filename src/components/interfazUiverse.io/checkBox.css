@@ -1,0 +1,77 @@
+/* From Uiverse.io by zanina-yassine */
+
+
+/* The switch - the box around the slider */
+.container-switch {
+
+      width: 55px;
+      height: 30px;
+      position: relative;
+      /* background-color: black; */
+}
+
+.container-switch-disabled {
+      pointer-events: none;
+      width: 55px;
+      height: 30px;
+      position: relative;
+}
+
+.container-switch-disabled .switch {
+      background-color: #d6d6d5;
+}
+
+.container-switch-disabled .checkbox:checked+.switch {
+      background-color: #d6d6d5;
+}
+
+/* Hide default HTML checkbox */
+.checkbox {
+      width: 55px;
+      height: 30px;
+      position: relative;
+}
+
+
+.switch {
+      width: 100%;
+      height: 100%;
+      display: block;
+      background-color: #a7d7fe;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease-out;
+}
+
+.slider {
+      width: 24px;
+      height: 24px;
+      position: absolute;
+      left: calc(50% - 24px / 2 - 12px);
+      top: calc(50% - 24px / 2);
+      border-radius: 100px;
+      background: #FFFFFF;
+      box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15), 0px 3px 1px rgba(0, 0, 0, 0.06);
+      transition: all 0.2s ease-out;
+      cursor: pointer;
+}
+
+.container-switch:active .slider {
+      width: 30px;
+      border-radius: 100px;
+}
+
+.checkbox:checked+.switch:active .slider {
+      width: 30px;
+      left: calc(50% - 24px/2 + 6px);
+}
+
+.checkbox:checked+.switch {
+      background-color: #2196f3;
+}
+
+/* Estilo para cuando el checkbox está marcado */
+.checkbox:checked+.switch .slider {
+      left: calc(50% - 24px / 2 + 12px);
+      top: calc(50% - 24px / 2);
+}

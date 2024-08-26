@@ -21,19 +21,10 @@ const MyTurns = ({ userData }) => {
     setDisableButtonMyTurns,
   } = useContext(DarkModeContext);
   const [listMyTurns, setListMyTurns] = useState(1);
-  const [InfoToSubmit, setInfoToSubmit] = useState({});
+  const [infoToSubmit, setInfoToSubmit] = useState({});
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-  const [turnServices, setTurnServices] = useState([]);
   const [refresh, setRefresh] = useState(false);
-
-  useEffect(() => {
-    // Recupera la lista de servicios agendados del localStorage
-    const existingTurns =
-      JSON.parse(localStorage.getItem("turnServices")) || [];
-
-    // Establece la lista en el estado
-    setTurnServices(existingTurns);
-  }, []); // Se ejecuta solo una vez al montar el componente
+  console.log(listMyTurns, '<----------listMyTurns')
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,11 +33,7 @@ const MyTurns = ({ userData }) => {
           `${VITE_BACKEND_URL}/workdays/myturns`,
           { emailUser: userData.email }
         );
-        const { data } = response;
-        setListMyTurns(data);
-        if (data.length < 1) {
-          localStorage.removeItem("turnServices");
-        }
+        setListMyTurns(response.data);
       } catch (error) {
         console.log(error);
       }
@@ -63,12 +50,8 @@ const MyTurns = ({ userData }) => {
     }
   }, [validateAlert]);
 
-  const handleConfirmCancelTurn = (turn, selectedService) => {
-    let newTurn = {
-      ...turn,
-      selectedService: selectedService,
-    };
-    setInfoToSubmit(newTurn);
+  const handleConfirmCancelTurn = (turn) => {
+    setInfoToSubmit(turn);
     setShowAlert({
       isOpen: true,
       message: "Estas a punto de cancelar el turno, deseas continuar?",
@@ -85,56 +68,52 @@ const MyTurns = ({ userData }) => {
     setDisableButtonMyTurns(true);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (turn) => {
+    
     try {
       const response = await axios.post(`${VITE_BACKEND_URL}/workdays/cancel`, {
-        month: InfoToSubmit.month,
-        day: InfoToSubmit.day,
-        time: InfoToSubmit.hourTime,
-        emailWorker: InfoToSubmit.worker,
-        emailClient: userData.email,
-        selectedService: InfoToSubmit.selectedService,
-      });
-      const { data } = response;
-
-      // Recuperar los turnos del localStorage
-      let existingTurns =
-        JSON.parse(localStorage.getItem("turnServices")) || [];
-
-      // Filtrar los turnos para eliminar el turno cancelado
-      existingTurns = existingTurns.filter((turn) => {
-        const serviceName = Object.keys(turn)[0];
-        const { month, day, ini } = turn[serviceName];
-        return (
-          month !== InfoToSubmit.month ||
-          day !== InfoToSubmit.day ||
-          ini !== InfoToSubmit.hourTime.ini
-        );
+        month: turn.month,
+        day: turn.day,
+        ini: turn.ini,
+        end: turn.end,
+        emailWorker: turn.worker.email,
+        nameWorker: turn.worker.name,
+        emailUser: userData.email,
+        nameUser: userData.name,
+        service: turn.service
       });
 
-      // Guardar los turnos actualizados en el localStorage
-      localStorage.setItem("turnServices", JSON.stringify(existingTurns));
+      // // Filtrar los turnos para eliminar el turno cancelado
+      // existingTurns = existingTurns.filter((turn) => {
+      //   const serviceName = Object.keys(turn)[0];
+      //   const { month, day, ini } = turn[serviceName];
+      //   return (
+      //     month !== infoToSubmit.month ||
+      //     day !== infoToSubmit.day ||
+      //     ini !== infoToSubmit.hourTime.ini
+      //   );
+      // });
 
       setRefresh(!refresh);
       setRefreshWhenCancelTurn(!refreshWhenCancelTurn);
-      const timeoutId = setTimeout(() => {
-        setShowAlert({
-          isOpen: true,
-          message: `Su turno ha sido cancelado exitosamente!`,
-          type: "success",
-          button1: {
-            text: "",
-            action: "",
-          },
-          buttonClose: {
-            text: "aceptar",
-          },
-        });
-      }, 450);
+      // const timeoutId = setTimeout(() => {
+      //   setShowAlert({
+      //     isOpen: true,
+      //     message: `Su turno ha sido cancelado exitosamente!`,
+      //     type: "success",
+      //     button1: {
+      //       text: "",
+      //       action: "",
+      //     },
+      //     buttonClose: {
+      //       text: "aceptar",
+      //     },
+      //   });
+      // }, 450);
 
-      return () => {
-        clearTimeout(timeoutId);
-      };
+      // return () => {
+      //   clearTimeout(timeoutId);
+      // };
     } catch (error) {
       console.error("Error al cancelar el turno:", error);
     }
@@ -145,20 +124,8 @@ const MyTurns = ({ userData }) => {
       <Box style={{ overflow: "auto" }}>
         {listMyTurns === 1 ? (
           <Skeleton variant="rounded" height={80} style={{ width: "100%" }} />
-        ) : listMyTurns && Object.keys(listMyTurns).length > 0 ? (
+        ) : listMyTurns && listMyTurns.length > 0 ? (
           listMyTurns.map((turn, index) => {
-            let serviceName;
-            turnServices.map((service, index) => {
-              let serviceObj = Object.keys(service); //para acceder luego a la prop de cada obj en cada vuelta
-              if (
-                turn.month === service[serviceObj].month &&
-                turn.day === service[serviceObj].day &&
-                turn.hourTime.ini === service[serviceObj].ini
-              ) {
-                serviceName = Object.keys(service)[0];
-              }
-            });
-
             return (
               <Box
                 key={index}
@@ -175,10 +142,9 @@ const MyTurns = ({ userData }) => {
                     alignItems: "center",
                   }}
                 >
-                  <h3 className="h3-myTurns">{serviceName}</h3>
+                  <h3 className="h3-myTurns">{turn.service.name}</h3>
                   <h4 className="h4-myTurns">
-                    El día: {turn.day}/{turn.month} a las{" "}
-                    {formatHour(turn.hourTime.ini)}
+                    El día: {turn.day}/{turn.month} a las {formatHour(turn.ini)}
                   </h4>
                   <hr style={{ width: "100%" }} />
                 </Box>
@@ -195,7 +161,7 @@ const MyTurns = ({ userData }) => {
                   >
                     <h4 className="h4-myTurns">Profesional:</h4>
                     <h4 className={sm ? "ticker-text" : "h4-myTurns"}>
-                      {turn.worker}
+                      {turn.worker.name}
                     </h4>
                   </Box>
                   <Button
@@ -209,7 +175,7 @@ const MyTurns = ({ userData }) => {
                       color: "red",
                       transition: ".2s",
                     }}
-                    onClick={() => handleConfirmCancelTurn(turn, serviceName)}
+                    onClick={() => handleSubmit(turn)}
                   >
                     <DeleteOutlineIcon />
                   </Button>
@@ -236,3 +202,5 @@ const MyTurns = ({ userData }) => {
 };
 
 export default MyTurns;
+
+

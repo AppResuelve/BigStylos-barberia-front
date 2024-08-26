@@ -27,9 +27,7 @@ const PlannedClosure = ({ schedule }) => {
         alert("Error al obtener los dias");
       }
       try {
-        const response = await axios.get(
-          `${VITE_BACKEND_URL}/schedule/`
-        );
+        const response = await axios.get(`${VITE_BACKEND_URL}/schedule/`);
         const { data } = response;
         setNoWork(data.noWorkDays);
         setDayIsSelected(data.noWorkDays);
@@ -51,51 +49,50 @@ const PlannedClosure = ({ schedule }) => {
   };
 
   const handleSubmit = async (confirm) => {
-    //     if (confirm === "confirm") {
-    //       console.log("hago peticion put con daysturn");
-    //       try {
-    //         const response = await axios.put(
-    //           `${VITE_BACKEND_URL}/schedule/updatenowork`,
-    //           {
-    //             noWorkDays: dayIsSelected,
-    //           }
-    //         );
-    //         const { data } = response;
-    //         setRefresh(!refresh);
-    //       } catch (error) {
-    //         console.error("Error al obtener los dias:", error);
-    //         alert("Error al obtener los dias");
-    //       }
-    //     } else if (daysWithTurns) {
-    //       console.log("pase por el true del daysWithTurns, muestro la alerta");
-    //       setShowAlert({
-    //         isOpen: true,
-    //         message:
-    //           "Has seleccionado días con turnos reservados, deseas continuar?",
-    //         type: "warning",
-    //         button1: {
-    //           text: "Si",
-    //           action: "handleActionProp",
-    //         },
-    //         buttonClose: {
-    //           text: "Volver",
-    //         },
-    //       });
-    //     } else {
+    // if (confirm === "confirm") {
     try {
       const response = await axios.put(
-        `${VITE_BACKEND_URL}/schedule/updateNoWork`,
+        `${VITE_BACKEND_URL}/schedule/updatenowork`,
         {
           noWorkDays: dayIsSelected,
+          daysToCancel: daysWithTurns,
         }
       );
       const { data } = response;
-      setShowEdit(false);
       setRefresh(!refresh);
     } catch (error) {
       console.error("Error al obtener los dias:", error);
       alert("Error al obtener los dias");
     }
+    // } else if (Object.keys(daysWithTurns).length > 0) {
+    //   setShowAlert({
+    //     isOpen: true,
+    //     message:
+    //       "Has seleccionado días con turnos reservados, deseas continuar?",
+    //     type: "warning",
+    //     button1: {
+    //       text: "Si",
+    //       action: "handleActionProp",
+    //     },
+    //     buttonClose: {
+    //       text: "Volver",
+    //     },
+    //   });
+    // }
+    // try {
+    //   const response = await axios.put(
+    //     `${VITE_BACKEND_URL}/schedule/updateNoWork`,
+    //     {
+    //       noWorkDays: dayIsSelected,
+    //     }
+    //   );
+    //   const { data } = response;
+    //   setShowEdit(false);
+    //   setRefresh(!refresh);
+    // } catch (error) {
+    //   console.error("Error al obtener los dias:", error);
+    //   alert("Error al obtener los dias");
+    // }
   };
   return (
     <div>
@@ -139,7 +136,11 @@ const PlannedClosure = ({ schedule }) => {
               variant="outlined"
               style={{ borderRadius: "50px", border: "2px solid" }}
             >
-              <h4 style={{ fontFamily: "Jost, sans-serif",fontWeight:"bold" }}>Volver</h4>
+              <h4
+                style={{ fontFamily: "Jost, sans-serif", fontWeight: "bold" }}
+              >
+                Volver
+              </h4>
             </Button>
             <Button onClick={handleSubmit} variant="contained">
               <h4 style={{ fontFamily: "Jost, sans-serif" }}>Guardar</h4>

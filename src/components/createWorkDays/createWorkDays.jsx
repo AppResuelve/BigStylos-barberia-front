@@ -78,7 +78,6 @@ const CreateWorkDays = ({
 
   useEffect(() => {
     const fetchNoWorkDays = async () => {
-      console.log("pase por el nowork");
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/schedule/`);
         const { data } = response;
@@ -477,8 +476,8 @@ const CreateWorkDays = ({
               </Box>
             </Box>
           )}
-          {/* sección del slider */}
         </Grid>
+          {/* sección del slider */}
         <SliderModal
           user={user}
           isOpen={isOpen}

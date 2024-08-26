@@ -1,6 +1,7 @@
 import { Skeleton, Stack } from "@mui/material";
+import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 
-const TurnsButtonsSkeleton = () => {
+const turnsButtonsSkeleton = () => {
   return (
     <>
       <Stack style={{ marginBottom: "35px" }}>
@@ -45,4 +46,38 @@ const TurnsButtonsSkeleton = () => {
   );
 };
 
-export { TurnsButtonsSkeleton };
+const AdminWorkerSkeleton = ({ numAcordeon }) => {
+  const { xs, sm, md, lg, xl } = useMediaQueryHook();
+
+  return (
+    <>
+      <Stack spacing={1} style={{ display: "flex", alignItems: "center" }}>
+        <Skeleton
+          variant="text"
+          height={70}
+          style={{
+            marginBottom: !sm ? "35px" : "",
+            width: "80vw",
+            maxWidth: "410px",
+          }}
+        />
+        {numAcordeon.map((acordeon, index) => {
+          return (
+            <Skeleton
+              key={index}
+              variant="rounded"
+              height={58}
+              style={{ width: "95vw", maxWidth: "900px" }}
+            />
+          );
+        })}
+      </Stack>
+    </>
+  );
+};
+
+const SectionSwitchSkeleton = () => {
+  return <Skeleton variant="rounded" height={30} width={55} style={{ borderRadius: "50px" }} />;
+};
+
+export { turnsButtonsSkeleton, AdminWorkerSkeleton, SectionSwitchSkeleton };

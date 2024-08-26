@@ -6,8 +6,6 @@ import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import time from "../../helpers/arrayTime";
 import HelpIcon from "@mui/icons-material/Help";
 import formatHour from "../../functions/formatHour";
-import durationMax from "../../helpers/durationMax";
-import { dark } from "@mui/material/styles/createPalette";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction={"up"} ref={ref} {...props} />;
@@ -28,7 +26,6 @@ const SliderModal = ({
   const [timeResult, setTimeResult] = useState([]); // aca estaran los values convertidos a time de back
   const handleClose = () => setIsOpen(false);
 
-  console.log(timeSelected, "esto es lo que tiene timeaSelected");
 
   const obtenerDuracionMaxima = (obj) => {
     let duracionMaxima = 0;

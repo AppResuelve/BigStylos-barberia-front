@@ -48,8 +48,7 @@ export const convertToServicesArray = (obj) => {
     for (const service in obj[category]) {
       servicesArray.push({
         name: service,
-        // duration: null,
-        // available: false,
+        img: obj[category][service].img,
       });
     }
   }
@@ -66,7 +65,7 @@ export const convertToServicesImgArray = (obj) => {
   return servicesArray;
 };
 
-export const filterImgServicesToUpdate = (newArray,originalArray) => {
+export const filterImgServicesToUpdate = (newArray, originalArray) => {
   const modifiedArray = newArray.filter((newItem) => {
     const originalItem = originalArray.find(
       (origItem) => origItem[0] === newItem[0]

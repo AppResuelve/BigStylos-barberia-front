@@ -6,14 +6,14 @@ import trashIcon from "../../assets/icons/trash.png";
 import "./turnsCartFooter.css";
 import axios from "axios";
 import { LoaderToBuy } from "../loaders/loaders";
-import { useNavigate } from "react-router-dom";
+import { setCookie } from "../../helpers/cookies";
+import { setLocalStorage } from "../../helpers/localStorage";
 
 const VITE_MERCADO_PAGO_PUBLIC_KEY = import.meta.env
   .VITE_MERCADO_PAGO_PUBLIC_KEY;
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const TurnsCartFooter = ({ turnsCart, setTurnsCart, setAuxCart }) => {
-  const navigate = useNavigate();
   const [openCart, setOpenCart] = useState(false);
   const [urlInitPoint, setUrlInitPoint] = useState(null);
   const [loader, setLoader] = useState(false);
@@ -85,29 +85,34 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart, setAuxCart }) => {
   const handleBuy = async () => {
     let cartWithSing = [];
     let cartNoSing = [];
+    setLoader(true);
     turnsCart.map((turn) => {
-      if (turn.service.sing !== "") {
+      console.log(turn);
+      
+      if (turn.service.sing != 0) {
         cartWithSing.push(turn);
       } else {
         cartNoSing.push(turn);
       }
     });
-    setLoader(true);
     if (cartWithSing.length > 0) {
       try {
         const response = await axios.post(
           `${VITE_BACKEND_URL}/mercadopago/create_preference`,
           {
             arrayItems: turnsCart,
-            // cartWithSing,
-            // cartNoSing,
+            cartWithSing,
           }
         );
-        setUrlInitPoint(response.data);
+
+        setUrlInitPoint(response.data.init_point);
+        setLocalStorage("CART_ID", response.data.turns);
+        setCookie("PREFERENCE_ID", response.data.preference_id, 4);
+
         setLoader(false);
         setTimeout(() => {
-          window.location.href = response.data;
-        }, 2500);
+          window.location.href = response.data.init_point;
+        }, 3000);
         // Redirigir después de establecer la URL de redirección
       } catch (error) {
         setLoader(false);

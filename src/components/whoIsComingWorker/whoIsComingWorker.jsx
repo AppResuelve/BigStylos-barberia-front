@@ -19,7 +19,6 @@ const WhoIsComingWorker = ({
   const [turns, setTurns] = useState([]);
   const [count, setCount] = useState([]);
   const [selectedDay, setSelectedDay] = useState("");
-
   /*  turns contiene:
   {
     email: el email del cliente
@@ -48,11 +47,10 @@ const WhoIsComingWorker = ({
       }
     };
     fetchCount();
-    if (refreshForWhoIsComing == true) {
+    if (refreshForWhoIsComing === true) {
       setRefreshForWhoIsComing(false);
     }
   }, [refreshForWhoIsComing]);
-  console.log(turns);
   useEffect(() => {
     const fetchTurns = async () => {
       const [numberDay, numberMonth] = selectedDay.split("/").map(Number);
@@ -202,7 +200,7 @@ const WhoIsComingWorker = ({
                 </Box>
                 <hr />
                 <h4 className="h-time-hic">
-                  {`${formatHour(element.ini)} - ${formatHour(element.fin)}`}
+                  {`${formatHour(element.ini)} - ${formatHour(element.end)}`}
                 </h4>
                 <hr />
                 <Box

@@ -7,7 +7,7 @@ import CustomCalendarTurns from "../customCalendar/customCalendarTurns";
 import obtainMonthName from "../../functions/obtainMonthName";
 import leftArrowBack from "../../assets/icons/left-arrow.png";
 import servicesIcon from "../../assets/icons/review.png";
-import { TurnsButtonsSkeleton } from "../skeletons/skeletons";
+import { turnsButtonsSkeleton } from "../skeletons/skeletons";
 import formatHour from "../../functions/formatHour";
 import "./turns.css";
 import axios from "axios";
@@ -81,8 +81,9 @@ const Turns = ({ setTurnsCart, auxCart, setAuxCart }) => {
   }, [serviceSelected]);
 
   const handleServiceChange = (serviceName, service) => {
+
     let singCalculated;
-    if (service.sing !== 0 && service.type === "%") {
+    if (service.sing != 0 && service.type === "%") {
       singCalculated = calculateSing(service.price, service.sing);
       setServiceSelected({
         name: serviceName,
@@ -90,19 +91,12 @@ const Turns = ({ setTurnsCart, auxCart, setAuxCart }) => {
         price: service.price,
         sing: singCalculated,
       });
-    } else if (service.sing !== 0 && service.type === "$") {
-      setServiceSelected({
-        name: serviceName,
-        img: service.img,
-        price: service.price,
-        sing: service.sing,
-      });
     } else {
       setServiceSelected({
         name: serviceName,
         img: service.img,
         price: service.price,
-        sing: null,
+        sing: service.sing,
       });
     }
     setExpanded(false);
@@ -524,7 +518,7 @@ const Turns = ({ setTurnsCart, auxCart, setAuxCart }) => {
               </div>
             </section>
           ) : (
-            <TurnsButtonsSkeleton />
+            <turnsButtonsSkeleton />
           )}
         </div>
       )}

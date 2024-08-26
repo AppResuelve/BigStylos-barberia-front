@@ -17,7 +17,7 @@ const LoginButton = () => {
         `${VITE_BACKEND_URL}/users/createGoogle`,
         { code: codeResponse.code }
       );
-      setCookie("IDSESSION", response.data.email, 6);
+      setCookie("IDSESSION", response.data.email, 360);
       setUserData(response.data);
       setRefreshStatusSession((prev) => {
         const prevStatusSession = prev;

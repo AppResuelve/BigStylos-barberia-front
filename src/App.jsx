@@ -89,7 +89,7 @@ function App() {
         .then((response) => {
           if (response.auth) {
             setUserData(response.user);
-            setCookie("IDSESSION", response.user.email, 6);
+            setCookie("IDSESSION", response.user.email, 360);
           } else {
             setUserData(false);
           }

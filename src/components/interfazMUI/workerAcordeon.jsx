@@ -1,18 +1,21 @@
 import { useEffect, useState, useContext } from "react";
-import { DarkModeContext } from "../../App";
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import LinearProgress from "@mui/material/LinearProgress";
-import { Box } from "@mui/material";
-import CreateWorkDays from "../createWorkDays/createWorkDays";
 import { useMediaQueryHook } from "./useMediaQuery";
+import { DarkModeContext } from "../../App";
+import {
+  Box,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  LinearProgress,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import CreateWorkDays from "../createWorkDays/createWorkDays";
 import MyServices from "../myServices/myServices";
 import CancelledTurnsForWorker from "../cancelledTurnsForWorker/cancelledTurnsForWorker";
 import WhoIsComingWorker from "../whoIsComingWorker/whoIsComingWorker";
-import axios from "axios";
 import { convertToServicesArray } from "../../helpers/convertCategoryService";
+import axios from "axios";
+
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const WorkerAcordeon = ({ user }) => {
@@ -32,62 +35,37 @@ const WorkerAcordeon = ({ user }) => {
   const [pendingServices, setPendingServices] = useState(false);
   const [doCeroServices, setDoCeroServices] = useState(false);
   /* estados locales del componente myServices */
-  const [services, setServices] = useState(1);
-  const [serviceStatus, setServiceStatus] = useState({});
+  const [services, setServices] = useState([]);
   const [timeEdit, setTimeEdit] = useState({});
-  const [showEdit, setShowEdit] = useState(false);
 
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-console.log(user);
-  useEffect(() => {
-    setTimeEdit(workerData.services);
-  }, [workerData]);
 
   useEffect(() => {
-    let hasNull = false;
-    let allZero = true;
-    if (timeEdit && Object.keys(timeEdit).length > 0) {
-      if (services && Object.keys(services).length > 0) {
-          for (const prop in timeEdit) {
-              if (timeEdit[prop].duration === null) {
-                hasNull = true;
-              } else if (timeEdit[prop].duration !== 0) {
-                allZero = false;
-              }
-          }
+    if (timeEdit && Object.keys(timeEdit).length > 0 && services.length > 0) {
+      let onePending = false;
+      let allZero = true;
+      for (const prop in timeEdit) {
+        console.log(timeEdit[prop]);
+        
+        if (timeEdit[prop].duration === 0) {
+          onePending = true;
+        } else if (
+          timeEdit[prop].duration !== 0 &&
+          timeEdit[prop].duration !== null
+        ) {
+          allZero = false;
+        }
       }
-      setPendingServices(hasNull);
+      setPendingServices(onePending);
       setDoCeroServices(allZero);
     }
   }, [timeEdit, services]);
 
   useEffect(() => {
-    let objNewServicies = {};
-    if (services && services.length > 0) {
-      for (const prop in workerData.services) {
-        if (services.some((serviceArr) => serviceArr.name === prop)) {
-          if (workerData.services[prop].duration === null) {
-            objNewServicies[prop] = true;
-          } else if (workerData.services[prop].duration === 0) {
-            objNewServicies[prop] = false;
-          } else {
-            objNewServicies[prop] = true;
-          }
-        }
-      }
-    }
-    if (!showEdit) {
-      setServiceStatus(objNewServicies);
-    }
-  }, [services, workerData, showEdit]);
-
-  useEffect(() => {
     const fetchServices = async () => {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/services/`);
-        const { data } = response;
-        console.log(data, "esto es el data");
-        const arrServices = convertToServicesArray(data); //pasamos a array de obj servicio antes de setear
+        const arrServices = convertToServicesArray(response.data); //pasamos a array de obj servicio antes de setear
         setServices(arrServices);
       } catch (error) {
         console.error("Error al obtener los servicios:", error);
@@ -101,8 +79,7 @@ console.log(user);
     const fetchSchedule = async () => {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/schedule`);
-        const { data } = response;
-        setSchedule(data.businessSchedule);
+        setSchedule(response.data.businessSchedule);
       } catch (error) {
         console.error("Error al obtener los horarios", error);
         alert("Error al obtener los horarios");
@@ -117,8 +94,8 @@ console.log(user);
         const response = await axios.post(`${VITE_BACKEND_URL}/users/byemail`, {
           email: user.email,
         });
-        const { data } = response;
-        setWorkerData(data);
+        setWorkerData(response.data);
+        setTimeEdit(response.data.services);
       } catch (error) {
         console.error("Error al obtener los dias:", error);
         alert("Error al obtener los dias");
@@ -126,7 +103,7 @@ console.log(user);
     };
     fetchWorker();
   }, [refresh]);
-console.log(services, " estos son sosdf serlkjsgt");
+
   const handleChange = (panel) => (event, isExpanded) => {
     if (changeNoSaved) {
       setShowAlert({
@@ -200,17 +177,15 @@ console.log(services, " estos son sosdf serlkjsgt");
             </h2>
           </AccordionSummary>
           <AccordionDetails>
-            {expanded === "panel1" &&
-              Object.keys(workerData).length > 0 &&
-              services.length > 0 && (
-                <CreateWorkDays
-                  user={workerData}
-                  schedule={schedule}
-                  pendingServices={pendingServices}
-                  doCeroServices={doCeroServices}
-                  setRefreshForWhoIsComing={setRefreshForWhoIsComing}
-                />
-              )}
+            {expanded === "panel1" && Object.keys(workerData).length > 0 && (
+              <CreateWorkDays
+                user={workerData}
+                schedule={schedule}
+                pendingServices={pendingServices}
+                doCeroServices={doCeroServices}
+                setRefreshForWhoIsComing={setRefreshForWhoIsComing}
+              />
+            )}
             {expanded === "panel1" && Object.keys(workerData).length < 1 && (
               <LinearProgress />
             )}
@@ -273,7 +248,7 @@ console.log(services, " estos son sosdf serlkjsgt");
               >
                 Mis servicios
               </h2>
-              {pendingServices && (
+              {pendingServices  && (
                 <h4
                   style={{
                     color: "red",
@@ -296,17 +271,12 @@ console.log(services, " estos son sosdf serlkjsgt");
           <AccordionDetails>
             {(expanded === "panel2" || redirectToMyServices) && (
               <MyServices
-                workerData={workerData.services}
-                email={workerData.email}
+                workerData={workerData}
                 refresh={refresh}
                 setRefresh={setRefresh}
                 services={services}
-                serviceStatus={serviceStatus}
-                setServiceStatus={setServiceStatus}
                 timeEdit={timeEdit}
                 setTimeEdit={setTimeEdit}
-                showEdit={showEdit}
-                setShowEdit={setShowEdit}
                 setChangeNoSaved={setChangeNoSaved}
               />
             )}
