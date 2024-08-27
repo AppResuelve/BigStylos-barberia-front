@@ -1,7 +1,5 @@
 import { useState, useContext } from "react";
-import { DarkModeContext } from "../../App";
-import "../interfazUiverse.io/checkBox.css";
-import axios from "axios";
+import ThemeContext from "../../context/ThemeContext";
 import {
   Box,
   Button,
@@ -13,6 +11,9 @@ import {
 import formatHour from "../../functions/formatHour";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
+import axios from "axios";
+import "../interfazUiverse.io/checkBox.css";
+import Swal from "sweetalert2";
 // import { SectionSwitchSkeleton } from "../skeletons/skeletons";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -25,8 +26,9 @@ const MyServices = ({
   timeEdit,
   setTimeEdit,
   setChangeNoSaved,
+  pendingServices
 }) => {
-  const { darkMode } = useContext(DarkModeContext);
+  const { darkMode } = useContext(ThemeContext);
   const [loading, setLoading] = useState(true);
   const [inputService, setInputService] = useState("");
   const [searchValue, setSearchValue] = useState("");
@@ -72,18 +74,25 @@ const MyServices = ({
   };
 
   const handleSubmit = async () => {
-    try {
-      const response = await axios.put(`${VITE_BACKEND_URL}/users/update`, {
-        email: workerData.email,
-        newServicesDuration: timeEdit,
+    if (pendingServices) {
+      Swal.fire({
+        title: "Tienes cambios sin guardar",
+        icon: "warning",
       });
-      setRefresh(!refresh);
-    } catch (error) {
-      console.error("Error al actulizar los servicios", error);
-      alert("Error al actulizar los servicios");
+    } else {
+      try {
+        const response = await axios.put(`${VITE_BACKEND_URL}/users/update`, {
+          email: workerData.email,
+          newServicesDuration: timeEdit,
+        });
+        setRefresh(!refresh);
+      } catch (error) {
+        console.error("Error al actulizar los servicios", error);
+        alert("Error al actulizar los servicios");
+      }
+      setShowEdit(false);
+      setChangeNoSaved(false);
     }
-    setShowEdit(false);
-    setChangeNoSaved(false);
   };
 
   return (

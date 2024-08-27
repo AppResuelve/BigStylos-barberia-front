@@ -1,17 +1,13 @@
-import { useState, useContext } from "react";
-import { DarkModeContext } from "../../App";
+import {  useContext } from "react";
+import ThemeContext from "../../context/ThemeContext";
+import AuthContext from "../../context/AuthContext";
 import UserPanelModal from "../interfazMUI/userPanelModal";
 import noUser from "../../assets/icons/noUser.png";
 import "./userProfile.css";
 
-const Profile = ({
-  userData,
-  isOpenUserPanel,
-  setIsOpenUserPanel,
-  showLoginForm,
-  setShowLoginForm ,
-}) => {
-  const { darkMode } = useContext(DarkModeContext);
+const Profile = () => {
+  const { darkMode } = useContext(ThemeContext);
+  const { userData, setIsOpenUserPanel } = useContext(AuthContext);
 
   return (
     <div>
@@ -27,13 +23,7 @@ const Profile = ({
           alt="mi perfil"
         />
       </button>
-      <UserPanelModal
-        isOpen={isOpenUserPanel}
-        setIsOpen={setIsOpenUserPanel}
-        userData={userData}
-        showLoginForm={showLoginForm}
-        setShowLoginForm={setShowLoginForm}
-      />
+      <UserPanelModal />
     </div>
   );
 };

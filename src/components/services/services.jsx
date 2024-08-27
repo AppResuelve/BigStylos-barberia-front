@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
-import { DarkModeContext } from "../../App";
 import { convertToCategoryServiceArray } from "../../helpers/convertCategoryService";
 import {
   Button,
@@ -14,6 +13,7 @@ import EditServicesModal from "./editServicesModal";
 import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import axios from "axios";
+import ThemeContext from "../../context/ThemeContext";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -25,7 +25,7 @@ const Services = ({
   setLoadingServices,
 }) => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-  const { darkMode } = useContext(DarkModeContext);
+  const { darkMode } = useContext(ThemeContext);
   const [categoryList, setCategoryList] = useState([]);
   // const [serviceList, setServiceList] = useState([]);
   const [categoryServices, setCategoryServices] = useState([]);

@@ -1,10 +1,9 @@
 import { useEffect, useState, useContext } from "react";
-import { DarkModeContext } from "../../App";
+import ThemeContext from "../../context/ThemeContext";
 import { Box, Button, Input } from "@mui/material";
 import AlertSnackBar from "./alertSnackBar";
 import Alert from "@mui/material/Alert";
 import CloseIcon from "@mui/icons-material/Close";
-import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import "./alertModal.css";
 
@@ -28,8 +27,7 @@ const AlertModal = ({
     setDisableButtonMyTurns,
     clientName,
     setClientName,
-  } = useContext(DarkModeContext);
-  const { loginWithRedirect } = useAuth0();
+  } = useContext(ThemeContext);
   const [newPhoneNumber, setNewPhoneNumber] = useState("");
   const [error, setError] = useState("");
   const [open, setOpen] = useState(false);

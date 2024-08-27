@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { DarkModeContext } from "../../App";
+import ThemeContext from "../../context/ThemeContext";
 import daysMonthCalendarCustom from "../../functions/daysMonthCalendarCustom";
 import getToday from "../../functions/getToday";
 import obtainDayName from "../../functions/obtainDayName";
@@ -17,7 +17,7 @@ const CustomCalendarPlannedC = ({
   days,
   setDaysWithTurns,
 }) => {
-  const { darkMode } = useContext(DarkModeContext);
+  const { darkMode } = useContext(ThemeContext);
   const daysCalendarCustom = daysMonthCalendarCustom(amountOfDays, false);
   let { currentMonth, nextMonth, currentYear, nextYear, month1, month2 } =
     daysCalendarCustom;

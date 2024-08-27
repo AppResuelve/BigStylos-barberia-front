@@ -1,11 +1,11 @@
 import { useEffect, useState, useContext } from "react";
-import { DarkModeContext } from "../../App";
 import { Box } from "@mui/material";
 import daysMonthCalendarCustom from "../../functions/daysMonthCalendarCustom";
 import getToday from "../../functions/getToday";
 import obtainDayName from "../../functions/obtainDayName";
 import "./customCalendar2.css";
 import axios from "axios";
+import ThemeContext from "../../context/ThemeContext";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -18,7 +18,7 @@ const CustomCalendarTurns = ({
   selectedWorker,
   setTurnsButtons,
 }) => {
-  const { darkMode, setShowAlert } = useContext(DarkModeContext);
+  const { darkMode, setShowAlert } = useContext(ThemeContext);
   const daysCalendarCustom = daysMonthCalendarCustom(27, true);
   const { currentMonth, nextMonth, currentYear, nextYear, month1, month2 } =
     daysCalendarCustom;

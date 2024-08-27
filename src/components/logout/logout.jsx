@@ -1,13 +1,13 @@
 import { deleteCookie } from "../../helpers/cookies";
 import { useContext } from "react";
-import { DarkModeContext } from "../../App";
 import logOutIcon from "../../assets/icons/log-out.png";
 import "../login/login-logout.css";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../../context/AuthContext";
 
 const LogoutButton = () => {
   const { setRefreshStatusSession, setIsOpenUserPanel } =
-    useContext(DarkModeContext);
+    useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogOut = () => {

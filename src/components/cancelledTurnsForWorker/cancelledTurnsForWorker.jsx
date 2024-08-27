@@ -1,7 +1,6 @@
 import { useEffect, useState, useContext } from "react";
-import { DarkModeContext } from "../../App";
-import { Button } from "@mui/material";
-import { Box } from "@mui/system";
+import ThemeContext from "../../context/ThemeContext";
+import { Button, Box } from "@mui/material";
 import { WhatsApp } from "@mui/icons-material";
 import axios from "axios";
 import "../cancelledTurnsForAdmin/cancelledTurns.css";
@@ -9,7 +8,7 @@ import "../cancelledTurnsForAdmin/cancelledTurns.css";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const CancelledTurnsForWorker = ({ user }) => {
-  const { darkMode } = useContext(DarkModeContext);
+  const { darkMode } = useContext(ThemeContext);
   const [cancelledTurnsByDays, setCancelledTurnsByDays] = useState([]);
   const [count, setCount] = useState([]);
   const [selectedDay, setSelectedDay] = useState("");

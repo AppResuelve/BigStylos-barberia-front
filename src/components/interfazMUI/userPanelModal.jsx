@@ -1,9 +1,10 @@
-import React, { useState, useContext, useEffect } from "react";
-import { DarkModeContext } from "../../App";
+import React, { useContext } from "react";
+import ThemeContext from "../../context/ThemeContext";
+import AuthContext from "../../context/AuthContext";
 import noUser from "../../assets/icons/noUser.png";
-import closeIcon from "../../assets/icons/close.png"
+import closeIcon from "../../assets/icons/close.png";
 import LogoutButton from "../logout/logout";
-import { Dialog,DialogContent, Backdrop, Slide, Box, Button } from "@mui/material";
+import { Dialog, Backdrop, Slide, Box, Button } from "@mui/material";
 import { useMediaQueryHook } from "./useMediaQuery";
 import { NavLink } from "react-router-dom";
 import ClientNestedList from "./clientNestedList";
@@ -14,11 +15,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction={"left"} ref={ref} {...props} />;
 });
 
-const UserPanelModal = ({ isOpen, setIsOpen, userData }) => {
-  const { darkMode } = useContext(DarkModeContext);
+const UserPanelModal = () => {
+  const { darkMode } = useContext(ThemeContext);
+  const { userData, isOpenUserPanel, setIsOpenUserPanel } =
+    useContext(AuthContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
-  const handleClose = () => setIsOpen(false);
+  const handleClose = () => setIsOpenUserPanel(false);
   return (
     <Dialog
       style={{
@@ -27,7 +30,7 @@ const UserPanelModal = ({ isOpen, setIsOpen, userData }) => {
       }}
       fullScreen={xl}
       TransitionComponent={Transition}
-      open={isOpen}
+      open={isOpenUserPanel}
       onClose={handleClose}
       slots={{ backdrop: Backdrop }}
       slotProps={{
@@ -57,24 +60,28 @@ const UserPanelModal = ({ isOpen, setIsOpen, userData }) => {
               justifyContent: "space-between",
             }}
           >
-            <div style={{display:"flex",alignItems:"center"}}>
-
-            <img
-              className="img-user-userModal"
-              src={userData?.image ? userData.image : noUser}
-              alt="mi perfil"
-            />
-            <span
-              style={{
-                color: darkMode.on ? "white" : darkMode.dark,
-                fontSize: "22px",
-              }}
-            >
-              {userData?.name}
-            </span>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <img
+                className="img-user-userModal"
+                src={userData?.image ? userData.image : noUser}
+                alt="mi perfil"
+              />
+              <span
+                style={{
+                  color: darkMode.on ? "white" : darkMode.dark,
+                  fontSize: "22px",
+                }}
+              >
+                {userData?.name}
+              </span>
             </div>
 
-            <img className="img-close-userModal" src={closeIcon} alt="" onClick={handleClose } />
+            <img
+              className="img-close-userModal"
+              src={closeIcon}
+              alt=""
+              onClick={handleClose}
+            />
           </div>
           <hr
             className="hr-userModal"
@@ -90,14 +97,14 @@ const UserPanelModal = ({ isOpen, setIsOpen, userData }) => {
               to="/admin"
               style={{ textDecoration: "none", color: "black" }}
             >
-              <Box onClick={() => setIsOpen(false)}>
+              <Box onClick={() => setIsOpenUserPanel(false)}>
                 <button
                   className="btn-userModal"
                   style={{
                     color: darkMode.on ? "white" : darkMode.dark,
                     fontWeight: "bold",
                   }}
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => setIsOpenUserPanel(false)}
                 >
                   Administración del local
                 </button>
@@ -118,14 +125,14 @@ const UserPanelModal = ({ isOpen, setIsOpen, userData }) => {
               to="/worker"
               style={{ textDecoration: "none", color: darkMode.dark }}
             >
-              <Box onClick={() => setIsOpen(false)}>
+              <Box onClick={() => setIsOpenUserPanel(false)}>
                 <button
                   className="btn-userModal"
                   style={{
                     color: darkMode.on ? "white" : darkMode.dark,
                     fontWeight: "bold",
                   }}
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => setIsOpenUserPanel(false)}
                 >
                   Administracíon del profesional
                 </button>

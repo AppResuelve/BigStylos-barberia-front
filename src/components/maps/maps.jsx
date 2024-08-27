@@ -1,14 +1,14 @@
 import { useContext, useState } from "react";
+import ThemeContext from "../../context/ThemeContext";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import Map, { Marker, Popup } from "react-map-gl";
 import "./map.css";
-import { DarkModeContext } from "../../App";
 
 const VITE_MAPBOX_MAPS_API_KEY = import.meta.env.VITE_MAPBOX_MAPS_API_KEY;
 
 const Maps = () => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-  const { darkMode } = useContext(DarkModeContext);
+  const { darkMode } = useContext(ThemeContext);
 
   const [viewport, setViewport] = useState({
     longitude: -58.994893588103295,

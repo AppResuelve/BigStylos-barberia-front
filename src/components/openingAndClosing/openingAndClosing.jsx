@@ -1,14 +1,14 @@
 import { useEffect, useState, useContext } from "react";
-import { DarkModeContext } from "../../App";
-import axios from "axios";
+import ThemeContext from "../../context/ThemeContext";
 import formatHour from "../../functions/formatHour";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { Box, Button, MenuItem, Select } from "@mui/material";
+import axios from "axios";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const OpeningAndClosing = ({ schedule, refresh, setRefresh, setRemaining }) => {
-  const { darkMode, setShowAlert } = useContext(DarkModeContext);
+  const { darkMode, setShowAlert } = useContext(ThemeContext);
   const [showEdit, setShowEdit] = useState(false);
   const [timeEdit, setTimeEdit] = useState({});
   const [loading, setLoading] = useState(true);

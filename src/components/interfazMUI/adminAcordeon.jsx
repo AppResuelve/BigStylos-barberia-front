@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { DarkModeContext } from "../../App";
+import ThemeContext from "../../context/ThemeContext";
 import { useMediaQueryHook } from "./useMediaQuery";
 import {
   Accordion,
@@ -22,7 +22,7 @@ import axios from "axios";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const AdminAcordeon = () => {
-  const { darkMode, setShowAlert } = useContext(DarkModeContext);
+  const { darkMode, setShowAlert } = useContext(ThemeContext);
   const [expanded, setExpanded] = useState(false);
   const [schedule, setSchedule] = useState({});
   const [refresh, setRefresh] = useState(false);

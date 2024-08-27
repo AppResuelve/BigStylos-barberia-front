@@ -1,5 +1,4 @@
 import { useEffect, useState, useContext } from "react";
-import { DarkModeContext } from "../../App";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { Box, Button, Input, LinearProgress } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -8,11 +7,12 @@ import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrow
 import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
 import "./users.css";
 import axios from "axios";
+import ThemeContext from "../../context/ThemeContext";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Users = () => {
-  const { darkMode } = useContext(DarkModeContext);
+  const { darkMode } = useContext(ThemeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [add, setAdd] = useState(false);
   const [typeUser, setTypeUser] = useState(true);

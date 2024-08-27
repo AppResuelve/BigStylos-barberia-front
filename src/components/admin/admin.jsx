@@ -1,12 +1,14 @@
 import { useEffect, useContext } from "react";
-import { DarkModeContext } from "../../App";
 import { useNavigate } from "react-router-dom";
+import ThemeContext from "../../context/ThemeContext";
+import AuthContext from "../../context/AuthContext";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import AdminAcordeon from "../interfazMUI/adminAcordeon";
 import { AdminWorkerSkeleton } from "../skeletons/skeletons";
 
 const Admin = () => {
-  const { darkMode, userData } = useContext(DarkModeContext);
+  const { darkMode } = useContext(ThemeContext);
+  const { userData } = useContext(AuthContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const navigate = useNavigate();
 

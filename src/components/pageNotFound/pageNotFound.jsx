@@ -1,14 +1,13 @@
 import { useContext } from "react";
-import { DarkModeContext } from "../../App";
+import ThemeContext from "../../context/ThemeContext";
 import toHome from "../../assets/icons/homeBlack.png";
 import toHomeWhite from "../../assets/icons/homeWhite.png";
-
 import imgFondoError from "../../assets/images/mano-error.png";
 import { NavLink } from "react-router-dom";
 import { Box, Button } from "@mui/material";
 
 const NotFound = () => {
-  const { darkMode } = useContext(DarkModeContext);
+  const { darkMode } = useContext(ThemeContext);
 
   return (
     <div

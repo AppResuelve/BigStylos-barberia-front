@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { DarkModeContext } from "../../App";
+import ThemeContext from "../../context/ThemeContext";
 import { Box, Button } from "@mui/material";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
@@ -14,8 +14,8 @@ import {
   filterImgServicesToUpdate,
 } from "../../helpers/convertCategoryService";
 import "./personalization.css";
-import axios from "axios";
 import { checkChangeToSave } from "../../helpers/checkChangeToSave";
+import axios from "axios";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const VITE_CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
@@ -27,7 +27,7 @@ const Personalization = ({
   setChangeNoSaved,
 }) => {
   const { darkMode, setRefreshPersonalization } =
-    useContext(DarkModeContext);
+    useContext(ThemeContext);
   const [imgServices, setImgServices] = useState([]); //images de los services basado en el estado services
   const [auxImgServices, setAuxImgServices] = useState([]); //images de los services basado en el estado services copia
   const [homeImages, setHomeImages] = useState([]); //images del home

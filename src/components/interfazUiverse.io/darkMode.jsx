@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import { DarkModeContext } from "../../App";
 import "./darkMode.css";
+import ThemeContext from "../../context/ThemeContext";
 
 const DarkMode = () => {
-  const { darkMode, toggleDarkMode } = useContext(DarkModeContext);
+  const { darkMode, toggleDarkMode } = useContext(ThemeContext);
   
   return (
     <div className="container-toggle-darkmode">

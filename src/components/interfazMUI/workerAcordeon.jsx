@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { useMediaQueryHook } from "./useMediaQuery";
-import { DarkModeContext } from "../../App";
+import ThemeContext from "../../context/ThemeContext";
 import {
   Box,
   Accordion,
@@ -15,6 +15,7 @@ import CancelledTurnsForWorker from "../cancelledTurnsForWorker/cancelledTurnsFo
 import WhoIsComingWorker from "../whoIsComingWorker/whoIsComingWorker";
 import { convertToServicesArray } from "../../helpers/convertCategoryService";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -26,7 +27,7 @@ const WorkerAcordeon = ({ user }) => {
     refreshForWhoIsComing,
     setRefreshForWhoIsComing,
     setShowAlert,
-  } = useContext(DarkModeContext);
+  } = useContext(ThemeContext);
   const [changeNoSaved, setChangeNoSaved] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [schedule, setSchedule] = useState({});
@@ -45,8 +46,6 @@ const WorkerAcordeon = ({ user }) => {
       let onePending = false;
       let allZero = true;
       for (const prop in timeEdit) {
-        console.log(timeEdit[prop]);
-        
         if (timeEdit[prop].duration === 0) {
           onePending = true;
         } else if (
@@ -106,17 +105,10 @@ const WorkerAcordeon = ({ user }) => {
 
   const handleChange = (panel) => (event, isExpanded) => {
     if (changeNoSaved) {
-      setShowAlert({
-        isOpen: true,
-        message: "Tienes cambios sin guardar.",
-        type: "warning",
-        button1: {
-          text: "",
-          action: "",
-        },
-        buttonClose: {
-          text: "OK",
-        },
+      Swal.fire({
+        title: "Tienes cambios sin guardar",
+        icon: "warning",
+        timer: 3000,
       });
     } else {
       setExpanded(isExpanded ? panel : false);
@@ -181,8 +173,8 @@ const WorkerAcordeon = ({ user }) => {
               <CreateWorkDays
                 user={workerData}
                 schedule={schedule}
-                pendingServices={pendingServices}
                 doCeroServices={doCeroServices}
+                pendingServices={pendingServices}
                 setRefreshForWhoIsComing={setRefreshForWhoIsComing}
               />
             )}
@@ -248,7 +240,7 @@ const WorkerAcordeon = ({ user }) => {
               >
                 Mis servicios
               </h2>
-              {pendingServices  && (
+              {pendingServices && (
                 <h4
                   style={{
                     color: "red",
@@ -278,6 +270,7 @@ const WorkerAcordeon = ({ user }) => {
                 timeEdit={timeEdit}
                 setTimeEdit={setTimeEdit}
                 setChangeNoSaved={setChangeNoSaved}
+                pendingServices={pendingServices}
               />
             )}
           </AccordionDetails>

@@ -36,6 +36,7 @@
     "react-swipeable-views-utils": "^0.14.0",
     "serve": "^14.2.1",
     "slick-carousel": "^1.8.1",
+    "sweetalert2": "^11.6.13",
     "tinycolor2": "^1.6.0"
   },
   "devDependencies": {

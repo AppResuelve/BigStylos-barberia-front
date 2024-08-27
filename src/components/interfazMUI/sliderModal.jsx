@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { DarkModeContext } from "../../App";
+import ThemeContext from "../../context/ThemeContext";
 import Slide from "@mui/material/Slide";
 import { Dialog, Grid, Slider, Box, Button, Backdrop } from "@mui/material";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
@@ -21,7 +21,7 @@ const SliderModal = ({
   setTimeSelected,
   handleSubmit,
 }) => {
-  const { darkMode } = useContext(DarkModeContext);
+  const { darkMode } = useContext(ThemeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [timeResult, setTimeResult] = useState([]); // aca estaran los values convertidos a time de back
   const handleClose = () => setIsOpen(false);

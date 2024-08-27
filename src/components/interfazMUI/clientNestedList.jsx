@@ -1,22 +1,24 @@
 import { useEffect, useState, useContext } from "react";
-import { DarkModeContext } from "../../App";
+import ThemeContext from "../../context/ThemeContext";
+import AuthContext from "../../context/AuthContext";
 import ListItemButton from "@mui/material/ListItemButton";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import { Box, Button, Input, Collapse, List } from "@mui/material";
-import axios from "axios";
+import { Box, Collapse, List } from "@mui/material";
 import AlertSnackBar from "./alertSnackBar";
 import MyTurns from "../myTurns/myTurns";
 import InputTel from "../inputTel/inputTel";
+import axios from "axios";
 import "./clientNestedList.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const ClientNestedList = ({ userData }) => {
-  const { darkMode } = useContext(DarkModeContext);
+const ClientNestedList = () => {
+  const { darkMode } = useContext(ThemeContext);
+  const { userData } = useContext(AuthContext);
   const [newPhoneNumber, setNewPhoneNumber] = useState(userData?.phone ?? "");
   const [refresh, setRefresh] = useState(false);
   const [showAlertSnack, setShowAlertSnack] = useState({});
@@ -26,7 +28,7 @@ const ClientNestedList = ({ userData }) => {
     telefono: false,
     turnos: false,
   });
-  const[inputTelError, setInputTelError]=useState("")
+  const [inputTelError, setInputTelError] = useState("");
 
   const handleSectionClick = (section) => {
     setOpenSection((prevSections) => {

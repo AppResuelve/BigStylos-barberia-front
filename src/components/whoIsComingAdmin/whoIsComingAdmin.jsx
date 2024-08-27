@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
-import { DarkModeContext } from "../../App";
-import { Button, Box } from "@mui/material";
+import ThemeContext from "../../context/ThemeContext";
+import { Box } from "@mui/material";
 import { WhatsApp } from "@mui/icons-material";
 import noUserImg from "../../assets/icons/noUser.png";
 import formatHour from "../../functions/formatHour";
@@ -10,7 +10,7 @@ import "./whoIsComing.css";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const WhoIsComingAdmin = () => {
-  const { darkMode } = useContext(DarkModeContext);
+  const { darkMode } = useContext(ThemeContext);
   const [turns, setTurns] = useState([]);
   const [count, setCount] = useState([]);
   const [selectedDay, setSelectedDay] = useState("");

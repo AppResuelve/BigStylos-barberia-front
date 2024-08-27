@@ -1,10 +1,10 @@
 import { useEffect, useState, useContext } from "react";
-import { DarkModeContext } from "../../App";
-import axios from "axios";
+import ThemeContext from "../../context/ThemeContext";
 import { Box, Button, Skeleton } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import formatHour from "../../functions/formatHour";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
+import axios from "axios";
 import "./myTurns.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -19,12 +19,11 @@ const MyTurns = ({ userData }) => {
     setRefreshWhenCancelTurn,
     disableButtonMyTurns,
     setDisableButtonMyTurns,
-  } = useContext(DarkModeContext);
+  } = useContext(ThemeContext);
   const [listMyTurns, setListMyTurns] = useState(1);
   const [infoToSubmit, setInfoToSubmit] = useState({});
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [refresh, setRefresh] = useState(false);
-  console.log(listMyTurns, '<----------listMyTurns')
 
   useEffect(() => {
     const fetchData = async () => {
@@ -69,7 +68,6 @@ const MyTurns = ({ userData }) => {
   };
 
   const handleSubmit = async (turn) => {
-    
     try {
       const response = await axios.post(`${VITE_BACKEND_URL}/workdays/cancel`, {
         month: turn.month,
@@ -80,7 +78,7 @@ const MyTurns = ({ userData }) => {
         nameWorker: turn.worker.name,
         emailUser: userData.email,
         nameUser: userData.name,
-        service: turn.service
+        service: turn.service,
       });
 
       // // Filtrar los turnos para eliminar el turno cancelado
@@ -202,5 +200,3 @@ const MyTurns = ({ userData }) => {
 };
 
 export default MyTurns;
-
-

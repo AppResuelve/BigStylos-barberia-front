@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
-import { DarkModeContext } from "../../App";
 import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
+import ThemeContext from "../../context/ThemeContext";
+import AuthContext from "../../context/AuthContext";
 import cualquieraImg from "../../assets/icons/user.png";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CustomCalendarTurns from "../customCalendar/customCalendarTurns";
@@ -8,15 +9,18 @@ import obtainMonthName from "../../functions/obtainMonthName";
 import leftArrowBack from "../../assets/icons/left-arrow.png";
 import servicesIcon from "../../assets/icons/review.png";
 import { turnsButtonsSkeleton } from "../skeletons/skeletons";
+import { calculateSing } from "../../helpers/calculateSing";
 import formatHour from "../../functions/formatHour";
 import "./turns.css";
 import axios from "axios";
-import { calculateSing } from "../../helpers/calculateSing";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Turns = ({ setTurnsCart, auxCart, setAuxCart }) => {
-  const { darkMode, userData } = useContext(DarkModeContext);
+  const { darkMode } = useContext(ThemeContext);
+  const { userData, googleLogin } = useContext(AuthContext);
   const [catServices, setCatServices] = useState({});
   const [serviceSelected, setServiceSelected] = useState({});
   const [expanded, setExpanded] = useState(false);
@@ -30,10 +34,21 @@ const Turns = ({ setTurnsCart, auxCart, setAuxCart }) => {
   const [days, setDays] = useState({});
   const [dayIsSelected, setDayIsSelected] = useState([]);
   const [turnsButtons, setTurnsButtons] = useState([]);
-
+  const navigate = useNavigate();
   // Referencias para los acordeones
   const serviceAccordionRef = useRef(null);
   const workerAccordionRef = useRef(null);
+
+  useEffect(() => {
+    if (userData === false) {
+      Swal.fire({
+        title: "Debes estar loggeado para reservar",
+        confirmButtonText: "Ok",
+      }).then(() => {
+        navigate("/");
+      });
+    }
+  }, [userData]);
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -79,9 +94,9 @@ const Turns = ({ setTurnsCart, auxCart, setAuxCart }) => {
 
     if (Object.keys(serviceSelected).length > 0) fetchServices();
   }, [serviceSelected]);
+  console.log(userData);
 
   const handleServiceChange = (serviceName, service) => {
-
     let singCalculated;
     if (service.sing != 0 && service.type === "%") {
       singCalculated = calculateSing(service.price, service.sing);
