@@ -6,6 +6,8 @@ import formatHour from "../../functions/formatHour";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import axios from "axios";
 import "./myTurns.css";
+import { positions } from "@mui/system";
+import Swal from "sweetalert2";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -18,7 +20,6 @@ const MyTurns = ({ userData }) => {
     refreshWhenCancelTurn,
     setRefreshWhenCancelTurn,
     disableButtonMyTurns,
-    setDisableButtonMyTurns,
   } = useContext(ThemeContext);
   const [listMyTurns, setListMyTurns] = useState(1);
   const [infoToSubmit, setInfoToSubmit] = useState({});
@@ -42,77 +43,64 @@ const MyTurns = ({ userData }) => {
     }
   }, [userData, refresh]);
 
-  useEffect(() => {
-    if (validateAlert === true) {
-      handleSubmit();
-      setValidateAlert(false);
-    }
-  }, [validateAlert]);
-
   const handleConfirmCancelTurn = (turn) => {
     setInfoToSubmit(turn);
-    setShowAlert({
-      isOpen: true,
-      message: "Estas a punto de cancelar el turno, deseas continuar?",
-      type: "error",
-      button1: {
-        text: "Confirmar",
-        action: "handleActionProp",
+    Swal.fire({
+      title: "Estas a punto de cancelar el turno, deseas continuar?",
+      icon: "warning",
+      showDenyButton: true,
+      confirmButtonText: "Continuar",
+      denyButtonText: `Volver`,
+      customClass: {
+        container: "my-swal-container",
       },
-      buttonClose: {
-        text: "Cancelar",
-      },
-      stateName: "validateAlert",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleSubmit();
+      }
     });
-    setDisableButtonMyTurns(true);
   };
 
-  const handleSubmit = async (turn) => {
+  const handleSubmit = async () => {
     try {
       const response = await axios.post(`${VITE_BACKEND_URL}/workdays/cancel`, {
-        month: turn.month,
-        day: turn.day,
-        ini: turn.ini,
-        end: turn.end,
-        emailWorker: turn.worker.email,
-        nameWorker: turn.worker.name,
+        month: infoToSubmit.month,
+        day: infoToSubmit.day,
+        ini: infoToSubmit.ini,
+        end: infoToSubmit.end,
+        emailWorker: infoToSubmit.worker.email,
+        nameWorker: infoToSubmit.worker.name,
         emailUser: userData.email,
         nameUser: userData.name,
-        service: turn.service,
+        service: infoToSubmit.service,
       });
-
-      // // Filtrar los turnos para eliminar el turno cancelado
-      // existingTurns = existingTurns.filter((turn) => {
-      //   const serviceName = Object.keys(turn)[0];
-      //   const { month, day, ini } = turn[serviceName];
-      //   return (
-      //     month !== infoToSubmit.month ||
-      //     day !== infoToSubmit.day ||
-      //     ini !== infoToSubmit.hourTime.ini
-      //   );
-      // });
-
       setRefresh(!refresh);
-      setRefreshWhenCancelTurn(!refreshWhenCancelTurn);
-      // const timeoutId = setTimeout(() => {
-      //   setShowAlert({
-      //     isOpen: true,
-      //     message: `Su turno ha sido cancelado exitosamente!`,
-      //     type: "success",
-      //     button1: {
-      //       text: "",
-      //       action: "",
-      //     },
-      //     buttonClose: {
-      //       text: "aceptar",
-      //     },
-      //   });
-      // }, 450);
-
-      // return () => {
-      //   clearTimeout(timeoutId);
-      // };
+       Swal.fire({
+         title: "Su turno ha sido cancelado exitosamente!",
+         icon: "success",
+         timer: 3000,
+         showDenyButton: false,
+         showConfirmButton: false,
+         toast: true,
+         position: "bottom-end",
+         customClass: {
+           container: "my-swal-container",
+         },
+       });
+      
     } catch (error) {
+       Swal.fire({
+         title: "Error al cancelar el turno",
+         icon: "error",
+         timer: 3000,
+         showDenyButton: false,
+         showConfirmButton: false,
+         toast: true,
+         position: "bottom-end",
+         customClass: {
+           container: "my-swal-container",
+         },
+       });
       console.error("Error al cancelar el turno:", error);
     }
   };
@@ -173,7 +161,7 @@ const MyTurns = ({ userData }) => {
                       color: "red",
                       transition: ".2s",
                     }}
-                    onClick={() => handleSubmit(turn)}
+                    onClick={() => handleConfirmCancelTurn(turn)}
                   >
                     <DeleteOutlineIcon />
                   </Button>

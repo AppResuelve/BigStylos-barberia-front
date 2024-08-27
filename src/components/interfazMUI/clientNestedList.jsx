@@ -8,9 +8,9 @@ import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { Box, Collapse, List } from "@mui/material";
-import AlertSnackBar from "./alertSnackBar";
 import MyTurns from "../myTurns/myTurns";
 import InputTel from "../inputTel/inputTel";
+import Swal from "sweetalert2";
 import axios from "axios";
 import "./clientNestedList.css";
 
@@ -21,8 +21,6 @@ const ClientNestedList = () => {
   const { userData } = useContext(AuthContext);
   const [newPhoneNumber, setNewPhoneNumber] = useState(userData?.phone ?? "");
   const [refresh, setRefresh] = useState(false);
-  const [showAlertSnack, setShowAlertSnack] = useState({});
-  const [open, setOpen] = useState(false);
   const [openSection, setOpenSection] = useState({
     miperfil: false,
     telefono: false,
@@ -57,59 +55,45 @@ const ClientNestedList = () => {
     });
   };
 
-  // const handleSetPhoneState = async (value) => {
-  //   // Expresión regular que solo permite números, "+", "(", ")" y "-"
-  //   const allowedCharacters = /^[0-9+()-]*$/;
-
-  //   // Verificar si el valor cumple con la expresión regular y no excede los 20 caracteres
-  //   if (allowedCharacters.test(value) && value.length < 8) {
-  //     setNewPhoneNumber(value);
-
-  //     // Actualizar el estado solo si el valor cumple con las validaciones
-  //     setError("Debe ser mayor a 8 caracteres");
-  //   } else if (allowedCharacters.test(value) && value.length <= 20) {
-  //     setError("");
-  //     setNewPhoneNumber(value);
-  //   }
-  // };
-
   const handleUpdatePhone = async () => {
-    if (inputTelError !== "") {
-      setShowAlertSnack({
-        message: error,
-        type: "error",
-      });
-      setOpen(true);
-    } else {
-      try {
-        if (newPhoneNumber !== "") {
-          // Verifica si el nuevo telefono no está vacío
-          await axios.put(`${VITE_BACKEND_URL}/users/update`, {
-            email: userData.email,
-            newPhoneNumber,
-          });
-          setShowAlertSnack({
-            message: "",
-            type: "success",
-          });
-          setOpen(true);
-          setRefresh(!refresh);
-        }
-      } catch (error) {
-        console.error("Error al cambiar el numero de teléfono:", error);
-        alert("Error al cambiar el numero de teléfono");
+    try {
+      if (newPhoneNumber !== "") {
+        // Verifica si el nuevo telefono no está vacío
+        await axios.put(`${VITE_BACKEND_URL}/users/update`, {
+          email: userData.email,
+          newPhoneNumber,
+        });
+        Swal.fire({
+          title: "Telefono guardado exitosamente!",
+          icon: "success",
+          timer: 3000,
+          toast: true,
+          position: "bottom-end",
+          showConfirmButton: false,
+          customClass: {
+            container: "my-swal-container",
+          },
+        });
+        setRefresh(!refresh);
       }
+    } catch (error) {
+      Swal.fire({
+        title: "Error al cambiar el numero de teléfono.",
+        icon: "error",
+        timer: 3000,
+        toast: true,
+        position: "bottom-end",
+        showConfirmButton: false,
+        customClass: {
+          container: "my-swal-container",
+        },
+      });
+      console.error("Error al cambiar el numero de teléfono:", error);
     }
   };
 
   return (
     <div style={{ position: "relative" }}>
-      <AlertSnackBar
-        showAlertSnack={showAlertSnack}
-        setShowAlertSnack={setShowAlertSnack}
-        open={open}
-        setOpen={setOpen}
-      />
       <ListItemButton
         className="listItembtn-nestedList"
         onClick={() => handleSectionClick("miperfil")}

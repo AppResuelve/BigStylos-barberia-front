@@ -20,10 +20,6 @@
    user-select: none;
  }
 
- body.alert-open {
-   overflow: hidden;
- }
-
  /* Estilos para motores Webkit y blink (Chrome, Safari, Opera...) */
  *::-webkit-scrollbar {
    width: 2px;
@@ -44,32 +40,6 @@
    height: 2px;
  }
 
- .div-bg-alert {
-   animation: fade-in-bg-color .3s ease-in-out forwards;
-
- }
-
- .div-bg-alert-down {
-   animation: fade-in-bg-color-down .3s ease-in-out forwards;
- }
-
- @keyframes fade-in-bg-color {
-   from {
-     background-color: transparent;
-   }
-
-   to {
-     background-color: rgba(0, 0, 0, 0.4);
-   }
- }
-
- @keyframes fade-in-bg-color-down {
-   from {
-     background-color: rgba(0, 0, 0, 0.4);
-
-   }
-
-   to {
-     background-color: transparent;
-   }
+ .my-swal-container {
+   z-index: 99999;
  }

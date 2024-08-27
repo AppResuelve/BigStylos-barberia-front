@@ -21,9 +21,7 @@ function App() {
   const [validateAlertTurnsWorker, setValidateAlertTurnsWorker] =
     useState(false);
   const [refreshWhenCancelTurn, setRefreshWhenCancelTurn] = useState(false);
-  const [disableButtonMyTurns, setDisableButtonMyTurns] = useState(false);
   const [clientName, setClientName] = useState("");
-  const [showAlert, setShowAlert] = useState({});
   const [turnsCart, setTurnsCart] = useState([]);
   const [auxCart, setAuxCart] = useState({});
 
