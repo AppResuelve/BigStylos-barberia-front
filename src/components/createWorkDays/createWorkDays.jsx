@@ -38,6 +38,7 @@ const CreateWorkDays = ({
   const [timeSelected, setTimeSelected] = useState([]); //estado de la rama fac, no se para que es aun.
   const [refreshDays, setRefreshDays] = useState(false);
   const [noWork, setNoWork] = useState({});
+console.log(user);
 
   /*   dayIsSelected && Object.keys(dayIsSelected).length > 0 && days && Object.keys(days) > 0 && console.log(days[Object.keys(dayIsSelected)[0]][Object.keys(Object.keys(dayIsSelected)[0])[0]])
    */
@@ -236,9 +237,7 @@ const CreateWorkDays = ({
   };
 
   const handleDeleteSubmit = async () => {
-    let day = Object.keys(
-      dayIsSelected[Object.keys(dayIsSelected)[0]]
-    )[0];
+    let day = Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0];
     let month = Object.keys(dayIsSelected)[0];
 
     if (
@@ -255,13 +254,13 @@ const CreateWorkDays = ({
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-
             const response = await axios.post(
               `${VITE_BACKEND_URL}/workdays/delete`,
               {
                 month,
                 day,
                 email: user.email,
+                name: user.name
               }
             );
             Swal.fire({
@@ -283,7 +282,6 @@ const CreateWorkDays = ({
       });
     } else {
       try {
-        
         const response = await axios.post(
           `${VITE_BACKEND_URL}/workdays/delete`,
           {

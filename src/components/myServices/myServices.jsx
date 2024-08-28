@@ -15,7 +15,7 @@ import axios from "axios";
 import "../interfazUiverse.io/checkBox.css";
 import Swal from "sweetalert2";
 // import { SectionSwitchSkeleton } from "../skeletons/skeletons";
-
+import serviceIcon from "../../assets/icons/review.png";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const MyServices = ({
@@ -26,7 +26,7 @@ const MyServices = ({
   timeEdit,
   setTimeEdit,
   setChangeNoSaved,
-  pendingServices
+  pendingServices,
 }) => {
   const { darkMode } = useContext(ThemeContext);
   const [loading, setLoading] = useState(true);
@@ -85,10 +85,27 @@ const MyServices = ({
           email: workerData.email,
           newServicesDuration: timeEdit,
         });
+         Swal.fire({
+           title: "Cambios guardados exitosamente",
+           icon: "success",
+           timer: 3000,
+           toast: true,
+           position: "bottom-end",
+           showConfirmButton: false,
+           showCloseButton: true,
+         });
         setRefresh(!refresh);
       } catch (error) {
+          Swal.fire({
+            title: "Error al actulizar los servicios",
+            icon: "error",
+            timer: 3000,
+            toast: true,
+            position: "bottom-end",
+            showConfirmButton: false,
+            showCloseButton: true,
+          });
         console.error("Error al actulizar los servicios", error);
-        alert("Error al actulizar los servicios");
       }
       setShowEdit(false);
       setChangeNoSaved(false);
@@ -172,7 +189,7 @@ const MyServices = ({
                 >
                   <div style={{ display: "flex", gap: "5px" }}>
                     <img
-                      src={element.img}
+                      src={element.img !== "" ? element.img : serviceIcon}
                       alt="imagen servicio"
                       style={{
                         width: "30px",

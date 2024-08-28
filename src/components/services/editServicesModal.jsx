@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import capitalizeFirstLetter from "../../helpers/capitalizeFirstLetter";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -33,19 +34,48 @@ const EditServicesModal = ({
   const [servicesToDelete, setServicesToDetele] = useState([]);
 
   const handleSaveCatSer = async () => {
-    try {
-      const result = await axios.post(`${VITE_BACKEND_URL}/services/delete`, {
-        services: servicesToDelete,
-      });
-      //en vez de hacer refresh se puede setear los estados servicios
-      //con el result.(luego de ejecutar la funcion convertCategoryService)
-      setRefreshServices((prevState) => {
-        let copyState = !prevState;
-        return copyState;
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    Swal.fire({
+      title:
+        "Estas a punto de borrar servicios o categorias. Deseas continuar?",
+      icon: "warning",
+      showDenyButton: true,
+      confirmButtonText: "Borrar",
+      denyButtonText: "Más tarde",
+      customClass: {
+        container: "my-swal-container",
+      },
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const result = await axios.post(
+            `${VITE_BACKEND_URL}/services/delete`,
+            {
+              services: servicesToDelete,
+            }
+          );
+          Swal.fire({
+            title: `Los servicios y/o categorias han sido borrados exitosamente. `,
+            icon: "success",
+            timer: 3000,
+            toast: true,
+            position: "bottom-end",
+            showConfirmButton: false,
+            showCloseButton: true,
+            customClass: {
+              container: "my-swal-container",
+            },
+          });
+          //en vez de hacer refresh se puede setear los estados servicios
+          //con el result.(luego de ejecutar la funcion convertCategoryService)
+          setRefreshServices((prevState) => {
+            let copyState = !prevState;
+            return copyState;
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    });
   };
 
   const handleClose = () => {
