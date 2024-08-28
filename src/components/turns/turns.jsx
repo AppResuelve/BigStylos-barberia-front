@@ -94,7 +94,6 @@ const Turns = ({ setTurnsCart, auxCart, setAuxCart }) => {
 
     if (Object.keys(serviceSelected).length > 0) fetchServices();
   }, [serviceSelected]);
-  console.log(userData);
 
   const handleServiceChange = (serviceName, service) => {
     let singCalculated;
@@ -236,7 +235,9 @@ const Turns = ({ setTurnsCart, auxCart, setAuxCart }) => {
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <img
                       src={
-                        serviceSelected.img ? serviceSelected.img : servicesIcon
+                        serviceSelected.img !== ""
+                          ? serviceSelected.img
+                          : servicesIcon
                       }
                       alt="service-selected-icon"
                       className="img-service-selected-turns"
@@ -326,7 +327,11 @@ const Turns = ({ setTurnsCart, auxCart, setAuxCart }) => {
                               }
                             >
                               <img
-                                src={catServices[category][service].img ? catServices[category][service].img : servicesIcon}
+                                src={
+                                  catServices[category][service].img
+                                    ? catServices[category][service].img
+                                    : servicesIcon
+                                }
                                 alt="im-service"
                                 className="img-service-turns"
                               />

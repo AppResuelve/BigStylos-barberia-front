@@ -1,5 +1,5 @@
-import { useEffect, useState, useRef } from "react";
-import { initMercadoPago, Wallet } from "@mercadopago/sdk-react";
+import { useEffect, useState } from "react";
+import { initMercadoPago } from "@mercadopago/sdk-react";
 import formatHour from "../../functions/formatHour";
 import backIcon from "../../assets/icons/back.png";
 import trashIcon from "../../assets/icons/trash.png";

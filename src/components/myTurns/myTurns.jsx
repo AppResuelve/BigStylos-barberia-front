@@ -25,7 +25,6 @@ const MyTurns = ({ userData }) => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [refresh, setRefresh] = useState(false);
 
-  console.log(listMyTurns, 'esto es lo que trae como listMyTurns')
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,8 +43,25 @@ const MyTurns = ({ userData }) => {
     }
   }, [userData, refresh]);
 
-  const handleConfirmCancelTurn = (turn) => {
-    setInfoToSubmit(turn);
+  // const handleConfirmCancelTurn = (turn) => {
+  //   setInfoToSubmit(turn);
+  //   Swal.fire({
+  //     title: "Estas a punto de cancelar el turno, deseas continuar?",
+  //     icon: "warning",
+  //     showDenyButton: true,
+  //     confirmButtonText: "Continuar",
+  //     denyButtonText: `Volver`,
+  //     customClass: {
+  //       container: "my-swal-container",
+  //     },
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       handleSubmit();
+  //     }
+  //   });
+  // };
+
+  const handleSubmit = async (turn) => {
     Swal.fire({
       title: "Estas a punto de cancelar el turno, deseas continuar?",
       icon: "warning",
@@ -55,56 +71,53 @@ const MyTurns = ({ userData }) => {
       customClass: {
         container: "my-swal-container",
       },
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        handleSubmit();
+        try {
+          const response = await axios.post(
+            `${VITE_BACKEND_URL}/workdays/cancel`,
+            {
+              month: turn.month,
+              day: turn.day,
+              ini: turn.ini,
+              end: turn.end,
+              emailWorker: turn.worker.email,
+              nameWorker: turn.worker.name,
+              emailUser: userData.email,
+              nameUser: userData.name,
+              service: turn.service,
+            }
+          );
+          setRefresh(!refresh);
+          Swal.fire({
+            title: "Su turno ha sido cancelado exitosamente!",
+            icon: "success",
+            timer: 3000,
+            showDenyButton: false,
+            showConfirmButton: false,
+            toast: true,
+            position: "bottom-end",
+            customClass: {
+              container: "my-swal-container",
+            },
+          });
+        } catch (error) {
+          Swal.fire({
+            title: "Error al cancelar el turno",
+            icon: "error",
+            timer: 3000,
+            showDenyButton: false,
+            showConfirmButton: false,
+            toast: true,
+            position: "bottom-end",
+            customClass: {
+              container: "my-swal-container",
+            },
+          });
+          console.error("Error al cancelar el turno:", error);
+        }
       }
     });
-  };
-
-  const handleSubmit = async () => {
-    console.log(infoToSubmit);
-
-    try {
-      const response = await axios.post(`${VITE_BACKEND_URL}/workdays/cancel`, {
-        month: infoToSubmit.month,
-        day: infoToSubmit.day,
-        ini: infoToSubmit.ini,
-        end: infoToSubmit.end,
-        emailWorker: infoToSubmit.worker.email,
-        nameWorker: infoToSubmit.worker.name,
-        emailUser: userData.email,
-        nameUser: userData.name,
-        service: infoToSubmit.service,
-      });
-      setRefresh(!refresh);
-      Swal.fire({
-        title: "Su turno ha sido cancelado exitosamente!",
-        icon: "success",
-        timer: 3000,
-        showDenyButton: false,
-        showConfirmButton: false,
-        toast: true,
-        position: "bottom-end",
-        customClass: {
-          container: "my-swal-container",
-        },
-      });
-    } catch (error) {
-      Swal.fire({
-        title: "Error al cancelar el turno",
-        icon: "error",
-        timer: 3000,
-        showDenyButton: false,
-        showConfirmButton: false,
-        toast: true,
-        position: "bottom-end",
-        customClass: {
-          container: "my-swal-container",
-        },
-      });
-      console.error("Error al cancelar el turno:", error);
-    }
   };
 
   return (
@@ -163,7 +176,7 @@ const MyTurns = ({ userData }) => {
                       color: "red",
                       transition: ".2s",
                     }}
-                    onClick={() => handleConfirmCancelTurn(turn)}
+                    onClick={() => handleSubmit(turn)}
                   >
                     <DeleteOutlineIcon />
                   </Button>

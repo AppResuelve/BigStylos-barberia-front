@@ -15,12 +15,6 @@ import "./App.css";
 
 function App() {
   const location = useLocation();
-  const [alertDelete, setAlertDelete] = useState(false);
-  const [validateAlert, setValidateAlert] = useState(false);
-  const [validateAlertTurns, setValidateAlertTurns] = useState(false);
-  const [validateAlertTurnsWorker, setValidateAlertTurnsWorker] =
-    useState(false);
-  const [refreshWhenCancelTurn, setRefreshWhenCancelTurn] = useState(false);
   const [clientName, setClientName] = useState("");
   const [turnsCart, setTurnsCart] = useState([]);
   const [auxCart, setAuxCart] = useState({});

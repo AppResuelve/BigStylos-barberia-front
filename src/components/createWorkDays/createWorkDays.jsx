@@ -25,10 +25,7 @@ const CreateWorkDays = ({
 }) => {
   const {
     darkMode,
-    setShowAlert,
-    alertDelete,
     setRefreshForWhoIsComing,
-    setAlertDelete,
     setRedirectToMyServices,
   } = useContext(ThemeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
@@ -58,11 +55,6 @@ const CreateWorkDays = ({
   /*   dayIsSelected && Object.keys(dayIsSelected)[0] && console.log(Object.keys(dayIsSelected)[0])
   dayIsSelected && Object.keys(dayIsSelected)[0] && console.log(Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0]) */
   /* dayIsSelected && Object.keys(dayIsSelected)[0] && days && days[Object.keys(dayIsSelected)[0]] && days[Object.keys(dayIsSelected)[0]][Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0]] */ /* console.log(Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0] */
-  useEffect(() => {
-    if (alertDelete) {
-      handleDeleteSubmit();
-    }
-  }, [alertDelete]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -246,44 +238,55 @@ const CreateWorkDays = ({
     }
   };
 
-  const handleDeleteDay = () => {
+  const handleDeleteSubmit = async () => {
     if (
       days[Object.keys(dayIsSelected)[0]] &&
       days[Object.keys(dayIsSelected)[0]][
         Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0]
       ].turn == true
     ) {
-      setShowAlert({
-        isOpen: true,
-        message: "Desea borrar un dia con turno?",
-        type: "warning",
-        button1: {
-          text: "confirmar",
-          action: "handleActionProp",
-        },
-        buttonClose: {
-          text: "cancelar",
-        },
-        stateName: "alertDelete",
+      Swal.fire({
+        title: "Desea borrar un dia con turno?",
+        showDenyButton: true,
+        confirmButtonText: "Borrar",
+        denyButtonText: "Más tarde",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            const response = await axios.post(
+              `${VITE_BACKEND_URL}/workdays/delete`,
+              {
+                month: Object.keys(dayIsSelected)[0],
+                day: Object.keys(
+                  dayIsSelected[Object.keys(dayIsSelected)[0]]
+                )[0],
+                email: user.email,
+              }
+            );
+            setDayIsSelected({});
+            setRefreshDays(true);
+            setRefreshForWhoIsComing(true);
+          } catch (error) {
+            console.error("Error al borrar el dia:", error);
+          }
+        }
       });
     } else {
-      handleDeleteSubmit();
-    }
-  };
-
-  const handleDeleteSubmit = async () => {
-    try {
-      const response = await axios.post(`${VITE_BACKEND_URL}/workdays/delete`, {
-        month: Object.keys(dayIsSelected)[0],
-        day: Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0],
-        email: user.email,
-      });
-      setDayIsSelected({});
-      setAlertDelete(false);
-      setRefreshDays(true);
-      setRefreshForWhoIsComing(true);
-    } catch (error) {
-      console.error("Error al borrar el dia:", error);
+      try {
+        const response = await axios.post(
+          `${VITE_BACKEND_URL}/workdays/delete`,
+          {
+            month: Object.keys(dayIsSelected)[0],
+            day: Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0],
+            email: user.email,
+          }
+        );
+        setDayIsSelected({});
+        setRefreshDays(true);
+        setRefreshForWhoIsComing(true);
+      } catch (error) {
+        console.error("Error al borrar el dia:", error);
+      }
     }
   };
 
@@ -443,7 +446,7 @@ const CreateWorkDays = ({
                       ? false
                       : true
                   }
-                  onClick={handleDeleteDay}
+                  onClick={handleDeleteSubmit}
                 >
                   <h4 style={{ fontFamily: "Jost, sans-serif" }}>borrar</h4>
                 </Button>
