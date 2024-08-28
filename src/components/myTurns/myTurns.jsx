@@ -6,7 +6,6 @@ import formatHour from "../../functions/formatHour";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import axios from "axios";
 import "./myTurns.css";
-import { positions } from "@mui/system";
 import Swal from "sweetalert2";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -62,6 +61,8 @@ const MyTurns = ({ userData }) => {
   };
 
   const handleSubmit = async () => {
+    console.log(infoToSubmit);
+
     try {
       const response = await axios.post(`${VITE_BACKEND_URL}/workdays/cancel`, {
         month: infoToSubmit.month,
@@ -75,32 +76,31 @@ const MyTurns = ({ userData }) => {
         service: infoToSubmit.service,
       });
       setRefresh(!refresh);
-       Swal.fire({
-         title: "Su turno ha sido cancelado exitosamente!",
-         icon: "success",
-         timer: 3000,
-         showDenyButton: false,
-         showConfirmButton: false,
-         toast: true,
-         position: "bottom-end",
-         customClass: {
-           container: "my-swal-container",
-         },
-       });
-      
+      Swal.fire({
+        title: "Su turno ha sido cancelado exitosamente!",
+        icon: "success",
+        timer: 3000,
+        showDenyButton: false,
+        showConfirmButton: false,
+        toast: true,
+        position: "bottom-end",
+        customClass: {
+          container: "my-swal-container",
+        },
+      });
     } catch (error) {
-       Swal.fire({
-         title: "Error al cancelar el turno",
-         icon: "error",
-         timer: 3000,
-         showDenyButton: false,
-         showConfirmButton: false,
-         toast: true,
-         position: "bottom-end",
-         customClass: {
-           container: "my-swal-container",
-         },
-       });
+      Swal.fire({
+        title: "Error al cancelar el turno",
+        icon: "error",
+        timer: 3000,
+        showDenyButton: false,
+        showConfirmButton: false,
+        toast: true,
+        position: "bottom-end",
+        customClass: {
+          container: "my-swal-container",
+        },
+      });
       console.error("Error al cancelar el turno:", error);
     }
   };
