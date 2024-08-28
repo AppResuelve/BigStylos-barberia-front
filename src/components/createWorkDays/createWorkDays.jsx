@@ -23,11 +23,8 @@ const CreateWorkDays = ({
   doCeroServices,
   pendingServices,
 }) => {
-  const {
-    darkMode,
-    setRefreshForWhoIsComing,
-    setRedirectToMyServices,
-  } = useContext(ThemeContext);
+  const { darkMode, setRefreshForWhoIsComing, setRedirectToMyServices } =
+    useContext(ThemeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [isOpen, setIsOpen] = useState(false);
   const [dayIsSelected, setDayIsSelected] = useState({});
@@ -211,7 +208,7 @@ const CreateWorkDays = ({
             return newState;
           });
           Swal.fire({
-            title: `el dia ${submitArray[i].day}/${submitArray[i].month} se creo exitosamente`,
+            title: `el día ${submitArray[i].day}/${submitArray[i].month} se creo exitosamente`,
             icon: "success",
             timer: 3000,
             toast: true,
@@ -221,7 +218,7 @@ const CreateWorkDays = ({
           });
         } catch (error) {
           console.error(
-            `Error al crear el dia ${submitArray[i].day}/${submitArray[i].month}`,
+            `Error al crear el día ${submitArray[i].day}/${submitArray[i].month}`,
             error
           );
         }
@@ -239,6 +236,11 @@ const CreateWorkDays = ({
   };
 
   const handleDeleteSubmit = async () => {
+    let day = Object.keys(
+      dayIsSelected[Object.keys(dayIsSelected)[0]]
+    )[0];
+    let month = Object.keys(dayIsSelected)[0];
+
     if (
       days[Object.keys(dayIsSelected)[0]] &&
       days[Object.keys(dayIsSelected)[0]][
@@ -246,23 +248,31 @@ const CreateWorkDays = ({
       ].turn == true
     ) {
       Swal.fire({
-        title: "Desea borrar un dia con turno?",
+        title: "Desea borrar un día con turno?",
         showDenyButton: true,
         confirmButtonText: "Borrar",
         denyButtonText: "Más tarde",
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
+
             const response = await axios.post(
               `${VITE_BACKEND_URL}/workdays/delete`,
               {
-                month: Object.keys(dayIsSelected)[0],
-                day: Object.keys(
-                  dayIsSelected[Object.keys(dayIsSelected)[0]]
-                )[0],
+                month,
+                day,
                 email: user.email,
               }
             );
+            Swal.fire({
+              title: `el día ${day}/${month} se borró exitosamente`,
+              icon: "success",
+              timer: 3000,
+              toast: true,
+              position: "bottom-end",
+              showConfirmButton: false,
+              showCloseButton: true,
+            });
             setDayIsSelected({});
             setRefreshDays(true);
             setRefreshForWhoIsComing(true);
@@ -273,14 +283,24 @@ const CreateWorkDays = ({
       });
     } else {
       try {
+        
         const response = await axios.post(
           `${VITE_BACKEND_URL}/workdays/delete`,
           {
-            month: Object.keys(dayIsSelected)[0],
-            day: Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0],
+            month,
+            day,
             email: user.email,
           }
         );
+        Swal.fire({
+          title: `el día ${day}/${month} se borró exitosamente`,
+          icon: "success",
+          timer: 3000,
+          toast: true,
+          position: "bottom-end",
+          showConfirmButton: false,
+          showCloseButton: true,
+        });
         setDayIsSelected({});
         setRefreshDays(true);
         setRefreshForWhoIsComing(true);
