@@ -326,7 +326,7 @@ const Turns = ({ setTurnsCart, auxCart, setAuxCart }) => {
                               }
                             >
                               <img
-                                src={catServices[category][service].img}
+                                src={catServices[category][service].img ? catServices[category][service].img : servicesIcon}
                                 alt="im-service"
                                 className="img-service-turns"
                               />

@@ -26,6 +26,8 @@ const MyTurns = ({ userData }) => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [refresh, setRefresh] = useState(false);
 
+  console.log(listMyTurns, 'esto es lo que trae como listMyTurns')
+
   useEffect(() => {
     const fetchData = async () => {
       try {
