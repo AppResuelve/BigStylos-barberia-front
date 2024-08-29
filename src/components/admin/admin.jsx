@@ -4,7 +4,7 @@ import ThemeContext from "../../context/ThemeContext";
 import AuthContext from "../../context/AuthContext";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import AdminAcordeon from "../interfazMUI/adminAcordeon";
-import { AdminWorkerSkeleton } from "../skeletons/skeletons";
+import { AdminWorkerSkeleton } from "../loaders/skeletons";
 
 const Admin = () => {
   const { darkMode } = useContext(ThemeContext);

@@ -4,6 +4,7 @@ import BorderColorIcon from "@mui/icons-material/BorderColor";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { Box, Button } from "@mui/material";
+import Swal from "sweetalert2";
 import axios from "axios";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -69,6 +70,15 @@ const WorkDays = ({ schedule, refresh, setRefresh, setChangeNoSaved }) => {
       console.error("Error al obtener los horarios", error);
       alert("Error al obtener los horarios");
     }
+    Swal.fire({
+      title: "Cambios guardados exitosamente.",
+      icon: "success",
+      timer: 3000,
+      toast: true,
+      position: "bottom-end",
+      showConfirmButton: false,
+      showCloseButton: true,
+    });
     setShowEdit(false);
     setChangeNoSaved({});
     setToggle(1);

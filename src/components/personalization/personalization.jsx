@@ -13,8 +13,9 @@ import {
   convertToServicesImgArray,
   filterImgServicesToUpdate,
 } from "../../helpers/convertCategoryService";
-import "./personalization.css";
 import { checkChangeToSave } from "../../helpers/checkChangeToSave";
+import Swal from "sweetalert2";
+import "./personalization.css";
 import axios from "axios";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -26,8 +27,7 @@ const Personalization = ({
   setRefreshServices,
   setChangeNoSaved,
 }) => {
-  const { darkMode, setRefreshPersonalization } =
-    useContext(ThemeContext);
+  const { darkMode, setRefreshPersonalization } = useContext(ThemeContext);
   const [imgServices, setImgServices] = useState([]); //images de los services basado en el estado services
   const [auxImgServices, setAuxImgServices] = useState([]); //images de los services basado en el estado services copia
   const [homeImages, setHomeImages] = useState([]); //images del home
@@ -47,7 +47,7 @@ const Personalization = ({
     colors: true,
   });
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-  
+
   useEffect(() => {
     const fetchImages = async () => {
       try {
@@ -183,7 +183,7 @@ const Personalization = ({
       data
     );
     const { secure_url } = res.data;
-
+    //estado d loading true hasta que se carga la imagen
     if (toggle.services) {
       // Actualiza el array de arrays con la nueva secure_url
       setAuxImgServices((prevAuxImgServices) => {
@@ -284,6 +284,15 @@ const Personalization = ({
             newImages: auxHomeImages,
           }
         );
+        Swal.fire({
+          title: "Cambios de inicio guardados exitosamente.",
+          icon: "success",
+          timer: 3000,
+          toast: true,
+          position: "bottom-end",
+          showConfirmButton: false,
+          showCloseButton: true,
+        });
         setRefreshPersonalization((prevState) => {
           const copyState = { ...prevState };
           copyState.home = true;
@@ -313,6 +322,15 @@ const Personalization = ({
             newColors: auxColorSelected,
           }
         );
+        Swal.fire({
+          title: "Cambios de colores guardados exitosamente.",
+          icon: "success",
+          timer: 3000,
+          toast: true,
+          position: "bottom-end",
+          showConfirmButton: false,
+          showCloseButton: true,
+        });
         setRefreshPersonalization((prevState) => {
           const copyState = { ...prevState };
           copyState.colors = true;
@@ -349,6 +367,15 @@ const Personalization = ({
               servicesWithImg: someServiceToUpdate,
             }
           );
+          Swal.fire({
+            title: "Cambios de servicios guardados exitosamente.",
+            icon: "success",
+            timer: 3000,
+            toast: true,
+            position: "bottom-end",
+            showConfirmButton: false,
+            showCloseButton: true,
+          });
           setRefreshServices(!refreshServices);
           setDisableSaveBtn((prevState) => {
             const saveBtn = { ...prevState };
@@ -714,9 +741,11 @@ const Personalization = ({
                         }
                         alt="img-servicio"
                         style={{
-                          width: sm ? "90px" : "150px",
-                          borderRadius: "3px",
+                          width: "90px",
+                          height: "90px",
+                          borderRadius: "150px",
                           marginRight: "5px",
+                          objectFit: "cover",
                         }}
                       />
                     </Box>

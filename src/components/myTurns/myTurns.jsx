@@ -11,20 +11,11 @@ import Swal from "sweetalert2";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const MyTurns = ({ userData }) => {
-  const {
-    darkMode,
-    setShowAlert,
-    validateAlert,
-    setValidateAlert,
-    refreshWhenCancelTurn,
-    setRefreshWhenCancelTurn,
-    disableButtonMyTurns,
-  } = useContext(ThemeContext);
+  const { darkMode, disableButtonMyTurns } = useContext(ThemeContext);
   const [listMyTurns, setListMyTurns] = useState(1);
   const [infoToSubmit, setInfoToSubmit] = useState({});
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [refresh, setRefresh] = useState(false);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,24 +33,6 @@ const MyTurns = ({ userData }) => {
       fetchData();
     }
   }, [userData, refresh]);
-
-  // const handleConfirmCancelTurn = (turn) => {
-  //   setInfoToSubmit(turn);
-  //   Swal.fire({
-  //     title: "Estas a punto de cancelar el turno, deseas continuar?",
-  //     icon: "warning",
-  //     showDenyButton: true,
-  //     confirmButtonText: "Continuar",
-  //     denyButtonText: `Volver`,
-  //     customClass: {
-  //       container: "my-swal-container",
-  //     },
-  //   }).then((result) => {
-  //     if (result.isConfirmed) {
-  //       handleSubmit();
-  //     }
-  //   });
-  // };
 
   const handleSubmit = async (turn) => {
     Swal.fire({
@@ -119,10 +92,11 @@ const MyTurns = ({ userData }) => {
       }
     });
   };
-
+  console.log(listMyTurns);
+  
   return (
     <div className="div-container-myturns">
-      <Box style={{ overflow: "auto" }}>
+      <div >
         {listMyTurns === 1 ? (
           <Skeleton variant="rounded" height={80} style={{ width: "100%" }} />
         ) : listMyTurns && listMyTurns.length > 0 ? (
@@ -165,21 +139,12 @@ const MyTurns = ({ userData }) => {
                       {turn.worker.name}
                     </h4>
                   </Box>
-                  <Button
-                    disabled={disableButtonMyTurns ? true : false}
+                  <button
                     className="btn-cancel-myTurns"
-                    sx={{
-                      marginLeft: "5px",
-                      display: "flex",
-                      alignSelf: "end",
-                      borderRadius: "5px",
-                      color: "red",
-                      transition: ".2s",
-                    }}
                     onClick={() => handleSubmit(turn)}
                   >
                     <DeleteOutlineIcon />
-                  </Button>
+                  </button>
                 </Box>
               </Box>
             );
@@ -197,7 +162,7 @@ const MyTurns = ({ userData }) => {
             No tienes turnos todavía
           </h4>
         )}
-      </Box>
+      </div>
     </div>
   );
 };

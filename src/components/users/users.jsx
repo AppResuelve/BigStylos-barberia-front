@@ -1,13 +1,14 @@
 import { useEffect, useState, useContext } from "react";
+import ThemeContext from "../../context/ThemeContext";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { Box, Button, Input, LinearProgress } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
+import Swal from "sweetalert2";
 import "./users.css";
 import axios from "axios";
-import ThemeContext from "../../context/ThemeContext";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -41,26 +42,54 @@ const Users = () => {
     fetchData();
   }, [add]);
 
-  const handleUpdateUser = async (email) => {
+  const handleUpdateUser = async (user) => {
     try {
       const response = await axios.put(`${VITE_BACKEND_URL}/users/update`, {
-        email,
+        email: user.email,
+      });
+      Swal.fire({
+        title: user.worker
+          ? `El usuario ${user.name} ahora es cliente`
+          : `El usuario ${user.name} ahora es empleado.`,
+        icon: "success",
+        timer: 3000,
+        toast: true,
+        position: "bottom-end",
+        showConfirmButton: false,
+        showCloseButton: true,
       });
       setAdd(!add);
     } catch {
-      console.error("Error al updatear usuario", error);
+      Swal.fire({
+        title: "Error al modificar el rol del usuario",
+        icon: "success",
+        timer: 3000,
+        toast: true,
+        position: "bottom-end",
+        showConfirmButton: false,
+        showCloseButton: true,
+      });
     }
   };
 
-  const handleDelete = async (email) => {
-    try {
-      const response = await axios.put(`${VITE_BACKEND_URL}/users/delete`, {
-        email,
-      });
-      setAdd(!add);
-    } catch (error) {
-      console.error("Error al updatear usuario", error);
-    }
+  const handleDelete = async (user) => {
+    Swal.fire({
+      title: `Deseas bannear a el usuario ${user.name}?`,
+      showDenyButton: true,
+      confirmButtonText: "Sí, bannear",
+      denyButtonText: "Más tarde",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await axios.put(`${VITE_BACKEND_URL}/users/delete`, {
+            email: user.email,
+          });
+          setAdd(!add);
+        } catch (error) {
+          console.error("Error al updatear usuario", error);
+        }
+      }
+    });
   };
 
   const filterUsersByEmail = (email, users) => {
@@ -194,7 +223,7 @@ const Users = () => {
                           justifyContent: "space-between",
                         }}
                       >
-                        <Button onClick={() => handleUpdateUser(user.email)}>
+                        <Button onClick={() => handleUpdateUser(user)}>
                           <KeyboardDoubleArrowRightIcon />
                         </Button>
                       </Box>
@@ -260,11 +289,11 @@ const Users = () => {
                           justifyContent: "space-between",
                         }}
                       >
-                        <Button onClick={() => handleUpdateUser(user.email)}>
+                        <Button onClick={() => handleUpdateUser(user)}>
                           <KeyboardDoubleArrowLeftIcon />
                         </Button>
                         <Button
-                          onClick={() => handleDelete(user.email)}
+                          onClick={() => handleDelete(user)}
                           style={{ color: "red" }}
                         >
                           <DeleteOutlineIcon />
@@ -332,7 +361,7 @@ const Users = () => {
                       }}
                     >
                       <Button
-                        onClick={() => handleDelete(user.email)}
+                        onClick={() => handleDelete(user)}
                         style={{ color: "orange", borderRadius: "50px" }}
                       >
                         <DeleteSweepIcon />
@@ -420,9 +449,7 @@ const Users = () => {
                               justifyContent: "space-between",
                             }}
                           >
-                            <Button
-                              onClick={() => handleUpdateUser(user.email)}
-                            >
+                            <Button onClick={() => handleUpdateUser(user)}>
                               <KeyboardDoubleArrowRightIcon />
                             </Button>
                           </Box>
@@ -458,13 +485,11 @@ const Users = () => {
                               justifyContent: "space-between",
                             }}
                           >
-                            <Button
-                              onClick={() => handleUpdateUser(user.email)}
-                            >
+                            <Button onClick={() => handleUpdateUser(user)}>
                               <KeyboardDoubleArrowLeftIcon />
                             </Button>
                             <Button
-                              onClick={() => handleDelete(user.email)}
+                              onClick={() => handleDelete(user)}
                               style={{ color: "red" }}
                             >
                               <DeleteOutlineIcon />
@@ -535,7 +560,7 @@ const Users = () => {
                         }}
                       >
                         <Button
-                          onClick={() => handleDelete(user.email)}
+                          onClick={() => handleDelete(user)}
                           style={{ color: "orange" }}
                         >
                           <DeleteSweepIcon />

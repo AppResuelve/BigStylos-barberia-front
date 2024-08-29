@@ -1,24 +1,24 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
-import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import ThemeContext from "../../context/ThemeContext";
 import AuthContext from "../../context/AuthContext";
+import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
 import cualquieraImg from "../../assets/icons/user.png";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CustomCalendarTurns from "../customCalendar/customCalendarTurns";
 import obtainMonthName from "../../functions/obtainMonthName";
 import leftArrowBack from "../../assets/icons/left-arrow.png";
 import servicesIcon from "../../assets/icons/review.png";
-import { turnsButtonsSkeleton } from "../skeletons/skeletons";
+import { TurnsButtonsSkeleton } from "../loaders/skeletons";
 import { calculateSing } from "../../helpers/calculateSing";
 import formatHour from "../../functions/formatHour";
-import "./turns.css";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-
+import axios from "axios";
+import "./turns.css";
+import clickGif from "../../assets/gifs/click.gif";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const Turns = ({ setTurnsCart, auxCart, setAuxCart }) => {
+const Turns = ({ turnsCart, setTurnsCart, auxCart, setAuxCart }) => {
   const { darkMode } = useContext(ThemeContext);
   const { userData, googleLogin } = useContext(AuthContext);
   const [catServices, setCatServices] = useState({});
@@ -159,6 +159,8 @@ const Turns = ({ setTurnsCart, auxCart, setAuxCart }) => {
   const handleSelectTime = (btn) => {
     setTurnsCart((prevState) => {
       // Si ya hay 3 elementos, no hacer nada
+      console.log();
+      
       if (prevState.length >= 3) return prevState;
       let copyState = [...prevState];
       copyState.push({
@@ -187,10 +189,45 @@ const Turns = ({ setTurnsCart, auxCart, setAuxCart }) => {
   };
 
   return (
-    <div className="container-turns">
+    <div
+      className="container-turns"
+      style={{
+        marginBottom: turnsCart.length > 0 ? "85px" : "0px", //condicion con el cart
+      }}
+    >
+      {/* backdrop fixed para que ocupe siempre el 100% de la pantalla con o sin scroll*/}
+      {Object.keys(serviceSelected).length < 1 && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.77)",
+            zIndex: "1",
+          }}
+        ></div>
+      )}
       {dayIsSelected.length < 1 ? (
         <div className="subcontainer-turns">
-          <div style={{ position: "relative" }}>
+          {/* seccion seleccion de servicio */}
+          <div
+            style={{
+              position: "relative",
+              zIndex: "2",
+              width: "100%",
+              height: "100%",
+              backgroundColor: "white", //revisar cuando se cambie el color
+              borderRadius: "20px",
+              border:
+                Object.keys(serviceSelected).length < 1
+                  ? "2px solid #2196f3"
+                  : "none",
+              padding: Object.keys(serviceSelected).length < 1 ? "15px" : "0px",
+              marginBottom: "25px",
+            }}
+          >
             <h2
               style={{
                 color: !darkMode.on
@@ -206,10 +243,8 @@ const Turns = ({ setTurnsCart, auxCart, setAuxCart }) => {
             <Accordion
               ref={serviceAccordionRef} // Referencia al acordeón de servicios
               style={{
-                zIndex: "20",
                 borderRadius: "36px",
                 padding: "5px",
-                marginBottom: "30px",
                 boxShadow: "0px 15px 25px -10px rgba(0,0,0,0.57)",
                 backgroundColor: !darkMode.on ? darkMode.light : darkMode.dark,
               }}
@@ -345,7 +380,26 @@ const Turns = ({ setTurnsCart, auxCart, setAuxCart }) => {
                 ))}
               </AccordionDetails>
             </Accordion>
+            {expanded !== "panel1" &&
+              Object.keys(serviceSelected).length < 1 && (
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: "calc(0% - 60px)",
+                    right: "calc(50% - 60px)",
+                    zIndex: 2,
+                    pointerEvents: "none",
+                  }}
+                >
+                  <img
+                    src={clickGif}
+                    alt="ház click en servicios"
+                    style={{ width: "120px" }}
+                  />
+                </div>
+              )}
           </div>
+          {/* seccion seleccion de profesional */}
           <div>
             <h2
               style={{
@@ -430,6 +484,9 @@ const Turns = ({ setTurnsCart, auxCart, setAuxCart }) => {
                 </div>
               </AccordionDetails>
             </Accordion>
+          </div>
+          {/* seccion seleccion de día */}
+          <div>
             <CustomCalendarTurns
               days={workerDays}
               dayIsSelected={dayIsSelected}
@@ -538,7 +595,7 @@ const Turns = ({ setTurnsCart, auxCart, setAuxCart }) => {
               </div>
             </section>
           ) : (
-            <turnsButtonsSkeleton />
+            <TurnsButtonsSkeleton />
           )}
         </div>
       )}

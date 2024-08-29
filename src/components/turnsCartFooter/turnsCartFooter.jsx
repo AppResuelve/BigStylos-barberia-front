@@ -8,7 +8,7 @@ import axios from "axios";
 import { LoaderToBuy } from "../loaders/loaders";
 import { setCookie } from "../../helpers/cookies";
 import { setLocalStorage } from "../../helpers/localStorage";
-
+import Swal from "sweetalert2";
 const VITE_MERCADO_PAGO_PUBLIC_KEY = import.meta.env
   .VITE_MERCADO_PAGO_PUBLIC_KEY;
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -87,8 +87,6 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart, setAuxCart }) => {
     let cartNoSing = [];
     setLoader(true);
     turnsCart.map((turn) => {
-      console.log(turn);
-      
       if (turn.service.sing != 0) {
         cartWithSing.push(turn);
       } else {
@@ -104,11 +102,10 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart, setAuxCart }) => {
             cartWithSing,
           }
         );
-
         setUrlInitPoint(response.data.init_point);
         setLocalStorage("CART_ID", response.data.turns);
         setCookie("PREFERENCE_ID", response.data.preference_id, 4);
-
+        setTurnsCart([]);
         setLoader(false);
         setTimeout(() => {
           window.location.href = response.data.init_point;
@@ -124,8 +121,17 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart, setAuxCart }) => {
           arrayItems: cartNoSing,
         });
         setLoader(false);
-        console.log(response);
-
+        setTurnsCart([]);
+        setAuxCart({});
+        Swal.fire({
+          title: "El/los turnos han sidos agendados con éxito!",
+          icon: "success",
+          timer: 3000,
+          toast: true,
+          position: "bottom",
+          showConfirmButton: false,
+          showCloseButton: true,
+        });
         //si sale bien alerta con success turnos
       } catch (error) {
         setLoader(false);
@@ -134,7 +140,6 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart, setAuxCart }) => {
     }
   };
 
-  console.log(loader);
   return (
     <div
       className={
@@ -174,7 +179,7 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart, setAuxCart }) => {
                 ? `Turnos seleccionados: ${turnsCart.length}`
                 : "Turnos seleccionados: 0"}
             </span>
-            <button onClick={handleToggleCart}>Desplegar</button>
+            <button onClick={handleToggleCart}>Mostrar</button>
           </>
         ) : (
           <>

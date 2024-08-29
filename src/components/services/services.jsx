@@ -254,7 +254,6 @@ const Services = ({
     });
   };
 
-  console.log(serviceRow);
   //handle input
   const handleChangeRowService = (field, e) => {
     let value = e.target.value;

@@ -14,7 +14,6 @@ import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import axios from "axios";
 import "../interfazUiverse.io/checkBox.css";
 import Swal from "sweetalert2";
-// import { SectionSwitchSkeleton } from "../skeletons/skeletons";
 import serviceIcon from "../../assets/icons/review.png";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -212,10 +211,6 @@ const MyServices = ({
                       width: sm ? "100%" : "50%",
                     }}
                   >
-                    {/* {true ? (
-                      <SectionSwitchSkeleton  />
-                    ) : ( */}
-                    {/* custom switch */}
                     <div
                       className={
                         showEdit

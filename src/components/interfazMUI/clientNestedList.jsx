@@ -22,7 +22,6 @@ const ClientNestedList = () => {
   const [newPhoneNumber, setNewPhoneNumber] = useState(userData?.phone ?? "");
   const [refresh, setRefresh] = useState(false);
   const [openSection, setOpenSection] = useState({
-    miperfil: false,
     telefono: false,
     turnos: false,
   });
@@ -30,14 +29,6 @@ const ClientNestedList = () => {
 
   const handleSectionClick = (section) => {
     setOpenSection((prevSections) => {
-      // Si la sección clicada es "miperfil", establece todas las demás secciones en false
-      if (section === "miperfil") {
-        return {
-          miperfil: !prevSections.miperfil,
-          telefono: false,
-          turnos: false,
-        };
-      }
       // Mantén una copia del objeto anterior
       const updatedSections = { ...prevSections };
 
@@ -94,145 +85,109 @@ const ClientNestedList = () => {
 
   return (
     <div style={{ position: "relative" }}>
+      {/* ////// contenido de seccion telefono dentro de miperfil ////// */}
       <ListItemButton
         className="listItembtn-nestedList"
-        onClick={() => handleSectionClick("miperfil")}
-        sx={{
-          borderBottom: darkMode.on
-            ? `1px solid ${"white"} `
-            : `1px solid ${darkMode.dark}`,
-        }}
+        onClick={() => handleSectionClick("telefono")}
       >
-        <Box sx={{ width: "100%" }}>
-          <h3
-            className="h3-nestedList"
+        <Box sx={{ display: "flex", width: "100%" }}>
+          <LocalPhoneIcon
+            sx={{
+              marginRight: "5px",
+              color: darkMode.on ? "white" : darkMode.dark,
+            }}
+          />
+          <span
+            className="span-nestedList"
             style={{
               color: darkMode.on ? "white" : darkMode.dark,
             }}
           >
-            Mi perfil
-          </h3>
+            Teléfono
+          </span>
         </Box>
-        {openSection.miperfil ? (
+        {openSection.telefono ? (
           <ExpandLess sx={{ color: darkMode.on ? "white" : darkMode.dark }} />
         ) : (
           <ExpandMore sx={{ color: "#2196f3" }} />
         )}
       </ListItemButton>
-
       <Collapse
-        in={openSection.miperfil ? true : false}
+        in={openSection.telefono ? true : false}
         timeout="auto"
         unmountOnExit
       >
-        {/* ////// contenido de seccion telefono dentro de miperfil ////// */}
-        <ListItemButton
-          className="listItembtn-nestedList"
-          onClick={() => handleSectionClick("telefono")}
-          sx={{
-            borderBottom: darkMode.on
-              ? `1px solid ${"white"} `
-              : `1px solid ${darkMode.dark}`,
-          }}
-        >
-          <Box sx={{ display: "flex", width: "100%" }}>
-            <LocalPhoneIcon
-              sx={{
-                marginRight: "5px",
-                color: darkMode.on ? "white" : darkMode.dark,
-              }}
-            />
-            <h3
-              className="h3-nestedList"
-              style={{
-                color: darkMode.on ? "white" : darkMode.dark,
-              }}
-            >
-              Teléfono
-            </h3>
-          </Box>
-          {openSection.telefono ? (
-            <ExpandLess sx={{ color: darkMode.on ? "white" : darkMode.dark }} />
-          ) : (
-            <ExpandMore sx={{ color: "#2196f3" }} />
-          )}
-        </ListItemButton>
-        <Collapse
-          in={openSection.telefono ? true : false}
-          timeout="auto"
-          unmountOnExit
-        >
-          <List component="div" disablePadding sx={{ marginBottom: "10px" }}>
-            <div className="div-container-tel">
-              <div>
-                <InputTel
-                  newPhoneNumber={newPhoneNumber}
-                  setNewPhoneNumber={setNewPhoneNumber}
-                  inputTelError={inputTelError}
-                  setInputTelError={setInputTelError}
-                />
-                {inputTelError && (
-                  <span className="spanErrorInputTel">{inputTelError}</span>
-                )}
-              </div>
-
-              <button
-                className={
-                  inputTelError
-                    ? "my-button-disabled-upadatephone"
-                    : "my-button-upadatephone"
-                }
-                disabled={inputTelError ? true : false}
-                onClick={handleUpdatePhone}
-              >
-                <DoneOutlineIcon sx={{ color: "white" }} />
-              </button>
+        <List component="div" disablePadding sx={{ marginBottom: "5px" }}>
+          <div className="div-container-tel">
+            <div>
+              <InputTel
+                newPhoneNumber={newPhoneNumber}
+                setNewPhoneNumber={setNewPhoneNumber}
+                inputTelError={inputTelError}
+                setInputTelError={setInputTelError}
+              />
+              {inputTelError && (
+                <span className="spanErrorInputTel">{inputTelError}</span>
+              )}
             </div>
-          </List>
-        </Collapse>
-
-        {/*////// contenido de seccion turnos dentro de miperfil //////*/}
-        <ListItemButton
-          className="listItembtn-nestedList"
-          onClick={() => handleSectionClick("turnos")}
-          sx={{
-            borderBottom: darkMode.on
-              ? `1px solid ${"white"} `
-              : `1px solid ${darkMode.dark}`,
-          }}
-        >
-          <Box sx={{ display: "flex", width: "100%" }}>
-            <CalendarMonthIcon
-              sx={{
-                marginRight: "5px",
-                color: darkMode.on ? "white" : darkMode.dark,
-              }}
-            />
-            <h3
-              className="h3-nestedList"
-              style={{
-                color: darkMode.on ? "white" : darkMode.dark,
-              }}
+            <button
+              className={"my-button-upadatephone"}
+              disabled={inputTelError ? true : false}
+              onClick={handleUpdatePhone}
             >
-              Mis turnos
-            </h3>
-          </Box>
-          {openSection.turnos ? (
-            <ExpandLess sx={{ color: darkMode.on ? "white" : darkMode.dark }} />
-          ) : (
-            <ExpandMore sx={{ color: "#2196f3" }} />
-          )}
-        </ListItemButton>
-        <Collapse
-          in={openSection.turnos ? true : false}
-          timeout="auto"
-          unmountOnExit
-        >
-          <List component="div" disablePadding>
-            <MyTurns userData={userData} />
-          </List>
-        </Collapse>
+              Guardar
+            </button>
+          </div>
+        </List>
       </Collapse>
+      <hr
+        className="hr-userModal"
+        style={{
+          backgroundColor: darkMode.on ? "white" : darkMode.dark,
+        }}
+      />
+      {/*////// contenido de seccion turnos dentro de miperfil //////*/}
+      <ListItemButton
+        className="listItembtn-nestedList"
+        onClick={() => handleSectionClick("turnos")}
+      >
+        <Box sx={{ display: "flex", width: "100%" }}>
+          <CalendarMonthIcon
+            sx={{
+              marginRight: "5px",
+              color: darkMode.on ? "white" : darkMode.dark,
+            }}
+          />
+          <span
+            className="span-nestedList"
+            style={{
+              color: darkMode.on ? "white" : darkMode.dark,
+            }}
+          >
+            Mis turnos
+          </span>
+        </Box>
+        {openSection.turnos ? (
+          <ExpandLess sx={{ color: darkMode.on ? "white" : darkMode.dark }} />
+        ) : (
+          <ExpandMore sx={{ color: "#2196f3" }} />
+        )}
+      </ListItemButton>
+      <Collapse
+        in={openSection.turnos ? true : false}
+        timeout="auto"
+        unmountOnExit
+      >
+        <List component="div" disablePadding>
+          <MyTurns userData={userData} />
+        </List>
+      </Collapse>
+      <hr
+        className="hr-userModal"
+        style={{
+          backgroundColor: darkMode.on ? "white" : darkMode.dark,
+        }}
+      />
     </div>
   );
 };

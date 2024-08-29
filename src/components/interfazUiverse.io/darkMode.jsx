@@ -4,20 +4,23 @@ import ThemeContext from "../../context/ThemeContext";
 
 const DarkMode = () => {
   const { darkMode, toggleDarkMode } = useContext(ThemeContext);
-  
-  return (
-    <div className="container-toggle-darkmode">
 
-    <div className={!darkMode.on ? "toggle-switch" : "toggle-switch-dark"}>
-      <label className={!darkMode.on ? "switch-label" : "switch-label-dark"}>
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+      <span style={{ color: darkMode.on ? "white" : "black" }}>
+        {darkMode.on ? "Oscuro" : "Claro"}
+      </span>
+      <div className="container-switch" onClick={toggleDarkMode}>
         <input
           type="checkbox"
-          className={!darkMode.on ? "checkbox" : "checkbox-dark"}
-          onClick={toggleDarkMode}
+          className="checkbox"
+          checked={darkMode.on ? true : false}
+          onChange={toggleDarkMode}
         />
-        <span className={!darkMode.on ? "slider" : "slider-dark"}></span>
-      </label>
-    </div>
+        <label className="switch">
+          <span className="slider"></span>
+        </label>
+      </div>
     </div>
   );
 };

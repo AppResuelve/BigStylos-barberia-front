@@ -11,19 +11,16 @@ import NotFound from "./components/pageNotFound/pageNotFound.jsx";
 import TurnsCartFooter from "./components/turnsCartFooter/turnsCartFooter.jsx";
 import "./App.css";
 
-
-
 function App() {
   const location = useLocation();
   const [clientName, setClientName] = useState("");
   const [turnsCart, setTurnsCart] = useState([]);
   const [auxCart, setAuxCart] = useState({});
 
-
   return (
     <ThemeProvider>
       <AuthProvider>
-        <div style={{ position: "relative" }}>
+        <div >
           {location.pathname !== "/requestDenied401" && <Nav />}
           <Routes>
             <Route path="/" element={<Home />} />
@@ -31,6 +28,7 @@ function App() {
               path="/turns"
               element={
                 <Turns
+                  turnsCart={turnsCart}
                   setTurnsCart={setTurnsCart}
                   auxCart={auxCart}
                   setAuxCart={setAuxCart}

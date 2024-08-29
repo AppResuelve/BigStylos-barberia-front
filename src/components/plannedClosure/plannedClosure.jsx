@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import CustomCalendarPlannedC from "../customCalendar/customCalendarPlannedC";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { Box, Button } from "@mui/material";
-import AlertModal from "../interfazMUI/alertModal";
+import Swal from "sweetalert2";
 import axios from "axios";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -30,7 +30,6 @@ const PlannedClosure = ({ schedule }) => {
         const response = await axios.get(`${VITE_BACKEND_URL}/schedule/`);
         const { data } = response;
         setNoWork(data.noWorkDays);
-        setDayIsSelected(data.noWorkDays);
       } catch (error) {
         console.error("Error al obtener los dias:", error);
         alert("Error al obtener los dias");
@@ -48,51 +47,47 @@ const PlannedClosure = ({ schedule }) => {
     setShowEdit(false);
   };
 
-  const handleSubmit = async (confirm) => {
-    // if (confirm === "confirm") {
-    try {
-      const response = await axios.put(
-        `${VITE_BACKEND_URL}/schedule/updatenowork`,
-        {
-          noWorkDays: dayIsSelected,
-          daysToCancel: daysWithTurns,
+  const handleSubmit = async () => {
+    if (turn) {
+      Swal.fire({
+        title: "",
+        showDenyButton: true,
+        confirmButtonText: "Ir a mis servicios",
+        denyButtonText: `Más tarde`,
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            const response = await axios.put(
+              `${VITE_BACKEND_URL}/schedule/updatenowork`,
+              {
+                noWorkDays: dayIsSelected,
+                daysToCancel: daysWithTurns,
+              }
+            );
+            const { data } = response;
+            setRefresh(!refresh);
+          } catch (error) {
+            console.error("Error al obtener los dias:", error);
+            alert("Error al obtener los dias");
+          }
         }
-      );
-      const { data } = response;
-      setRefresh(!refresh);
-    } catch (error) {
-      console.error("Error al obtener los dias:", error);
-      alert("Error al obtener los dias");
+      });
+    } else {
+      try {
+        const response = await axios.put(
+          `${VITE_BACKEND_URL}/schedule/updatenowork`,
+          {
+            noWorkDays: dayIsSelected,
+            daysToCancel: daysWithTurns,
+          }
+        );
+        const { data } = response;
+        setRefresh(!refresh);
+      } catch (error) {
+        console.error("Error al obtener los dias:", error);
+        alert("Error al obtener los dias");
+      }
     }
-    // } else if (Object.keys(daysWithTurns).length > 0) {
-    //   setShowAlert({
-    //     isOpen: true,
-    //     message:
-    //       "Has seleccionado días con turnos reservados, deseas continuar?",
-    //     type: "warning",
-    //     button1: {
-    //       text: "Si",
-    //       action: "handleActionProp",
-    //     },
-    //     buttonClose: {
-    //       text: "Volver",
-    //     },
-    //   });
-    // }
-    // try {
-    //   const response = await axios.put(
-    //     `${VITE_BACKEND_URL}/schedule/updateNoWork`,
-    //     {
-    //       noWorkDays: dayIsSelected,
-    //     }
-    //   );
-    //   const { data } = response;
-    //   setShowEdit(false);
-    //   setRefresh(!refresh);
-    // } catch (error) {
-    //   console.error("Error al obtener los dias:", error);
-    //   alert("Error al obtener los dias");
-    // }
   };
   return (
     <div>
@@ -148,11 +143,6 @@ const PlannedClosure = ({ schedule }) => {
           </Box>
         )}
       </Box>
-      <AlertModal
-        showAlert={showAlert}
-        setShowAlert={setShowAlert}
-        handleActionProp={handleSubmit}
-      />
     </div>
   );
 };

@@ -18,6 +18,7 @@ import Personalization from "../personalization/personalization";
 import WhoIsComingAdmin from "../whoIsComingAdmin/whoIsComingAdmin";
 import CancelledTurnsForAdmin from "../cancelledTurnsForAdmin/cancelledTurnsForAdmin";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -90,18 +91,12 @@ const AdminAcordeon = () => {
   const handleChange = (panel) => (event, isExpanded) => {
     const panelName = panelNames[expanded];
     if (Object.keys(changeNoSaved).length > 0) {
-      setShowAlert({
-        isOpen: true,
-        message: `Tienes cambios sin guardar en la sección ${panelName}`,
-        type: "warning",
-        button1: {
-          text: "",
-          action: "",
-        },
-        buttonClose: {
-          text: "Entendido",
-        },
-      });
+          Swal.fire({
+            title: `Tienes cambios sin guardar en la sección ${panelName}.`,
+            icon: "warning",
+            timer: 3000,
+            showConfirmButton: true,
+          });
     } else {
       setExpanded(isExpanded ? panel : false);
     }

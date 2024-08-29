@@ -106,7 +106,6 @@ const Home = () => {
               justifyContent: "space-between",
               alignItems: "center",
               backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
-              position: "relative", // Para el backdrop
             }}
           >
             <Box style={{ height: "30%" }}>
@@ -134,10 +133,7 @@ const Home = () => {
                   }
                   alt="nombre del lugar"
                   style={{
-                    marginTop: "20px",
-                    objectFit: "cover",
-                    borderRadius: "200px",
-                    boxShadow: "0px 43px 51px -23px rgba(0,0,0,0.57)", // Propiedades de la sombra
+                    boxShadow: "0px 43px 51px -23px rgba(0,0,0,0.57)",
                   }}
                 />
               )}

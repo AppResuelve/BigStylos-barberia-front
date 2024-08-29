@@ -38,7 +38,6 @@ const WorkerAcordeon = ({ user }) => {
   /* estados locales del componente myServices */
   const [services, setServices] = useState([]);
   const [timeEdit, setTimeEdit] = useState({});
-console.log(user);
 
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
