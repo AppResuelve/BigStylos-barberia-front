@@ -6,15 +6,16 @@ import Swal from "sweetalert2";
 import axios from "axios";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const PlannedClosure = ({ schedule }) => {
-  const [noWork, setNoWork] = useState({});
+const PlannedClosure = ({ schedule }) => { //horarios de apertura y cierre sin los dias no laborables
+  const [noWork, setNoWork] = useState({}); // dias con cierre programado
   const [dayIsSelected, setDayIsSelected] = useState({});
   const [showEdit, setShowEdit] = useState(false);
   const [showAlert, setShowAlert] = useState({});
   const [refresh, setRefresh] = useState(false);
-  const [days, setDays] = useState({});
+  const [days, setDays] = useState({});  // dias para calendario
   const [daysWithTurns, setDaysWithTurns] = useState({});
   const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,12 +39,13 @@ const PlannedClosure = ({ schedule }) => {
     fetchData();
   }, [refresh]);
 
+
   const handleEdit = () => {
     setShowEdit(true);
   };
 
   const handleCancel = () => {
-    setDayIsSelected(noWork);
+    setDayIsSelected({});
     setShowEdit(false);
   };
 
@@ -104,13 +106,11 @@ const PlannedClosure = ({ schedule }) => {
       <CustomCalendarPlannedC
         schedule={schedule}
         noWork={noWork}
-        setNoWork={setNoWork}
         amountOfDays={27}
         dayIsSelected={dayIsSelected}
         setDayIsSelected={setDayIsSelected}
         days={days}
         showEdit={showEdit}
-        setDaysWithTurns={setDaysWithTurns}
       />
       <Box sx={{ marginTop: "12px" }}>
         {showEdit === false && (
