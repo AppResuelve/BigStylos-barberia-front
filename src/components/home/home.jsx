@@ -1,25 +1,26 @@
-import { useState, useContext, useEffect } from "react";
-import { DarkModeContext } from "../../App";
+import { useContext, useEffect } from "react";
+import ThemeContext from "../../context/ThemeContext";
+import AuthContext from "../../context/AuthContext";
+import Swal from "sweetalert2";
 import { NavLink, useNavigate } from "react-router-dom";
-import Footer from "../footer/footer";
 import { Box, Button, Skeleton } from "@mui/material";
+import { verificateFrontResponse } from "../../helpers/verificateFrontResponseMP";
+import { getCookie } from "../../helpers/cookies";
+import { getLocalStorage } from "../../helpers/localStorage";
 import defaultImg from "../../assets/icons/no-image-logotipe.png";
 import defaultImgLight from "../../assets/icons/no-image-logotipe-light.png";
 import instagram from "../../assets/icons/instagram.png";
 import facebook from "../../assets/icons/facebook.png";
 import whatsapp from "../../assets/icons/whatsapp.png";
-import { verificateFrontResponse } from "../../helpers/verificateFrontResponseMP";
-import { getCookie } from "../../helpers/cookies";
+import Footer from "../footer/footer";
 import axios from "axios";
 import "./home.css";
-import { getLocalStorage } from "../../helpers/localStorage";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const Home = ({ homeImages }) => {
-  const { darkMode } = useContext(DarkModeContext);
-  const [showBackdrop, setShowBackdrop] = useState(false);
-  const [showLoginMessage, setShowLoginMessage] = useState(false);
+const Home = () => {
+  const { darkMode, homeImages } = useContext(ThemeContext);
+  const { googleLogin } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(async () => {
@@ -34,7 +35,7 @@ const Home = ({ homeImages }) => {
         const isMatch = verificateFrontResponse(urlParams, preferenceId);
         if (isMatch) {
           const arrayItems = getLocalStorage("CART_ID");
-          
+
           try {
             await axios.put(`${VITE_BACKEND_URL}/workdays/tofreeturns`, {
               arrayItems,
@@ -53,22 +54,18 @@ const Home = ({ homeImages }) => {
   }, []);
 
   const handleReserveClick = () => {
-    const isLoggedIn = getCookie("IDSESSION"); // Verifica si el usuario está logueado (puedes adaptar esta lógica según tu implementación)
-
+    const isLoggedIn = getCookie("IDSESSION");
     if (!isLoggedIn) {
-      // Mostrar el backdrop y el mensaje de login
-      setShowBackdrop(true);
-      setShowLoginMessage(true);
-
-      // Ocultar el backdrop después de 1.5 segundos
-      setTimeout(() => {
-        setShowBackdrop(false);
-      }, 1500);
-
-      // Ocultar el mensaje de login después de 4 segundos
-      setTimeout(() => {
-        setShowLoginMessage(false);
-      }, 4000);
+      Swal.fire({
+        title: "Debes estar loggeado para reservar",
+        showDenyButton: true,
+        confirmButtonText: "Iniciar sesión",
+        denyButtonText: `Más tarde`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          googleLogin();
+        }
+      });
     } else {
       // Navegar a la página de reservas si el usuario está logueado
       navigate("/turns");
@@ -109,26 +106,9 @@ const Home = ({ homeImages }) => {
               justifyContent: "space-between",
               alignItems: "center",
               backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
-              position: "relative", // Para el backdrop
             }}
           >
-            {showBackdrop && (
-              <div
-                className="backdrop"
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                  backgroundColor: "rgba(0, 0, 0, 0.7)", // Color de oscurecimiento
-                  zIndex: 1, // Asegura que el backdrop esté encima de todo
-                  transition: "opacity 0.3s ease",
-                }}
-              />
-            )}
-
-            <Box style={{ height: "30%", zIndex: showBackdrop ? 2 : 0 }}>
+            <Box style={{ height: "30%" }}>
               {homeImages === 1 ? (
                 <Box>
                   <Skeleton
@@ -153,10 +133,7 @@ const Home = ({ homeImages }) => {
                   }
                   alt="nombre del lugar"
                   style={{
-                    marginTop: "20px",
-                    objectFit: "cover",
-                    borderRadius: "200px",
-                    boxShadow: "0px 43px 51px -23px rgba(0,0,0,0.57)", // Propiedades de la sombra
+                    boxShadow: "0px 43px 51px -23px rgba(0,0,0,0.57)",
                   }}
                 />
               )}
@@ -169,7 +146,6 @@ const Home = ({ homeImages }) => {
                 height: "30%",
                 display: "flex",
                 justifyContent: "space-between",
-                zIndex: showBackdrop ? 2 : 0, // Asegura que los contenidos estén encima del backdrop
               }}
             >
               <Box
@@ -250,26 +226,6 @@ const Home = ({ homeImages }) => {
                 </a>
               </Box>
             </Box>
-
-            {showLoginMessage && (
-              <span
-                className="login-message"
-                style={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  backgroundColor: "white",
-                  color: "black",
-                  padding: "10px 20px",
-                  borderRadius: "5px",
-                  zIndex: 3, // Asegura que el mensaje esté encima de todo
-                  boxShadow: "0px 10px 17px 0px rgba(0,0,0,0.75)",
-                }}
-              >
-                ¡Inicia sesión primero!
-              </span>
-            )}
           </div>
           <Footer />
         </>

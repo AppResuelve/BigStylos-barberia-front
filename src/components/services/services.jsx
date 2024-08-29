@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
-import { DarkModeContext } from "../../App";
 import { convertToCategoryServiceArray } from "../../helpers/convertCategoryService";
 import {
   Button,
@@ -14,6 +13,8 @@ import EditServicesModal from "./editServicesModal";
 import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import axios from "axios";
+import ThemeContext from "../../context/ThemeContext";
+import Swal from "sweetalert2";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -25,9 +26,8 @@ const Services = ({
   setLoadingServices,
 }) => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-  const { darkMode } = useContext(DarkModeContext);
+  const { darkMode } = useContext(ThemeContext);
   const [categoryList, setCategoryList] = useState([]);
-  // const [serviceList, setServiceList] = useState([]);
   const [categoryServices, setCategoryServices] = useState([]);
   const [editableCatSer, setEditableCatSer] = useState([]);
   const [showEdit, setShowEdit] = useState(false);
@@ -72,7 +72,6 @@ const Services = ({
           (sing === "" && price === "") ||
           (price !== "" && sing == ""))
       ) {
-        // Verifica si el nuevo servicio no está vacío
         await axios.post(`${VITE_BACKEND_URL}/services/create`, {
           service,
           category,
@@ -80,7 +79,15 @@ const Services = ({
           sing: sing == 0 ? 0 : sing,
           type,
         });
-
+        Swal.fire({
+          title: "El servicio se agregó exitosamente",
+          icon: "success",
+          timer: 3000,
+          toast: true,
+          position: "bottom-end",
+          showConfirmButton: false,
+          showCloseButton: true,
+        });
         // Refresca la lista de servicios después de agregar uno nuevo
         setRefreshServices((prevState) => !prevState);
         // Limpiar los inputs
@@ -93,8 +100,16 @@ const Services = ({
         });
       }
     } catch (error) {
+      Swal.fire({
+        title: "Error al agregar el servicio",
+        icon: "error",
+        timer: 3000,
+        toast: true,
+        position: "bottom-end",
+        showConfirmButton: false,
+        showCloseButton: true,
+      });
       console.error("Error al agregar el servicio:", error);
-      alert("Error al agregar el servicio");
     }
   };
 
@@ -108,12 +123,29 @@ const Services = ({
           current,
         }
       );
-
+      Swal.fire({
+        title: `Categoria ${current} actualizada correctamente.`,
+        icon: "success",
+        timer: 3000,
+        toast: true,
+        position: "bottom-end",
+        showConfirmButton: false,
+        showCloseButton: true,
+      });
       // Refresca la lista de servicios después de agregar uno nuevo
       setRefreshServices((prevState) => !prevState);
       setCategoryName({});
       setShowEdit(false);
     } catch (error) {
+      Swal.fire({
+        title: `Error al actualizar la categoria ${current}`,
+        icon: "error",
+        timer: 3000,
+        toast: true,
+        position: "bottom-end",
+        showConfirmButton: false,
+        showCloseButton: true,
+      });
       console.error("Error al actualizar la categoria:", error);
     }
   };
@@ -132,12 +164,29 @@ const Services = ({
           type,
         }
       );
-
+      Swal.fire({
+        title: `Fila del servicio ${current} actualizada correctamente.`,
+        icon: "success",
+        timer: 3000,
+        toast: true,
+        position: "bottom-end",
+        showConfirmButton: false,
+        showCloseButton: true,
+      });
       // Refresca la lista de servicios después de agregar uno nuevo
       setRefreshServices((prevState) => !prevState);
       setServiceRow({});
       setShowEdit(false);
     } catch (error) {
+      Swal.fire({
+        title: `Error al actualizar la fila del servicio ${prev} al ${current}.`,
+        icon: "success",
+        timer: 3000,
+        toast: true,
+        position: "bottom-end",
+        showConfirmButton: false,
+        showCloseButton: true,
+      });
       console.error("Error al actualizar el servicio:", error);
     }
   };
@@ -205,7 +254,6 @@ const Services = ({
     });
   };
 
-  console.log(serviceRow);
   //handle input
   const handleChangeRowService = (field, e) => {
     let value = e.target.value;

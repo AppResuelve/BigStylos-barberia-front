@@ -1,5 +1,4 @@
 import { useEffect, useState, useContext } from "react";
-import { DarkModeContext } from "../../App";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -12,10 +11,10 @@ import { Box } from "@mui/material";
 import Maps from "../maps/maps";
 import "./footer.css";
 import { convertToRGB } from "../../helpers/convertColorToRgb";
-import { color } from "@mui/system";
+import ThemeContext from "../../context/ThemeContext";
 
 const Footer = () => {
-  const { darkMode } = useContext(DarkModeContext);
+  const { darkMode } = useContext(ThemeContext);
   const [colorRGB, setColorRGB] = useState("");
   const [invertedColorRGB, setInvertedColorRGB] = useState("");
 
@@ -53,9 +52,9 @@ const Footer = () => {
       },
     ],
   };
-  
+
   return (
-    <div
+    <footer
       style={{
         display: "flex",
         position: "relative",
@@ -289,7 +288,7 @@ const Footer = () => {
         <h4>Olavarria, Bs As, Argentina</h4>
         <h4>Todos los derechos reservados @2024 </h4>
       </div>
-    </div>
+    </footer>
   );
 };
 

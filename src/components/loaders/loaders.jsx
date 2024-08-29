@@ -1,8 +1,8 @@
 import mercadoPagoIcon from "../../assets/images/mercadopago.png";
 import securePayIcon from "../../assets/icons/secure-pay.png";
 import "./loaders.css";
+
 const LoaderToBuy = ({ redirect }) => {
-  console.log(redirect);
   return (
     <div className="container-all-loadertobuy">
       <div

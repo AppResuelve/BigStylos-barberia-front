@@ -8,21 +8,15 @@
       margin-top: 10px;
 }
 
-.btn-update-turn-nestedList {
-      border-radius: 40px;
-      border: none;
-      height: 45px;
-      min-width: 45px;
-      margin-left: 10px;
-}
-
 .my-button-upadatephone {
-      border-radius: 40px;
+      border-radius: 10px;
       border: none;
       height: 45px;
-      min-width: 45px;
+      width: 80px;
       margin-left: 10px;
       cursor: pointer;
+      font-size: 15px;
+      color: white;
       background-color: #2196f3;
       transition: .2s;
 }
@@ -31,38 +25,26 @@
       background-color: #50b0fe;
 }
 
-
-.my-button-disabled-upadatephone {
-      border-radius: 40px;
-      border: none;
-      height: 45px;
-      min-width: 45px;
-      margin-left: 10px;
+.my-button-upadatephone:disabled {
       cursor: auto;
       background-color: lightgray;
 }
 
-.hr-nestedList {
-      border: none;
-      height: 1px;
-      margin-bottom: 15px;
-}
-
-
-.h3-nestedList {
+.span-nestedList {
       font-family: Jost, sans-serif;
       font-size: 18px;
+      font-weight: bold;
 }
 
 .listItembtn-nestedList {
       display: flex;
       justify-content: space-between;
       height: 45px;
-      border-radius: 4px;
+      border-radius: 10px !important;
 }
 
 .listItembtn-nestedList:hover {
-     background-color: lightgray !important;
+      background-color: lightgray !important;
 }
 
 .spanErrorInputTel {

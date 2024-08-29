@@ -1,7 +1,6 @@
 import { useEffect, useState, useContext } from "react";
-import { DarkModeContext } from "../../App";
-import { Button } from "@mui/material";
-import { Box } from "@mui/system";
+import ThemeContext from "../../context/ThemeContext";
+import { Button, Box } from "@mui/material";
 import { WhatsApp } from "@mui/icons-material";
 import noUserImg from "../../assets/icons/noUser.png";
 import formatHour from "../../functions/formatHour";
@@ -15,7 +14,7 @@ const WhoIsComingWorker = ({
   refreshForWhoIsComing,
   setRefreshForWhoIsComing,
 }) => {
-  const { darkMode } = useContext(DarkModeContext);
+  const { darkMode } = useContext(ThemeContext);
   const [turns, setTurns] = useState([]);
   const [count, setCount] = useState([]);
   const [selectedDay, setSelectedDay] = useState("");

@@ -1,9 +1,10 @@
-import React, { useState, useContext, useEffect } from "react";
-import { DarkModeContext } from "../../App";
+import React, { useContext } from "react";
+import ThemeContext from "../../context/ThemeContext";
+import AuthContext from "../../context/AuthContext";
 import noUser from "../../assets/icons/noUser.png";
-import closeIcon from "../../assets/icons/close.png"
+import closeIcon from "../../assets/icons/close.png";
 import LogoutButton from "../logout/logout";
-import { Dialog,DialogContent, Backdrop, Slide, Box, Button } from "@mui/material";
+import { Dialog, Backdrop, Slide, Box } from "@mui/material";
 import { useMediaQueryHook } from "./useMediaQuery";
 import { NavLink } from "react-router-dom";
 import ClientNestedList from "./clientNestedList";
@@ -14,11 +15,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction={"left"} ref={ref} {...props} />;
 });
 
-const UserPanelModal = ({ isOpen, setIsOpen, userData }) => {
-  const { darkMode } = useContext(DarkModeContext);
+const UserPanelModal = () => {
+  const { darkMode } = useContext(ThemeContext);
+  const { userData, isOpenUserPanel, setIsOpenUserPanel } =
+    useContext(AuthContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
-  const handleClose = () => setIsOpen(false);
+  const handleClose = () => setIsOpenUserPanel(false);
   return (
     <Dialog
       style={{
@@ -27,7 +30,7 @@ const UserPanelModal = ({ isOpen, setIsOpen, userData }) => {
       }}
       fullScreen={xl}
       TransitionComponent={Transition}
-      open={isOpen}
+      open={isOpenUserPanel}
       onClose={handleClose}
       slots={{ backdrop: Backdrop }}
       slotProps={{
@@ -37,18 +40,25 @@ const UserPanelModal = ({ isOpen, setIsOpen, userData }) => {
       }}
     >
       <div //container
+        className="container-userpanelmodal"
         style={{
           display: "flex",
           flexDirection: "column",
-          // justifyContent: "space-between",
-          width: sm ? "340px" : "380px",
           height: "100%",
-          paddingBottom: "90px",
+          overflowY: "auto",
+          paddingBottom: "70px",
           backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
-          // p: 0,
         }}
       >
-        <section style={{ padding: "0px 10px 10px 10px" }}>
+        <header
+          className="header-userpanelmodal"
+          style={{
+            position: "fixed",
+            backgroundColor: "lightgray",
+            zIndex: "1",
+            boxShadow: "0px 6px 5px -3px rgb(0,0,0,0.5)",
+          }}
+        >
           <div
             className="box-subContainer1-userModal"
             style={{
@@ -57,101 +67,102 @@ const UserPanelModal = ({ isOpen, setIsOpen, userData }) => {
               justifyContent: "space-between",
             }}
           >
-            <div style={{display:"flex",alignItems:"center"}}>
-
-            <img
-              className="img-user-userModal"
-              src={userData?.image ? userData.image : noUser}
-              alt="mi perfil"
-            />
-            <span
-              style={{
-                color: darkMode.on ? "white" : darkMode.dark,
-                fontSize: "22px",
-              }}
-            >
-              {userData?.name}
-            </span>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <img
+                className="img-user-userModal"
+                src={userData?.image ? userData.image : noUser}
+                alt="mi perfil"
+              />
+              <span
+                style={{
+                  color: darkMode.on ? "white" : darkMode.dark,
+                  fontSize: "22px",
+                }}
+              >
+                {userData?.name}
+              </span>
             </div>
 
-            <img className="img-close-userModal" src={closeIcon} alt="" onClick={handleClose } />
+            <img
+              className="img-close-userModal"
+              src={closeIcon}
+              alt=""
+              onClick={handleClose}
+            />
           </div>
           <hr
-            className="hr-userModal"
             style={{
               border: "none",
               height: "2px",
               backgroundColor: darkMode.on ? "white" : darkMode.dark,
             }}
           />
+        </header>
+        <section style={{ padding: "0px 10px 10px 10px",marginTop:"5px" }}>
           {/* seccion del admin */}
           {userData !== 1 && userData.admin && (
-            <NavLink
-              to="/admin"
-              style={{ textDecoration: "none", color: "black" }}
+            <section
+              style={{ marginTop: "50px" }}
+              onClick={() => setIsOpenUserPanel(false)}
             >
-              <Box onClick={() => setIsOpen(false)}>
-                <button
-                  className="btn-userModal"
-                  style={{
-                    color: darkMode.on ? "white" : darkMode.dark,
-                    fontWeight: "bold",
-                  }}
-                  onClick={() => setIsOpen(false)}
-                >
-                  Administración del local
-                </button>
-                <hr
-                  className="hr-userModal"
-                  style={{
-                    border: "none",
-                    height: "1px",
-                    backgroundColor: darkMode.on ? "white" : darkMode.dark,
-                  }}
-                />
-              </Box>
-            </NavLink>
+              <NavLink
+                to="/admin"
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                <Box>
+                  <button
+                    className="btn-userModal"
+                    style={{
+                      color: darkMode.on ? "white" : darkMode.dark,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Administración del local
+                  </button>
+                  <hr
+                    className="hr-userModal"
+                    style={{
+                      backgroundColor: darkMode.on ? "white" : darkMode.dark,
+                    }}
+                  />
+                </Box>
+              </NavLink>
+            </section>
           )}
           {/* seccion del worker */}
           {userData !== 1 && userData.worker && (
-            <NavLink
-              to="/worker"
-              style={{ textDecoration: "none", color: darkMode.dark }}
-            >
-              <Box onClick={() => setIsOpen(false)}>
-                <button
-                  className="btn-userModal"
-                  style={{
-                    color: darkMode.on ? "white" : darkMode.dark,
-                    fontWeight: "bold",
-                  }}
-                  onClick={() => setIsOpen(false)}
-                >
-                  Administracíon del profesional
-                </button>
-                <hr
-                  className="hr-userModal"
-                  style={{
-                    border: "none",
-                    height: "1px", // Altura de la línea
-                    backgroundColor: darkMode.on ? "white" : darkMode.dark,
-                  }}
-                />
-              </Box>
-            </NavLink>
+            <section onClick={() => setIsOpenUserPanel(false)}>
+              <NavLink
+                to="/worker"
+                style={{ textDecoration: "none", color: darkMode.dark }}
+              >
+                <Box>
+                  <button
+                    className="btn-userModal"
+                    style={{
+                      color: darkMode.on ? "white" : darkMode.dark,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Administracíon del profesional
+                  </button>
+                  <hr
+                    className="hr-userModal"
+                    style={{
+                      backgroundColor: darkMode.on ? "white" : darkMode.dark,
+                    }}
+                  />
+                </Box>
+              </NavLink>
+            </section>
           )}
           {/* seccion del cliente la cual van a poder acceder todos los tipos de usuarios */}
           <ClientNestedList userData={userData} />
         </section>
-        <section
-          className="section-logout-darkmode"
-          style={{
-            width: sm ? "340px" : "380px",
-          }}
-        >
+        <footer className="footer-logout-darkmode">
           {userData !== 1 && userData !== false && <LogoutButton />}
           <DarkMode />
-        </section>
+        </footer>
       </div>
     </Dialog>
   );

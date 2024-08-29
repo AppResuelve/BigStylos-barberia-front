@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { DarkModeContext } from "../../App";
+import ThemeContext from "../../context/ThemeContext";
 import CustomCalendar from "../customCalendar/customCalendar";
 import SelectedDay from "../selectedDay/selectedDay";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
@@ -9,22 +9,22 @@ import { Grid, Box, Button, LinearProgress } from "@mui/material";
 import getCurrentMonth from "../../functions/getCurrentMonth";
 import durationMax from "../../helpers/durationMax";
 import shouldDisableButton from "../../helpers/shouldDisableButton";
-import axios from "axios";
-import "./createWorkDays.css";
 import daysMonthCalendarCustom from "../../functions/daysMonthCalendarCustom";
 import obtainDayName from "../../functions/obtainDayName";
+import Swal from "sweetalert2";
+import axios from "axios";
+import "./createWorkDays.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const CreateWorkDays = ({
   user,
   schedule,
-  pendingServices,
   doCeroServices,
-  setRefreshForWhoIsComing,
+  pendingServices,
 }) => {
-  const { darkMode, setShowAlert, alertDelete, setAlertDelete } =
-    useContext(DarkModeContext);
+  const { darkMode, setRefreshForWhoIsComing, setRedirectToMyServices } =
+    useContext(ThemeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [isOpen, setIsOpen] = useState(false);
   const [dayIsSelected, setDayIsSelected] = useState({});
@@ -52,11 +52,6 @@ const CreateWorkDays = ({
   /*   dayIsSelected && Object.keys(dayIsSelected)[0] && console.log(Object.keys(dayIsSelected)[0])
   dayIsSelected && Object.keys(dayIsSelected)[0] && console.log(Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0]) */
   /* dayIsSelected && Object.keys(dayIsSelected)[0] && days && days[Object.keys(dayIsSelected)[0]] && days[Object.keys(dayIsSelected)[0]][Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0]] */ /* console.log(Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0] */
-  useEffect(() => {
-    if (alertDelete) {
-      handleDeleteSubmit();
-    }
-  }, [alertDelete]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -107,33 +102,17 @@ const CreateWorkDays = ({
     }
   }, [dayIsSelected]);
 
-  useEffect(() => {
-    // Agregar la clase alert-open cuando se monta el componente y el alerta está presente
-    if (showEdit) {
-      document.body.classList.add("alert-open");
-    } else {
-      // Remover la clase alert-open cuando se desmonta el componente o el alerta se cierra
-      setTimeout(() => {
-        document.body.classList.remove("alert-open");
-      }, 300); // 400 milisegundos = .4 s
-    }
-  }, [showEdit]);
-
   const handleEdit = () => {
     if (pendingServices || doCeroServices) {
-      setShowAlert({
-        isOpen: true,
-        message:
-          "Para crear un día de trabajo debes tener al menos 1 servicio disponible y sin pendientes de asignación.",
-        type: "warning",
-        button1: {
-          text: "Mis servicios",
-          action: "handleActionProp",
-        },
-        buttonClose: {
-          text: "VOLVER",
-        },
-        stateName: "redirectToMyServices",
+      Swal.fire({
+        title: "Para crear un día NO debes tener servicios pendientes.",
+        showDenyButton: true,
+        confirmButtonText: "Ir a mis servicios",
+        denyButtonText: `Más tarde`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          setRedirectToMyServices(true);
+        }
       });
     } else {
       setShowEdit(true);
@@ -228,12 +207,18 @@ const CreateWorkDays = ({
             }
             return newState;
           });
-          console.log(
-            `el dia ${submitArray[i].day}/${submitArray[i].month} se creo exitosamente`
-          );
+          Swal.fire({
+            title: `el día ${submitArray[i].day}/${submitArray[i].month} se creo exitosamente`,
+            icon: "success",
+            timer: 3000,
+            toast: true,
+            position: "bottom-end",
+            showConfirmButton: false,
+            showCloseButton: true,
+          });
         } catch (error) {
           console.error(
-            `Error al crear el dia ${submitArray[i].day}/${submitArray[i].month}`,
+            `Error al crear el día ${submitArray[i].day}/${submitArray[i].month}`,
             error
           );
         }
@@ -242,60 +227,83 @@ const CreateWorkDays = ({
       setShowEdit(false);
       setRefreshDays(true);
     } else {
-      setShowAlert({
-        isOpen: true,
-        message:
-          "El rango horario debe ser mayor a la tardanza de tus servicios",
-        type: "warning",
-        button1: {
-          text: "",
-          action: "",
-        },
-        buttonClose: {
-          text: "Ok",
-        },
+      Swal.fire({
+        title: "El rango horario debe ser mayor a la tardanza de tus servicios",
+        icon: "warning",
+        timer: 3000,
       });
     }
   };
 
-  const handleDeleteDay = () => {
+  const handleDeleteSubmit = async () => {
+    let day = Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0];
+    let month = Object.keys(dayIsSelected)[0];
+
     if (
       days[Object.keys(dayIsSelected)[0]] &&
       days[Object.keys(dayIsSelected)[0]][
         Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0]
       ].turn == true
     ) {
-      setShowAlert({
-        isOpen: true,
-        message: "Desea borrar un dia con turno?",
-        type: "warning",
-        button1: {
-          text: "confirmar",
-          action: "handleActionProp",
-        },
-        buttonClose: {
-          text: "cancelar",
-        },
-        stateName: "alertDelete",
+      Swal.fire({
+        title: "Desea borrar un día con turno?",
+        showDenyButton: true,
+        confirmButtonText: "Borrar",
+        denyButtonText: "Más tarde",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            const response = await axios.post(
+              `${VITE_BACKEND_URL}/workdays/delete`,
+              {
+                month,
+                day,
+                email: user.email,
+                name: user.name
+              }
+            );
+            Swal.fire({
+              title: `el día ${day}/${month} se borró exitosamente`,
+              icon: "success",
+              timer: 3000,
+              toast: true,
+              position: "bottom-end",
+              showConfirmButton: false,
+              showCloseButton: true,
+            });
+            setDayIsSelected({});
+            setRefreshDays(true);
+            setRefreshForWhoIsComing(true);
+          } catch (error) {
+            console.error("Error al borrar el dia:", error);
+          }
+        }
       });
     } else {
-      handleDeleteSubmit();
-    }
-  };
-
-  const handleDeleteSubmit = async () => {
-    try {
-      const response = await axios.post(`${VITE_BACKEND_URL}/workdays/delete`, {
-        month: Object.keys(dayIsSelected)[0],
-        day: Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0],
-        email: user.email,
-      });
-      setDayIsSelected({});
-      setAlertDelete(false);
-      setRefreshDays(true);
-      setRefreshForWhoIsComing(true);
-    } catch (error) {
-      console.error("Error al borrar el dia:", error);
+      try {
+        const response = await axios.post(
+          `${VITE_BACKEND_URL}/workdays/delete`,
+          {
+            month,
+            day,
+            email: user.email,
+          }
+        );
+        Swal.fire({
+          title: `el día ${day}/${month} se borró exitosamente`,
+          icon: "success",
+          timer: 3000,
+          toast: true,
+          position: "bottom-end",
+          showConfirmButton: false,
+          showCloseButton: true,
+        });
+        setDayIsSelected({});
+        setRefreshDays(true);
+        setRefreshForWhoIsComing(true);
+      } catch (error) {
+        console.error("Error al borrar el dia:", error);
+      }
     }
   };
 
@@ -455,7 +463,7 @@ const CreateWorkDays = ({
                       ? false
                       : true
                   }
-                  onClick={handleDeleteDay}
+                  onClick={handleDeleteSubmit}
                 >
                   <h4 style={{ fontFamily: "Jost, sans-serif" }}>borrar</h4>
                 </Button>
@@ -477,7 +485,7 @@ const CreateWorkDays = ({
             </Box>
           )}
         </Grid>
-          {/* sección del slider */}
+        {/* sección del slider */}
         <SliderModal
           user={user}
           isOpen={isOpen}

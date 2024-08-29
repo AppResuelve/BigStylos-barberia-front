@@ -58,7 +58,8 @@ const InputTel = ({
           fontFamily: "Jost",
           fontWeight: "bold",
           fontSize: "18px",
-          marginBottom:"5px"
+          marginBottom: "5px",
+          borderRadius:"10px"
         }}
       />
   );

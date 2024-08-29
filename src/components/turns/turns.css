@@ -4,15 +4,14 @@
       height: 100%;
       display: flex;
       justify-content: center;
-      margin-bottom: 85px;
 }
 
 .subcontainer-turns {
+      position: relative;
       width: 97%;
       max-width: 900px;
-      height: fit-content;
+      height: 100%;
       margin-top: 20px;
-
 }
 
 .subcontainer-selectedday-turns {
@@ -173,7 +172,7 @@
             width: 100%;
             max-width: 900px;
       }
-      
+
       .img-calendar-turns {
             filter: grayscale(100%);
             width: 250px;
@@ -188,7 +187,7 @@
             width: 100%;
             max-width: 900px;
       }
-      
+
       .img-calendar-turns {
             filter: grayscale(100%);
             width: 350px;
@@ -202,7 +201,7 @@
             width: 100%;
             max-width: 900px;
       }
-      
+
       .img-calendar-turns {
             filter: grayscale(100%);
             width: 90%;

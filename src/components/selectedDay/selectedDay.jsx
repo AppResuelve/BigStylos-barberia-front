@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { DarkModeContext } from "../../App";
+import ThemeContext from "../../context/ThemeContext";
 import timeForRenderedStructure from "../../functions/timeForRenderedStructure";
 import { Button } from "@mui/material";
 
@@ -13,7 +13,7 @@ const SelectedDay = ({
   md,
   sm,
 }) => {
-  const { darkMode } = useContext(DarkModeContext);
+  const { darkMode } = useContext(ThemeContext);
   const [renderedStructure, setRenderedStructure] = useState([]);
 
   useEffect(() => {

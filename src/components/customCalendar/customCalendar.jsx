@@ -1,14 +1,11 @@
-import { useEffect, useState, useContext } from "react";
-import { DarkModeContext } from "../../App";
+import { useState, useContext } from "react";
+import ThemeContext from "../../context/ThemeContext";
 import daysMonthCalendarCustom from "../../functions/daysMonthCalendarCustom";
 import getToday from "../../functions/getToday";
 import obtainDayName from "../../functions/obtainDayName";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
+import { Box } from "@mui/material";
 import "./customCalendar.css";
-import { Box, Button } from "@mui/material";
-import axios from "axios";
-import { width } from "@mui/system";
-const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const CustomCalendar = ({
   setDayIsSelected,
@@ -19,9 +16,9 @@ const CustomCalendar = ({
   setDays,
   schedule,
   loading,
-  noWork
+  noWork,
 }) => {
-  const { darkMode } = useContext(DarkModeContext);
+  const { darkMode } = useContext(ThemeContext);
   const daysCalendarCustom = daysMonthCalendarCustom(amountOfDays, false);
   let { currentMonth, nextMonth, currentYear, nextYear, month1, month2 } =
     daysCalendarCustom;
