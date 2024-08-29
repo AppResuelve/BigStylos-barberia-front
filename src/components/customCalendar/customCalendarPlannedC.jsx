@@ -5,17 +5,16 @@ import getToday from "../../functions/getToday";
 import obtainDayName from "../../functions/obtainDayName";
 import { Box } from "@mui/material";
 import "./customCalendar.css";
+import { useState } from "react";
 
 const CustomCalendarPlannedC = ({
   schedule,
   noWork,
-  setNoWork,
   amountOfDays,
   dayIsSelected,
   setDayIsSelected,
   showEdit,
   days,
-  setDaysWithTurns,
 }) => {
   const { darkMode } = useContext(ThemeContext);
   const daysCalendarCustom = daysMonthCalendarCustom(amountOfDays, false);
@@ -23,49 +22,67 @@ const CustomCalendarPlannedC = ({
     daysCalendarCustom;
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
   const getDayPosition = getToday() + 1;
+  const [hasTurnInSelectedDay, setHasTurnInSelectedDay] = useState(false);
 
-  const handleDay = (day, month, turn) => {
-    if (turn) {
-      setDayIsSelected({
-        [month]: {
-          [day]: {},
-        },
-        turn: true,
-      });
-      setDaysWithTurns({
-        month,
-        day,
-      });
+  const handleDay = (day, month) => {
+    if (dayIsSelected && dayIsSelected[month] && dayIsSelected[month][day]) {
+        // Si ya existe en dayIsSelected, lo quitamos
+        setDayIsSelected((prevState) => {
+            const newState = { ...prevState };
+            const { [day]: _, ...restDays } = newState[month];
+
+            if (Object.keys(restDays).length === 0) {
+                // Si no quedan más días en ese mes, eliminamos el mes
+                delete newState[month];
+            } else {
+                // Si aún quedan días en el mes, actualizamos el mes
+                newState[month] = restDays;
+            }
+
+            // Actualizamos el estado de hasTurnInSelectedDay si el día removido tenía un turno
+            if (days[month][day] && days[month][day].turn) {
+                setHasTurnInSelectedDay(false);
+            }
+
+            return newState;
+        });
     } else {
-      setDaysWithTurns({});
-      setDayIsSelected((prevState) => {
-        let newState = {};
-        if (!dayIsSelected.turn) {
-          newState = { ...prevState };
-        }
+        if (days && days[month] && days[month][day] && days[month][day].turn) {
+            // Si el día tiene turn = true, sobrescribimos el estado con el nuevo valor
+            setDayIsSelected({
+                [month]: {
+                    [day]: {}, // Puedes agregar aquí cualquier dato que desees almacenar para ese día
+                },
+            });
 
-        if (newState[month] && newState[month][day]) {
-          // Si ya existe en dayIsSelected, lo quitamos
-
-          const { [day]: _, ...rest } = newState[month];
-
-          if (Object.keys(rest).length < 1) {
-            delete newState[month];
-          } else {
-            newState[month] = rest;
-          }
+            // Indicamos que el nuevo día seleccionado tiene un turno
+            setHasTurnInSelectedDay(true);
         } else {
-          // Si no existe, lo agregamos
-          newState[month] = {
-            ...newState[month],
-            [day]: {},
-          };
-        }
+            // Si el día que se va a agregar no tiene turno, pero ya hay un día con turno en el estado, sobrescribimos
+            if (hasTurnInSelectedDay) {
+                setDayIsSelected({
+                    [month]: {
+                        [day]: {}, // Puedes agregar aquí cualquier dato que desees almacenar para ese día
+                    },
+                });
 
-        return newState;
-      });
+                // El nuevo día no tiene turno, así que desactivamos el flag
+                setHasTurnInSelectedDay(false);
+            } else {
+                // Si no existe, lo agregamos sin sobrescribir el estado anterior
+                setDayIsSelected((prevState) => ({
+                    ...prevState,
+                    [month]: {
+                        ...prevState[month],
+                        [day]: {}, // Puedes agregar aquí cualquier dato que desees almacenar para ese día
+                    },
+                }));
+            }
+        }
     }
-  };
+};
+  
+  
 
   return (
     <div className="div-container-calendar">
@@ -110,7 +127,7 @@ const CustomCalendarPlannedC = ({
               key={index}
               disabled={!showEdit ? true : disabled}
               className={!showEdit || disabled ? "month1-false" : "month1"}
-              onClick={() => handleDay(day, currentMonth, turn)}
+              onClick={() => handleDay(day, currentMonth)}
               style={{
                 gridColumnStart: index === 0 ? getDayPosition : "auto",
                 backgroundColor:
