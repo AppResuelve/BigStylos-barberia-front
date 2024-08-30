@@ -14,7 +14,7 @@ import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import axios from "axios";
 import ThemeContext from "../../context/ThemeContext";
-import Swal from "sweetalert2";
+import toastAlert from "../../helpers/alertFunction";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -79,15 +79,7 @@ const Services = ({
           sing: sing == 0 ? 0 : sing,
           type,
         });
-        Swal.fire({
-          title: "El servicio se agregó exitosamente",
-          icon: "success",
-          timer: 3000,
-          toast: true,
-          position: "bottom-end",
-          showConfirmButton: false,
-          showCloseButton: true,
-        });
+        toastAlert("El servicio se agregó exitosamente.", "success");
         // Refresca la lista de servicios después de agregar uno nuevo
         setRefreshServices((prevState) => !prevState);
         // Limpiar los inputs
@@ -100,15 +92,7 @@ const Services = ({
         });
       }
     } catch (error) {
-      Swal.fire({
-        title: "Error al agregar el servicio",
-        icon: "error",
-        timer: 3000,
-        toast: true,
-        position: "bottom-end",
-        showConfirmButton: false,
-        showCloseButton: true,
-      });
+      toastAlert("Error al agregar el servicio.", "error");
       console.error("Error al agregar el servicio:", error);
     }
   };
@@ -123,29 +107,13 @@ const Services = ({
           current,
         }
       );
-      Swal.fire({
-        title: `Categoria ${current} actualizada correctamente.`,
-        icon: "success",
-        timer: 3000,
-        toast: true,
-        position: "bottom-end",
-        showConfirmButton: false,
-        showCloseButton: true,
-      });
+      toastAlert(`Categoria ${current} actualizada correctamente.`, "success");
       // Refresca la lista de servicios después de agregar uno nuevo
       setRefreshServices((prevState) => !prevState);
       setCategoryName({});
       setShowEdit(false);
     } catch (error) {
-      Swal.fire({
-        title: `Error al actualizar la categoria ${current}`,
-        icon: "error",
-        timer: 3000,
-        toast: true,
-        position: "bottom-end",
-        showConfirmButton: false,
-        showCloseButton: true,
-      });
+      toastAlert(`Error al actualizar la categoria ${current}`, "error");
       console.error("Error al actualizar la categoria:", error);
     }
   };
@@ -164,29 +132,19 @@ const Services = ({
           type,
         }
       );
-      Swal.fire({
-        title: `Fila del servicio ${current} actualizada correctamente.`,
-        icon: "success",
-        timer: 3000,
-        toast: true,
-        position: "bottom-end",
-        showConfirmButton: false,
-        showCloseButton: true,
-      });
+      toastAlert(
+        `Fila del servicio ${current} actualizada correctamente.`,
+        "success"
+      );
       // Refresca la lista de servicios después de agregar uno nuevo
       setRefreshServices((prevState) => !prevState);
       setServiceRow({});
       setShowEdit(false);
     } catch (error) {
-      Swal.fire({
-        title: `Error al actualizar la fila del servicio ${prev} al ${current}.`,
-        icon: "success",
-        timer: 3000,
-        toast: true,
-        position: "bottom-end",
-        showConfirmButton: false,
-        showCloseButton: true,
-      });
+      toastAlert(
+        `Error al actualizar la fila del servicio ${prev} al ${current}.`,
+        "error"
+      );
       console.error("Error al actualizar el servicio:", error);
     }
   };

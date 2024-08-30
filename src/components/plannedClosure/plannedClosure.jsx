@@ -4,18 +4,17 @@ import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { Box, Button } from "@mui/material";
 import Swal from "sweetalert2";
 import axios from "axios";
+import toastAlert from "../../helpers/alertFunction";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const PlannedClosure = ({ schedule }) => { //horarios de apertura y cierre sin los dias no laborables
+const PlannedClosure = ({ schedule }) => {
+  //horarios de apertura y cierre sin los dias no laborables
   const [noWork, setNoWork] = useState({}); // dias con cierre programado
   const [dayIsSelected, setDayIsSelected] = useState({});
   const [showEdit, setShowEdit] = useState(false);
-  const [showAlert, setShowAlert] = useState({});
   const [refresh, setRefresh] = useState(false);
-  const [days, setDays] = useState({});  // dias para calendario
-  const [daysWithTurns, setDaysWithTurns] = useState({});
+  const [days, setDays] = useState({}); // dias para calendario
   const [loading, setLoading] = useState(true);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,7 +38,6 @@ const PlannedClosure = ({ schedule }) => { //horarios de apertura y cierre sin l
     fetchData();
   }, [refresh]);
 
-
   const handleEdit = () => {
     setShowEdit(true);
   };
@@ -50,27 +48,32 @@ const PlannedClosure = ({ schedule }) => { //horarios de apertura y cierre sin l
   };
 
   const handleSubmit = async () => {
-    if (turn) {
+    let confirm = false;
+    let day = Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]]);
+    let month = Object.keys(dayIsSelected)[0];
+
+    if (days[month] && days[month][day] && days[month][day].turn) {
       Swal.fire({
-        title: "",
+        title: `Estas por cancelar los turnos del día ${day}/${month}, deseas continuar?`,
+        icon: "warning",
         showDenyButton: true,
-        confirmButtonText: "Ir a mis servicios",
-        denyButtonText: `Más tarde`,
+        confirmButtonText: "Sí, cancelar",
+        denyButtonText: "Más tarde",
       }).then(async (result) => {
         if (result.isConfirmed) {
+          confirm = true;
           try {
             const response = await axios.put(
               `${VITE_BACKEND_URL}/schedule/updatenowork`,
               {
                 noWorkDays: dayIsSelected,
-                daysToCancel: daysWithTurns,
               }
             );
-            const { data } = response;
+            toastAlert("Día/s cerrado/s exitosamente.", "success");
             setRefresh(!refresh);
           } catch (error) {
+            toastAlert("Error al cerrar el/los Día/s.", "error");
             console.error("Error al obtener los dias:", error);
-            alert("Error al obtener los dias");
           }
         }
       });
@@ -80,17 +83,17 @@ const PlannedClosure = ({ schedule }) => { //horarios de apertura y cierre sin l
           `${VITE_BACKEND_URL}/schedule/updatenowork`,
           {
             noWorkDays: dayIsSelected,
-            daysToCancel: daysWithTurns,
           }
         );
-        const { data } = response;
+        toastAlert("Día/s cerrado/s exitosamente.", "success");
         setRefresh(!refresh);
       } catch (error) {
+        toastAlert("Error al cerrar el/los Día/s.", "error");
         console.error("Error al obtener los dias:", error);
-        alert("Error al obtener los dias");
       }
     }
   };
+
   return (
     <div>
       <hr
@@ -102,7 +105,6 @@ const PlannedClosure = ({ schedule }) => { //horarios de apertura y cierre sin l
           backgroundColor: "#2196f3",
         }}
       />
-
       <CustomCalendarPlannedC
         schedule={schedule}
         noWork={noWork}
@@ -129,7 +131,7 @@ const PlannedClosure = ({ schedule }) => { //horarios de apertura y cierre sin l
             <Button
               onClick={handleCancel}
               variant="outlined"
-              style={{ borderRadius: "50px", border: "2px solid" }}
+              style={{ border: "2px solid" }}
             >
               <h4
                 style={{ fontFamily: "Jost, sans-serif", fontWeight: "bold" }}
@@ -137,8 +139,13 @@ const PlannedClosure = ({ schedule }) => { //horarios de apertura y cierre sin l
                 Volver
               </h4>
             </Button>
-            <Button onClick={handleSubmit} variant="contained">
-              <h4 style={{ fontFamily: "Jost, sans-serif" }}>Guardar</h4>
+            <Button
+              disabled={Object.keys(dayIsSelected).length > 0 ? false : true}
+              color="error"
+              onClick={handleSubmit}
+              variant="contained"
+            >
+              <h4 style={{ fontFamily: "Jost, sans-serif" }}>cerrar días</h4>
             </Button>
           </Box>
         )}

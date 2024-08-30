@@ -9,6 +9,7 @@ import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
 import Swal from "sweetalert2";
 import "./users.css";
 import axios from "axios";
+import toastAlert from "../../helpers/alertFunction";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -47,28 +48,15 @@ const Users = () => {
       const response = await axios.put(`${VITE_BACKEND_URL}/users/update`, {
         email: user.email,
       });
-      Swal.fire({
-        title: user.worker
+      toastAlert(
+        user.worker
           ? `El usuario ${user.name} ahora es cliente`
           : `El usuario ${user.name} ahora es empleado.`,
-        icon: "success",
-        timer: 3000,
-        toast: true,
-        position: "bottom-end",
-        showConfirmButton: false,
-        showCloseButton: true,
-      });
+        "success"
+      );
       setAdd(!add);
     } catch {
-      Swal.fire({
-        title: "Error al modificar el rol del usuario",
-        icon: "success",
-        timer: 3000,
-        toast: true,
-        position: "bottom-end",
-        showConfirmButton: false,
-        showCloseButton: true,
-      });
+      toastAlert("Error al modificar el rol del usuario.", "error");
     }
   };
 

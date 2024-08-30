@@ -14,6 +14,7 @@ import obtainDayName from "../../functions/obtainDayName";
 import Swal from "sweetalert2";
 import axios from "axios";
 import "./createWorkDays.css";
+import toastAlert from "../../helpers/alertFunction";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -207,16 +208,15 @@ const CreateWorkDays = ({
             }
             return newState;
           });
-          Swal.fire({
-            title: `el día ${submitArray[i].day}/${submitArray[i].month} se creo exitosamente`,
-            icon: "success",
-            timer: 3000,
-            toast: true,
-            position: "bottom-end",
-            showConfirmButton: false,
-            showCloseButton: true,
-          });
+          toastAlert(
+            `el día ${submitArray[i].day}/${submitArray[i].month} se creo exitosamente`,
+            "success"
+          );
         } catch (error) {
+           toastAlert(
+             `Error al crear el día ${submitArray[i].day}/${submitArray[i].month}`,
+             "error"
+           );
           console.error(
             `Error al crear el día ${submitArray[i].day}/${submitArray[i].month}`,
             error
@@ -259,22 +259,21 @@ const CreateWorkDays = ({
                 month,
                 day,
                 email: user.email,
-                name: user.name
+                name: user.name,
               }
             );
-            Swal.fire({
-              title: `el día ${day}/${month} se borró exitosamente`,
-              icon: "success",
-              timer: 3000,
-              toast: true,
-              position: "bottom-end",
-              showConfirmButton: false,
-              showCloseButton: true,
-            });
+             toastAlert(
+               `el día ${day}/${month} se borró exitosamente`,
+               "success"
+             );
             setDayIsSelected({});
             setRefreshDays(true);
             setRefreshForWhoIsComing(true);
           } catch (error) {
+             toastAlert(
+               `Error al borrar el día ${day}/${month}`,
+               "error"
+             );
             console.error("Error al borrar el dia:", error);
           }
         }
@@ -289,19 +288,12 @@ const CreateWorkDays = ({
             email: user.email,
           }
         );
-        Swal.fire({
-          title: `el día ${day}/${month} se borró exitosamente`,
-          icon: "success",
-          timer: 3000,
-          toast: true,
-          position: "bottom-end",
-          showConfirmButton: false,
-          showCloseButton: true,
-        });
+         toastAlert(`el día ${day}/${month} se borró exitosamente`, "success");
         setDayIsSelected({});
         setRefreshDays(true);
         setRefreshForWhoIsComing(true);
       } catch (error) {
+         toastAlert(`Error al borrar el día ${day}/${month}`, "error");
         console.error("Error al borrar el dia:", error);
       }
     }

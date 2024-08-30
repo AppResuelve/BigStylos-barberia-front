@@ -3,8 +3,8 @@ import ThemeContext from "../../context/ThemeContext";
 import formatHour from "../../functions/formatHour";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { Box, Button, MenuItem, Select } from "@mui/material";
-import Swal from "sweetalert2";
 import axios from "axios";
+import toastAlert from "../../helpers/alertFunction";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -70,26 +70,10 @@ const OpeningAndClosing = ({ schedule, refresh, setRefresh, setRemaining }) => {
       const response = await axios.put(`${VITE_BACKEND_URL}/schedule/update`, {
         newSchedule: timeEdit,
       });
-      Swal.fire({
-        title: "Cambios guardados exitosamente.",
-        icon: "success",
-        timer: 3000,
-        toast: true,
-        position: "bottom-end",
-        showConfirmButton: false,
-        showCloseButton: true,
-      });
+      toastAlert("Cambios guardados exitosamente.", "success");
       setRefresh(!refresh);
     } catch (error) {
-       Swal.fire({
-         title: "Error al cambiar los horarios.",
-         icon: "error",
-         timer: 3000,
-         toast: true,
-         position: "bottom-end",
-         showConfirmButton: false,
-         showCloseButton: true,
-       });
+      toastAlert("Error al cambiar los horarios.", "error");
       console.error("Error al obtener los horarios", error);
     }
     setShowEdit(false);

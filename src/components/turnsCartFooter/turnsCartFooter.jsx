@@ -9,6 +9,7 @@ import { LoaderToBuy } from "../loaders/loaders";
 import { setCookie } from "../../helpers/cookies";
 import { setLocalStorage } from "../../helpers/localStorage";
 import Swal from "sweetalert2";
+import toastAlert from "../../helpers/alertFunction";
 const VITE_MERCADO_PAGO_PUBLIC_KEY = import.meta.env
   .VITE_MERCADO_PAGO_PUBLIC_KEY;
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -123,18 +124,12 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart, setAuxCart }) => {
         setLoader(false);
         setTurnsCart([]);
         setAuxCart({});
-        Swal.fire({
-          title: "El/los turnos han sidos agendados con éxito!",
-          icon: "success",
-          timer: 3000,
-          toast: true,
-          position: "bottom",
-          showConfirmButton: false,
-          showCloseButton: true,
-        });
+        toastAlert("El/los turnos han sidos agendados con éxito!","success");
         //si sale bien alerta con success turnos
       } catch (error) {
         setLoader(false);
+        toastAlert("Error al agendar el/los turnos.", "error");
+
         console.log(error);
       }
     }
