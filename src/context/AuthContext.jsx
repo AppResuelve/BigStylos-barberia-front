@@ -51,14 +51,20 @@ const AuthProvider = ({ children }) => {
             }
           },
           allowOutsideClick: false, // Evita cerrar el modal al hacer clic fuera de él
-        }).then((result) => {
+        }).then(async (result) => {
           if (result.isConfirmed) {
             // Aquí manejas el número de teléfono ingresado
-            const phoneNumber = result.value;
-            toastAlert(`Tú número ha sido guardado!`, "success");
-
-           
-            // Puedes enviar este número al servidor o guardarlo en el estado de tu aplicación
+            try {
+              const phoneNumber = result.value;
+              const res = await axios.put(`${VITE_BACKEND_URL}/users/update`, {
+                email: response.data.email,
+                newPhoneNumber: phoneNumber,
+              });
+              toastAlert("Telefono guardado exitosamente!", "success");
+            } catch (error) {
+              toastAlert("Error al guardar el numero de teléfono.", "error");
+              console.error("Error al cambiar el numero de teléfono:", error);
+            }
           }
         });
       }
