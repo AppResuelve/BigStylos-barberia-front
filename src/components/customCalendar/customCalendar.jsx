@@ -73,7 +73,7 @@ const CustomCalendar = ({
 
   return (
     <div className="div-container-calendar">
-      <Box className={"line7day-query600px"}>
+      <Box className={"line7day"}>
         {daysOfWeek.map((day) => (
           <h4
             key={day}
@@ -84,7 +84,7 @@ const CustomCalendar = ({
         ))}
       </Box>
 
-      <Box className={"line7-query600px"}>
+      <Box className={"line7-calendar"}>
         {daysCalendarCustom.month1.map((day, index) => {
           let dayName = obtainDayName(day, currentMonth, currentYear);
           let disabled = false;
@@ -265,7 +265,7 @@ const CustomCalendar = ({
                 letterSpacing: "1px",
               }}
             >
-              No laborable
+              Día no laborable
             </h4>
           </Box>
           <Box sx={{ display: "flex", alignItems: "center", margin: "5px" }}>
@@ -284,7 +284,7 @@ const CustomCalendar = ({
                 letterSpacing: "1px",
               }}
             >
-              Día laborable
+              Día de trabajo
             </h4>
           </Box>
         </Box>

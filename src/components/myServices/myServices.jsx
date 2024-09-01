@@ -19,7 +19,7 @@ import toastAlert from "../../helpers/alertFunction";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const MyServices = ({
-  workerData,
+  userData,
   refresh,
   setRefresh,
   services,
@@ -69,7 +69,7 @@ const MyServices = ({
 
   const handleCancel = () => {
     setShowEdit(false);
-    setTimeEdit(workerData.services);
+    setTimeEdit(userData.services);
     setChangeNoSaved(false);
   };
 
@@ -82,7 +82,7 @@ const MyServices = ({
     } else {
       try {
         const response = await axios.put(`${VITE_BACKEND_URL}/users/update`, {
-          email: workerData.email,
+          email: userData.email,
           newServicesDuration: timeEdit,
         });
         toastAlert("Cambios guardados exitosamente.", "success");

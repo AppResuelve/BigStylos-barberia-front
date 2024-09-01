@@ -19,27 +19,24 @@ import Swal from "sweetalert2";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const WorkerAcordeon = ({ user }) => {
+const WorkerAcordeon = ({ userData }) => {
   const {
     darkMode,
     redirectToMyServices,
     setRedirectToMyServices,
     refreshForWhoIsComing,
     setRefreshForWhoIsComing,
-    setShowAlert,
   } = useContext(ThemeContext);
   const [changeNoSaved, setChangeNoSaved] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [schedule, setSchedule] = useState({});
-  const [workerData, setWorkerData] = useState({});
   const [refresh, setRefresh] = useState(false);
   const [pendingServices, setPendingServices] = useState(false);
   const [doCeroServices, setDoCeroServices] = useState(false);
+  const { xs, sm, md, lg, xl } = useMediaQueryHook();
   /* estados locales del componente myServices */
   const [services, setServices] = useState([]);
   const [timeEdit, setTimeEdit] = useState({});
-
-  const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
   useEffect(() => {
     if (timeEdit && Object.keys(timeEdit).length > 0 && services.length > 0) {
@@ -65,8 +62,7 @@ const WorkerAcordeon = ({ user }) => {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/services/`);
         const arrServices = convertToServicesArray(response.data); //pasamos a array de obj servicio antes de setear
-        setServices(arrServices);
-      } catch (error) {
+        setServices(arrServices);      } catch (error) {
         console.error("Error al obtener los servicios:", error);
         alert("Error al obtener los servicios");
       }
@@ -87,21 +83,12 @@ const WorkerAcordeon = ({ user }) => {
     fetchSchedule();
   }, []);
 
+  // Efecto para inicializar timeEdit con userData.services
   useEffect(() => {
-    const fetchWorker = async () => {
-      try {
-        const response = await axios.post(`${VITE_BACKEND_URL}/users/byemail`, {
-          email: user.email,
-        });
-        setWorkerData(response.data);
-        setTimeEdit(response.data.services);
-      } catch (error) {
-        console.error("Error al obtener los dias:", error);
-        alert("Error al obtener los dias");
-      }
-    };
-    fetchWorker();
-  }, [refresh]);
+    if (userData && userData.services) {
+      setTimeEdit(userData.services);
+    }
+  }, [userData]);
 
   const handleChange = (panel) => (event, isExpanded) => {
     if (changeNoSaved) {
@@ -169,16 +156,16 @@ const WorkerAcordeon = ({ user }) => {
             </h2>
           </AccordionSummary>
           <AccordionDetails>
-            {expanded === "panel1" && Object.keys(workerData).length > 0 && (
+            {expanded === "panel1" && Object.keys(userData).length > 0 && (
               <CreateWorkDays
-                user={workerData}
+                userData={userData}
                 schedule={schedule}
                 doCeroServices={doCeroServices}
                 pendingServices={pendingServices}
                 setRefreshForWhoIsComing={setRefreshForWhoIsComing}
               />
             )}
-            {expanded === "panel1" && Object.keys(workerData).length < 1 && (
+            {expanded === "panel1" && Object.keys(userData).length < 1 && (
               <LinearProgress />
             )}
             {services !== 1 && services.length == 0 && (
@@ -263,7 +250,7 @@ const WorkerAcordeon = ({ user }) => {
           <AccordionDetails>
             {(expanded === "panel2" || redirectToMyServices) && (
               <MyServices
-                workerData={workerData}
+                userData={userData}
                 refresh={refresh}
                 setRefresh={setRefresh}
                 services={services}
@@ -314,7 +301,7 @@ const WorkerAcordeon = ({ user }) => {
           </AccordionSummary>
           <AccordionDetails>
             <WhoIsComingWorker
-              user={user}
+              userData={userData}
               refreshForWhoIsComing={refreshForWhoIsComing}
               setRefreshForWhoIsComing={setRefreshForWhoIsComing}
             />
@@ -357,7 +344,7 @@ const WorkerAcordeon = ({ user }) => {
             </h2>
           </AccordionSummary>
           <AccordionDetails>
-            <CancelledTurnsForWorker user={user} />
+            <CancelledTurnsForWorker userData={userData} />
           </AccordionDetails>
         </Accordion>
       </Box>

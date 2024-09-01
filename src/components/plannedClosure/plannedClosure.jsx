@@ -5,6 +5,9 @@ import { Box, Button } from "@mui/material";
 import Swal from "sweetalert2";
 import axios from "axios";
 import toastAlert from "../../helpers/alertFunction";
+import AddIcon from "@mui/icons-material/Add";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const PlannedClosure = ({ schedule }) => {
@@ -15,6 +18,10 @@ const PlannedClosure = ({ schedule }) => {
   const [refresh, setRefresh] = useState(false);
   const [days, setDays] = useState({}); // dias para calendario
   const [loading, setLoading] = useState(true);
+  const [toggle, setToggle] = useState({
+    add: false,
+    remove: false,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,20 +45,47 @@ const PlannedClosure = ({ schedule }) => {
     fetchData();
   }, [refresh]);
 
-  const handleEdit = () => {
-    setShowEdit(true);
-  };
-
   const handleCancel = () => {
     setDayIsSelected({});
     setShowEdit(false);
+    setToggle({
+      add: false,
+      remove: false,
+    });
+  };
+
+  const handleToggle = (action) => {
+    if (action === "add") {
+      setShowEdit(true);
+      setToggle({
+        add: true,
+        remove: false,
+      });
+    } else if (action === "add-discard") {
+      setToggle({
+        add: false,
+        remove: false,
+      });
+      setShowEdit(false);
+    } else if (action === "remove") {
+      setShowEdit(true);
+      setToggle({
+        add: false,
+        remove: true,
+      });
+    } else {
+      setToggle({
+        add: false,
+        remove: false,
+      });
+      setShowEdit(false);
+    }
+    setDayIsSelected({});
   };
 
   const handleSubmit = async () => {
-    let confirm = false;
     let day = Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]]);
     let month = Object.keys(dayIsSelected)[0];
-
     if (days[month] && days[month][day] && days[month][day].turn) {
       Swal.fire({
         title: `Estas por cancelar los turnos del día ${day}/${month}, deseas continuar?`,
@@ -61,20 +95,22 @@ const PlannedClosure = ({ schedule }) => {
         denyButtonText: "Más tarde",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          confirm = true;
           try {
             const response = await axios.put(
-              `${VITE_BACKEND_URL}/schedule/updatenowork`,
+              `${VITE_BACKEND_URL}/schedule/updatenowork&cancelturn`,
               {
-                noWorkDays: dayIsSelected,
+                noWorkDaysCancelTurn: dayIsSelected,
               }
             );
-            toastAlert("Día/s cerrado/s exitosamente.", "success");
+            toastAlert("Día/s deshabilitado/s exitosamente.", "success");
+            handleCancel();
             setRefresh(!refresh);
           } catch (error) {
-            toastAlert("Error al cerrar el/los Día/s.", "error");
-            console.error("Error al obtener los dias:", error);
+            toastAlert("Error al deshabilitar el/los Día/s.", "error");
+            console.error("Error al deshabilitar el/los Día/s.", error);
           }
+        } else {
+          return;
         }
       });
     } else {
@@ -85,11 +121,12 @@ const PlannedClosure = ({ schedule }) => {
             noWorkDays: dayIsSelected,
           }
         );
-        toastAlert("Día/s cerrado/s exitosamente.", "success");
+        toastAlert("Día/s habilitado/s exitosamente.", "success");
+        handleCancel();
         setRefresh(!refresh);
       } catch (error) {
-        toastAlert("Error al cerrar el/los Día/s.", "error");
-        console.error("Error al obtener los dias:", error);
+        toastAlert("Error al habilitar el/los Día/s.", "error");
+        console.error("Error al habilitar el/los Día/s.", error);
       }
     }
   };
@@ -113,42 +150,63 @@ const PlannedClosure = ({ schedule }) => {
         setDayIsSelected={setDayIsSelected}
         days={days}
         showEdit={showEdit}
+        toggle={toggle}
       />
       <Box sx={{ marginTop: "12px" }}>
-        {showEdit === false && (
-          <Button onClick={handleEdit}>
-            <BorderColorIcon />
-          </Button>
-        )}
-        {showEdit === true && (
-          <Box
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Button
-              onClick={handleCancel}
-              variant="outlined"
-              style={{ border: "2px solid" }}
-            >
-              <h4
-                style={{ fontFamily: "Jost, sans-serif", fontWeight: "bold" }}
+        <Box
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ display: "flex" }}>
+            {toggle.add ? (
+              <Button
+                variant="outlined"
+                onClick={() => handleToggle("add-discard")}
               >
-                Volver
-              </h4>
-            </Button>
-            <Button
-              disabled={Object.keys(dayIsSelected).length > 0 ? false : true}
-              color="error"
-              onClick={handleSubmit}
-              variant="contained"
-            >
-              <h4 style={{ fontFamily: "Jost, sans-serif" }}>cerrar días</h4>
-            </Button>
-          </Box>
-        )}
+                Descartar
+              </Button>
+            ) : (
+              <Button
+                // variant={toggle.add ? "outlined" : "contained"}
+                onClick={() => handleToggle("add")}
+              >
+                <AddIcon />
+              </Button>
+            )}
+            <hr
+              style={{
+                border: "2px solid",
+                borderRadius: "10px",
+                margin: "0px 6px",
+                color: "lightgray",
+              }}
+            />
+
+            {toggle.remove ? (
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => handleToggle("remove-discard")}
+              >
+                Descartar
+              </Button>
+            ) : (
+              <Button color="error" onClick={() => handleToggle("remove")}>
+                <DeleteOutlineIcon />
+              </Button>
+            )}
+          </div>
+          <Button
+            disabled={Object.keys(dayIsSelected).length > 0 ? false : true}
+            onClick={handleSubmit}
+            variant="contained"
+          >
+            Guardar
+          </Button>
+        </Box>
       </Box>
     </div>
   );
