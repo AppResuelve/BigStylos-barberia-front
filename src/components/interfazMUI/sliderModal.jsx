@@ -12,7 +12,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const SliderModal = ({
-  user,
+  userData,
   isOpen,
   setIsOpen,
   setSubmit,
@@ -25,7 +25,6 @@ const SliderModal = ({
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [timeResult, setTimeResult] = useState([]); // aca estaran los values convertidos a time de back
   const handleClose = () => setIsOpen(false);
-
 
   const obtenerDuracionMaxima = (obj) => {
     let duracionMaxima = 0;
@@ -42,7 +41,7 @@ const SliderModal = ({
     return duracionMaxima;
   };
 
-  const maxDelay = obtenerDuracionMaxima(user);
+  const maxDelay = obtenerDuracionMaxima(userData);
 
   const [values, setValues] = useState([
     [660, 840],

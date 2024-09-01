@@ -7,7 +7,7 @@ import "../cancelledTurnsForAdmin/cancelledTurns.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const CancelledTurnsForWorker = ({ user }) => {
+const CancelledTurnsForWorker = ({ userData }) => {
   const { darkMode } = useContext(ThemeContext);
   const [cancelledTurnsByDays, setCancelledTurnsByDays] = useState([]);
   const [count, setCount] = useState([]);
@@ -21,7 +21,7 @@ const CancelledTurnsForWorker = ({ user }) => {
       try {
         const response = await axios.post(
           `${VITE_BACKEND_URL}/cancelledturns/getcount`,
-          { emailWorker: user.email }
+          { emailWorker: userData.email }
         );
         const { data } = response;
         setCount(data);
@@ -38,7 +38,7 @@ const CancelledTurnsForWorker = ({ user }) => {
       try {
         const response = await axios.post(
           `${VITE_BACKEND_URL}/cancelledturns/getforworker`,
-          { emailWorker: user.email, month: numberMonth, day: numberDay }
+          { emailWorker: userData.email, month: numberMonth, day: numberDay }
         );
         const { data } = response;
         setCancelledTurnsByDays(data);
@@ -74,7 +74,7 @@ const CancelledTurnsForWorker = ({ user }) => {
       >
         <Box
           style={{
-            display:"flex",
+            display: "flex",
             width: "100%",
             maxWidth: "900px",
             overflow: "auto",

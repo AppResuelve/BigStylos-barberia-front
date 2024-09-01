@@ -17,6 +17,7 @@ import { checkChangeToSave } from "../../helpers/checkChangeToSave";
 import Swal from "sweetalert2";
 import "./personalization.css";
 import axios from "axios";
+import toastAlert from "../../helpers/alertFunction";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const VITE_CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
@@ -367,15 +368,7 @@ const Personalization = ({
               servicesWithImg: someServiceToUpdate,
             }
           );
-          Swal.fire({
-            title: "Cambios de servicios guardados exitosamente.",
-            icon: "success",
-            timer: 3000,
-            toast: true,
-            position: "bottom-end",
-            showConfirmButton: false,
-            showCloseButton: true,
-          });
+          toastAlert("Cambios de servicios guardados exitosamente.", "success");
           setRefreshServices(!refreshServices);
           setDisableSaveBtn((prevState) => {
             const saveBtn = { ...prevState };
@@ -391,6 +384,8 @@ const Personalization = ({
           });
           setShowEdit(false);
         } catch (error) {
+          toastAlert("Error al actulizar los servicios.", "error");
+
           console.error("Error al actulizar los servicios", error);
         }
       }

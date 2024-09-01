@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import daysMonthCalendarCustom from "../../functions/daysMonthCalendarCustom";
 import getToday from "../../functions/getToday";
 import obtainDayName from "../../functions/obtainDayName";
-import "./customCalendar2.css";
+import "./customCalendar.css";
 import axios from "axios";
 import ThemeContext from "../../context/ThemeContext";
 
@@ -60,65 +60,15 @@ const CustomCalendarTurns = ({
       alert("Error al obtener los horarios");
     }
   };
-  // if (Object.keys(user).length > 0 && user.phone === "") {
-  //   setShowAlert({
-  //     isOpen: true,
-  //     message: "Por única vez debes ingresar tu numero de celular",
-  //     type: "info",
-  //     button1: {
-  //       text: "aceptar",
-  //       action: "submit",
-  //     },
-  //     buttonClose: {
-  //       text: "phone",
-  //     },
-  //   });
-  // } else if (Object.keys(user).length > 0 && user.isDelete === false) {
-  //   setIsOpen(true);
-  // } else if (user.isDelete === true) {
-  //   setShowAlert({
-  //     isOpen: true,
-  //     message: "Has sido inhabilitado por incumplir las normas",
-  //     type: "error",
-  //     button1: {
-  //       text: "",
-  //       action: "",
-  //     },
-  //     buttonClose: {
-  //       text: "aceptar",
-  //     },
-  //   });
-  // } else if (user === false) {
-  //   setShowAlert({
-  //     isOpen: true,
-  //     message: "Debes estar loggeado para agendar un turno",
-  //     type: "warning",
-  //     button1: {
-  //       text: "login",
-  //       action: "login",
-  //     },
-  //     buttonClose: {
-  //       text: "cancelar",
-  //     },
-  //   });
-  // }
 
   return (
-    <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          width: "100%",
-          maxWidth: "550px",
-          height: "",
-          // padding: "10px",
-          alignItems: "center",
-          margin: "50px 0px 50px 0px",
-          borderRadius: "30px",
-        }}
-      >
+    <div
+      style={{
+        width: "100%",
+        display: "flex",
+      }}
+    >
+      <div className="div-container-calendar">
         <div className="line7day">
           {daysOfWeek.map((day) => (
             <h4
@@ -153,7 +103,7 @@ const CustomCalendarTurns = ({
             return (
               <button
                 key={index}
-                className={disable ? "month1-false-turns" : "month1-turns"}
+                className={disable ? "month1-false" : "month1"}
                 onClick={() => getTime(day, currentMonth)}
                 disabled={disable}
                 style={{
@@ -203,7 +153,7 @@ const CustomCalendarTurns = ({
             return (
               <button
                 key={index + 100}
-                className={disable ? "month2-false-turns" : "month2-turns"}
+                className={disable ? "month2-false" : "month2"}
                 onClick={() => getTime(day, nextMonth)}
                 disabled={disable}
                 style={{

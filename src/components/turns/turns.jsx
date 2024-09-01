@@ -42,7 +42,7 @@ const Turns = ({ turnsCart, setTurnsCart, auxCart, setAuxCart }) => {
   useEffect(() => {
     if (userData === false) {
       Swal.fire({
-        title: "Debes estar loggeado para reservar",
+        title: "Debes estar loggeado para reservar.",
         confirmButtonText: "Ok",
       }).then(() => {
         navigate("/");
@@ -159,7 +159,6 @@ const Turns = ({ turnsCart, setTurnsCart, auxCart, setAuxCart }) => {
   const handleSelectTime = (btn) => {
     setTurnsCart((prevState) => {
       // Si ya hay 3 elementos, no hacer nada
-      console.log();
       
       if (prevState.length >= 3) return prevState;
       let copyState = [...prevState];

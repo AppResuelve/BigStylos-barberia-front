@@ -15,10 +15,11 @@ import axios from "axios";
 import "../interfazUiverse.io/checkBox.css";
 import Swal from "sweetalert2";
 import serviceIcon from "../../assets/icons/review.png";
+import toastAlert from "../../helpers/alertFunction";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const MyServices = ({
-  workerData,
+  userData,
   refresh,
   setRefresh,
   services,
@@ -68,7 +69,7 @@ const MyServices = ({
 
   const handleCancel = () => {
     setShowEdit(false);
-    setTimeEdit(workerData.services);
+    setTimeEdit(userData.services);
     setChangeNoSaved(false);
   };
 
@@ -81,29 +82,13 @@ const MyServices = ({
     } else {
       try {
         const response = await axios.put(`${VITE_BACKEND_URL}/users/update`, {
-          email: workerData.email,
+          email: userData.email,
           newServicesDuration: timeEdit,
         });
-         Swal.fire({
-           title: "Cambios guardados exitosamente",
-           icon: "success",
-           timer: 3000,
-           toast: true,
-           position: "bottom-end",
-           showConfirmButton: false,
-           showCloseButton: true,
-         });
+        toastAlert("Cambios guardados exitosamente.", "success");
         setRefresh(!refresh);
       } catch (error) {
-          Swal.fire({
-            title: "Error al actulizar los servicios",
-            icon: "error",
-            timer: 3000,
-            toast: true,
-            position: "bottom-end",
-            showConfirmButton: false,
-            showCloseButton: true,
-          });
+        toastAlert("Error al actulizar los servicios.", "error");
         console.error("Error al actulizar los servicios", error);
       }
       setShowEdit(false);

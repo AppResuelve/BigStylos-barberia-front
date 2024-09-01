@@ -10,7 +10,7 @@ import "../whoIsComingAdmin/whoIsComing.css";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const WhoIsComingWorker = ({
-  user,
+  userData,
   refreshForWhoIsComing,
   setRefreshForWhoIsComing,
 }) => {
@@ -36,7 +36,7 @@ const WhoIsComingWorker = ({
       try {
         const response = await axios.post(
           `${VITE_BACKEND_URL}/workdays/countworker`,
-          { emailWorker: user.email }
+          { emailWorker: userData.email }
         );
         const { data } = response;
         setCount(data);
@@ -56,7 +56,7 @@ const WhoIsComingWorker = ({
       try {
         const response = await axios.post(
           `${VITE_BACKEND_URL}/workdays/whoiscoming`,
-          { emailWorker: user.email, month: numberMonth, day: numberDay }
+          { emailWorker: userData.email, month: numberMonth, day: numberDay }
         );
         const { data } = response;
         setTurns(data);

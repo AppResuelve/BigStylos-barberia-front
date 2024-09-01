@@ -14,11 +14,12 @@ import obtainDayName from "../../functions/obtainDayName";
 import Swal from "sweetalert2";
 import axios from "axios";
 import "./createWorkDays.css";
+import toastAlert from "../../helpers/alertFunction";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const CreateWorkDays = ({
-  user,
+  userData,
   schedule,
   doCeroServices,
   pendingServices,
@@ -58,7 +59,7 @@ const CreateWorkDays = ({
       try {
         const response = await axios.post(
           `${VITE_BACKEND_URL}/workdays/byemail`,
-          { email: user.email }
+          { email: userData.email }
         );
         const { data } = response;
         setDays(data);
@@ -132,22 +133,22 @@ const CreateWorkDays = ({
     const currentMonth = getCurrentMonth();
     const currentMonth2 = currentMonth == 12 ? 1 : currentMonth + 1;
 
-    const resultDuration = durationMax(user.services, values);
+    const resultDuration = durationMax(userData.services, values);
     if (resultDuration) {
-      const arrayServices = Object.keys(user.services);
+      const arrayServices = Object.keys(userData.services);
       let objServices = {};
       arrayServices.forEach((element) => {
         if (
-          user.services[element].duration != null &&
-          user.services[element].duration != 0
+          userData.services[element].duration != null &&
+          userData.services[element].duration != 0
         ) {
           objServices[element] = {
-            duration: user.services[element].duration,
+            duration: userData.services[element].duration,
             available: true,
           };
         } else {
           objServices[element] = {
-            duration: user.services[element].duration,
+            duration: userData.services[element].duration,
             available: false,
           };
         }
@@ -162,9 +163,9 @@ const CreateWorkDays = ({
           submitArray.push({
             month: Object.keys(dayIsSelected)[0],
             day: Number(element),
-            email: user.email,
-            name: user.name,
-            image: user.image,
+            email: userData.email,
+            name: userData.name,
+            image: userData.image,
             time,
             services: objServices,
           });
@@ -181,9 +182,9 @@ const CreateWorkDays = ({
           submitArray.push({
             month: currentMonth2,
             day: Number(element),
-            email: user.email,
-            name: user.name,
-            image: user.image,
+            email: userData.email,
+            name: userData.name,
+            image: userData.image,
             time,
             services: objServices,
           });
@@ -207,16 +208,15 @@ const CreateWorkDays = ({
             }
             return newState;
           });
-          Swal.fire({
-            title: `el día ${submitArray[i].day}/${submitArray[i].month} se creo exitosamente`,
-            icon: "success",
-            timer: 3000,
-            toast: true,
-            position: "bottom-end",
-            showConfirmButton: false,
-            showCloseButton: true,
-          });
+          toastAlert(
+            `el día ${submitArray[i].day}/${submitArray[i].month} se creo exitosamente`,
+            "success"
+          );
         } catch (error) {
+           toastAlert(
+             `Error al crear el día ${submitArray[i].day}/${submitArray[i].month}`,
+             "error"
+           );
           console.error(
             `Error al crear el día ${submitArray[i].day}/${submitArray[i].month}`,
             error
@@ -258,23 +258,22 @@ const CreateWorkDays = ({
               {
                 month,
                 day,
-                email: user.email,
-                name: user.name
+                email: userData.email,
+                name: userData.name,
               }
             );
-            Swal.fire({
-              title: `el día ${day}/${month} se borró exitosamente`,
-              icon: "success",
-              timer: 3000,
-              toast: true,
-              position: "bottom-end",
-              showConfirmButton: false,
-              showCloseButton: true,
-            });
+             toastAlert(
+               `el día ${day}/${month} se borró exitosamente`,
+               "success"
+             );
             setDayIsSelected({});
             setRefreshDays(true);
             setRefreshForWhoIsComing(true);
           } catch (error) {
+             toastAlert(
+               `Error al borrar el día ${day}/${month}`,
+               "error"
+             );
             console.error("Error al borrar el dia:", error);
           }
         }
@@ -286,22 +285,15 @@ const CreateWorkDays = ({
           {
             month,
             day,
-            email: user.email,
+            email: userData.email,
           }
         );
-        Swal.fire({
-          title: `el día ${day}/${month} se borró exitosamente`,
-          icon: "success",
-          timer: 3000,
-          toast: true,
-          position: "bottom-end",
-          showConfirmButton: false,
-          showCloseButton: true,
-        });
+         toastAlert(`el día ${day}/${month} se borró exitosamente`, "success");
         setDayIsSelected({});
         setRefreshDays(true);
         setRefreshForWhoIsComing(true);
       } catch (error) {
+         toastAlert(`Error al borrar el día ${day}/${month}`, "error");
         console.error("Error al borrar el dia:", error);
       }
     }
@@ -487,7 +479,7 @@ const CreateWorkDays = ({
         </Grid>
         {/* sección del slider */}
         <SliderModal
-          user={user}
+          userData={userData}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           setSubmit={setSubmit}

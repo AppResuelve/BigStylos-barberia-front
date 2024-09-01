@@ -13,14 +13,13 @@ import "./App.css";
 
 function App() {
   const location = useLocation();
-  const [clientName, setClientName] = useState("");
   const [turnsCart, setTurnsCart] = useState([]);
   const [auxCart, setAuxCart] = useState({});
 
   return (
     <ThemeProvider>
       <AuthProvider>
-        <div >
+        <div>
           {location.pathname !== "/requestDenied401" && <Nav />}
           <Routes>
             <Route path="/" element={<Home />} />

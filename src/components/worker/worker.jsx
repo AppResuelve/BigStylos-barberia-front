@@ -50,7 +50,7 @@ const Worker = () => {
           >
             Administración del profesional
           </h1>
-          <WorkerAcordeon user={userData} />
+          <WorkerAcordeon userData={userData} />
         </div>
       ) : null}
     </div>
