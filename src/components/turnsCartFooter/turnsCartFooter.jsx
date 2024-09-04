@@ -1,35 +1,24 @@
-import { useEffect, useState } from "react";
-import { initMercadoPago } from "@mercadopago/sdk-react";
+import { useContext, useEffect, useState } from "react";
+import CartContext from "../../context/CartContext";
 import formatHour from "../../functions/formatHour";
 import backIcon from "../../assets/icons/back.png";
 import trashIcon from "../../assets/icons/trash.png";
-import "./turnsCartFooter.css";
-import axios from "axios";
 import { LoaderToBuy } from "../loaders/loaders";
 import { setCookie } from "../../helpers/cookies";
 import { setLocalStorage } from "../../helpers/localStorage";
-import Swal from "sweetalert2";
 import toastAlert from "../../helpers/alertFunction";
-const VITE_MERCADO_PAGO_PUBLIC_KEY = import.meta.env
-  .VITE_MERCADO_PAGO_PUBLIC_KEY;
+import axios from "axios";
+import "./turnsCartFooter.css";
+
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const TurnsCartFooter = ({ turnsCart, setTurnsCart, setAuxCart }) => {
+const TurnsCartFooter = () => {
+  const { turnsCart, setTurnsCart, setAuxCart, setDayIsSelected } =
+    useContext(CartContext);
+
   const [openCart, setOpenCart] = useState(false);
   const [urlInitPoint, setUrlInitPoint] = useState(null);
   const [loader, setLoader] = useState(false);
-
-  initMercadoPago(VITE_MERCADO_PAGO_PUBLIC_KEY, {
-    locale: "es-AR",
-  });
-
-  const handleToggleCart = () => {
-    setOpenCart((prevOpenCart) => {
-      const newOpenCart = !prevOpenCart;
-      window.history.pushState({ openCart: newOpenCart }, "");
-      return newOpenCart;
-    });
-  };
 
   useEffect(() => {
     // Manejar el evento de popstate
@@ -49,7 +38,18 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart, setAuxCart }) => {
       window.removeEventListener("popstate", handlePopState);
     };
   }, []);
+  // Si no hay turnos en el carrito, no renderizar nada
+  if (turnsCart.length === 0) {
+    return null; // No renderiza nada
+  }
 
+  const handleToggleCart = () => {
+    setOpenCart((prevOpenCart) => {
+      const newOpenCart = !prevOpenCart;
+      window.history.pushState({ openCart: newOpenCart }, "");
+      return newOpenCart;
+    });
+  };
   const handleAdd = (turn) => {
     setTurnsCart((prevState) => {
       return prevState.map((t) => {
@@ -106,12 +106,10 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart, setAuxCart }) => {
         setUrlInitPoint(response.data.init_point);
         setLocalStorage("CART_ID", response.data.turns);
         setCookie("PREFERENCE_ID", response.data.preference_id, 4);
-        setTurnsCart([]);
         setLoader(false);
         setTimeout(() => {
           window.location.href = response.data.init_point;
         }, 3000);
-        // Redirigir después de establecer la URL de redirección
       } catch (error) {
         setLoader(false);
         console.log(error);
@@ -124,8 +122,8 @@ const TurnsCartFooter = ({ turnsCart, setTurnsCart, setAuxCart }) => {
         setLoader(false);
         setTurnsCart([]);
         setAuxCart({});
-        toastAlert("El/los turnos han sidos agendados con éxito!","success");
-        //si sale bien alerta con success turnos
+        setDayIsSelected([]);
+        toastAlert("El/los turnos han sidos agendados con éxito!", "success");
       } catch (error) {
         setLoader(false);
         toastAlert("Error al agendar el/los turnos.", "error");

@@ -1,0 +1,135 @@
+.header-DeleteServicesModal {
+      width: 100%;
+      display: flex;
+      padding: 10px;
+      justify-content: space-between;
+}
+
+.header-DeleteServicesModal h1 {
+      margin-top: 2px;
+      font-size: 22px;
+}
+
+.header-DeleteServicesModal img {
+      width: 15px;
+      height: 15px;
+}
+
+.body-DeleteServicesModal {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 10px;
+}
+
+.div-category-DelServiceModal {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 12px;
+      transition: .2s;
+}
+
+
+.div-category-DelServiceModal span {
+      font-weight: bold;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 2px;
+}
+
+
+.div-category-DelServiceModal:hover {
+      background-color: lightgray;
+}
+
+.div-service-DelServiceModal {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      margin: 4px 0px 4px 0px;
+      padding: 4px;
+      border-radius: 12px;
+      transition: .2s;
+      cursor: pointer;
+}
+
+.div-service-DelServiceModal:hover {
+      background-color: lightgray;
+}
+
+.div-service-DelServiceModal span {
+      font-weight: bold;
+      padding: 4px;
+}
+
+.footer-DeleteServicesModal {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+}
+
+/* Hide the default checkbox */
+/* .container-checkbox input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+      display: none;
+} */
+
+/* .container-checkbox {
+      display: block;
+      position: relative;
+      cursor: pointer;
+      font-size: 20px;
+      user-select: none;
+      border-radius: 11px;
+} */
+
+/* Create a custom checkbox */
+/* .checkmark {
+      position: relative;
+      top: 0;
+      left: 0;
+      height: 30px;
+      width: 30px;
+      background: rgb(221, 221, 221);
+      border-radius: 10px;
+      box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.30), 0px 1px 1px rgba(0, 5);
+} */
+
+/* When the checkbox is checked, add a blue background */
+/* .container-checkbox input:checked~.checkmark {
+      background-image: linear-gradient(#ff4800eb, #ff4800eb)
+} */
+
+/* Create the checkmark/indicator (hidden when not checked) */
+/* .checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+} */
+
+/* Show the checkmark when checked */
+/* .container-checkbox input:checked~.checkmark:after {
+      display: block;
+} */
+
+/* Style the checkmark/indicator */
+/* .container-checkbox .checkmark:after {
+      left: calc(50% - 5px);
+      top: calc(50% - 13px);
+      width: 7px;
+      height: 18px;
+      border: solid white;
+      border-radius: 2px;
+      border-width: 0 0.15em 0.15em 0;
+      transform: rotate(45deg);
+} */

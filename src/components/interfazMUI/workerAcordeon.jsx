@@ -62,7 +62,8 @@ const WorkerAcordeon = ({ userData }) => {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/services/`);
         const arrServices = convertToServicesArray(response.data); //pasamos a array de obj servicio antes de setear
-        setServices(arrServices);      } catch (error) {
+        setServices(arrServices);
+      } catch (error) {
         console.error("Error al obtener los servicios:", error);
         alert("Error al obtener los servicios");
       }
@@ -155,7 +156,7 @@ const WorkerAcordeon = ({ userData }) => {
               Dias de trabajo
             </h2>
           </AccordionSummary>
-          <AccordionDetails>
+          <AccordionDetails sx={{ p: 1 }}>
             {expanded === "panel1" && Object.keys(userData).length > 0 && (
               <CreateWorkDays
                 userData={userData}

@@ -1,8 +1,9 @@
 import { useEffect, useState, useContext } from "react";
 import ThemeContext from "../../context/ThemeContext";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
+import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
 import AddIcon from "@mui/icons-material/Add";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+
 import { Box, Button } from "@mui/material";
 import axios from "axios";
 import toastAlert from "../../helpers/alertFunction";
@@ -131,7 +132,7 @@ const WorkDays = ({ schedule, refresh, setRefresh, setChangeNoSaved }) => {
                     }}
                     onClick={() => handleChange("remove", index)}
                   >
-                    <DeleteOutlineIcon
+                    <DeleteRoundedIcon
                       style={{ color: darkMode.on ? "white" : darkMode.dark }}
                     />
                   </button>
@@ -159,7 +160,7 @@ const WorkDays = ({ schedule, refresh, setRefresh, setChangeNoSaved }) => {
       <Box>
         {showEdit === false && (
           <Button onClick={handleEdit} style={{ marginBottom: "5px" }}>
-            <BorderColorIcon />
+            <CreateRoundedIcon />
           </Button>
         )}
         {showEdit === true && (
@@ -194,7 +195,7 @@ const WorkDays = ({ schedule, refresh, setRefresh, setChangeNoSaved }) => {
                 disabled={toggle === false ? true : false}
                 onClick={() => handleShowAddRemove("remove")}
               >
-                <DeleteOutlineIcon />
+                <DeleteRoundedIcon />
               </Button>
             </Box>
             <Button onClick={handleSubmit} variant="contained">

@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import ThemeContext from "../../context/ThemeContext";
+import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import daysMonthCalendarCustom from "../../functions/daysMonthCalendarCustom";
 import getToday from "../../functions/getToday";
 import obtainDayName from "../../functions/obtainDayName";
@@ -20,6 +21,7 @@ const CustomCalendarPlannedC = ({
 }) => {
   const { darkMode } = useContext(ThemeContext);
   const daysCalendarCustom = daysMonthCalendarCustom(amountOfDays, false);
+  const { xs, sm, md, lg, xl } = useMediaQueryHook();
   let { currentMonth, nextMonth, currentYear, nextYear, month1, month2 } =
     daysCalendarCustom;
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
@@ -79,6 +81,7 @@ const CustomCalendarPlannedC = ({
     }
   };
 
+  // let arr = [1, 2, 3, 4, 5, 6, 7];
   return (
     <div className="div-container-calendar">
       <Box className="line7day">
@@ -97,6 +100,7 @@ const CustomCalendarPlannedC = ({
           let dayName = obtainDayName(day, currentMonth, currentYear);
           let disabled = false;
           let colorDay = "white";
+          let eventNone = false;
           if (
             days &&
             days[currentMonth] &&
@@ -119,21 +123,21 @@ const CustomCalendarPlannedC = ({
             (toggle.remove && colorDay !== "gray") ||
             (toggle.add && colorDay !== "#e6b226d0" && colorDay !== "white")
           ) {
-            disabled = true;
+            eventNone = true;
           }
           return (
             <div
-              key={index}
+              key={index + 100}
               style={{
                 position: "relative",
+                gridColumnStart: index === 0 ? getDayPosition : "auto",
               }}
             >
               <button
-                disabled={!showEdit ? true : disabled}
-                className={!showEdit || disabled ? "month1-false" : "month1"}
+                disabled={!showEdit ? true : eventNone || disabled}
+                className="month1"
                 onClick={() => handleDay(day, currentMonth)}
                 style={{
-                  gridColumnStart: index === 0 ? getDayPosition : "auto",
                   backgroundColor:
                     dayIsSelected[currentMonth] &&
                     dayIsSelected[currentMonth][day] &&
@@ -142,7 +146,7 @@ const CustomCalendarPlannedC = ({
                       : dayIsSelected[currentMonth] &&
                         dayIsSelected[currentMonth][day] &&
                         toggle.remove
-                      ? "red"
+                      ? "#ff4800eb"
                       : colorDay,
                   cursor: !showEdit
                     ? "not-allowed"
@@ -156,6 +160,10 @@ const CustomCalendarPlannedC = ({
                     : dayIsSelected[currentMonth] &&
                       dayIsSelected[currentMonth][day]
                     ? "white"
+                    : toggle.remove &&
+                      noWork[currentMonth] &&
+                      noWork[currentMonth][day]
+                    ? "darkorange"
                     : "darkblue",
                 }}
               >
@@ -166,18 +174,22 @@ const CustomCalendarPlannedC = ({
               colorDay !== "#e6b226d0" &&
               !disabled ? (
                 <DeleteOutlineIcon
-                  color="error"
+                  onClick={() => handleDay(day, currentMonth)}
                   sx={{
                     position: "absolute",
                     bottom: "calc(0% + 2px)",
                     right: "calc(0% + 2px)",
                     bgcolor: "white",
+                    color: "#ff4800eb",
                     borderRadius: "50px",
+                    width: sm ? "17px" : "24px",
+                    height: sm ? "17px" : "24px",
                   }}
                 />
               ) : toggle.add &&
                 (colorDay === "white" || colorDay === "#e6b226d0") ? (
                 <AddIcon
+                  onClick={() => handleDay(day, currentMonth)}
                   color="info"
                   sx={{
                     position: "absolute",
@@ -185,12 +197,19 @@ const CustomCalendarPlannedC = ({
                     right: "calc(0% + 2px)",
                     bgcolor: "white",
                     borderRadius: "50px",
+                    width: sm ? "17px" : "24px",
+                    height: sm ? "17px" : "24px",
                   }}
                 />
               ) : null}
             </div>
           );
         })}
+        {/* {arr.map((ar) => {
+          return (
+            <button className="month2" disabled></button>
+          )
+        })} */}
         {daysCalendarCustom.month2.map((day, index) => {
           let dayName = obtainDayName(day, nextMonth, nextYear);
           let disabled = false;
@@ -220,53 +239,81 @@ const CustomCalendarPlannedC = ({
             disabled = true;
           }
           return (
-            <button
+            <div
               key={index + 100}
-              disabled={!showEdit ? true : disabled}
-              className={!showEdit || disabled ? "month2-false" : "month2"}
-              onClick={() => handleDay(day, nextMonth)}
               style={{
+                position: "relative",
                 gridColumnStart:
                   month1.length < 1 && index === 0 ? getDayPosition : "auto",
-                backgroundColor:
-                  dayIsSelected[nextMonth] &&
-                  dayIsSelected[nextMonth][day] &&
-                  toggle.add
-                    ? "#2196f3"
-                    : dayIsSelected[nextMonth] &&
-                      dayIsSelected[nextMonth][day] &&
-                      toggle.remove
-                    ? "red"
-                    : colorDay,
-                cursor: !showEdit
-                  ? "not-allowed"
-                  : disabled
-                  ? "auto"
-                  : "pointer",
-                color: disabled
-                  ? "white"
-                  : !showEdit
-                  ? "darkblue"
-                  : dayIsSelected[nextMonth] && dayIsSelected[nextMonth][day]
-                  ? "white"
-                  : "darkblue",
               }}
             >
-              <span>{day}</span>
+              <button
+                key={index + 100}
+                disabled={!showEdit ? true : disabled}
+                className="month2"
+                onClick={() => handleDay(day, nextMonth)}
+                style={{
+                  backgroundColor:
+                    dayIsSelected[nextMonth] &&
+                    dayIsSelected[nextMonth][day] &&
+                    toggle.add
+                      ? "#2196f3"
+                      : dayIsSelected[nextMonth] &&
+                        dayIsSelected[nextMonth][day] &&
+                        toggle.remove
+                      ? "red"
+                      : colorDay,
+                  cursor: !showEdit
+                    ? "not-allowed"
+                    : disabled
+                    ? "auto"
+                    : "pointer",
+                  color: disabled
+                    ? "white"
+                    : !showEdit
+                    ? "darkblue"
+                    : dayIsSelected[nextMonth] && dayIsSelected[nextMonth][day]
+                    ? "white"
+                    : "darkblue",
+                }}
+              >
+                <span>{day}</span>
+              </button>
 
               {toggle.remove &&
-              colorDay !== "#e0e0e0d2" &&
+              colorDay !== "white" &&
               colorDay !== "#e6b226d0" &&
               !disabled ? (
-                <>
-                  {/* <hr /> */}
-                  <DeleteOutlineIcon />
-                </>
+                <DeleteOutlineIcon
+                  onClick={() => handleDay(day, nextMonth)}
+                  sx={{
+                    position: "absolute",
+                    bottom: "calc(0% + 2px)",
+                    right: "calc(0% + 2px)",
+                    bgcolor: "white",
+                    color: "#ff4800eb",
+                    borderRadius: "50px",
+                    width: sm ? "17px" : "24px",
+                    height: sm ? "17px" : "24px",
+                  }}
+                />
               ) : toggle.add &&
-                (colorDay === "#e0e0e0d2" || colorDay === "#e6b226d0") ? (
-                <AddIcon />
+                (colorDay === "white" || colorDay === "#e6b226d0") ? (
+                <AddIcon
+                  onClick={() => handleDay(day, nextMonth)}
+                  color="info"
+                  sx={{
+                    position: "absolute",
+                    bottom: "calc(0% + 2px)",
+                    right: "calc(0% + 2px)",
+                    bgcolor: "white",
+                    borderRadius: "50px",
+                    width: sm ? "17px" : "24px",
+                    height: sm ? "17px" : "24px",
+                  }}
+                />
               ) : null}
-            </button>
+            </div>
           );
         })}
       </Box>
@@ -363,7 +410,7 @@ const CustomCalendarPlannedC = ({
               style={{
                 height: "18px",
                 width: "18px",
-                backgroundColor: "red",
+                backgroundColor: "#ff4800eb",
                 borderRadius: "25px",
               }}
             ></div>

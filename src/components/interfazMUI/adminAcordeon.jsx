@@ -309,7 +309,7 @@ const AdminAcordeon = () => {
               Cierre programado
             </h2>
           </AccordionSummary>
-          <AccordionDetails>
+          <AccordionDetails sx={{ p: 1 }}>
             {Object.keys(schedule).length > 0 && !loading ? (
               <PlannedClosure
                 schedule={schedule}

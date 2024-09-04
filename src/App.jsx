@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
 import { AuthProvider } from "./context/AuthContext.jsx";
+import { CartProvider } from "./context/CartContext.jsx";
 import Nav from "./components/nav/nav.jsx";
 import Home from "./components/home/home.jsx";
 import Turns from "./components/turns/turns.jsx";
@@ -13,40 +13,23 @@ import "./App.css";
 
 function App() {
   const location = useLocation();
-  const [turnsCart, setTurnsCart] = useState([]);
-  const [auxCart, setAuxCart] = useState({});
 
   return (
     <ThemeProvider>
       <AuthProvider>
-        <div>
+        <CartProvider>
           {location.pathname !== "/requestDenied401" && <Nav />}
           <Routes>
+            <Route path="/turns" element={<Turns />} />
             <Route path="/" element={<Home />} />
-            <Route
-              path="/turns"
-              element={
-                <Turns
-                  turnsCart={turnsCart}
-                  setTurnsCart={setTurnsCart}
-                  auxCart={auxCart}
-                  setAuxCart={setAuxCart}
-                />
-              }
-            />
             <Route path="/admin" element={<Admin />} />
             <Route path="/worker" element={<Worker />} />
             <Route path="/requestDenied401" element={<NotFound />} />
           </Routes>
-          {turnsCart.length > 0 &&
-            (location.pathname === "/" || location.pathname === "/turns") && (
-              <TurnsCartFooter
-                turnsCart={turnsCart}
-                setTurnsCart={setTurnsCart}
-                setAuxCart={setAuxCart}
-              />
-            )}
-        </div>
+          {(location.pathname === "/" || location.pathname === "/turns") && (
+            <TurnsCartFooter />
+          )}
+        </CartProvider>
       </AuthProvider>
     </ThemeProvider>
   );
