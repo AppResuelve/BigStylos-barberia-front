@@ -24,6 +24,5 @@ ReactDOM.render(
       </ThemeProvider>
     </BrowserRouter>
   </GoogleOAuthProvider>,
-
   document.getElementById("root")
 );

@@ -1,6 +1,8 @@
 import mercadoPagoIcon from "../../assets/images/mercadopago.png";
 import securePayIcon from "../../assets/icons/secure-pay.png";
 import "./loaders.css";
+import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
+const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
 const LoaderToBuy = ({ redirect }) => {
   return (
@@ -65,4 +67,19 @@ const LoaderPage = () => {
   );
 };
 
-export { LoaderToBuy, LoaderUserReady, LoaderPage };
+const LoaderMapReady = () => {
+  return (
+    <div
+      className="container-loadermapready"
+      style={{
+        height: sm ? "200px" : "300px",
+      }}
+    >
+      <li className="dots-mapready" id="dot-1"></li>
+      <li className="dots-mapready" id="dot-2"></li>
+      <li className="dots-mapready" id="dot-3"></li>
+    </div>
+  );
+};
+
+export { LoaderToBuy, LoaderUserReady, LoaderPage, LoaderMapReady };
