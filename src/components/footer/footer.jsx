@@ -69,7 +69,7 @@ const Footer = () => {
       }}
     >
       {/* Sección svg y div */}
-      <div
+      {/* <div
         className="div-container-custom-shape-divider-and-div"
         style={{
           backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
@@ -96,7 +96,7 @@ const Footer = () => {
             style={{ fill: darkMode.on ? darkMode.dark : darkMode.light }}
           ></path>
         </svg>
-      </div>
+      </div> */}
       <div
         style={{
           display: "flex",
