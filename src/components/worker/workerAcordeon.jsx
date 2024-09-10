@@ -1,5 +1,4 @@
 import { useEffect, useState, useContext } from "react";
-import { useMediaQueryHook } from "./useMediaQuery";
 import ThemeContext from "../../context/ThemeContext";
 import {
   Box,
@@ -16,6 +15,7 @@ import WhoIsComingWorker from "../whoIsComingWorker/whoIsComingWorker";
 import { convertToServicesArray } from "../../helpers/convertCategoryService";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -37,6 +37,13 @@ const WorkerAcordeon = ({ userData }) => {
   /* estados locales del componente myServices */
   const [services, setServices] = useState([]);
   const [timeEdit, setTimeEdit] = useState({});
+
+  // Efecto para inicializar timeEdit con userData.services
+  useEffect(() => {
+    if (userData && userData.services) {
+      setTimeEdit(userData.services);
+    }
+  }, [userData]);
 
   useEffect(() => {
     if (timeEdit && Object.keys(timeEdit).length > 0 && services.length > 0) {
@@ -69,7 +76,7 @@ const WorkerAcordeon = ({ userData }) => {
       }
     };
     fetchServices();
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     const fetchSchedule = async () => {
@@ -83,13 +90,6 @@ const WorkerAcordeon = ({ userData }) => {
     };
     fetchSchedule();
   }, []);
-
-  // Efecto para inicializar timeEdit con userData.services
-  useEffect(() => {
-    if (userData && userData.services) {
-      setTimeEdit(userData.services);
-    }
-  }, [userData]);
 
   const handleChange = (panel) => (event, isExpanded) => {
     if (changeNoSaved) {
@@ -156,7 +156,7 @@ const WorkerAcordeon = ({ userData }) => {
               Dias de trabajo
             </h2>
           </AccordionSummary>
-          <AccordionDetails >
+          <AccordionDetails>
             {expanded === "panel1" && Object.keys(userData).length > 0 && (
               <CreateWorkDays
                 userData={userData}
@@ -257,6 +257,7 @@ const WorkerAcordeon = ({ userData }) => {
                 services={services}
                 timeEdit={timeEdit}
                 setTimeEdit={setTimeEdit}
+                changeNoSaved={changeNoSaved}
                 setChangeNoSaved={setChangeNoSaved}
                 pendingServices={pendingServices}
               />

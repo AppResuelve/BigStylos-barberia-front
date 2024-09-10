@@ -1,7 +1,7 @@
 import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
-import WorkerAcordeon from "../interfazMUI/workerAcordeon";
+import WorkerAcordeon from "./workerAcordeon";
 import { AdminWorkerSkeleton } from "../loaders/skeletons";
 import ThemeContext from "../../context/ThemeContext";
 import AuthContext from "../../context/AuthContext";

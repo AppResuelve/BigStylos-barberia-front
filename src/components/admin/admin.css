@@ -1,0 +1,10 @@
+.container-adminacordeon {
+      display: flex;
+      flex-direction: column;
+      width: 95vw;
+      max-width: 900px;
+}
+
+.span-administration {
+      color: red;
+}
