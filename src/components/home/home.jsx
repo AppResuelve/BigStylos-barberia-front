@@ -1,28 +1,27 @@
 import { useContext, useEffect } from "react";
 import ThemeContext from "../../context/ThemeContext";
 import AuthContext from "../../context/AuthContext";
-import { NavLink, useNavigate } from "react-router-dom";
-import { Box, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { verificateFrontResponse } from "../../helpers/verificateFrontResponseMP";
 import { getCookie } from "../../helpers/cookies";
 import { getLocalStorage } from "../../helpers/localStorage";
 import defaultImg from "../../assets/icons/no-image-logotipe.png";
 import defaultImgLight from "../../assets/icons/no-image-logotipe-light.png";
-import instagram from "../../assets/icons/instagram.png";
-import facebook from "../../assets/icons/facebook.png";
-import whatsapp from "../../assets/icons/whatsapp.png";
+
 import Swal from "sweetalert2";
 import axios from "axios";
 import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
 import "./home.css";
+import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Home = () => {
   const { darkMode, homeImages } = useContext(ThemeContext);
   const { googleLogin } = useContext(AuthContext);
-  const { pageIsReady, setImgLogoLoaded } = useContext(LoadAndRefreshContext);
+  const { setImgLogoLoaded } = useContext(LoadAndRefreshContext);
   const navigate = useNavigate();
+  const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
   useEffect(async () => {
     // Extraer la URL y sus parámetros
@@ -78,11 +77,14 @@ const Home = () => {
       className="container-home"
       style={{
         display: "flex",
-        height: "100vh",
+        height: "100svh",
         flexDirection: "column",
         justifyContent: "space-between",
         alignItems: "center",
         backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
+        // backgroundImage: `url('ruta/a/la/imagen.jpg')`, // Cambia la ruta a tu imagen
+        // backgroundSize: "cover", // Ajusta cómo se escala la imagen
+        // backgroundPosition: "center", // Posiciona la imagen
       }}
     >
       <section className="container-img-logotipo">
@@ -105,59 +107,35 @@ const Home = () => {
           className="image-overlay"
         ></div>
       </section>
-      <section className="section-btn-reservar">
-        <div className="container-btn-reservar">
+      <section
+        className="section-btn-reservar"
+        style={{
+          borderRadius: "20px 20px 0px 0px",
+          background: `linear-gradient(to bottom, lightgray, transparent)`,
+        }}
+      >
+        <div
+          className="container-btn-reservar"
+          style={{
+            display: "flex",
+            flexDirection: md ? "column" : "row",
+          }}
+        >
           <button
             onClick={handleReserveClick}
             className="btn-reservar-home"
-            style={{ color: "white" }}
+            style={{ width: md ? "100%" : "calc(50% - 5px)" }}
           >
             Reservar turno
           </button>
-          <div
-            style={{
-              width: "100%",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
+          <button
+            id="myTurns"
+            onClick={handleReserveClick}
+            className="btn-reservar-home"
+            style={{ width: md ? "100%" : "calc(50% - 5px)" }}
           >
-            <div style={{ display: "flex" }}>
-              <NavLink
-                className="img-social-home-link"
-                to="https://www.instagram.com/"
-                target="-blank"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src={instagram}
-                  alt="instagram"
-                  className="img-social-home"
-                />
-              </NavLink>
-              <NavLink
-                id="fb"
-                className="img-social-home-link"
-                to="https://www.facebook.com/"
-                target="-blank"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src={facebook}
-                  alt="facebook"
-                  className="img-social-home"
-                />
-              </NavLink>
-            </div>
-
-            <a
-              className="img-social-home-link
-              href="
-              whatsapp:target="_blank" //send?phone=+5492983664119&text=Quiero saber cómo obtener una página para mi negocio."
-              rel="noopener noreferrer"
-            >
-              <img className="img-social-home" src={whatsapp} alt="whatsapp" />
-            </a>
-          </div>
+            Mis turnos
+          </button>
         </div>
       </section>
     </div>

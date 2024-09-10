@@ -10,8 +10,12 @@ import babyliss from "../../assets/images/babyliss.png";
 import pantene from "../../assets/images/pantene.png";
 import { Box } from "@mui/material";
 import Maps from "../maps/maps";
+import instagram from "../../assets/icons/instagram.png";
+import facebook from "../../assets/icons/facebook.png";
+import whatsapp from "../../assets/icons/whatsapp.png";
 import "./footer.css";
 import { convertToRGB } from "../../helpers/convertColorToRgb";
+import { NavLink } from "react-router-dom";
 
 const Footer = () => {
   const { darkMode } = useContext(ThemeContext);
@@ -110,7 +114,7 @@ const Footer = () => {
         <span
           style={{
             display: "flex",
-            justifyContent: "center",
+            // justifyContent: "center",
             alignSelf: "center",
             width: "90%",
             fontSize: "20px",
@@ -259,13 +263,14 @@ const Footer = () => {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          width: "90%",
+          width: "95%",
           maxWidth: "900px",
         }}
       >
         <span
           style={{
-            margin: "10px 0px 5px 0px",
+            margin: "10px 0px 5px 15px",
+            fontSize:"18px",
             color: darkMode.on ? "#e6e6e6" : "black",
           }}
         >
@@ -285,6 +290,46 @@ const Footer = () => {
           color: darkMode.on ? "#e6e6e6" : "black",
         }}
       >
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <div style={{ display: "flex" }}>
+            <NavLink
+              className="img-social-home-link"
+              to="https://www.instagram.com/"
+              target="-blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src={instagram}
+                alt="instagram"
+                className="img-social-home"
+              />
+            </NavLink>
+            <NavLink
+              id="fb"
+              className="img-social-home-link"
+              to="https://www.facebook.com/"
+              target="-blank"
+              rel="noopener noreferrer"
+            >
+              <img src={facebook} alt="facebook" className="img-social-home" />
+            </NavLink>
+          </div>
+
+          <a
+            className="img-social-home-link
+              href="
+            whatsapp:target="_blank" //send?phone=+5492983664119&text=Quiero saber cómo obtener una página para mi negocio."
+            rel="noopener noreferrer"
+          >
+            <img className="img-social-home" src={whatsapp} alt="whatsapp" />
+          </a>
+        </div>
         <h4>Olavarria, Bs As, Argentina</h4>
         <h4>Todos los derechos reservados @2024 </h4>
       </div>
