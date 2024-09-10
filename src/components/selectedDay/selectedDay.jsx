@@ -48,10 +48,10 @@ const SelectedDay = ({
         display: "flex",
         flexDirection: "column",
         maxHeight: md ? "250px" : "350px",
-        marginBottom: "10px",
+        margin: md ? "0px 0px 20px 0px" : "50px 0px 20px 0px",
       }}
     >
-      <div stule={{ width: "100%" }}>
+      <div style={{ width: "100%" }}>
         <Button
           variant="outlined"
           sx={{
@@ -61,7 +61,7 @@ const SelectedDay = ({
             height: "35px",
             fontFamily: "Jost, sans serif",
           }}
-          onClick={()=>selectAllDays()}
+          onClick={() => selectAllDays()}
         >
           Seleccionar todo
         </Button>
@@ -75,7 +75,7 @@ const SelectedDay = ({
             height: "35px",
             fontFamily: "Jost, sans serif",
           }}
-          onClick={()=>deselectAllDays()}
+          onClick={() => deselectAllDays()}
         >
           Deseleccionar todo
         </Button>

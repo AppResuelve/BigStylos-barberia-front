@@ -9,12 +9,12 @@ import {
   LinearProgress,
   Autocomplete,
 } from "@mui/material";
-import EditServicesModal from "./editServicesModal";
 import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import axios from "axios";
 import ThemeContext from "../../context/ThemeContext";
 import toastAlert from "../../helpers/alertFunction";
+import DeleteServicesModal from "./deleteServicesModal";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -31,7 +31,7 @@ const Services = ({
   const [categoryServices, setCategoryServices] = useState([]);
   const [editableCatSer, setEditableCatSer] = useState([]);
   const [showEdit, setShowEdit] = useState(false);
-  const [openEdition, setOpenEdition] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
 
   // Estado para los inputs de creacion
   const [inputs, setInputs] = useState({
@@ -174,7 +174,7 @@ const Services = ({
   };
 
   const handleOpenDelete = () => {
-    setOpenEdition(true);
+    setOpenDelete(true);
   };
 
   //handle span
@@ -764,7 +764,7 @@ const Services = ({
         style={{
           display: "flex",
           justifyContent: "space-between",
-          marginTop: "10px",
+          marginTop: "20px",
           width: "100%",
         }}
       >
@@ -783,10 +783,25 @@ const Services = ({
               <CreateRoundedIcon />
             </Button>
           ) : (
-            <Button onClick={handleDiscard} variant="outlined">
-              <h4 style={{ fontFamily: "Jost, sans-serif" }}>Descartar</h4>
+            <Button
+              style={{
+                fontFamily: "Jost",
+                fontWeight: "bold",
+                letterSpacing: "1px",
+              }}
+              onClick={handleDiscard}
+            >
+              Descartar
             </Button>
           )}
+          <hr
+            style={{
+              border: "2px solid",
+              borderRadius: "10px",
+              margin: "0px 6px",
+              color: "lightgray",
+            }}
+          />
           <Button
             color="error"
             disabled={categoryServices.length < 1 ? true : false}
@@ -830,11 +845,10 @@ const Services = ({
           </Button>
         )}
       </div>
-
-      <EditServicesModal
+      <DeleteServicesModal
         categoryServices={categoryServices}
-        openEdition={openEdition}
-        setOpenEdition={setOpenEdition}
+        openDelete={openDelete}
+        setOpenDelete={setOpenDelete}
         setRefreshServices={setRefreshServices}
         editableCatSer={editableCatSer}
         setEditableCatSer={setEditableCatSer}

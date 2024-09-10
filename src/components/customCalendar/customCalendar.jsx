@@ -72,7 +72,7 @@ const CustomCalendar = ({
   };
 
   return (
-    <div className="div-container-calendar">
+    <div className="div-container-calendar" style={{backgroundColor:"blue"}}>
       <Box className={"line7day"}>
         {daysOfWeek.map((day) => (
           <h4
@@ -117,7 +117,7 @@ const CustomCalendar = ({
             <button
               key={index}
               disabled={!showEdit ? true : disabled}
-              className={!showEdit || disabled ? "month1-false" : "month1"}
+              className="month1"
               onClick={() => handleDay(day, currentMonth)}
               style={{
                 gridColumnStart: index === 0 ? getDayPosition : "auto",
@@ -187,7 +187,7 @@ const CustomCalendar = ({
           return (
             <button
               key={index + 100}
-              className={!showEdit || disabled ? "month2-false" : "month2"}
+              className="month2"
               disabled={!showEdit ? true : disabled}
               onClick={() => handleDay(day, nextMonth)}
               style={{
@@ -335,7 +335,6 @@ const CustomCalendar = ({
             width: "100%",
             border: "2px solid lightgray",
             borderRadius: "10px",
-            marginBottom: "10px",
           }}
         />
       )}

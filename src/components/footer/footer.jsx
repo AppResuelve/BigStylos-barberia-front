@@ -1,4 +1,5 @@
 import { useEffect, useState, useContext } from "react";
+import ThemeContext from "../../context/ThemeContext";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -11,7 +12,6 @@ import { Box } from "@mui/material";
 import Maps from "../maps/maps";
 import "./footer.css";
 import { convertToRGB } from "../../helpers/convertColorToRgb";
-import ThemeContext from "../../context/ThemeContext";
 
 const Footer = () => {
   const { darkMode } = useContext(ThemeContext);

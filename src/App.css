@@ -11,10 +11,17 @@
 
  }
 
+
  @font-face {
    font-family: 'Jost';
    src: url('./assets/fonts/Jost-Light.ttf') format('woff');
  }
+
+ @font-face {
+   font-family: 'SUSE-Medium';
+   src: url('./assets/fonts/SUSE-Medium.ttf') format('woff');
+ }
+
 
  body {
    user-select: none;

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import CustomCalendarPlannedC from "../customCalendar/customCalendarPlannedC";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { Box, Button } from "@mui/material";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -11,10 +10,8 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const PlannedClosure = ({ schedule }) => {
-  //horarios de apertura y cierre sin los dias no laborables
   const [noWork, setNoWork] = useState({}); // dias con cierre programado
   const [dayIsSelected, setDayIsSelected] = useState({});
-  const [showEdit, setShowEdit] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [days, setDays] = useState({}); // dias para calendario
   const [loading, setLoading] = useState(true);
@@ -47,7 +44,6 @@ const PlannedClosure = ({ schedule }) => {
 
   const handleCancel = () => {
     setDayIsSelected({});
-    setShowEdit(false);
     setToggle({
       add: false,
       remove: false,
@@ -56,19 +52,11 @@ const PlannedClosure = ({ schedule }) => {
 
   const handleToggle = (action) => {
     if (action === "add") {
-      setShowEdit(true);
       setToggle({
         add: true,
         remove: false,
       });
-    } else if (action === "add-discard") {
-      setToggle({
-        add: false,
-        remove: false,
-      });
-      setShowEdit(false);
     } else if (action === "remove") {
-      setShowEdit(true);
       setToggle({
         add: false,
         remove: true,
@@ -78,7 +66,6 @@ const PlannedClosure = ({ schedule }) => {
         add: false,
         remove: false,
       });
-      setShowEdit(false);
     }
     setDayIsSelected({});
   };
@@ -86,6 +73,7 @@ const PlannedClosure = ({ schedule }) => {
   const handleSubmit = async () => {
     let day = Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]]);
     let month = Object.keys(dayIsSelected)[0];
+
     if (days[month] && days[month][day] && days[month][day].turn) {
       Swal.fire({
         title: `Estas por cancelar los turnos del día ${day}/${month}, deseas continuar?`,
@@ -102,12 +90,12 @@ const PlannedClosure = ({ schedule }) => {
                 noWorkDaysCancelTurn: dayIsSelected,
               }
             );
-            toastAlert("Día/s deshabilitado/s exitosamente.", "success");
+            toastAlert("Día deshabilitado exitosamente.", "success");
             handleCancel();
             setRefresh(!refresh);
           } catch (error) {
-            toastAlert("Error al deshabilitar el/los Día/s.", "error");
-            console.error("Error al deshabilitar el/los Día/s.", error);
+            toastAlert("Error al deshabilitar el Día.", "error");
+            console.error("Error al deshabilitar el Día.", error);
           }
         } else {
           return;
@@ -121,15 +109,33 @@ const PlannedClosure = ({ schedule }) => {
             noWorkDays: dayIsSelected,
           }
         );
-        toastAlert("Día/s habilitado/s exitosamente.", "success");
+        let message =
+          toggle.add &&
+          (Object.keys(dayIsSelected).length > 1 ||
+            Object.keys(dayIsSelected[month]).length > 1)
+            ? "Días deshabilitados exitosamente."
+            : toggle.add
+            ? "Día deshabilitado exitosamente."
+            : toggle.remove &&
+              (Object.keys(dayIsSelected).length > 1 ||
+                Object.keys(dayIsSelected[month]).length > 1)
+            ? "Días habilitados exitosamente."
+            : "Día habilitado exitosamente.";
+        toastAlert(message, "success");
         handleCancel();
         setRefresh(!refresh);
       } catch (error) {
-        toastAlert("Error al habilitar el/los Día/s.", "error");
+        toastAlert(
+          toggle.add
+            ? "Error al deshabilitar el/los Día/s."
+            : "Error al habilitar el/los Día/s.",
+          "error"
+        );
         console.error("Error al habilitar el/los Día/s.", error);
       }
     }
   };
+  console.log(dayIsSelected);
 
   return (
     <div>
@@ -149,7 +155,6 @@ const PlannedClosure = ({ schedule }) => {
         dayIsSelected={dayIsSelected}
         setDayIsSelected={setDayIsSelected}
         days={days}
-        showEdit={showEdit}
         toggle={toggle}
       />
       <Box sx={{ marginTop: "12px" }}>
@@ -163,7 +168,11 @@ const PlannedClosure = ({ schedule }) => {
           <div style={{ display: "flex" }}>
             {toggle.add ? (
               <Button
-                variant="outlined"
+                style={{
+                  fontFamily: "Jost",
+                  fontWeight: "bold",
+                  letterSpacing: "1px",
+                }}
                 onClick={() => handleToggle("add-discard")}
               >
                 Descartar
@@ -187,15 +196,27 @@ const PlannedClosure = ({ schedule }) => {
 
             {toggle.remove ? (
               <Button
-                variant="outlined"
                 color="error"
+                // variant="outlined"
+                style={{
+                  color: "#ff4800eb",
+                  fontFamily: "Jost",
+                  fontWeight: "bold",
+                  letterSpacing: "1px",
+                  // border: "2px solid",
+                  // padding:"4px"
+                }}
                 onClick={() => handleToggle("remove-discard")}
               >
                 Descartar
               </Button>
             ) : (
               <Button color="error" onClick={() => handleToggle("remove")}>
-                <DeleteOutlineIcon />
+                <DeleteOutlineIcon
+                  sx={{
+                    color: "#ff4800eb",
+                  }}
+                />
               </Button>
             )}
           </div>
@@ -203,6 +224,11 @@ const PlannedClosure = ({ schedule }) => {
             disabled={Object.keys(dayIsSelected).length > 0 ? false : true}
             onClick={handleSubmit}
             variant="contained"
+            style={{
+              fontFamily: "Jost",
+              fontWeight: "bold",
+              letterSpacing: "1px",
+            }}
           >
             Guardar
           </Button>

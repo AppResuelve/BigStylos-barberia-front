@@ -25,6 +25,12 @@
        transition: .2s;
  }
 
+ .btn-img-home-nav:disabled {
+       pointer-events: none;
+       background-color: rgb(242, 242, 242);
+       cursor: auto;
+ }
+
  .btn-img-home-nav:hover {
        background-color: white;
  }
@@ -39,8 +45,23 @@
        margin: 5px;
  }
 
- @media (min-width:500px) and (max-height: 800px) {}
+ .btn-userProfile {
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       border-radius: 50px;
+       border: none;
+       cursor: pointer;
+ }
 
- @media (min-width:500px) and (min-height: 801px) and (max-height: 1000px) {}
+ .btn-userProfile {
+       height: 40px;
+       width: 40px;
+       position: relative;
+ }
 
- @media (max-width:500px) and (max-height: 1000px) {}
+ .img-user-nav {
+       border-radius: 50px;
+       height: 40px;
+       width: 40px;
+ }

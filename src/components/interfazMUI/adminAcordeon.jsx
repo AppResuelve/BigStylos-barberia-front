@@ -23,7 +23,7 @@ import Swal from "sweetalert2";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const AdminAcordeon = () => {
-  const { darkMode, setShowAlert } = useContext(ThemeContext);
+  const { darkMode } = useContext(ThemeContext);
   const [expanded, setExpanded] = useState(false);
   const [schedule, setSchedule] = useState({});
   const [refresh, setRefresh] = useState(false);
@@ -85,18 +85,17 @@ const AdminAcordeon = () => {
     panel6: "Personalización",
     panel7: "Agenda de turnos",
     panel8: "Turnos cancelados",
-    panel9: "Precios y señas",
   };
 
   const handleChange = (panel) => (event, isExpanded) => {
     const panelName = panelNames[expanded];
     if (Object.keys(changeNoSaved).length > 0) {
-          Swal.fire({
-            title: `Tienes cambios sin guardar en la sección ${panelName}.`,
-            icon: "warning",
-            timer: 3000,
-            showConfirmButton: true,
-          });
+      Swal.fire({
+        title: `Tienes cambios sin guardar en la sección ${panelName}.`,
+        icon: "warning",
+        timer: 3000,
+        showConfirmButton: true,
+      });
     } else {
       setExpanded(isExpanded ? panel : false);
     }
@@ -309,7 +308,7 @@ const AdminAcordeon = () => {
               Cierre programado
             </h2>
           </AccordionSummary>
-          <AccordionDetails>
+          <AccordionDetails sx={{ p: 1 }}>
             {Object.keys(schedule).length > 0 && !loading ? (
               <PlannedClosure
                 schedule={schedule}

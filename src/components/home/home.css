@@ -1,44 +1,7 @@
-.loader {
-      display: block;
-      --height-of-loader: 10px;
-      --loader-color: #0071e2;
-      width: 170px;
-      height: var(--height-of-loader);
-      border-radius: 30px;
-      background-color: rgba(0, 0, 0, 0.2);
-      position: relative;
-}
-
-.loader::before {
-      content: "";
-      position: absolute;
-      background: var(--loader-color);
-      top: 0;
-      left: 0;
-      width: 0%;
-      height: 100%;
-      border-radius: 30px;
-      animation: moving 1s ease-in-out infinite;
-      ;
-}
-
-@keyframes moving {
-      50% {
-            width: 100%;
-      }
-
-      100% {
-            width: 0;
-            right: 0;
-            left: unset;
-      }
-}
-
-
-/* ////////////////////////////////// */
 .container-home {
       padding-top: 40px;
 }
+
 
 .img-whatsapp-home {
       width: 45px;
@@ -53,22 +16,47 @@
 
 }
 
-.img-social-home {
-      transition: .3s;
+.img-social-home-link {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50px;
+
 }
 
-.img-social-home:hover {
+.img-social-home {
       cursor: pointer;
-      transform: translateY(-2px);
+}
 
+.container-img-logotipo {
+      position: relative;
+      display: inline-block;
+      max-width: 800px;
+      max-height: 400px;
+      width: 95%;
+      height: 30%;
+      margin-top: 50px;
+      border-radius: 20px;
+      box-shadow: 0px 4px 2px -2px rgba(0, 0, 0, 0.2);
 }
 
 .img-logotipo-home {
+      aspect-ratio: 16/9;
       height: 100%;
-      aspect-ratio: 1/1;
-      margin-top: 30px;
+      width: 100%;
       object-fit: cover;
-      border-radius: 100%;
+      border-radius: 20px;
+}
+
+.image-overlay {
+      position: absolute;
+      top: calc(0% - 1px);
+      left: 0;
+      right: 0;
+      /* Ajusta esta altura para controlar cuánto del gradiente se superpone */
+      height: 50%;
+      width: 100%;
+      border-radius: 0px 0px 20px 20px;
 }
 
 @media (min-width:500px) and (max-height: 800px) {
@@ -127,7 +115,7 @@
       .img-social-home-link {
             width: 40px;
             height: 40px;
-            border-radius: 50px;
+
             margin-bottom: 10px;
 
       }
@@ -151,18 +139,15 @@
       }
 
       .img-social-home {
-            width: 40px;
-            height: 40px;
+            width: 30px;
+            height: 30px;
             transition: .3s;
-            margin-left: 10px;
       }
 
       .img-social-home-link {
             width: 40px;
             height: 40px;
-            border-radius: 50px;
-            margin-bottom: 10px;
-
+            margin: 0px 0px 10px 10px;
       }
 
       .img-whatsapp-home-link {

@@ -1,10 +1,10 @@
 import { useEffect, useState, useContext } from "react";
 import ThemeContext from "../../context/ThemeContext";
 import formatHour from "../../functions/formatHour";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
 import { Box, Button, MenuItem, Select } from "@mui/material";
 import axios from "axios";
 import toastAlert from "../../helpers/alertFunction";
+import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -188,7 +188,7 @@ const OpeningAndClosing = ({ schedule, refresh, setRefresh, setRemaining }) => {
       <Box sx={{ marginTop: "12px" }}>
         {showEdit === false && (
           <Button onClick={handleEdit}>
-            <BorderColorIcon />
+            <CreateRoundedIcon />
           </Button>
         )}
         {showEdit === true && (
@@ -201,14 +201,9 @@ const OpeningAndClosing = ({ schedule, refresh, setRefresh, setRemaining }) => {
           >
             <Button
               onClick={handleCancel}
-              variant="outlined"
-              style={{ borderRadius: "50px", border: "2px solid " }}
+              sx={{ fontFamily: "Jost, sans-serif", fontWeight: "bold" }}
             >
-              <h4
-                style={{ fontFamily: "Jost, sans-serif", fontWeight: "bold" }}
-              >
-                Volver
-              </h4>
+              Descartar
             </Button>
             <Button onClick={handleSubmit} variant="contained">
               <h4 style={{ fontFamily: "Jost, sans-serif" }}>Guardar</h4>

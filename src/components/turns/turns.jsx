@@ -13,14 +13,24 @@ import { TurnsButtonsSkeleton } from "../loaders/skeletons";
 import { calculateSing } from "../../helpers/calculateSing";
 import formatHour from "../../functions/formatHour";
 import Swal from "sweetalert2";
+import clickGif from "../../assets/gifs/click.gif";
+import CartContext from "../../context/CartContext";
 import axios from "axios";
 import "./turns.css";
-import clickGif from "../../assets/gifs/click.gif";
+
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const Turns = ({ turnsCart, setTurnsCart, auxCart, setAuxCart }) => {
+const Turns = () => {
   const { darkMode } = useContext(ThemeContext);
-  const { userData, googleLogin } = useContext(AuthContext);
+  const { userData } = useContext(AuthContext);
+  const {
+    turnsCart,
+    setTurnsCart,
+    auxCart,
+    setAuxCart,
+    dayIsSelected,
+    setDayIsSelected,
+  } = useContext(CartContext);
   const [catServices, setCatServices] = useState({});
   const [serviceSelected, setServiceSelected] = useState({});
   const [expanded, setExpanded] = useState(false);
@@ -32,7 +42,6 @@ const Turns = ({ turnsCart, setTurnsCart, auxCart, setAuxCart }) => {
   });
   const [workerDays, setWorkerDays] = useState({});
   const [days, setDays] = useState({});
-  const [dayIsSelected, setDayIsSelected] = useState([]);
   const [turnsButtons, setTurnsButtons] = useState([]);
   const navigate = useNavigate();
   // Referencias para los acordeones
@@ -94,6 +103,11 @@ const Turns = ({ turnsCart, setTurnsCart, auxCart, setAuxCart }) => {
 
     if (Object.keys(serviceSelected).length > 0) fetchServices();
   }, [serviceSelected]);
+
+console.log(workerDays);
+console.log(workers);
+console.log(selectedWorker);
+
 
   const handleServiceChange = (serviceName, service) => {
     let singCalculated;
@@ -157,9 +171,20 @@ const Turns = ({ turnsCart, setTurnsCart, auxCart, setAuxCart }) => {
   };
 
   const handleSelectTime = (btn) => {
+    setAuxCart((prevState) => {
+      if (Object.keys(prevState).length >= 3) return prevState;
+
+      let copyState = { ...prevState };
+
+      // Crear una clave única usando los valores seleccionados
+      const uniqueKey = `${dayIsSelected[0]}+${dayIsSelected[1]}+${serviceSelected.name}+${btn.ini}`;
+      // Añadir o actualizar la entrada en el objeto de estado
+      copyState[uniqueKey] = btn.worker;
+
+      return copyState;
+    });
     setTurnsCart((prevState) => {
-      // Si ya hay 3 elementos, no hacer nada
-      
+      // Limitamos a 3 turnos por carrito
       if (prevState.length >= 3) return prevState;
       let copyState = [...prevState];
       copyState.push({
@@ -174,18 +199,8 @@ const Turns = ({ turnsCart, setTurnsCart, auxCart, setAuxCart }) => {
       });
       return copyState;
     });
-    setAuxCart((prevState) => {
-      if (Object.keys(prevState).length >= 3) return prevState;
-
-      let copyState = { ...prevState };
-      // Crear una clave única usando los valores seleccionados
-      const uniqueKey = `${dayIsSelected[0]}+${dayIsSelected[1]}+${serviceSelected.name}+${btn.ini}`;
-      // Añadir o actualizar la entrada en el objeto de estado
-      copyState[uniqueKey] = btn.worker;
-
-      return copyState;
-    });
   };
+  console.log(auxCart);
 
   return (
     <div
@@ -571,10 +586,12 @@ const Turns = ({ turnsCart, setTurnsCart, auxCart, setAuxCart }) => {
                     turnsButtons.map((btn, index) => {
                       if (btn.ini < 720) return;
                       let dayInCart = false;
+                      let disabled = false;
                       let uniqueKey = `${dayIsSelected[0]}+${dayIsSelected[1]}+${serviceSelected.name}+${btn.ini}`;
                       if (auxCart[uniqueKey]) {
                         dayInCart = true;
                       }
+                      // if(auxCart[])
                       return (
                         <button
                           key={index}

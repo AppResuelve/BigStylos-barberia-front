@@ -3,19 +3,20 @@ import ThemeContext from "../../context/ThemeContext";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import Map, { Marker, Popup } from "react-map-gl";
 import "./map.css";
+import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
 
 const VITE_MAPBOX_MAPS_API_KEY = import.meta.env.VITE_MAPBOX_MAPS_API_KEY;
 
 const Maps = () => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const { darkMode } = useContext(ThemeContext);
-
+  const { mapLoaded, setMapLoaded } = useContext(LoadAndRefreshContext)
+  
   const [viewport, setViewport] = useState({
     longitude: -58.994893588103295,
     latitude: -27.467508847351258,
     zoom: 12,
   });
-
   const [selectedMarker, setSelectedMarker] = useState(null);
 
   const handleMarkerClick = () => {
@@ -31,6 +32,10 @@ const Maps = () => {
 
   const handleClosePopup = () => {
     setSelectedMarker(null);
+  };
+
+  const handleMapLoad = () => {
+    setMapLoaded(true); // Establece el estado como cargado
   };
 
   return (
@@ -49,6 +54,7 @@ const Maps = () => {
             ? "mapbox://styles/mapbox/dark-v10"
             : "mapbox://styles/mapbox/streets-v12"
         }
+        onLoad={handleMapLoad} // Evento que detecta cuando el mapa está cargado
       >
         <Marker
           longitude={-58.994893588103295}

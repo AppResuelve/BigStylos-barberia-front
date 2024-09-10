@@ -98,11 +98,10 @@ const UserPanelModal = () => {
             }}
           />
         </header>
-        <section style={{ padding: "0px 10px 10px 10px",marginTop:"5px" }}>
+        <section style={{ padding: "55px 10px 10px 10px" }}>
           {/* seccion del admin */}
           {userData !== 1 && userData.admin && (
             <section
-              style={{ marginTop: "50px" }}
               onClick={() => setIsOpenUserPanel(false)}
             >
               <NavLink

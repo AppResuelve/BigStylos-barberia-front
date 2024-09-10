@@ -103,7 +103,7 @@ const CustomCalendarTurns = ({
             return (
               <button
                 key={index}
-                className={disable ? "month1-false" : "month1"}
+                className="month1"
                 onClick={() => getTime(day, currentMonth)}
                 disabled={disable}
                 style={{
@@ -153,7 +153,7 @@ const CustomCalendarTurns = ({
             return (
               <button
                 key={index + 100}
-                className={disable ? "month2-false" : "month2"}
+                className="month2"
                 onClick={() => getTime(day, nextMonth)}
                 disabled={disable}
                 style={{

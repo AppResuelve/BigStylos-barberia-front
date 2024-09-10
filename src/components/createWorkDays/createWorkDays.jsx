@@ -2,7 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import ThemeContext from "../../context/ThemeContext";
 import CustomCalendar from "../customCalendar/customCalendar";
 import SelectedDay from "../selectedDay/selectedDay";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
+import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import SliderModal from "../interfazMUI/sliderModal";
 import { Grid, Box, Button, LinearProgress } from "@mui/material";
@@ -213,10 +213,10 @@ const CreateWorkDays = ({
             "success"
           );
         } catch (error) {
-           toastAlert(
-             `Error al crear el día ${submitArray[i].day}/${submitArray[i].month}`,
-             "error"
-           );
+          toastAlert(
+            `Error al crear el día ${submitArray[i].day}/${submitArray[i].month}`,
+            "error"
+          );
           console.error(
             `Error al crear el día ${submitArray[i].day}/${submitArray[i].month}`,
             error
@@ -262,18 +262,15 @@ const CreateWorkDays = ({
                 name: userData.name,
               }
             );
-             toastAlert(
-               `el día ${day}/${month} se borró exitosamente`,
-               "success"
-             );
+            toastAlert(
+              `el día ${day}/${month} se borró exitosamente`,
+              "success"
+            );
             setDayIsSelected({});
             setRefreshDays(true);
             setRefreshForWhoIsComing(true);
           } catch (error) {
-             toastAlert(
-               `Error al borrar el día ${day}/${month}`,
-               "error"
-             );
+            toastAlert(`Error al borrar el día ${day}/${month}`, "error");
             console.error("Error al borrar el dia:", error);
           }
         }
@@ -288,12 +285,12 @@ const CreateWorkDays = ({
             email: userData.email,
           }
         );
-         toastAlert(`el día ${day}/${month} se borró exitosamente`, "success");
+        toastAlert(`el día ${day}/${month} se borró exitosamente`, "success");
         setDayIsSelected({});
         setRefreshDays(true);
         setRefreshForWhoIsComing(true);
       } catch (error) {
-         toastAlert(`Error al borrar el día ${day}/${month}`, "error");
+        toastAlert(`Error al borrar el día ${day}/${month}`, "error");
         console.error("Error al borrar el dia:", error);
       }
     }
@@ -345,7 +342,6 @@ const CreateWorkDays = ({
       ) : (
         <hr
           style={{
-            marginBottom: "15px",
             border: "none",
             height: "2px",
             backgroundColor: "#2196f3",
@@ -354,7 +350,10 @@ const CreateWorkDays = ({
       )}
       <Grid
         container
-        style={{ display: "flex", justifyContent: "space-between" }}
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+        }}
       >
         <Grid
           item
@@ -415,80 +414,78 @@ const CreateWorkDays = ({
             )}
         </Grid>
         {/* area de los botones */}
-        <Grid xs={12} sm={12} md={12} item>
-          {showEdit === false && (
-            <Button onClick={handleEdit}>
-              <BorderColorIcon />
-            </Button>
-          )}
-          {showEdit === true && (
-            <Box
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Button
-                variant="outlined"
-                disabled={submit ? true : false}
-                style={{ borderRadius: "50px", border: "2px solid " }}
-                onClick={handleCancel}
-              >
-                <h4 style={{ fontFamily: "Jost, sans-serif" }}>Volver</h4>
-              </Button>
-              {/* *********************************************** */}
-              <Box style={{ display: "flex" }}>
-                <Button
-                  variant="contained"
-                  color="error"
-                  disabled={
-                    dayIsSelected &&
-                    Object.keys(dayIsSelected)[0] &&
-                    days &&
-                    days[Object.keys(dayIsSelected)[0]] &&
-                    days[Object.keys(dayIsSelected)[0]][
-                      Object.keys(
-                        dayIsSelected[Object.keys(dayIsSelected)[0]]
-                      )[0]
-                    ]
-                      ? false
-                      : true
-                  }
-                  onClick={handleDeleteSubmit}
-                >
-                  <h4 style={{ fontFamily: "Jost, sans-serif" }}>borrar</h4>
-                </Button>
-
-                {/* *********************************************** */}
-                <Button
-                  style={{ marginLeft: "10px" }}
-                  variant="contained"
-                  disabled={
-                    !dayIsSelected ||
-                    Object.keys(dayIsSelected).length === 0 ||
-                    shouldDisableButton(dayIsSelected, days)
-                  }
-                  onClick={handleShowSlider}
-                >
-                  <h4 style={{ fontFamily: "Jost, sans-serif" }}>Asignar</h4>
-                </Button>
-              </Box>
-            </Box>
-          )}
-        </Grid>
-        {/* sección del slider */}
-        <SliderModal
-          userData={userData}
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          setSubmit={setSubmit}
-          openClose={openClose}
-          timeSelected={timeSelected}
-          setTimeSelected={setTimeSelected}
-          handleSubmit={handleSubmit}
-        />
       </Grid>
+
+      {!showEdit ? (
+        <Button onClick={handleEdit}>
+          <CreateRoundedIcon />
+        </Button>
+      ) : (
+        <section
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
+          }}
+        >
+          <Button
+            disabled={submit ? true : false}
+            sx={{ fontFamily: "Jost, sans-serif" }}
+            onClick={handleCancel}
+          >
+            Descartar
+          </Button>
+          {/* *********************************************** */}
+          <Box style={{ display: "flex" }}>
+            <Button
+              variant="contained"
+              color="error"
+              disabled={
+                dayIsSelected &&
+                Object.keys(dayIsSelected)[0] &&
+                days &&
+                days[Object.keys(dayIsSelected)[0]] &&
+                days[Object.keys(dayIsSelected)[0]][
+                  Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]])[0]
+                ]
+                  ? false
+                  : true
+              }
+              onClick={handleDeleteSubmit}
+              sx={{ fontFamily: "Jost, sans-serif" }}
+            >
+              Borrar
+            </Button>
+
+            {/* *********************************************** */}
+            <Button
+              style={{ marginLeft: "10px" }}
+              variant="contained"
+              disabled={
+                !dayIsSelected ||
+                Object.keys(dayIsSelected).length === 0 ||
+                shouldDisableButton(dayIsSelected, days)
+              }
+              onClick={handleShowSlider}
+              sx={{ fontFamily: "Jost, sans-serif" }}
+            >
+              Asignar
+            </Button>
+          </Box>
+        </section>
+      )}
+      {/* sección del slider */}
+      <SliderModal
+        userData={userData}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        setSubmit={setSubmit}
+        openClose={openClose}
+        timeSelected={timeSelected}
+        setTimeSelected={setTimeSelected}
+        handleSubmit={handleSubmit}
+      />
     </div>
   );
 };

@@ -21,7 +21,7 @@ const LogoutButton = () => {
   };
   return (
     <button
-      className="btn-loginout-login"
+      className="btn-loginout-logout"
       style={{
         bottom: "calc(0% + 20px)",
         left: "calc(0% + 20px)",

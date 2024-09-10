@@ -1,8 +1,9 @@
 import { useEffect, useState, useContext } from "react";
 import ThemeContext from "../../context/ThemeContext";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
+import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
 import AddIcon from "@mui/icons-material/Add";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+
 import { Box, Button } from "@mui/material";
 import axios from "axios";
 import toastAlert from "../../helpers/alertFunction";
@@ -11,10 +12,11 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const WorkDays = ({ schedule, refresh, setRefresh, setChangeNoSaved }) => {
   const { darkMode } = useContext(ThemeContext);
-  const [showEdit, setShowEdit] = useState(false);
-  const [showAdd, setShowAdd] = useState(null);
-  const [showRemove, setShowRemove] = useState(null);
-  const [toggle, setToggle] = useState(null);
+
+  const [toggle, setToggle] = useState({
+    add: false,
+    remove: false,
+  });
   const [timeEdit, setTimeEdit] = useState({});
 
   const days = ["Lun", "Mar", "Mie", "Jue", "Vie", "Sab", "Dom"];
@@ -22,22 +24,26 @@ const WorkDays = ({ schedule, refresh, setRefresh, setChangeNoSaved }) => {
   useEffect(() => {
     setTimeEdit(schedule);
   }, [schedule]);
-  const handleEdit = () => {
-    setShowEdit(true);
-  };
-  const handleCancel = () => {
-    setShowEdit(false);
-    setTimeEdit(schedule);
-    setShowAdd(null);
-    setShowRemove(null);
-    setToggle(null);
-    setChangeNoSaved({});
-  };
 
-  const handleShowAddRemove = (value) => {
-    value === "add"
-      ? (setShowAdd(true), setToggle(true), setShowRemove(false))
-      : (setShowRemove(true), setToggle(false), setShowAdd(false));
+  const handleToggle = (action) => {
+    if (action === "add") {
+      setToggle({
+        add: true,
+        remove: false,
+      });
+    } else if (action === "remove") {
+      setToggle({
+        add: false,
+        remove: true,
+      });
+    } else {
+      setToggle({
+        add: false,
+        remove: false,
+      });
+    }
+    setChangeNoSaved({});
+    setTimeEdit(schedule);
   };
 
   const handleChange = (value, index) => {
@@ -70,12 +76,9 @@ const WorkDays = ({ schedule, refresh, setRefresh, setChangeNoSaved }) => {
       console.error("Error al obtener los horarios", error);
       alert("Error al obtener los horarios");
     }
-    toastAlert("Cambios guardados exitosamente.","success");
-    setShowEdit(false);
+    toastAlert("Cambios guardados exitosamente.", "success");
     setChangeNoSaved({});
-    setToggle(1);
-    setShowAdd(null);
-    setShowRemove(null);
+    setToggle({ add: false, remove: false });
   };
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
@@ -120,7 +123,7 @@ const WorkDays = ({ schedule, refresh, setRefresh, setChangeNoSaved }) => {
                     --
                   </h3>
                 )}
-                {showRemove && timeEdit[index] && (
+                {toggle.remove && timeEdit[index] && (
                   <button
                     style={{
                       width: "30px",
@@ -131,12 +134,10 @@ const WorkDays = ({ schedule, refresh, setRefresh, setChangeNoSaved }) => {
                     }}
                     onClick={() => handleChange("remove", index)}
                   >
-                    <DeleteOutlineIcon
-                      style={{ color: darkMode.on ? "white" : darkMode.dark }}
-                    />
+                    <DeleteRoundedIcon style={{ color: "#ff4800eb" }} />
                   </button>
                 )}
-                {showAdd && !timeEdit[index] && (
+                {toggle.add && !timeEdit[index] && (
                   <button
                     style={{
                       width: "30px",
@@ -147,61 +148,86 @@ const WorkDays = ({ schedule, refresh, setRefresh, setChangeNoSaved }) => {
                     }}
                     onClick={() => handleChange("add", index)}
                   >
-                    <AddIcon
-                      style={{ color: darkMode.on ? "white" : darkMode.dark }}
-                    />
+                    <AddIcon color="info" />
                   </button>
                 )}
               </Box>
             );
           })}
       </Box>
-      <Box>
-        {showEdit === false && (
-          <Button onClick={handleEdit} style={{ marginBottom: "5px" }}>
-            <BorderColorIcon />
-          </Button>
-        )}
-        {showEdit === true && (
-          <Box
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginBottom: "3px",
-            }}
-          >
-            <Button
-              onClick={handleCancel}
-              variant="outlined"
-              style={{
-                borderRadius: "50px",
-                border: "2px solid",
-                fontFamily: "Jost, sans-serif",
-                fontWeight: "bold",
-              }}
-            >
-              Volver
-            </Button>
-            <Box>
+      <Box sx={{ marginTop: "12px" }}>
+        <Box
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ display: "flex" }}>
+            {toggle.add ? (
               <Button
-                disabled={toggle === true ? true : false}
-                onClick={() => handleShowAddRemove("add")}
+                style={{
+                  fontFamily: "Jost",
+                  fontWeight: "bold",
+                  letterSpacing: "1px",
+                }}
+                onClick={() => handleToggle("add-discard")}
+              >
+                Descartar
+              </Button>
+            ) : (
+              <Button
+                // variant={toggle.add ? "outlined" : "contained"}
+                onClick={() => handleToggle("add")}
               >
                 <AddIcon />
               </Button>
+            )}
+            <hr
+              style={{
+                border: "2px solid",
+                borderRadius: "10px",
+                margin: "0px 6px",
+                color: "lightgray",
+              }}
+            />
+
+            {toggle.remove ? (
               <Button
                 color="error"
-                disabled={toggle === false ? true : false}
-                onClick={() => handleShowAddRemove("remove")}
+                style={{
+                  color: "#ff4800eb",
+                  fontFamily: "Jost",
+                  fontWeight: "bold",
+                  letterSpacing: "1px",
+                }}
+                onClick={() => handleToggle("remove-discard")}
               >
-                <DeleteOutlineIcon />
+                Descartar
               </Button>
-            </Box>
-            <Button onClick={handleSubmit} variant="contained">
-              <h4 style={{ fontFamily: "Jost, sans-serif" }}>Guardar</h4>
-            </Button>
-          </Box>
-        )}
+            ) : (
+              <Button color="error" onClick={() => handleToggle("remove")}>
+                <DeleteRoundedIcon
+                  sx={{
+                    color: "#ff4800eb",
+                  }}
+                />
+              </Button>
+            )}
+          </div>
+          <Button
+            // disabled={Object.keys(dayIsSelected).length > 0 ? false : true}
+            onClick={handleSubmit}
+            variant="contained"
+            style={{
+              fontFamily: "Jost",
+              fontWeight: "bold",
+              letterSpacing: "1px",
+            }}
+          >
+            Guardar
+          </Button>
+        </Box>
       </Box>
     </div>
   );
