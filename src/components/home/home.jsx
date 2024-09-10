@@ -78,14 +78,14 @@ const Home = () => {
       className="container-home"
       style={{
         display: "flex",
-        height: "calc(100vh - 70px)",
+        height: "100vh",
         flexDirection: "column",
         justifyContent: "space-between",
         alignItems: "center",
         backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
       }}
     >
-      <div className="container-img-logotipo">
+      <section className="container-img-logotipo">
         <img
           onLoad={() => setImgLogoLoaded(true)}
           className="img-logotipo-home"
@@ -104,81 +104,62 @@ const Home = () => {
           }}
           className="image-overlay"
         ></div>
-      </div>
-      <Box
-        sx={{
-          position: "relative",
-          width: "100%",
-          height: "30%",
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <Box
-          style={{
-            width: "25%",
-            display: "flex",
-            flexDirection: "column",
-            alignSelf: "end",
-          }}
-        >
-          <NavLink
-            className="img-social-home-link"
-            to="https://www.instagram.com/"
-            target="-blank"
-            rel="noopener noreferrer"
-          >
-            <img src={instagram} alt="instagram" className="img-social-home" />
-          </NavLink>
-          <NavLink
-            className="img-social-home-link"
-            to="https://www.facebook.com/"
-            target="-blank"
-            rel="noopener noreferrer"
-          >
-            <img src={facebook} alt="facebook" className="img-social-home" />
-          </NavLink>
-        </Box>
-        <Box
-          style={{
-            width: "50%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Button
+      </section>
+      <section className="section-btn-reservar">
+        <div className="container-btn-reservar">
+          <button
             onClick={handleReserveClick}
             className="btn-reservar-home"
+            style={{ color: "white" }}
+          >
+            Reservar turno
+          </button>
+          <div
             style={{
-              boxShadow: "0px 3px 5px 0px rgba(0,0,0,0.75)",
-              borderRadius: "50px",
-              fontFamily: "Jost, sans-serif",
-              fontSize: "20px",
-              backgroundColor: darkMode.on ? "white" : darkMode.dark,
-              color: darkMode.on ? darkMode.dark : "white",
+              width: "100%",
+              display: "flex",
+              justifyContent: "space-between",
             }}
           >
-            Reservar
-          </Button>
-        </Box>
-        <Box
-          style={{
-            width: "25%",
-            display: "flex",
-            justifyContent: "end",
-            alignItems: "end",
-          }}
-        >
-          <a
-            href="whatsapp://send?phone=+5492983664119&text=Quiero saber cómo obtener una página para mi negocio."
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img className="img-whatsapp-home" src={whatsapp} alt="whatsapp" />
-          </a>
-        </Box>
-      </Box>
+            <div style={{ display: "flex" }}>
+              <NavLink
+                className="img-social-home-link"
+                to="https://www.instagram.com/"
+                target="-blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src={instagram}
+                  alt="instagram"
+                  className="img-social-home"
+                />
+              </NavLink>
+              <NavLink
+                id="fb"
+                className="img-social-home-link"
+                to="https://www.facebook.com/"
+                target="-blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src={facebook}
+                  alt="facebook"
+                  className="img-social-home"
+                />
+              </NavLink>
+            </div>
+
+            <a
+              className="img-social-home-link
+              href="
+              whatsapp:target="_blank" //send?phone=+5492983664119&text=Quiero saber cómo obtener una página para mi negocio."
+              rel="noopener noreferrer"
+            >
+              <img className="img-social-home" src={whatsapp} alt="whatsapp" />
+            </a>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

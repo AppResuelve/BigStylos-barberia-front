@@ -21,7 +21,7 @@
       }
 }
 
-.div-container-custom-shape-divider-and-div {
+/* .div-container-custom-shape-divider-and-div {
       position: absolute;
       top: 0;
       left: 0;
@@ -36,14 +36,4 @@
       height: 55px;
       z-index: 1;
 
-}
-
-
-
-/** For mobile devices **/
-@media (max-width: 767px) {
-      /* .div-container-custom-shape-divider-and-div svg {
-            width: calc(100% + 1.3px);
-            height: 70px;
-      } */
-}
+} */
