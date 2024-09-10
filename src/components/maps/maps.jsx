@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useRef, useEffect } from "react";
 import ThemeContext from "../../context/ThemeContext";
 import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
@@ -20,6 +20,13 @@ const Maps = () => {
     zoom: 12,
   });
   const [selectedMarker, setSelectedMarker] = useState(null);
+  const mapRef = useRef(null); // Referencia al mapa
+
+  useEffect(() => {
+    if (mapRef.current) {
+      mapRef.current.resize(); // Llama a resize cuando cambias el tamaño
+    }
+  }, [expandMap, sm]); // Ejecuta esto cuando se expande o cambia el tamaño
 
   const handleMarkerClick = () => {
     setSelectedMarker({
@@ -43,6 +50,7 @@ const Maps = () => {
   return (
     <div style={{ position: "relative" }}>
       <Map
+        ref={mapRef} // Asigna la referencia al mapa
         mapboxAccessToken={VITE_MAPBOX_MAPS_API_KEY}
         initialViewState={viewport}
         style={{
@@ -72,7 +80,7 @@ const Maps = () => {
             latitude={selectedMarker.latitude}
             closeOnClick={false}
             onClose={handleClosePopup}
-            className="custom-popup" // Aplica la clase personalizada
+            className="custom-popup"
           >
             <div>
               <h3>{selectedMarker.info.name}</h3>

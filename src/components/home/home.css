@@ -48,16 +48,32 @@
 .btn-reservar-home#myTurns {
       background-color: lightgray;
       color: black;
-
 }
 
+.btn-reservar-home:disabled#myTurns {
+      cursor: not-allowed;
+      filter: brightness(100%);
+}
+
+.btn-reservar-home:disabled:hover#myTurns {
+      cursor: not-allowed;
+      filter: none;
+      box-shadow: 0px 3px 5px -2px rgba(0, 0, 0, 0.50);
+}
+
+.btn-reservar-home:disabled:active#myTurns {
+      cursor: not-allowed;
+      box-shadow: 0px 3px 5px -2px rgba(0, 0, 0, 0.50);
+}
+
+
 .btn-reservar-home:hover#myTurns {
-      filter: brightness(90%);
-      box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.50);
+      filter: brightness(110%);
+      box-shadow: 0px 2px 5px -2px rgba(0, 0, 0, 0.50);
 }
 
 .btn-reservar-home:active#myTurns {
-      box-shadow: 0px 0px 1px 4px rgb(0, 0, 0);
+      box-shadow: none;
 }
 
 .img-social-home-link {
@@ -71,7 +87,6 @@
 
 .img-social-home-link#fb {
       margin-left: 10px;
-
 }
 
 .img-social-home {
