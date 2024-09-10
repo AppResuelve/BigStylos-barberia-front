@@ -7,7 +7,6 @@ import { getCookie } from "../../helpers/cookies";
 import { getLocalStorage } from "../../helpers/localStorage";
 import defaultImg from "../../assets/icons/no-image-logotipe.png";
 import defaultImgLight from "../../assets/icons/no-image-logotipe-light.png";
-
 import Swal from "sweetalert2";
 import axios from "axios";
 import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
@@ -18,7 +17,7 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Home = () => {
   const { darkMode, homeImages } = useContext(ThemeContext);
-  const { googleLogin, setIsOpenUserPanel, setOpenSection } =
+  const { googleLogin, setIsOpenUserPanel, setOpenSection, userData } =
     useContext(AuthContext);
   const { setImgLogoLoaded } = useContext(LoadAndRefreshContext);
   const navigate = useNavigate();
@@ -141,6 +140,7 @@ const Home = () => {
           </button>
           <button
             id="myTurns"
+            disabled={!userData}
             onClick={handleGoToMyTurns}
             className="btn-reservar-home"
             style={{ width: md ? "100%" : "calc(50% - 5px)" }}
