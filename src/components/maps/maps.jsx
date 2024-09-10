@@ -1,17 +1,19 @@
 import { useContext, useState } from "react";
 import ThemeContext from "../../context/ThemeContext";
+import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import Map, { Marker, Popup } from "react-map-gl";
+import expandIcon from "../../assets/icons/expand.png";
+import expandLessIcon from "../../assets/icons/expandless.png";
 import "./map.css";
-import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
 
 const VITE_MAPBOX_MAPS_API_KEY = import.meta.env.VITE_MAPBOX_MAPS_API_KEY;
 
 const Maps = () => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const { darkMode } = useContext(ThemeContext);
-  const { mapLoaded, setMapLoaded } = useContext(LoadAndRefreshContext)
-  
+  const { mapLoaded, setMapLoaded } = useContext(LoadAndRefreshContext);
+  const [expandMap, setExpandMap] = useState(false);
   const [viewport, setViewport] = useState({
     longitude: -58.994893588103295,
     latitude: -27.467508847351258,
@@ -45,8 +47,8 @@ const Maps = () => {
         initialViewState={viewport}
         style={{
           width: "100%",
-          height: sm ? "400px" : "300px",
-          boxShadow: "0px 0px 10px 0px rgb(0,0,0,0.5)",
+          height: sm && expandMap ? "400px" : sm ? "200px" : "300px",
+          boxShadow: "0px 2px 5px 0px rgba(0, 0, 0, 0.50)",
           borderRadius: "16px",
         }}
         mapStyle={
@@ -79,6 +81,16 @@ const Maps = () => {
           </Popup>
         )}
       </Map>
+      {sm && !expandMap ? (
+        <button className="btn-to-expand" onClick={() => setExpandMap(true)}>
+          <img src={expandIcon} alt="expandir" />
+        </button>
+      ) : (
+        <button className="btn-to-expand" onClick={() => setExpandMap(false)}>
+          <img src={expandLessIcon} alt="contraer" />
+        </button>
+      )}
+
       <a
         className="btn-to-maps"
         style={{

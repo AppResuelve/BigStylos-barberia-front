@@ -4,7 +4,6 @@ import AuthContext from "../../context/AuthContext";
 import ListItemButton from "@mui/material/ListItemButton";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { Box, Collapse, List } from "@mui/material";
@@ -18,13 +17,9 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const ClientNestedList = () => {
   const { darkMode } = useContext(ThemeContext);
-  const { userData } = useContext(AuthContext);
+  const { userData, openSection, setOpenSection } = useContext(AuthContext);
   const [newPhoneNumber, setNewPhoneNumber] = useState(userData?.phone ?? "");
   const [refresh, setRefresh] = useState(false);
-  const [openSection, setOpenSection] = useState({
-    telefono: false,
-    turnos: false,
-  });
   const [inputTelError, setInputTelError] = useState("");
 
   const handleSectionClick = (section) => {

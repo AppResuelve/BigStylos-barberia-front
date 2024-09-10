@@ -15,19 +15,21 @@ const AuthProvider = ({ children }) => {
   const [userIsReady, setUserIsReady] = useState(false);
   const [refreshStatusSession, setRefreshStatusSession] = useState(false);
   const [isOpenUserPanel, setIsOpenUserPanel] = useState(false);
-  
+  const [openSection, setOpenSection] = useState({
+    telefono: false,
+    turnos: false,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        
         const response = await authenticateUsers();
 
         if (response.auth) {
           setUserData(response.user);
           setUserIsReady(true);
           setCookie("IDSESSION", response.user.email, 360);
-        } else {          
+        } else {
           setUserData(false);
           setUserIsReady(true);
         }
@@ -109,6 +111,8 @@ const AuthProvider = ({ children }) => {
     setUserData,
     isOpenUserPanel,
     setIsOpenUserPanel,
+    openSection,
+    setOpenSection,
     setRefreshStatusSession,
     googleLogin,
     userIsReady,

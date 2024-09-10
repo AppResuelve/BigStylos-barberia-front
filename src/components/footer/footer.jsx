@@ -10,8 +10,12 @@ import babyliss from "../../assets/images/babyliss.png";
 import pantene from "../../assets/images/pantene.png";
 import { Box } from "@mui/material";
 import Maps from "../maps/maps";
+import instagram from "../../assets/icons/instagram.png";
+import facebook from "../../assets/icons/facebook.png";
+import whatsapp from "../../assets/icons/whatsapp.png";
 import "./footer.css";
 import { convertToRGB } from "../../helpers/convertColorToRgb";
+import { NavLink } from "react-router-dom";
 
 const Footer = () => {
   const { darkMode } = useContext(ThemeContext);
@@ -61,42 +65,12 @@ const Footer = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        top: "100%",
         width: "100%",
         height: "100%",
         overflow: "hidden",
         backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
       }}
     >
-      {/* Sección svg y div */}
-      {/* <div
-        className="div-container-custom-shape-divider-and-div"
-        style={{
-          backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
-        }}
-      >
-        <svg
-          data-name="Layer 1"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1200 120"
-          preserveAspectRatio="none"
-          style={{
-            filter: `drop-shadow(0px 0px 4px rgba(${invertedColorRGB.r},${invertedColorRGB.g},${invertedColorRGB.b}, 0.7))`,
-          }}
-        >
-          <div
-            style={{
-              width: "100%",
-              height: "20px",
-              backgroundColor: "white",
-            }}
-          ></div>
-          <path
-            d="M600,112.77C268.63,112.77,0,65.52,0,7.23V120H1200V7.23C1200,65.52,931.37,112.77,600,112.77Z"
-            style={{ fill: darkMode.on ? darkMode.dark : darkMode.light }}
-          ></path>
-        </svg>
-      </div> */}
       <div
         style={{
           display: "flex",
@@ -104,7 +78,7 @@ const Footer = () => {
           justifyContent: "center",
           alignItems: "center",
           width: "100%",
-          marginTop: "calc(0% + 120px)",
+          marginTop: "100px",
         }}
       >
         <span
@@ -124,7 +98,7 @@ const Footer = () => {
           style={{
             width: "100%",
             maxWidth: "900px",
-            border: "1px solid lightgray",
+            border: "1px solid #208de7",
             borderRadius: "10px",
             margin: "30px 0px 10px 0px",
           }}
@@ -244,12 +218,11 @@ const Footer = () => {
           ></div>
         </Box>
       </div>
-
       <hr
         style={{
           width: "100%",
           maxWidth: "900px",
-          border: "1px solid lightgray",
+          border: "1px solid #208de7",
           borderRadius: "10px",
           margin: "10px 0px 50px 0px",
         }}
@@ -259,13 +232,15 @@ const Footer = () => {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          width: "90%",
+          width: "95%",
           maxWidth: "900px",
+          marginBottom: "25px",
         }}
       >
         <span
           style={{
-            margin: "10px 0px 5px 0px",
+            margin: "10px 0px 5px 15px",
+            fontSize: "18px",
             color: darkMode.on ? "#e6e6e6" : "black",
           }}
         >
@@ -273,21 +248,71 @@ const Footer = () => {
         </span>
         <Maps />
       </div>
-      <div
+      <section
         style={{
           display: "flex",
           flexDirection: "column",
-          justifyContent: "end",
-          alignItems: "end",
+          alignItems: "center",
           width: "100%",
-          height: "100px",
-          padding: "15px",
+          backgroundColor: "red",
           color: darkMode.on ? "#e6e6e6" : "black",
+          background: `linear-gradient(to top, lightgray, transparent)`,
         }}
       >
-        <h4>Olavarria, Bs As, Argentina</h4>
-        <h4>Todos los derechos reservados @2024 </h4>
-      </div>
+        <div
+          style={{
+            width: "95%",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <div style={{ display: "flex" }}>
+            <NavLink
+              className="img-social-home-link"
+              to="https://www.instagram.com/"
+              target="-blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src={instagram}
+                alt="instagram"
+                className="img-social-home"
+              />
+            </NavLink>
+            <NavLink
+              id="fb"
+              className="img-social-home-link"
+              to="https://www.facebook.com/"
+              target="-blank"
+              rel="noopener noreferrer"
+            >
+              <img src={facebook} alt="facebook" className="img-social-home" />
+            </NavLink>
+          </div>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <span>Contáctenos</span>
+            <a
+              className="img-social-home-link
+              href="
+              whatsapp:target="_blank" //send?phone=+5492983664119&text=Quiero saber cómo obtener una página para mi negocio."
+              rel="noopener noreferrer"
+            >
+              <img className="img-social-home" src={whatsapp} alt="whatsapp" />
+            </a>
+          </div>
+        </div>
+        <div
+          style={{
+            width:"95%",
+            marginTop: "25px",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <h4>Olavarria, Bs As, Argentina</h4>
+          <h4>Todos los derechos reservados @2024 </h4>
+        </div>
+      </section>
     </footer>
   );
 };
