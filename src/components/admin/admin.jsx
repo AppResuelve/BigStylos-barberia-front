@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ThemeContext from "../../context/ThemeContext";
 import AuthContext from "../../context/AuthContext";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
-import AdminAcordeon from "../interfazMUI/adminAcordeon";
+import AdminAcordeon from "./adminAcordeon";
 import { AdminWorkerSkeleton } from "../loaders/skeletons";
 
 const Admin = () => {

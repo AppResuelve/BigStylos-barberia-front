@@ -10,20 +10,19 @@ const LoadAndRefreshProvider = ({ children }) => {
   const [imgLogoLoaded, setImgLogoLoaded] = useState(false); // Estado para el estado del mapa
   const [minTimePassed, setMinTimePassed] = useState(false); // Estado para el retraso mínimo
 
-  
   useEffect(() => {
     const timer = setTimeout(() => {
       setMinTimePassed(true); // Se cumple el retraso de 1 segundo
-    }, 2000);
+    }, 800);
 
     return () => clearTimeout(timer); // Limpiar el temporizador al desmontar
   }, []);
 
   useEffect(() => {
-    if (userData !== 1 && imgLogoLoaded && mapLoaded && minTimePassed) {
+    if (userData !== 1 && imgLogoLoaded && minTimePassed) {
       setPageIsReady(true); // Solo si todo está listo y pasó el tiempo mínimo
     }
-  }, [userData, imgLogoLoaded, mapLoaded, minTimePassed]);
+  }, [userData, imgLogoLoaded, minTimePassed]);
 
   const data = {
     pageIsReady,

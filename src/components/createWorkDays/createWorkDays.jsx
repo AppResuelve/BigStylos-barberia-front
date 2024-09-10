@@ -327,7 +327,6 @@ const CreateWorkDays = ({
 
     selectDays(currentMonth, month1);
     selectDays(nextMonth, month2);
-
     setDayIsSelected(allDaysSelected);
   };
 

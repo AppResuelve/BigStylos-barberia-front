@@ -25,6 +25,7 @@ const MyServices = ({
   services,
   timeEdit,
   setTimeEdit,
+  changeNoSaved,
   setChangeNoSaved,
   pendingServices,
 }) => {
@@ -221,7 +222,6 @@ const MyServices = ({
                         <span className="slider"></span>
                       </label>
                     </div>
-                    {/* )} */}
                     <Box sx={{ display: "flex", alignItems: "center" }}>
                       {timeEdit &&
                         Object.keys(timeEdit).length > 0 &&
@@ -296,7 +296,12 @@ const MyServices = ({
         )}
       </Box>
       <Box
-        sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          width: "100%",
+          marginTop: "20px",
+        }}
       >
         {showEdit === false && (
           <Button
@@ -323,7 +328,8 @@ const MyServices = ({
             </Button>
             <Button
               onClick={handleSubmit}
-              sx={{ fontFamily: "Jost, sans-serif" }}
+              disabled={!changeNoSaved}
+              sx={{ fontFamily: "Jost, sans-serif", width: "100px" }}
               variant="contained"
             >
               Guardar

@@ -34,7 +34,7 @@ const DeleteServicesModal = ({
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const result = await axios.post(
+          const response = await axios.post(
             `${VITE_BACKEND_URL}/services/delete`,
             {
               services: servicesToDelete,
@@ -58,6 +58,10 @@ const DeleteServicesModal = ({
             let copyState = !prevState;
             return copyState;
           });
+
+          if (Object.keys(response.data.services).length < 1) {
+            handleClose();
+          }
         } catch (error) {
           console.log(error);
         }
@@ -79,7 +83,7 @@ const DeleteServicesModal = ({
     setServicesToDetele((prevState) => {
       let updatedState = [...prevState];
 
-      if (serviceName === undefined ) {
+      if (serviceName === undefined) {
         // Manejar el checkbox de la categoría
         if (checked) {
           // Agregar todos los servicios de la categoría si se selecciona
@@ -104,7 +108,6 @@ const DeleteServicesModal = ({
           updatedState = updatedState.filter((serv) => serv !== serviceName);
         }
       }
-
       return updatedState;
     });
 
@@ -146,8 +149,6 @@ const DeleteServicesModal = ({
 
     setEditableCatSer(updatedCategoryServices);
   };
-
-  console.log(servicesToDelete);
 
   return (
     <Dialog

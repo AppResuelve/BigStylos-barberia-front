@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import ThemeContext from "../../context/ThemeContext";
+import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -16,9 +17,11 @@ import whatsapp from "../../assets/icons/whatsapp.png";
 import "./footer.css";
 import { convertToRGB } from "../../helpers/convertColorToRgb";
 import { NavLink } from "react-router-dom";
+import { LoaderMapReady } from "../loaders/loaders";
 
 const Footer = () => {
   const { darkMode } = useContext(ThemeContext);
+  const { pageIsReady } = useContext(LoadAndRefreshContext);
   const [colorRGB, setColorRGB] = useState("");
   const [invertedColorRGB, setInvertedColorRGB] = useState("");
 
@@ -246,7 +249,7 @@ const Footer = () => {
         >
           Puedes encontrarnos aquí:
         </span>
-        <Maps />
+        {pageIsReady && <Maps />}
       </div>
       <section
         style={{
@@ -303,7 +306,7 @@ const Footer = () => {
         </div>
         <div
           style={{
-            width:"95%",
+            width: "95%",
             marginTop: "25px",
             display: "flex",
             flexDirection: "column",

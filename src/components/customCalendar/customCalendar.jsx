@@ -13,7 +13,6 @@ const CustomCalendar = ({
   dayIsSelected,
   days,
   showEdit,
-  setDays,
   schedule,
   loading,
   noWork,
@@ -72,7 +71,7 @@ const CustomCalendar = ({
   };
 
   return (
-    <div className="div-container-calendar" style={{backgroundColor:"blue"}}>
+    <div className="div-container-calendar">
       <Box className={"line7day"}>
         {daysOfWeek.map((day) => (
           <h4

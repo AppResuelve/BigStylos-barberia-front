@@ -2,7 +2,6 @@ import { NavLink, useLocation } from "react-router-dom";
 import { useContext } from "react";
 import ThemeContext from "../../context/ThemeContext";
 import AuthContext from "../../context/AuthContext";
-import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import toHome from "../../assets/icons/home.png";
 import toHome2 from "../../assets/icons/homeWhite.png";

@@ -33,7 +33,6 @@ const ThemeProvider = ({ children }) => {
     const fetchImages = async () => {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/personalization`);
-        console.log(response.data);
         
         setHomeImages(response.data.allImages)
         setDarkMode((prevMode) => ({

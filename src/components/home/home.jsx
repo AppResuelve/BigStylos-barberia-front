@@ -120,6 +120,7 @@ const Home = () => {
       <section
         className="section-btn-reservar"
         style={{
+          height: md ? "135px" : "70px",
           borderRadius: "20px 20px 0px 0px",
           background: `linear-gradient(to bottom, lightgray, transparent)`,
         }}
