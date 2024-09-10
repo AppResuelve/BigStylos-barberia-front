@@ -12,7 +12,6 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const PlannedClosure = ({ schedule }) => {
   const [noWork, setNoWork] = useState({}); // dias con cierre programado
   const [dayIsSelected, setDayIsSelected] = useState({});
-  const [showEdit, setShowEdit] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [days, setDays] = useState({}); // dias para calendario
   const [loading, setLoading] = useState(true);
@@ -45,7 +44,6 @@ const PlannedClosure = ({ schedule }) => {
 
   const handleCancel = () => {
     setDayIsSelected({});
-    setShowEdit(false);
     setToggle({
       add: false,
       remove: false,
@@ -54,19 +52,11 @@ const PlannedClosure = ({ schedule }) => {
 
   const handleToggle = (action) => {
     if (action === "add") {
-      setShowEdit(true);
       setToggle({
         add: true,
         remove: false,
       });
-    } else if (action === "add-discard") {
-      setToggle({
-        add: false,
-        remove: false,
-      });
-      setShowEdit(false);
     } else if (action === "remove") {
-      setShowEdit(true);
       setToggle({
         add: false,
         remove: true,
@@ -76,7 +66,6 @@ const PlannedClosure = ({ schedule }) => {
         add: false,
         remove: false,
       });
-      setShowEdit(false);
     }
     setDayIsSelected({});
   };
@@ -84,6 +73,7 @@ const PlannedClosure = ({ schedule }) => {
   const handleSubmit = async () => {
     let day = Object.keys(dayIsSelected[Object.keys(dayIsSelected)[0]]);
     let month = Object.keys(dayIsSelected)[0];
+
     if (days[month] && days[month][day] && days[month][day].turn) {
       Swal.fire({
         title: `Estas por cancelar los turnos del día ${day}/${month}, deseas continuar?`,
@@ -119,12 +109,19 @@ const PlannedClosure = ({ schedule }) => {
             noWorkDays: dayIsSelected,
           }
         );
-        toastAlert(
-          toggle.add
-            ? "Día/s deshabilitado/s exitosamente."
-            : "Día/s habilitado/s exitosamente.",
-          "success"
-        );
+        let message =
+          toggle.add &&
+          (Object.keys(dayIsSelected).length > 1 ||
+            Object.keys(dayIsSelected[month]).length > 1)
+            ? "Días deshabilitados exitosamente."
+            : toggle.add
+            ? "Día deshabilitado exitosamente."
+            : toggle.remove &&
+              (Object.keys(dayIsSelected).length > 1 ||
+                Object.keys(dayIsSelected[month]).length > 1)
+            ? "Días habilitados exitosamente."
+            : "Día habilitado exitosamente.";
+        toastAlert(message, "success");
         handleCancel();
         setRefresh(!refresh);
       } catch (error) {
@@ -138,6 +135,7 @@ const PlannedClosure = ({ schedule }) => {
       }
     }
   };
+  console.log(dayIsSelected);
 
   return (
     <div>
@@ -157,7 +155,6 @@ const PlannedClosure = ({ schedule }) => {
         dayIsSelected={dayIsSelected}
         setDayIsSelected={setDayIsSelected}
         days={days}
-        showEdit={showEdit}
         toggle={toggle}
       />
       <Box sx={{ marginTop: "12px" }}>

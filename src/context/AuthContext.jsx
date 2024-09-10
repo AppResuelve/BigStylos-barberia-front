@@ -12,17 +12,45 @@ const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState(1);
+  const [userIsReady, setUserIsReady] = useState(false);
   const [refreshStatusSession, setRefreshStatusSession] = useState(false);
   const [isOpenUserPanel, setIsOpenUserPanel] = useState(false);
+  
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        
+        const response = await authenticateUsers();
+
+        if (response.auth) {
+          setUserData(response.user);
+          setUserIsReady(true);
+          setCookie("IDSESSION", response.user.email, 360);
+        } else {          
+          setUserData(false);
+          setUserIsReady(true);
+        }
+      } catch (error) {
+        setUserIsReady(true);
+        setUserData(false);
+        console.log("Error en authenticateUsers", error);
+      }
+    };
+
+    fetchData();
+  }, [refreshStatusSession]);
 
   const googleLogin = useGoogleLogin({
     onSuccess: async (codeResponse) => {
+      setUserIsReady(false);
       const response = await axios.post(
         `${VITE_BACKEND_URL}/users/createGoogle`,
         { code: codeResponse.code }
       );
       setCookie("IDSESSION", response.data.email, 360);
       setUserData(response.data);
+      setUserIsReady(true);
       setRefreshStatusSession((prev) => {
         const prevStatusSession = prev;
         return !prevStatusSession;
@@ -70,24 +98,11 @@ const AuthProvider = ({ children }) => {
       }
     },
     flow: "auth-code",
-    onError: (errorResponse) => console.log(errorResponse),
+    onNonOAuthError: () => setUserIsReady(true),
+    onError: (errorResponse) => {
+      console.log(errorResponse);
+    },
   });
-
-  useEffect(() => {
-    authenticateUsers()
-      .then((response) => {
-        if (response.auth) {
-          setUserData(response.user);
-          setCookie("IDSESSION", response.user.email, 360);
-        } else {
-          setUserData(false);
-        }
-      })
-      .catch((error) => {
-        setUserData(false);
-        console.log(error);
-      });
-  }, [refreshStatusSession]);
 
   const data = {
     userData,
@@ -96,6 +111,8 @@ const AuthProvider = ({ children }) => {
     setIsOpenUserPanel,
     setRefreshStatusSession,
     googleLogin,
+    userIsReady,
+    setUserIsReady,
   };
   return <AuthContext.Provider value={data}>{children}</AuthContext.Provider>;
 };

@@ -15,7 +15,6 @@ const CustomCalendarPlannedC = ({
   amountOfDays,
   dayIsSelected,
   setDayIsSelected,
-  showEdit,
   days,
   toggle,
 }) => {
@@ -134,7 +133,9 @@ const CustomCalendarPlannedC = ({
               }}
             >
               <button
-                disabled={!showEdit ? true : eventNone || disabled}
+                disabled={
+                  !toggle.add && !toggle.remove ? true : eventNone || disabled
+                }
                 className="month1"
                 onClick={() => handleDay(day, currentMonth)}
                 style={{
@@ -148,14 +149,15 @@ const CustomCalendarPlannedC = ({
                         toggle.remove
                       ? "#ff4800eb"
                       : colorDay,
-                  cursor: !showEdit
-                    ? "not-allowed"
-                    : disabled
-                    ? "auto"
-                    : "pointer",
+                  cursor:
+                    !toggle.add && !toggle.remove
+                      ? "not-allowed"
+                      : disabled
+                      ? "auto"
+                      : "pointer",
                   color: disabled
                     ? "white"
-                    : !showEdit
+                    : !toggle.add && !toggle.remove
                     ? "darkblue"
                     : dayIsSelected[currentMonth] &&
                       dayIsSelected[currentMonth][day]
@@ -214,6 +216,7 @@ const CustomCalendarPlannedC = ({
           let dayName = obtainDayName(day, nextMonth, nextYear);
           let disabled = false;
           let colorDay = "white";
+          let eventNone = false;
           if (
             days &&
             days[nextMonth] &&
@@ -222,9 +225,6 @@ const CustomCalendarPlannedC = ({
           ) {
             colorDay = "#e6b226d0";
           }
-          if (noWork[nextMonth] && noWork[nextMonth][day]) {
-            colorDay = "gray";
-          }
           if (
             !schedule[dayName] ||
             (schedule[dayName].open === 0 && schedule[dayName].close === 1440)
@@ -232,12 +232,16 @@ const CustomCalendarPlannedC = ({
             disabled = true;
             colorDay = "gray";
           }
+          if (noWork[nextMonth] && noWork[nextMonth][day]) {
+            colorDay = "gray";
+          }
           if (
             (toggle.remove && colorDay !== "gray") ||
             (toggle.add && colorDay !== "#e6b226d0" && colorDay !== "white")
           ) {
-            disabled = true;
+            eventNone = true;
           }
+        
           return (
             <div
               key={index + 100}
@@ -249,7 +253,9 @@ const CustomCalendarPlannedC = ({
             >
               <button
                 key={index + 100}
-                disabled={!showEdit ? true : disabled}
+                disabled={
+                  !toggle.add && !toggle.remove ? true : eventNone || disabled
+                }
                 className="month2"
                 onClick={() => handleDay(day, nextMonth)}
                 style={{
@@ -261,19 +267,24 @@ const CustomCalendarPlannedC = ({
                       : dayIsSelected[nextMonth] &&
                         dayIsSelected[nextMonth][day] &&
                         toggle.remove
-                      ? "red"
+                      ? "#ff4800eb"
                       : colorDay,
-                  cursor: !showEdit
-                    ? "not-allowed"
-                    : disabled
-                    ? "auto"
-                    : "pointer",
+                  cursor:
+                    !toggle.add && !toggle.remove
+                      ? "not-allowed"
+                      : disabled
+                      ? "auto"
+                      : "pointer",
                   color: disabled
                     ? "white"
-                    : !showEdit
+                    : !toggle.add && !toggle.remove
                     ? "darkblue"
                     : dayIsSelected[nextMonth] && dayIsSelected[nextMonth][day]
                     ? "white"
+                    : toggle.remove &&
+                      noWork[nextMonth] &&
+                      noWork[nextMonth][day]
+                    ? "darkorange"
                     : "darkblue",
                 }}
               >

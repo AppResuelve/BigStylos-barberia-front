@@ -9,7 +9,7 @@ import {
   Select,
 } from "@mui/material";
 import formatHour from "../../functions/formatHour";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
+import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import axios from "axios";
 import "../interfazUiverse.io/checkBox.css";
@@ -303,7 +303,7 @@ const MyServices = ({
             disabled={services !== 1 && services.length == 0 ? true : false}
             onClick={handleEdit}
           >
-            <BorderColorIcon />
+            <CreateRoundedIcon />
           </Button>
         )}
         {showEdit === true && (
@@ -317,13 +317,16 @@ const MyServices = ({
           >
             <Button
               onClick={handleCancel}
-              variant="outlined"
-              style={{ borderRadius: "50px", border: "2px solid " }}
+              sx={{ fontFamily: "Jost, sans-serif" }}
             >
-              <h4 style={{ fontFamily: "Jost, sans-serif" }}>Volver</h4>
+              Descartar
             </Button>
-            <Button onClick={handleSubmit} variant="contained">
-              <h4 style={{ fontFamily: "Jost, sans-serif" }}>Guardar</h4>
+            <Button
+              onClick={handleSubmit}
+              sx={{ fontFamily: "Jost, sans-serif" }}
+              variant="contained"
+            >
+              Guardar
             </Button>
           </Box>
         )}

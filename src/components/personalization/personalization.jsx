@@ -2,7 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import ThemeContext from "../../context/ThemeContext";
 import { Box, Button } from "@mui/material";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
+import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
 import noImg from "../../assets/icons/no-image.png";
 import commingSoon from "../../assets/images/coming-soon.png";
 import noImageLogotipe from "../../assets/icons/no-image-logotipe.png";
@@ -14,10 +14,9 @@ import {
   filterImgServicesToUpdate,
 } from "../../helpers/convertCategoryService";
 import { checkChangeToSave } from "../../helpers/checkChangeToSave";
-import Swal from "sweetalert2";
-import "./personalization.css";
-import axios from "axios";
 import toastAlert from "../../helpers/alertFunction";
+import axios from "axios";
+import "./personalization.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const VITE_CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
@@ -28,15 +27,16 @@ const Personalization = ({
   setRefreshServices,
   setChangeNoSaved,
 }) => {
-  const { darkMode, setRefreshPersonalization } = useContext(ThemeContext);
+  const {
+    darkMode,
+    homeImages,
+    setHomeImages,
+    refreshPersonalization,
+    setRefreshPersonalization,
+  } = useContext(ThemeContext);
   const [imgServices, setImgServices] = useState([]); //images de los services basado en el estado services
-  const [auxImgServices, setAuxImgServices] = useState([]); //images de los services basado en el estado services copia
-  const [homeImages, setHomeImages] = useState([]); //images del home
-  const [auxHomeImages, setAuxHomeImages] = useState([]); //images del home basado ene le estado homeImages
-  const [colors, setColors] = useState("#ffffff");
-  const [auxColorSelected, setAuxColorSelected] = useState("#ffffff");
+  const [auxImgServices, setAuxImgServices] = useState([]);
   const [showEdit, setShowEdit] = useState(false);
-  const [refresh, setRefresh] = useState(false);
   const [toggle, setToggle] = useState({
     home: true,
     services: false,
@@ -47,17 +47,21 @@ const Personalization = ({
     services: true,
     colors: true,
   });
+  const [auxHomeImages, setAuxHomeImages] = useState([]); //images del home basado ene le estado homeImages
+  const [colors, setColors] = useState("#ffffff");
+  const [auxColorSelected, setAuxColorSelected] = useState("#ffffff");
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
   useEffect(() => {
     const fetchImages = async () => {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/personalization`);
-        const { data } = response;
-        setHomeImages(data.allImages);
-        setAuxHomeImages(JSON.parse(JSON.stringify(data.allImages))); // Crear una copia profunda del array
-        setColors(data.allColors);
-        setAuxColorSelected(JSON.parse(JSON.stringify(data.allColors))); // Crear una copia profunda del array
+        setHomeImages(response.data.allImages);
+        setAuxHomeImages(JSON.parse(JSON.stringify(response.data.allImages))); // Crear una copia profunda del array
+        setColors(response.data.allColors);
+        setAuxColorSelected(
+          JSON.parse(JSON.stringify(response.data.allColors))
+        ); // Crear una copia profunda del array
       } catch (error) {
         console.error("Error al obtener los servicios:", error);
       }
@@ -73,104 +77,92 @@ const Personalization = ({
   }, [services]);
 
   useEffect(() => {
-    if (
-      auxHomeImages.length > 0 &&
-      auxImgServices.length > 0 &&
-      auxColorSelected.length > 0
-    ) {
-      if (toggle.services) {
-        // Determinar si algún servicio se actualizó
-        const someServiceToUpdate = filterImgServicesToUpdate(
-          auxImgServices,
-          imgServices
-        );
+    if (auxImgServices.length > 0 && toggle.services) {
+      const someServiceToUpdate = filterImgServicesToUpdate(
+        auxImgServices,
+        imgServices
+      );
 
-        // Actualizar estado dependiendo de si hay cambios
-        if (someServiceToUpdate) {
-          setDisableSaveBtn((prevState) => {
-            let saveBtn = { ...prevState };
-            saveBtn.services = false;
-            return saveBtn;
-          });
-          setChangeNoSaved((prevState) => {
-            let copyState = { ...prevState };
-            copyState.services = true;
-            return copyState;
-          });
-        } else {
-          setDisableSaveBtn((prevState) => {
-            let saveBtn = { ...prevState };
-            saveBtn.services = true;
-            return saveBtn;
-          });
-          setChangeNoSaved((prevState) => {
-            let copyState = { ...prevState };
-
-            copyState.services = false;
-            let check = checkChangeToSave(copyState);
-            if (!check) copyState = {};
-            return copyState;
-          });
-        }
-      } else if (toggle.home) {
-        if (
-          auxHomeImages[0][1] !== homeImages[0][1] ||
-          auxHomeImages[1][1] !== homeImages[1][1]
-        ) {
-          setDisableSaveBtn((prevState) => {
-            let saveBtn = { ...prevState };
-            saveBtn.home = false;
-            return saveBtn;
-          });
-          setChangeNoSaved((prevState) => {
-            let copyState = { ...prevState };
-            copyState.home = true;
-            return copyState;
-          });
-        } else {
-          setDisableSaveBtn((prevState) => {
-            let saveBtn = { ...prevState };
-            saveBtn.home = true;
-            return saveBtn;
-          });
-          setChangeNoSaved((prevState) => {
-            let copyState = { ...prevState };
-            copyState.home = false;
-            let check = checkChangeToSave(copyState);
-            if (!check) copyState = {};
-            return copyState;
-          });
-        }
-      } else if (toggle.colors) {
-        if (auxColorSelected[0] !== colors[0]) {
-          setDisableSaveBtn((prevState) => {
-            let saveBtn = { ...prevState };
-            saveBtn.colors = false;
-            return saveBtn;
-          });
-          setChangeNoSaved((prevState) => {
-            let copyState = { ...prevState };
-            copyState.colors = true;
-            return copyState;
-          });
-        } else {
-          setDisableSaveBtn((prevState) => {
-            let saveBtn = { ...prevState };
-            saveBtn.colors = true;
-            return saveBtn;
-          });
-          setChangeNoSaved((prevState) => {
-            let copyState = { ...prevState };
-            copyState.colors = false;
-            let check = checkChangeToSave(copyState);
-            if (!check) copyState = {};
-            return copyState;
-          });
-        }
+      if (someServiceToUpdate) {
+        setDisableSaveBtn((prevState) => ({
+          ...prevState,
+          services: false,
+        }));
+        setChangeNoSaved((prevState) => ({
+          ...prevState,
+          services: true,
+        }));
+      } else {
+        setDisableSaveBtn((prevState) => ({
+          ...prevState,
+          services: true,
+        }));
+        setChangeNoSaved((prevState) => {
+          let copyState = { ...prevState, services: false };
+          let check = checkChangeToSave(copyState);
+          if (!check) copyState = {};
+          return copyState;
+        });
       }
     }
-  }, [auxHomeImages, auxImgServices, auxColorSelected]);
+  }, [auxImgServices]);
 
+  useEffect(() => {
+    if (auxHomeImages.length > 0 && toggle.home) {
+      if (
+        auxHomeImages[0][1] !== homeImages[0][1] ||
+        auxHomeImages[1][1] !== homeImages[1][1]
+      ) {
+        setDisableSaveBtn((prevState) => ({
+          ...prevState,
+          home: false,
+        }));
+        setChangeNoSaved((prevState) => ({
+          ...prevState,
+          home: true,
+        }));
+      } else {
+        setDisableSaveBtn((prevState) => ({
+          ...prevState,
+          home: true,
+        }));
+        setChangeNoSaved((prevState) => {
+          let copyState = { ...prevState, home: false };
+          let check = checkChangeToSave(copyState);
+          if (!check) copyState = {};
+          return copyState;
+        });
+      }
+    }
+  }, [auxHomeImages]);
+
+  useEffect(() => {
+    if (auxColorSelected.length > 0 && toggle.colors) {
+      if (auxColorSelected[0] !== colors[0]) {
+        setDisableSaveBtn((prevState) => ({
+          ...prevState,
+          colors: false,
+        }));
+        setChangeNoSaved((prevState) => ({
+          ...prevState,
+          colors: true,
+        }));
+      } else {
+        setDisableSaveBtn((prevState) => ({
+          ...prevState,
+          colors: true,
+        }));
+        setChangeNoSaved((prevState) => {
+          let copyState = { ...prevState, colors: false };
+          let check = checkChangeToSave(copyState);
+          if (!check) copyState = {};
+          return copyState;
+        });
+      }
+    }
+  }, [auxColorSelected]);
+
+  // Función para manejar el cambio de imagenes seleccionadas
   const uploadImage = async (event, nameSection) => {
     const name = event.target.name;
     const files = event.target.files;
@@ -200,7 +192,7 @@ const Personalization = ({
         // Devolver la nueva copia del array actualizado
         return copyOfArray;
       });
-    } else if (toggle.home) {
+    } else {
       setAuxHomeImages((prevImages) => {
         let copyOfArray = [...prevImages];
 
@@ -210,12 +202,6 @@ const Personalization = ({
           copyOfArray[1][1] = secure_url;
         }
         return copyOfArray;
-      });
-    } else {
-      setAuxColorSelected((prevState) => {
-        let copyState = [...prevState];
-        copyState = secure_url;
-        return copyState;
       });
     }
   };
@@ -285,20 +271,9 @@ const Personalization = ({
             newImages: auxHomeImages,
           }
         );
-        Swal.fire({
-          title: "Cambios de inicio guardados exitosamente.",
-          icon: "success",
-          timer: 3000,
-          toast: true,
-          position: "bottom-end",
-          showConfirmButton: false,
-          showCloseButton: true,
-        });
-        setRefreshPersonalization((prevState) => {
-          const copyState = { ...prevState };
-          copyState.home = true;
-          return copyState;
-        });
+        toastAlert("Cambios de inicio guardados exitosamente.", "success");
+        setHomeImages(response.data);
+        setAuxHomeImages(JSON.parse(JSON.stringify(response.data))); // Crear una copia profunda del array
         setDisableSaveBtn((prevState) => {
           const saveBtn = { ...prevState };
           saveBtn.home = true;
@@ -313,7 +288,7 @@ const Personalization = ({
         });
         setShowEdit(false);
       } catch (error) {
-        console.error("Error al actulizar las imgenes", error);
+        console.error("Error al actualizar las imagenes", error);
       }
     } else if (toggle.colors) {
       try {
@@ -323,20 +298,9 @@ const Personalization = ({
             newColors: auxColorSelected,
           }
         );
-        Swal.fire({
-          title: "Cambios de colores guardados exitosamente.",
-          icon: "success",
-          timer: 3000,
-          toast: true,
-          position: "bottom-end",
-          showConfirmButton: false,
-          showCloseButton: true,
-        });
-        setRefreshPersonalization((prevState) => {
-          const copyState = { ...prevState };
-          copyState.colors = true;
-          return copyState;
-        });
+        toastAlert("Cambio de color exitoso.", "success");
+        setColors(response.data);
+        setAuxColorSelected(JSON.parse(JSON.stringify(response.data))); // Crear una copia profunda del array
         setDisableSaveBtn((prevState) => {
           const saveBtn = { ...prevState };
           saveBtn.colors = true;
@@ -352,7 +316,7 @@ const Personalization = ({
         });
         setShowEdit(false);
       } catch (error) {
-        console.error("Error al actulizar las imgenes", error);
+        console.error("Error al actualizar el color", error);
       }
     } else {
       // Determinar si algún servicio se actualizó
@@ -385,23 +349,16 @@ const Personalization = ({
           setShowEdit(false);
         } catch (error) {
           toastAlert("Error al actulizar los servicios.", "error");
-
           console.error("Error al actulizar los servicios", error);
         }
       }
     }
+    if (toggle.home || toggle.colors)
+      setRefreshPersonalization(!refreshPersonalization);
   };
 
   const handleToggle = (section) => {
-    setToggle((prevToggle) => {
-      // Inicializar el nuevo estado de toggle
-      const newToggle = { home: false, services: false, colors: false };
-
-      // Establecer la sección seleccionada a true
-      newToggle[section] = true;
-
-      return newToggle;
-    });
+    setToggle({ home: false, services: false, colors: false, [section]: true });
   };
 
   return (
@@ -856,7 +813,7 @@ const Personalization = ({
       >
         {showEdit === false && (
           <Button onClick={handleEdit}>
-            <BorderColorIcon />
+            <CreateRoundedIcon />
           </Button>
         )}
         {showEdit === true && (
@@ -870,14 +827,9 @@ const Personalization = ({
           >
             <Button
               onClick={handleCancel}
-              variant="outlined"
-              style={{ border: "2px solid " }}
+              sx={{ fontFamily: "Jost, sans-serif", fontWeight: "bold" }}
             >
-              <h4
-                style={{ fontFamily: "Jost, sans-serif", fontWeight: "bold" }}
-              >
-                Volver
-              </h4>
+              Descartar
             </Button>
             {/* 1 BOTON GUARDAR POR CADA SECCION (3 BTN)*/}
             {toggle.home && (
@@ -885,10 +837,9 @@ const Personalization = ({
                 onClick={handleSubmit}
                 variant="contained"
                 disabled={disableSaveBtn.home ? true : false}
+                sx={{ fontFamily: "Jost, sans-serif" }}
               >
-                <h4 style={{ fontFamily: "Jost, sans-serif" }}>
-                  Guardar inicio
-                </h4>
+                Guardar inicio
               </Button>
             )}
             {toggle.services && (
@@ -896,10 +847,9 @@ const Personalization = ({
                 onClick={handleSubmit}
                 variant="contained"
                 disabled={disableSaveBtn.services ? true : false}
+                sx={{ fontFamily: "Jost, sans-serif" }}
               >
-                <h4 style={{ fontFamily: "Jost, sans-serif" }}>
-                  Guardar servicios
-                </h4>
+                Guardar servicios
               </Button>
             )}
             {toggle.colors && (
@@ -907,10 +857,9 @@ const Personalization = ({
                 onClick={handleSubmit}
                 variant="contained"
                 disabled={disableSaveBtn.colors ? true : false}
+                sx={{ fontFamily: "Jost, sans-serif" }}
               >
-                <h4 style={{ fontFamily: "Jost, sans-serif" }}>
-                  Guardar color
-                </h4>
+                Guardar color
               </Button>
             )}
           </Box>

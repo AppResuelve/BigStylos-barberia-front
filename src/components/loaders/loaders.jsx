@@ -31,4 +31,38 @@ const LoaderToBuy = ({ redirect }) => {
   );
 };
 
-export { LoaderToBuy };
+const LoaderUserReady = () => {
+  return (
+    <div className="container-loaderuserready">
+      <li className="dots-userready" id="dot-1"></li>
+      <li className="dots-userready" id="dot-2"></li>
+      <li className="dots-userready" id="dot-3"></li>
+    </div>
+  );
+};
+
+const LoaderPage = () => {
+  return (
+    <div className="container-page">
+      <div className="rings-container">
+        <div id="rings-calendar-1"></div>
+        <div id="rings-calendar-2"></div>
+        <div className="container-loaderpage">
+          <div className="folded-sheet-calendar"></div>
+          <div className="loaderpage">
+            <div className="loader-square"></div>
+            <div className="loader-square"></div>
+            <div className="loader-square"></div>
+            <div className="loader-square"></div>
+            <div className="loader-square"></div>
+            <div className="loader-square"></div>
+            <div className="loader-square"></div>
+          </div>
+        </div>
+        <span>Tengoturno</span>
+      </div>
+    </div>
+  );
+};
+
+export { LoaderToBuy, LoaderUserReady, LoaderPage };

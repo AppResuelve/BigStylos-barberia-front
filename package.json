@@ -11,16 +11,13 @@
     "start": "serve dist -s"
   },
   "dependencies": {
-    "@auth0/auth0-react": "^2.2.4",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@mercadopago/sdk-react": "^0.0.19",
     "@mui/icons-material": "^5.15.3",
     "@mui/material": "^5.15.3",
-    "@mui/system": "^5.15.4",
     "@react-oauth/google": "^0.12.1",
     "axios": "^1.3.1",
-    "cli": "^1.0.1",
     "crypto-js": "^4.2.0",
     "dotenv": "^16.3.1",
     "js-cookie": "^3.0.5",
@@ -30,11 +27,7 @@
     "react-map-gl": "^7.1.7",
     "react-phone-input-2": "^2.15.1",
     "react-router-dom": "^6.21.0",
-    "react-select": "^5.8.0",
     "react-slick": "^0.30.1",
-    "react-swipeable-views": "^0.14.0",
-    "react-swipeable-views-utils": "^0.14.0",
-    "serve": "^14.2.1",
     "slick-carousel": "^1.8.1",
     "sweetalert2": "^11.6.13",
     "tinycolor2": "^1.6.0"

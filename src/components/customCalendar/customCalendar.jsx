@@ -72,7 +72,7 @@ const CustomCalendar = ({
   };
 
   return (
-    <div className="div-container-calendar">
+    <div className="div-container-calendar" style={{backgroundColor:"blue"}}>
       <Box className={"line7day"}>
         {daysOfWeek.map((day) => (
           <h4
@@ -335,7 +335,6 @@ const CustomCalendar = ({
             width: "100%",
             border: "2px solid lightgray",
             borderRadius: "10px",
-            marginBottom: "10px",
           }}
         />
       )}

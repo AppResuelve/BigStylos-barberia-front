@@ -104,6 +104,11 @@ const Turns = () => {
     if (Object.keys(serviceSelected).length > 0) fetchServices();
   }, [serviceSelected]);
 
+console.log(workerDays);
+console.log(workers);
+console.log(selectedWorker);
+
+
   const handleServiceChange = (serviceName, service) => {
     let singCalculated;
     if (service.sing != 0 && service.type === "%") {
@@ -166,6 +171,18 @@ const Turns = () => {
   };
 
   const handleSelectTime = (btn) => {
+    setAuxCart((prevState) => {
+      if (Object.keys(prevState).length >= 3) return prevState;
+
+      let copyState = { ...prevState };
+
+      // Crear una clave única usando los valores seleccionados
+      const uniqueKey = `${dayIsSelected[0]}+${dayIsSelected[1]}+${serviceSelected.name}+${btn.ini}`;
+      // Añadir o actualizar la entrada en el objeto de estado
+      copyState[uniqueKey] = btn.worker;
+
+      return copyState;
+    });
     setTurnsCart((prevState) => {
       // Limitamos a 3 turnos por carrito
       if (prevState.length >= 3) return prevState;
@@ -182,18 +199,8 @@ const Turns = () => {
       });
       return copyState;
     });
-    setAuxCart((prevState) => {
-      if (Object.keys(prevState).length >= 3) return prevState;
-
-      let copyState = { ...prevState };
-      // Crear una clave única usando los valores seleccionados
-      const uniqueKey = `${dayIsSelected[0]}+${dayIsSelected[1]}+${serviceSelected.name}+${btn.ini}`;
-      // Añadir o actualizar la entrada en el objeto de estado
-      copyState[uniqueKey] = btn.worker;
-
-      return copyState;
-    });
   };
+  console.log(auxCart);
 
   return (
     <div
@@ -579,10 +586,12 @@ const Turns = () => {
                     turnsButtons.map((btn, index) => {
                       if (btn.ini < 720) return;
                       let dayInCart = false;
+                      let disabled = false;
                       let uniqueKey = `${dayIsSelected[0]}+${dayIsSelected[1]}+${serviceSelected.name}+${btn.ini}`;
                       if (auxCart[uniqueKey]) {
                         dayInCart = true;
                       }
+                      // if(auxCart[])
                       return (
                         <button
                           key={index}

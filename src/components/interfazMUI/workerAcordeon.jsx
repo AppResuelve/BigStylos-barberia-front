@@ -156,7 +156,7 @@ const WorkerAcordeon = ({ userData }) => {
               Dias de trabajo
             </h2>
           </AccordionSummary>
-          <AccordionDetails sx={{ p: 1 }}>
+          <AccordionDetails >
             {expanded === "panel1" && Object.keys(userData).length > 0 && (
               <CreateWorkDays
                 userData={userData}

@@ -15,7 +15,6 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const TurnsCartFooter = () => {
   const { turnsCart, setTurnsCart, setAuxCart, setDayIsSelected } =
     useContext(CartContext);
-
   const [openCart, setOpenCart] = useState(false);
   const [urlInitPoint, setUrlInitPoint] = useState(null);
   const [loader, setLoader] = useState(false);
@@ -32,12 +31,12 @@ const TurnsCartFooter = () => {
 
     // Escuchar el evento popstate
     window.addEventListener("popstate", handlePopState);
-
     // Limpiar el evento al desmontar el componente
     return () => {
       window.removeEventListener("popstate", handlePopState);
     };
   }, []);
+
   // Si no hay turnos en el carrito, no renderizar nada
   if (turnsCart.length === 0) {
     return null; // No renderiza nada
@@ -50,6 +49,7 @@ const TurnsCartFooter = () => {
       return newOpenCart;
     });
   };
+
   const handleAdd = (turn) => {
     setTurnsCart((prevState) => {
       return prevState.map((t) => {
@@ -73,6 +73,7 @@ const TurnsCartFooter = () => {
       });
     });
   };
+
   const handleDeleteTurn = (turn) => {
     setTurnsCart((prevState) => {
       return prevState.filter((t) => t.id !== turn.id);
@@ -123,11 +124,20 @@ const TurnsCartFooter = () => {
         setTurnsCart([]);
         setAuxCart({});
         setDayIsSelected([]);
-        toastAlert("El/los turnos han sidos agendados con éxito!", "success");
+        toastAlert(
+          cartNoSing.length > 1
+            ? "Los turnos han sidos agendados con éxito!"
+            : "El turno ha sido agendado con éxito!",
+          "success"
+        );
       } catch (error) {
         setLoader(false);
-        toastAlert("Error al agendar el/los turnos.", "error");
-
+        toastAlert(
+          cartNoSing.length > 1
+            ? "Error al agendar los turnos."
+            : "Error al agendar el turno",
+          "error"
+        );
         console.log(error);
       }
     }
