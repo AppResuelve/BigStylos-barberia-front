@@ -10,6 +10,7 @@ const LoadAndRefreshProvider = ({ children }) => {
   const [imgLogoLoaded, setImgLogoLoaded] = useState(false); // Estado para el estado del mapa
   const [minTimePassed, setMinTimePassed] = useState(false); // Estado para el retraso mínimo
 
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       setMinTimePassed(true); // Se cumple el retraso de 1 segundo

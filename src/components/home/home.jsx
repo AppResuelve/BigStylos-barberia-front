@@ -18,7 +18,8 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Home = () => {
   const { darkMode, homeImages } = useContext(ThemeContext);
-  const { googleLogin } = useContext(AuthContext);
+  const { googleLogin, setIsOpenUserPanel, setOpenSection } =
+    useContext(AuthContext);
   const { setImgLogoLoaded } = useContext(LoadAndRefreshContext);
   const navigate = useNavigate();
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
@@ -70,6 +71,16 @@ const Home = () => {
       // Navegar a la página de reservas si el usuario está logueado
       navigate("/turns");
     }
+  };
+
+  const handleGoToMyTurns = () => {
+    setIsOpenUserPanel(true);
+    setTimeout(() => {
+      setOpenSection({
+        telefono: false,
+        turnos: true,
+      });
+    }, 300);
   };
 
   return (
@@ -130,7 +141,7 @@ const Home = () => {
           </button>
           <button
             id="myTurns"
-            onClick={handleReserveClick}
+            onClick={handleGoToMyTurns}
             className="btn-reservar-home"
             style={{ width: md ? "100%" : "calc(50% - 5px)" }}
           >

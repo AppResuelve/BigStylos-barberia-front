@@ -17,11 +17,14 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const UserPanelModal = () => {
   const { darkMode } = useContext(ThemeContext);
-  const { userData, isOpenUserPanel, setIsOpenUserPanel } =
+  const { userData, isOpenUserPanel, setIsOpenUserPanel, setOpenSection } =
     useContext(AuthContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
-  const handleClose = () => setIsOpenUserPanel(false);
+  const handleClose = () => {
+    setIsOpenUserPanel(false),
+      setOpenSection({ telefono: false, turnos: false });
+  };
   return (
     <Dialog
       style={{
@@ -101,9 +104,7 @@ const UserPanelModal = () => {
         <section style={{ padding: "55px 10px 10px 10px" }}>
           {/* seccion del admin */}
           {userData !== 1 && userData.admin && (
-            <section
-              onClick={() => setIsOpenUserPanel(false)}
-            >
+            <section onClick={() => setIsOpenUserPanel(false)}>
               <NavLink
                 to="/admin"
                 style={{ textDecoration: "none", color: "black" }}

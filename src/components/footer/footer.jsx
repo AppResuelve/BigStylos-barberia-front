@@ -65,42 +65,12 @@ const Footer = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        top: "100%",
         width: "100%",
         height: "100%",
         overflow: "hidden",
         backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
       }}
     >
-      {/* Sección svg y div */}
-      {/* <div
-        className="div-container-custom-shape-divider-and-div"
-        style={{
-          backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
-        }}
-      >
-        <svg
-          data-name="Layer 1"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1200 120"
-          preserveAspectRatio="none"
-          style={{
-            filter: `drop-shadow(0px 0px 4px rgba(${invertedColorRGB.r},${invertedColorRGB.g},${invertedColorRGB.b}, 0.7))`,
-          }}
-        >
-          <div
-            style={{
-              width: "100%",
-              height: "20px",
-              backgroundColor: "white",
-            }}
-          ></div>
-          <path
-            d="M600,112.77C268.63,112.77,0,65.52,0,7.23V120H1200V7.23C1200,65.52,931.37,112.77,600,112.77Z"
-            style={{ fill: darkMode.on ? darkMode.dark : darkMode.light }}
-          ></path>
-        </svg>
-      </div> */}
       <div
         style={{
           display: "flex",
@@ -108,13 +78,13 @@ const Footer = () => {
           justifyContent: "center",
           alignItems: "center",
           width: "100%",
-          marginTop: "calc(0% + 120px)",
+          marginTop: "100px",
         }}
       >
         <span
           style={{
             display: "flex",
-            // justifyContent: "center",
+            justifyContent: "center",
             alignSelf: "center",
             width: "90%",
             fontSize: "20px",
@@ -128,7 +98,7 @@ const Footer = () => {
           style={{
             width: "100%",
             maxWidth: "900px",
-            border: "1px solid lightgray",
+            border: "1px solid #208de7",
             borderRadius: "10px",
             margin: "30px 0px 10px 0px",
           }}
@@ -248,12 +218,11 @@ const Footer = () => {
           ></div>
         </Box>
       </div>
-
       <hr
         style={{
           width: "100%",
           maxWidth: "900px",
-          border: "1px solid lightgray",
+          border: "1px solid #208de7",
           borderRadius: "10px",
           margin: "10px 0px 50px 0px",
         }}
@@ -265,12 +234,13 @@ const Footer = () => {
           justifyContent: "center",
           width: "95%",
           maxWidth: "900px",
+          marginBottom: "25px",
         }}
       >
         <span
           style={{
             margin: "10px 0px 5px 15px",
-            fontSize:"18px",
+            fontSize: "18px",
             color: darkMode.on ? "#e6e6e6" : "black",
           }}
         >
@@ -278,21 +248,20 @@ const Footer = () => {
         </span>
         <Maps />
       </div>
-      <div
+      <section
         style={{
           display: "flex",
           flexDirection: "column",
-          justifyContent: "end",
-          alignItems: "end",
+          alignItems: "center",
           width: "100%",
-          height: "100px",
-          padding: "15px",
+          backgroundColor: "red",
           color: darkMode.on ? "#e6e6e6" : "black",
+          background: `linear-gradient(to top, lightgray, transparent)`,
         }}
       >
         <div
           style={{
-            width: "100%",
+            width: "95%",
             display: "flex",
             justifyContent: "space-between",
           }}
@@ -320,19 +289,30 @@ const Footer = () => {
               <img src={facebook} alt="facebook" className="img-social-home" />
             </NavLink>
           </div>
-
-          <a
-            className="img-social-home-link
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <span>Contáctenos</span>
+            <a
+              className="img-social-home-link
               href="
-            whatsapp:target="_blank" //send?phone=+5492983664119&text=Quiero saber cómo obtener una página para mi negocio."
-            rel="noopener noreferrer"
-          >
-            <img className="img-social-home" src={whatsapp} alt="whatsapp" />
-          </a>
+              whatsapp:target="_blank" //send?phone=+5492983664119&text=Quiero saber cómo obtener una página para mi negocio."
+              rel="noopener noreferrer"
+            >
+              <img className="img-social-home" src={whatsapp} alt="whatsapp" />
+            </a>
+          </div>
         </div>
-        <h4>Olavarria, Bs As, Argentina</h4>
-        <h4>Todos los derechos reservados @2024 </h4>
-      </div>
+        <div
+          style={{
+            width:"95%",
+            marginTop: "25px",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <h4>Olavarria, Bs As, Argentina</h4>
+          <h4>Todos los derechos reservados @2024 </h4>
+        </div>
+      </section>
     </footer>
   );
 };
