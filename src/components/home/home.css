@@ -10,7 +10,7 @@
 
 .container-btn-reservar {
       width: 100%;
-      max-width: 800px;
+      max-width: 600px;
       justify-content: space-between;
       /* align-items: center; */
       padding: 10px;
@@ -99,7 +99,7 @@
       position: relative;
       display: flex;
       justify-content: center;
-      max-width: 800px;
+      max-width: 600px;
       max-height: 400px;
       width: 100%;
       height: 30%;
