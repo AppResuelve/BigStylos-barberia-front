@@ -14,6 +14,7 @@ import { calculateSing } from "../../helpers/calculateSing";
 import formatHour from "../../functions/formatHour";
 import Swal from "sweetalert2";
 import clickGif from "../../assets/gifs/click.gif";
+import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import CartContext from "../../context/CartContext";
 import axios from "axios";
 import "./turns.css";
@@ -31,6 +32,7 @@ const Turns = () => {
     dayIsSelected,
     setDayIsSelected,
   } = useContext(CartContext);
+  const { sm } = useMediaQueryHook();
   const [catServices, setCatServices] = useState({});
   const [serviceSelected, setServiceSelected] = useState({});
   const [expanded, setExpanded] = useState(false);
@@ -103,11 +105,6 @@ const Turns = () => {
 
     if (Object.keys(serviceSelected).length > 0) fetchServices();
   }, [serviceSelected]);
-
-console.log(workerDays);
-console.log(workers);
-console.log(selectedWorker);
-
 
   const handleServiceChange = (serviceName, service) => {
     let singCalculated;
@@ -200,7 +197,6 @@ console.log(selectedWorker);
       return copyState;
     });
   };
-  console.log(auxCart);
 
   return (
     <div
@@ -209,20 +205,6 @@ console.log(selectedWorker);
         marginBottom: turnsCart.length > 0 ? "85px" : "0px", //condicion con el cart
       }}
     >
-      {/* backdrop fixed para que ocupe siempre el 100% de la pantalla con o sin scroll*/}
-      {Object.keys(serviceSelected).length < 1 && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.77)",
-            zIndex: "1",
-          }}
-        ></div>
-      )}
       {dayIsSelected.length < 1 ? (
         <div className="subcontainer-turns">
           {/* seccion seleccion de servicio */}
@@ -234,11 +216,7 @@ console.log(selectedWorker);
               height: "100%",
               backgroundColor: "white", //revisar cuando se cambie el color
               borderRadius: "20px",
-              border:
-                Object.keys(serviceSelected).length < 1
-                  ? "2px solid #2196f3"
-                  : "none",
-              padding: Object.keys(serviceSelected).length < 1 ? "15px" : "0px",
+            
               marginBottom: "25px",
             }}
           >
@@ -257,80 +235,82 @@ console.log(selectedWorker);
             <Accordion
               ref={serviceAccordionRef} // Referencia al acordeón de servicios
               style={{
-                borderRadius: "36px",
+                borderRadius: "20px",
                 padding: "5px",
-                boxShadow: "0px 15px 25px -10px rgba(0,0,0,0.57)",
+                boxShadow: "0px 5px 10px -5px rgba(0,0,0,0.50)",
                 backgroundColor: !darkMode.on ? darkMode.light : darkMode.dark,
               }}
               expanded={expanded === "panel1"}
               onChange={handleChange("panel1")}
             >
-              <AccordionSummary
-                sx={{
-                  backgroundColor: expanded === "panel1" ? "#d6d6d5" : "",
-                  borderRadius: "40px",
-                  height: "60px",
-                }}
-                expandIcon={
-                  <ExpandMoreIcon
-                    fontSize="large"
-                    sx={{ color: expanded === "panel1" ? "" : "#2196f3" }}
-                  />
-                }
-                aria-controls="panel1bh-content"
-                id="panel1bh-header"
-              >
-                {Object.keys(serviceSelected).length > 0 ? (
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <img
-                      src={
-                        serviceSelected.img !== ""
-                          ? serviceSelected.img
-                          : servicesIcon
-                      }
-                      alt="service-selected-icon"
-                      className="img-service-selected-turns"
+              {Object.keys(serviceSelected).length > 0 && (
+                <AccordionSummary
+                  style={{
+                    backgroundColor: expanded === "panel1" ? "#d6d6d5" : "",
+                    borderRadius: "20px",
+                    height: "60px",
+                  }}
+                  expandIcon={
+                    <ExpandMoreIcon
+                      fontSize="large"
+                      sx={{ color: expanded === "panel1" ? "" : "#2196f3" }}
                     />
-                    <span
+                  }
+                  aria-controls="panel1bh-content"
+                  id="panel1bh-header"
+                >
+                  {Object.keys(serviceSelected).length > 0 ? (
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <img
+                        src={
+                          serviceSelected.img !== ""
+                            ? serviceSelected.img
+                            : servicesIcon
+                        }
+                        alt="service-selected-icon"
+                        className="img-service-selected-turns"
+                      />
+                      <span
+                        style={{
+                          color: !darkMode.on
+                            ? darkMode.dark
+                            : expanded === "panel1"
+                            ? darkMode.dark
+                            : "white",
+                        }}
+                      >
+                        {serviceSelected.name}
+                      </span>
+                    </div>
+                  ) : (
+                    <div
                       style={{
                         color: !darkMode.on
                           ? darkMode.dark
                           : expanded === "panel1"
                           ? darkMode.dark
                           : "white",
+                        fontWeight: "bold",
+                        fontSize: "20px",
+                        height: "40px",
+                        display: "flex",
+                        alignItems: "center",
                       }}
                     >
-                      {serviceSelected.name}
-                    </span>
-                  </div>
-                ) : (
-                  <div
-                    style={{
-                      color: !darkMode.on
-                        ? darkMode.dark
-                        : expanded === "panel1"
-                        ? darkMode.dark
-                        : "white",
-                      fontWeight: "bold",
-                      fontSize: "20px",
-                      height: "40px",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <img
-                      src={servicesIcon}
-                      alt="services-icon"
-                      style={{
-                        width: "40px",
-                        marginRight: "15px",
-                      }}
-                    />
-                    <span>Servicios</span>
-                  </div>
-                )}
-              </AccordionSummary>
-              <AccordionDetails>
+                      <img
+                        src={servicesIcon}
+                        alt="services-icon"
+                        style={{
+                          width: "40px",
+                          marginRight: "15px",
+                        }}
+                      />
+                      <span>Servicios</span>
+                    </div>
+                  )}
+                </AccordionSummary>
+              )}
+              <AccordionDetails sx={{ p: 1 }}>
                 {Object.keys(catServices).map((category, index) => (
                   <section key={index}>
                     <span
@@ -340,8 +320,11 @@ console.log(selectedWorker);
                         fontSize: "20px",
                         fontWeight: "bold",
                         display: "flex",
-                        marginTop: "10px",
-                        borderRadius: "40px",
+                        marginTop:
+                          Object.keys(serviceSelected).length > 0
+                            ? "10px"
+                            : "0px",
+                        borderRadius: "15px",
                         justifyContent: "center",
                       }}
                     >
@@ -351,10 +334,12 @@ console.log(selectedWorker);
                       {Object.entries(catServices[category]).map(
                         ([service, details], srvIndex) => {
                           return (
-                            <button
+                            <div
                               key={`${category}-${srvIndex}`}
                               className="btn-services-turns"
                               style={{
+                                display: "flex",
+                                flexDirection: "column",
                                 backgroundColor:
                                   serviceSelected.name === service
                                     ? "#2688ff"
@@ -375,17 +360,44 @@ console.log(selectedWorker);
                                 )
                               }
                             >
-                              <img
-                                src={
-                                  catServices[category][service].img
-                                    ? catServices[category][service].img
-                                    : servicesIcon
-                                }
-                                alt="im-service"
-                                className="img-service-turns"
-                              />
-                              <span>{service}</span>
-                            </button>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <img
+                                  src={
+                                    catServices[category][service].img
+                                      ? catServices[category][service].img
+                                      : servicesIcon
+                                  }
+                                  alt="im-service"
+                                  className="img-service-turns"
+                                />
+                                <span>{service}</span>
+                              </div>
+                              {catServices[category][service].price != 0 && (
+                                <hr className="hr-selectservice" />
+                              )}
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                }}
+                              >
+                                <span>
+                                  {catServices[category][service].price != 0
+                                    ? `$${catServices[category][service].price}`
+                                    : ""}
+                                </span>
+                                <span>
+                                  {catServices[category][service].sing != 0
+                                    ? "Con seña"
+                                    : ""}
+                                </span>
+                              </div>
+                            </div>
                           );
                         }
                       )}
@@ -394,122 +406,113 @@ console.log(selectedWorker);
                 ))}
               </AccordionDetails>
             </Accordion>
-            {expanded !== "panel1" &&
-              Object.keys(serviceSelected).length < 1 && (
-                <div
+          </div>
+          {Object.keys(serviceSelected).length > 0 && (
+            <>
+              <div>
+                <h2
                   style={{
-                    position: "absolute",
-                    bottom: "calc(0% - 60px)",
-                    right: "calc(50% - 60px)",
-                    zIndex: 2,
-                    pointerEvents: "none",
+                    color: !darkMode.on
+                      ? darkMode.dark
+                      : expanded === "panel2"
+                      ? darkMode.dark
+                      : "white",
+                    marginLeft: "20px",
                   }}
                 >
-                  <img
-                    src={clickGif}
-                    alt="ház click en servicios"
-                    style={{ width: "120px" }}
-                  />
-                </div>
-              )}
-          </div>
-          {/* seccion seleccion de profesional */}
-          <div>
-            <h2
-              style={{
-                color: !darkMode.on
-                  ? darkMode.dark
-                  : expanded === "panel2"
-                  ? darkMode.dark
-                  : "white",
-                marginLeft: "20px",
-              }}
-            >
-              Seleccione un profesional
-            </h2>
-            <Accordion
-              ref={workerAccordionRef} // Referencia al acordeón de trabajadores
-              style={{
-                padding: "5px",
-                borderRadius: "36px",
-                boxShadow: "0px 15px 25px -10px rgba(0,0,0,0.57)",
-                backgroundColor: !darkMode.on ? darkMode.light : darkMode.dark,
-              }}
-              expanded={expanded === "panel2"}
-              onChange={handleChange("panel2")}
-            >
-              <AccordionSummary
-                sx={{
-                  borderRadius: "40px",
-                  backgroundColor: expanded === "panel2" ? "#d6d6d5" : "",
-                  height: "60px",
-                }}
-                expandIcon={
-                  <ExpandMoreIcon
-                    fontSize="large"
-                    sx={{ color: expanded === "panel2" ? "" : "#2196f3" }}
-                  />
-                }
-                aria-controls="panel2bh-content"
-                id="panel2bh-header"
-              >
-                <div className="select-cualquiera-turns">
-                  <img src={selectedWorker.image} alt="worker-seleccionado" />
-                  <span>
-                    {selectedWorker.name === "cualquiera"
-                      ? "Sin preferencia"
-                      : selectedWorker.name}
-                  </span>
-                </div>
-              </AccordionSummary>
-              <AccordionDetails>
-                <div className="container-workers-turns">
-                  {workers.length > 0 &&
-                    workers.map((worker, index) => {
-                      return (
-                        <div
-                          key={index}
-                          className="select-workers-turns"
-                          onClick={() => handleSelectWorker(worker)}
-                          style={{
-                            backgroundColor:
-                              selectedWorker.email === worker.email
-                                ? "#2688ff"
-                                : "rgba(255, 255, 255, 0.48)",
-                            color:
-                              selectedWorker.email === worker.email
-                                ? "white"
-                                : "black",
-                            pointerEvents:
-                              selectedWorker.email === worker.email
-                                ? "none"
-                                : "",
-                          }}
-                        >
-                          <img src={worker.image} alt={worker.name} />
-                          <span>
-                            {worker.name === "cualquiera"
-                              ? "Sin preferencia"
-                              : worker.name}
-                          </span>
-                        </div>
-                      );
-                    })}
-                </div>
-              </AccordionDetails>
-            </Accordion>
-          </div>
-          {/* seccion seleccion de día */}
-          <div>
-            <CustomCalendarTurns
-              days={workerDays}
-              dayIsSelected={dayIsSelected}
-              setDayIsSelected={setDayIsSelected}
-              selectedWorker={selectedWorker}
-              serviceSelected={serviceSelected}
-              setTurnsButtons={setTurnsButtons}
-            />
-          </div>
+                  Seleccione un profesional
+                </h2>
+                <Accordion
+                  ref={workerAccordionRef} // Referencia al acordeón de trabajadores
+                  style={{
+                    padding: "5px",
+                    borderRadius: "20px",
+                    boxShadow: "0px 5px 10px -5px rgba(0,0,0,0.50)",
+
+                    backgroundColor: !darkMode.on
+                      ? darkMode.light
+                      : darkMode.dark,
+                  }}
+                  expanded={expanded === "panel2"}
+                  onChange={handleChange("panel2")}
+                >
+                  <AccordionSummary
+                    style={{
+                      borderRadius: "20px",
+                      backgroundColor: expanded === "panel2" ? "#d6d6d5" : "",
+                      height: "60px",
+                    }}
+                    expandIcon={
+                      <ExpandMoreIcon
+                        fontSize="large"
+                        sx={{ color: expanded === "panel2" ? "" : "#2196f3" }}
+                      />
+                    }
+                    aria-controls="panel2bh-content"
+                    id="panel2bh-header"
+                  >
+                    <div className="select-cualquiera-turns">
+                      <img
+                        src={selectedWorker.image}
+                        alt="worker-seleccionado"
+                      />
+                      <span>
+                        {selectedWorker.name === "cualquiera"
+                          ? "Sin preferencia"
+                          : selectedWorker.name}
+                      </span>
+                    </div>
+                  </AccordionSummary>
+                  <AccordionDetails sx={{ p: 1 }}>
+                    <div className="container-workers-turns">
+                      {workers.length > 0 &&
+                        workers.map((worker, index) => {
+                          return (
+                            <div
+                              key={index}
+                              className="select-workers-turns"
+                              onClick={() => handleSelectWorker(worker)}
+                              style={{
+                                width: sm ? "100%" : "fit-content",
+                                backgroundColor:
+                                  selectedWorker.email === worker.email
+                                    ? "#2688ff"
+                                    : "rgba(255, 255, 255, 0.48)",
+                                color:
+                                  selectedWorker.email === worker.email
+                                    ? "white"
+                                    : "black",
+                                pointerEvents:
+                                  selectedWorker.email === worker.email
+                                    ? "none"
+                                    : "",
+                              }}
+                            >
+                              <img src={worker.image} alt={worker.name} />
+                              <span>
+                                {worker.name === "cualquiera"
+                                  ? "Sin preferencia"
+                                  : worker.name}
+                              </span>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  </AccordionDetails>
+                </Accordion>
+              </div>
+              <div>
+                <CustomCalendarTurns
+                  days={workerDays}
+                  dayIsSelected={dayIsSelected}
+                  setDayIsSelected={setDayIsSelected}
+                  selectedWorker={selectedWorker}
+                  serviceSelected={serviceSelected}
+                  setTurnsButtons={setTurnsButtons}
+                />
+              </div>
+            </>
+          )}
         </div>
       ) : (
         <div

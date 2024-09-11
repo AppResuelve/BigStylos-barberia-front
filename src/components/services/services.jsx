@@ -127,8 +127,8 @@ const Services = ({
           category,
           prev,
           current,
-          price,
-          sing,
+          price: price == 0 ? 0 : price,
+          sing: sing == 0 ? 0 : sing,
           type,
         }
       );
