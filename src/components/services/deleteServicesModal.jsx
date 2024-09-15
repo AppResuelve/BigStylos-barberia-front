@@ -16,6 +16,7 @@ const DeleteServicesModal = ({
   openDelete,
   setOpenDelete,
   setRefreshServices,
+  setRefreshStatusSession,
 }) => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [servicesToDelete, setServicesToDetele] = useState([]);
@@ -52,6 +53,9 @@ const DeleteServicesModal = ({
               container: "my-swal-container",
             },
           });
+          console.log(response.data);
+          
+          setRefreshStatusSession((prevState) => !prevState);
           //en vez de hacer refresh se puede setear los estados servicios
           //con el result.(luego de ejecutar la funcion convertCategoryService)
           setRefreshServices((prevState) => {
