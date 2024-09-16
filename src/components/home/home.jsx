@@ -140,22 +140,27 @@ const Home = () => {
           >
             Reservar turno
           </button>
-          <div style={{ position: "relative" }}>
+          <div
+            style={{
+              position: "relative",
+              width: !md ? "calc(50% - 5px)" : "100%",
+            }}
+          >
             <button
               id="myTurns"
               disabled={!userData}
               onClick={handleGoToMyTurns}
               className="btn-reservar-home"
-              style={{ width: md ? "100%" : "calc(50% - 5px)" }}
+              style={{ width: "100%" }}
             >
               Mis turnos
             </button>
-              <label htmlFor="" className="label-count-notification"/>
-              <img
-                src={bellNotificationIcon}
-                alt="notificacíon de turnos"
-                className="notification-myturns"
-              />
+            <label htmlFor="" className="label-count-notification" />
+            <img
+              src={bellNotificationIcon}
+              alt="notificacíon de turnos"
+              className="notification-myturns"
+            />
           </div>
         </div>
       </section>
