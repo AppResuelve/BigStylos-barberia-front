@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
+import ThemeContext from "../../context/ThemeContext";
+import AuthContext from "../../context/AuthContext";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { convertToCategoryServiceArray } from "../../helpers/convertCategoryService";
 import {
@@ -12,21 +14,15 @@ import {
 import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import axios from "axios";
-import ThemeContext from "../../context/ThemeContext";
 import toastAlert from "../../helpers/alertFunction";
 import DeleteServicesModal from "./deleteServicesModal";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const Services = ({
-  setRefreshServices,
-  loadingServices,
-  services,
-  setServices,
-  setLoadingServices,
-}) => {
+const Services = ({ setRefreshServices, loadingServices, services }) => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const { darkMode } = useContext(ThemeContext);
+  const { setRefreshStatusSession } = useContext(AuthContext);
   const [categoryList, setCategoryList] = useState([]);
   const [categoryServices, setCategoryServices] = useState([]);
   const [editableCatSer, setEditableCatSer] = useState([]);
@@ -82,6 +78,7 @@ const Services = ({
         toastAlert("El servicio se agregó exitosamente.", "success");
         // Refresca la lista de servicios después de agregar uno nuevo
         setRefreshServices((prevState) => !prevState);
+        setRefreshStatusSession((prevState) => !prevState);
         // Limpiar los inputs
         setInputs({
           category: "",
@@ -110,6 +107,8 @@ const Services = ({
       toastAlert(`Categoria ${current} actualizada correctamente.`, "success");
       // Refresca la lista de servicios después de agregar uno nuevo
       setRefreshServices((prevState) => !prevState);
+      setRefreshStatusSession((prevState) => !prevState);
+
       setCategoryName({});
       setShowEdit(false);
     } catch (error) {
@@ -138,6 +137,7 @@ const Services = ({
       );
       // Refresca la lista de servicios después de agregar uno nuevo
       setRefreshServices((prevState) => !prevState);
+      setRefreshStatusSession((prevState) => !prevState);
       setServiceRow({});
       setShowEdit(false);
     } catch (error) {
@@ -852,6 +852,7 @@ const Services = ({
         setRefreshServices={setRefreshServices}
         editableCatSer={editableCatSer}
         setEditableCatSer={setEditableCatSer}
+        setRefreshStatusSession={setRefreshStatusSession}
       />
     </div>
   );

@@ -6,12 +6,13 @@ import { verificateFrontResponse } from "../../helpers/verificateFrontResponseMP
 import { getCookie } from "../../helpers/cookies";
 import { getLocalStorage } from "../../helpers/localStorage";
 import defaultImg from "../../assets/icons/no-image-logotipe.png";
+import bellNotificationIcon from "../../assets/icons/bell-on.png";
 import defaultImgLight from "../../assets/icons/no-image-logotipe-light.png";
 import Swal from "sweetalert2";
 import axios from "axios";
 import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
-import "./home.css";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
+import "./home.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -139,15 +140,23 @@ const Home = () => {
           >
             Reservar turno
           </button>
-          <button
-            id="myTurns"
-            disabled={!userData}
-            onClick={handleGoToMyTurns}
-            className="btn-reservar-home"
-            style={{ width: md ? "100%" : "calc(50% - 5px)" }}
-          >
-            Mis turnos
-          </button>
+          <div style={{ position: "relative" }}>
+            <button
+              id="myTurns"
+              disabled={!userData}
+              onClick={handleGoToMyTurns}
+              className="btn-reservar-home"
+              style={{ width: md ? "100%" : "calc(50% - 5px)" }}
+            >
+              Mis turnos
+            </button>
+              <label htmlFor="" className="label-count-notification"/>
+              <img
+                src={bellNotificationIcon}
+                alt="notificacíon de turnos"
+                className="notification-myturns"
+              />
+          </div>
         </div>
       </section>
     </div>

@@ -8,12 +8,12 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CustomCalendarTurns from "../customCalendar/customCalendarTurns";
 import obtainMonthName from "../../functions/obtainMonthName";
 import leftArrowBack from "../../assets/icons/left-arrow.png";
+import hasSingIcon from "../../assets/icons/dollar.png";
 import servicesIcon from "../../assets/icons/review.png";
 import { TurnsButtonsSkeleton } from "../loaders/skeletons";
 import { calculateSing } from "../../helpers/calculateSing";
 import formatHour from "../../functions/formatHour";
 import Swal from "sweetalert2";
-import clickGif from "../../assets/gifs/click.gif";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import CartContext from "../../context/CartContext";
 import axios from "axios";
@@ -106,45 +106,56 @@ const Turns = () => {
     if (Object.keys(serviceSelected).length > 0) fetchServices();
   }, [serviceSelected]);
 
+  useEffect(() => {
+    // Función de limpieza que se ejecuta cuando el componente se desmonta
+    return () => {
+      setDayIsSelected([]);
+    };
+  }, []); // El array vacío asegura que este useEffect solo se ejecute una vez, en el desmontaje
+
   const handleServiceChange = (serviceName, service) => {
-    let singCalculated;
-    if (service.sing != 0 && service.type === "%") {
-      singCalculated = calculateSing(service.price, service.sing);
-      setServiceSelected({
-        name: serviceName,
-        img: service.img,
-        price: service.price,
-        sing: singCalculated,
-      });
-    } else {
-      setServiceSelected({
-        name: serviceName,
-        img: service.img,
-        price: service.price,
-        sing: service.sing,
-      });
+    if (serviceSelected.name !== serviceName) {
+      let singCalculated;
+      if (service.sing != 0 && service.type === "%") {
+        singCalculated = calculateSing(service.price, service.sing);
+        setServiceSelected({
+          name: serviceName,
+          img: service.img,
+          price: service.price,
+          sing: singCalculated,
+        });
+      } else {
+        setServiceSelected({
+          name: serviceName,
+          img: service.img,
+          price: service.price,
+          sing: service.sing,
+        });
+      }
     }
     setExpanded(false);
   };
 
   const handleSelectWorker = (worker) => {
-    setSelectedWorker(worker);
-    setExpanded(false);
-    if (worker.email === "cualquiera") {
-      setWorkerDays(days);
-    } else {
-      // Filtra los días que coinciden con el email del trabajador seleccionado
-      const filteredDays = {};
-      Object.keys(days).forEach((month) => {
-        filteredDays[month] = {};
-        Object.keys(days[month]).forEach((day) => {
-          if (days[month][day][worker.email]) {
-            filteredDays[month][day] = days[month][day][worker.email];
-          }
+    if (selectedWorker.email !== worker.email) {
+      setSelectedWorker(worker);
+      if (worker.email === "cualquiera") {
+        setWorkerDays(days);
+      } else {
+        // Filtra los días que coinciden con el email del trabajador seleccionado
+        const filteredDays = {};
+        Object.keys(days).forEach((month) => {
+          filteredDays[month] = {};
+          Object.keys(days[month]).forEach((day) => {
+            if (days[month][day][worker.email]) {
+              filteredDays[month][day] = days[month][day][worker.email];
+            }
+          });
         });
-      });
-      setWorkerDays(filteredDays);
+        setWorkerDays(filteredDays);
+      }
     }
+    setExpanded(false);
   };
 
   const handleChange = (panel) => (event, isExpanded) => {
@@ -168,6 +179,8 @@ const Turns = () => {
   };
 
   const handleSelectTime = (btn) => {
+    console.log(serviceSelected);
+
     setAuxCart((prevState) => {
       if (Object.keys(prevState).length >= 3) return prevState;
 
@@ -216,7 +229,7 @@ const Turns = () => {
               height: "100%",
               backgroundColor: "white", //revisar cuando se cambie el color
               borderRadius: "20px",
-            
+
               marginBottom: "25px",
             }}
           >
@@ -259,67 +272,45 @@ const Turns = () => {
                   aria-controls="panel1bh-content"
                   id="panel1bh-header"
                 >
-                  {Object.keys(serviceSelected).length > 0 ? (
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      <img
-                        src={
-                          serviceSelected.img !== ""
-                            ? serviceSelected.img
-                            : servicesIcon
-                        }
-                        alt="service-selected-icon"
-                        className="img-service-selected-turns"
-                      />
-                      <span
-                        style={{
-                          color: !darkMode.on
-                            ? darkMode.dark
-                            : expanded === "panel1"
-                            ? darkMode.dark
-                            : "white",
-                        }}
-                      >
-                        {serviceSelected.name}
-                      </span>
-                    </div>
-                  ) : (
-                    <div
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <img
+                      src={
+                        serviceSelected.img !== ""
+                          ? serviceSelected.img
+                          : servicesIcon
+                      }
+                      alt="service-selected-icon"
+                      className="img-service-selected-turns"
+                    />
+                    <span
                       style={{
                         color: !darkMode.on
                           ? darkMode.dark
                           : expanded === "panel1"
                           ? darkMode.dark
                           : "white",
-                        fontWeight: "bold",
-                        fontSize: "20px",
-                        height: "40px",
-                        display: "flex",
-                        alignItems: "center",
                       }}
                     >
-                      <img
-                        src={servicesIcon}
-                        alt="services-icon"
-                        style={{
-                          width: "40px",
-                          marginRight: "15px",
-                        }}
-                      />
-                      <span>Servicios</span>
-                    </div>
-                  )}
+                      {serviceSelected.name}
+                    </span>
+                  </div>
                 </AccordionSummary>
               )}
               <AccordionDetails sx={{ p: 1 }}>
                 {Object.keys(catServices).map((category, index) => (
-                  <section key={index}>
+                  <section
+                    key={index}
+                    style={{ marginTop: index === 0 ? "0px" : "15px" }}
+                  >
                     <span
                       style={{
-                        padding: "5px",
+                        width: "100%",
+                        height: "38px",
                         backgroundColor: "lightgray",
                         fontSize: "20px",
                         fontWeight: "bold",
                         display: "flex",
+                        alignItems: "center",
                         marginTop:
                           Object.keys(serviceSelected).length > 0
                             ? "10px"
@@ -348,10 +339,6 @@ const Turns = () => {
                                   serviceSelected.name === service
                                     ? "white"
                                     : "black",
-                                pointerEvents:
-                                  serviceSelected.name === service
-                                    ? "none"
-                                    : "",
                               }}
                               onClick={() =>
                                 handleServiceChange(
@@ -383,6 +370,7 @@ const Turns = () => {
                               <div
                                 style={{
                                   display: "flex",
+                                  alignItems: "center",
                                   justifyContent: "space-between",
                                 }}
                               >
@@ -391,11 +379,15 @@ const Turns = () => {
                                     ? `$${catServices[category][service].price}`
                                     : ""}
                                 </span>
-                                <span>
-                                  {catServices[category][service].sing != 0
-                                    ? "Con seña"
-                                    : ""}
-                                </span>
+                                {catServices[category][service].sing != 0 && (
+                                  <div className="div-span-imgsing-turns">
+                                    <span>Requiere seña</span>
+                                    <img
+                                      src={hasSingIcon}
+                                      alt="requiere seña"
+                                    />
+                                  </div>
+                                )}
                               </div>
                             </div>
                           );
@@ -482,10 +474,6 @@ const Turns = () => {
                                   selectedWorker.email === worker.email
                                     ? "white"
                                     : "black",
-                                pointerEvents:
-                                  selectedWorker.email === worker.email
-                                    ? "none"
-                                    : "",
                               }}
                             >
                               <img src={worker.image} alt={worker.name} />

@@ -30,7 +30,6 @@ const WorkerAcordeon = ({ userData }) => {
   const [changeNoSaved, setChangeNoSaved] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [schedule, setSchedule] = useState({});
-  const [refresh, setRefresh] = useState(false);
   const [pendingServices, setPendingServices] = useState(false);
   const [doCeroServices, setDoCeroServices] = useState(false);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
@@ -66,6 +65,7 @@ const WorkerAcordeon = ({ userData }) => {
 
   useEffect(() => {
     const fetchServices = async () => {
+
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/services/`);
         const arrServices = convertToServicesArray(response.data); //pasamos a array de obj servicio antes de setear
@@ -76,7 +76,7 @@ const WorkerAcordeon = ({ userData }) => {
       }
     };
     fetchServices();
-  }, [refresh]);
+  }, []);
 
   useEffect(() => {
     const fetchSchedule = async () => {
@@ -251,9 +251,6 @@ const WorkerAcordeon = ({ userData }) => {
           <AccordionDetails>
             {(expanded === "panel2" || redirectToMyServices) && (
               <MyServices
-                userData={userData}
-                refresh={refresh}
-                setRefresh={setRefresh}
                 services={services}
                 timeEdit={timeEdit}
                 setTimeEdit={setTimeEdit}

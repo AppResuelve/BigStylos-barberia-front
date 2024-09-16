@@ -45,7 +45,6 @@ const AdminAcordeon = () => {
         console.error("Error al obtener los servicios:", error);
       }
     };
-
     fetchData();
   }, [refreshServices]);
 

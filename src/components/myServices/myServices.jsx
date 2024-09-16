@@ -16,12 +16,10 @@ import "../interfazUiverse.io/checkBox.css";
 import Swal from "sweetalert2";
 import serviceIcon from "../../assets/icons/review.png";
 import toastAlert from "../../helpers/alertFunction";
+import AuthContext from "../../context/AuthContext";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const MyServices = ({
-  userData,
-  refresh,
-  setRefresh,
   services,
   timeEdit,
   setTimeEdit,
@@ -30,6 +28,7 @@ const MyServices = ({
   pendingServices,
 }) => {
   const { darkMode } = useContext(ThemeContext);
+  const { userData, setUserData } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [inputService, setInputService] = useState("");
   const [searchValue, setSearchValue] = useState("");
@@ -86,11 +85,14 @@ const MyServices = ({
           email: userData.email,
           newServicesDuration: timeEdit,
         });
-        toastAlert("Cambios guardados exitosamente.", "success");
-        setRefresh(!refresh);
+        setUserData(response.data);
+        toastAlert(
+          "La configuración de tus servicios ha sido actualizada exitosamente.",
+          "success"
+        );
       } catch (error) {
-        toastAlert("Error al actulizar los servicios.", "error");
-        console.error("Error al actulizar los servicios", error);
+        toastAlert("Error al actualizar los servicios.", "error");
+        console.error("Error al actualizar los servicios", error);
       }
       setShowEdit(false);
       setChangeNoSaved(false);
