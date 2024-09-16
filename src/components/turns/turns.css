@@ -167,6 +167,17 @@
       cursor: pointer;
 }
 
+.div-span-imgsing-turns {
+      display: flex;
+      align-items: center;
+}
+
+.div-span-imgsing-turns img{
+     width: 30px;
+     height: 30px;
+     margin-left: 5px;
+}
+
 @media (min-width:500px) and (max-height: 800px) {
       .box-calendar-turns {
             margin-top: 20px;

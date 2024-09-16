@@ -1,4 +1,15 @@
+.backdrop-turnscartfooter {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.688);
+      z-index: 1000;
+}
+
 .container-turnscartfooter {
+      position: fixed;
       width: 100%;
       height: 90px;
       position: fixed;
@@ -16,7 +27,7 @@
       left: 0;
       display: flex;
       justify-content: center;
-      z-index: 100;
+      z-index: 1001;
 }
 
 .subcontainer-turnscartfooter {
@@ -25,12 +36,13 @@
       justify-content: space-between;
       align-items: center;
       padding: 15px;
-      width: 97%;
+      width: 100%;
       max-width: 900px;
       height: 100%;
       border-radius: 25px 25px 0px 0px;
       background-color: white;
-      box-shadow: 0px -4px 10px -4px rgb(0, 0, 0, 0.5);
+      box-shadow: 0px -2px 5px -2px rgba(0, 0, 0, 0.5);
+
 }
 
 .subcontainer-turnscartfooter-open {
@@ -39,12 +51,12 @@
       flex-direction: column;
       align-items: center;
       padding: 15px;
-      width: 97%;
+      width: 100%;
       height: fit-content;
       max-width: 900px;
       border-radius: 25px 25px 0px 0px;
       background-color: white;
-      box-shadow: 0px -4px 10px -4px rgb(0, 0, 0, 0.5);
+      box-shadow: 0px -2px 5px -2px rgba(0, 0, 0, 0.5);
       gap: 10px;
 }
 
@@ -69,20 +81,48 @@
 
 .container-each-turn {
       display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      width: 100%;
+      /* height: 60px; */
+      padding: 10px;
+      border-radius: 10px;
+      background-color: lightgray;
+      /* margin-top: 10px; */
+}
+
+.container-each-turn hr {
+      border: 2px solid white;
+      width: 100%;
+      border-radius: 10px;
+}
+
+.sub-container1-each-turn {
+      display: flex;
       align-items: center;
       justify-content: space-between;
       width: 100%;
       height: 60px;
-      padding: 10px;
-      border-radius: 10px;
-      background-color: lightgray;
+}
+
+.sub-container2-each-turn {
+      display: flex;
+      align-items: center;
+      justify-self: flex-end;
+      justify-content: space-between;
+      width: 120px;
       margin-top: 10px;
+}
+
+.sub-container2-each-turn img {
+      width: 30px;
+      height: auto;
+      margin-left: 5px;
 }
 
 .container-each-turn button {
       width: 30px;
       height: 30px;
-      /* padding: 5px; */
       border: none;
       border-radius: 30px;
       background-color: #2688ff;
@@ -110,7 +150,7 @@
 
 .container-each-turn #minor-plas {
       display: flex;
-
+      align-items: center;
 }
 
 .container-each-turn #minor-plas #deleteturn-button {
@@ -131,14 +171,31 @@
       width: 40px;
       height: 40px;
       border-radius: 40px;
-      box-shadow: 0px -4px 7px -2px rgb(0, 0, 0, 0.4);
-      background-color: white;
+      box-shadow: 0px 0px 0px 5px rgb(255, 255, 255);
+      background-color: rgb(229, 229, 229);
       cursor: pointer;
 }
 
 .extend-cart-btn img {
       width: 30px;
       height: 30px;
+}
+
+.div-container-totalsing-turns {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      width: 100%;
+}
+
+.div-container-totalsing-turns span {
+      margin: 10px;
+}
+
+.hr-totalsing-turns {
+      width: 100%;
+      border: 1px solid lightgray;
+      border-radius: 10px;
 }
 
 .div-btns-pay-mp {

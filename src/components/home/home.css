@@ -127,6 +127,28 @@
 }
 
 
+.label-count-notification {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      top: calc(50% - 10px);
+      right: calc(0% + 14px);
+      border-radius: 20px;
+      background-color: rgb(219, 1, 1);
+      box-shadow: 0px 0px 0px 2px lightgray;
+      z-index: 1;
+}
+
+
+
+.notification-myturns {
+      position: absolute;
+      width: 27px;
+      height: 27px;
+      top: calc(50% - 13.5px);
+      right: calc(0% + 13.5px);
+      border-radius: 10px;
+}
 
 /* @media (min-width:500px) and (max-height: 800px) {
       .img-social-home {
