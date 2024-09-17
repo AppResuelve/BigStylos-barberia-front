@@ -99,18 +99,24 @@ const Home = () => {
       }}
     >
       <section className="container-img-logotipo">
-        <img
-          onLoad={() => setImgLogoLoaded(true)}
-          className="img-logotipo-home"
-          src={
-            homeImages && homeImages[0] && homeImages[0][1]
-              ? homeImages[0][1]
-              : darkMode.on
-              ? defaultImgLight
-              : defaultImg
-          }
-          alt="nombre del lugar"
-        />
+        {homeImages && homeImages[0] && homeImages[0][1] ? (
+          <img
+            onLoad={() => setImgLogoLoaded(true)}
+            className="img-logotipo-home"
+            src={
+              homeImages && homeImages[0] && homeImages[0][1]
+                ? homeImages[0][1]
+                : darkMode.on
+                ? defaultImgLight
+                : defaultImg
+            }
+            alt="nombre del lugar"
+          />
+        ) : (
+          <>
+            <span>cargando</span>
+          </>
+        )}
         <div
           style={{
             background: `linear-gradient(to bottom, ${darkMode.light}, transparent)`,
