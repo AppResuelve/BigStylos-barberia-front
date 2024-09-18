@@ -179,8 +179,6 @@ const Turns = () => {
   };
 
   const handleSelectTime = (btn) => {
-    console.log(serviceSelected);
-
     setAuxCart((prevState) => {
       if (Object.keys(prevState).length >= 3) return prevState;
 
@@ -192,6 +190,10 @@ const Turns = () => {
       copyState[uniqueKey] = btn.worker;
 
       return copyState;
+    });
+    let maxEnd = 0;
+    btn.worker.map((wkr) => {
+      maxEnd += wkr.end;
     });
     setTurnsCart((prevState) => {
       // Limitamos a 3 turnos por carrito
@@ -206,10 +208,13 @@ const Turns = () => {
         month: dayIsSelected[1],
         service: serviceSelected,
         quantity: 1,
+        maxEnd,
       });
       return copyState;
     });
   };
+  console.log(turnsCart);
+  console.log(dayIsSelected);
 
   return (
     <div
@@ -496,7 +501,9 @@ const Turns = () => {
                   setDayIsSelected={setDayIsSelected}
                   selectedWorker={selectedWorker}
                   serviceSelected={serviceSelected}
+                  turnsButtons={turnsButtons}
                   setTurnsButtons={setTurnsButtons}
+                  turnsCart={turnsCart}
                 />
               </div>
             </>
@@ -535,18 +542,17 @@ const Turns = () => {
                   {turnsButtons.length > 0 &&
                     turnsButtons.map((btn, index) => {
                       if (btn.ini >= 720) return;
-                      let dayInCart = false;
                       let uniqueKey = `${dayIsSelected[0]}+${dayIsSelected[1]}+${serviceSelected.name}+${btn.ini}`;
-                      if (auxCart[uniqueKey]) {
-                        dayInCart = true;
-                      }
+
                       return (
                         <button
                           key={index}
                           style={{
-                            backgroundColor: dayInCart ? "#2688ff" : "",
-                            color: dayInCart ? "white" : "",
-                            pointerEvents: dayInCart ? "none" : "",
+                            backgroundColor: auxCart[uniqueKey]
+                              ? "#2688ff"
+                              : "",
+                            color: auxCart[uniqueKey] ? "white" : "",
+                            pointerEvents: auxCart[uniqueKey] ? "none" : "",
                           }}
                           className="turnsbtn-turns"
                           onClick={() => handleSelectTime(btn)}
@@ -576,20 +582,16 @@ const Turns = () => {
                   {turnsButtons.length > 0 &&
                     turnsButtons.map((btn, index) => {
                       if (btn.ini < 720) return;
-                      let dayInCart = false;
-                      let disabled = false;
                       let uniqueKey = `${dayIsSelected[0]}+${dayIsSelected[1]}+${serviceSelected.name}+${btn.ini}`;
-                      if (auxCart[uniqueKey]) {
-                        dayInCart = true;
-                      }
-                      // if(auxCart[])
                       return (
                         <button
                           key={index}
                           style={{
-                            backgroundColor: dayInCart ? "#2688ff" : "",
-                            color: dayInCart ? "white" : "",
-                            pointerEvents: dayInCart ? "none" : "",
+                            backgroundColor: auxCart[uniqueKey]
+                              ? "#2688ff"
+                              : "",
+                            color: auxCart[uniqueKey] ? "white" : "",
+                            pointerEvents: auxCart[uniqueKey] ? "none" : "",
                           }}
                           className="turnsbtn-turns"
                           onClick={() => handleSelectTime(btn)}

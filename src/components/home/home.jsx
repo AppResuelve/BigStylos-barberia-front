@@ -13,6 +13,7 @@ import axios from "axios";
 import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import "./home.css";
+import { LoaderMapReady } from "../loaders/loaders";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -20,7 +21,8 @@ const Home = () => {
   const { darkMode, homeImages } = useContext(ThemeContext);
   const { googleLogin, setIsOpenUserPanel, setOpenSection, userData } =
     useContext(AuthContext);
-  const { setImgLogoLoaded } = useContext(LoadAndRefreshContext);
+  const { setImgLogoLoaded, newTurnNotification, setNewTurnNotification } =
+    useContext(LoadAndRefreshContext);
   const navigate = useNavigate();
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
@@ -80,6 +82,7 @@ const Home = () => {
         telefono: false,
         turnos: true,
       });
+      setNewTurnNotification(false);
     }, 300);
   };
 
@@ -99,7 +102,7 @@ const Home = () => {
       }}
     >
       <section className="container-img-logotipo">
-        {homeImages && homeImages[0] && homeImages[0][1] ? (
+        {homeImages.length > 0 && homeImages[0] && homeImages[0][1] ? (
           <img
             onLoad={() => setImgLogoLoaded(true)}
             className="img-logotipo-home"
@@ -113,9 +116,7 @@ const Home = () => {
             alt="nombre del lugar"
           />
         ) : (
-          <>
-            <span>cargando</span>
-          </>
+          <LoaderMapReady />
         )}
         <div
           style={{
@@ -161,12 +162,16 @@ const Home = () => {
             >
               Mis turnos
             </button>
-            <label htmlFor="" className="label-count-notification" />
-            <img
-              src={bellNotificationIcon}
-              alt="notificacíon de turnos"
-              className="notification-myturns"
-            />
+            {newTurnNotification && (
+              <>
+                <label htmlFor="" className="label-count-notification" />
+                <img
+                  src={bellNotificationIcon}
+                  alt="notificacíon de turnos"
+                  className="notification-myturns"
+                />
+              </>
+            )}
           </div>
         </div>
       </section>

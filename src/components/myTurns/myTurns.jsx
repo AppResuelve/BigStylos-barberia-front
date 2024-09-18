@@ -7,14 +7,14 @@ import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import axios from "axios";
 import "./myTurns.css";
 import Swal from "sweetalert2";
+import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const MyTurns = ({ userData }) => {
-  const { darkMode, disableButtonMyTurns } = useContext(ThemeContext);
+  const { darkMode } = useContext(ThemeContext);
   const [listMyTurns, setListMyTurns] = useState(1);
-  const [infoToSubmit, setInfoToSubmit] = useState({});
-  const { xs, sm, md, lg, xl } = useMediaQueryHook();
+  const { sm } = useMediaQueryHook();
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
@@ -93,10 +93,10 @@ const MyTurns = ({ userData }) => {
     });
   };
   console.log(listMyTurns);
-  
+
   return (
     <div className="div-container-myturns">
-      <div >
+      <div>
         {listMyTurns === 1 ? (
           <Skeleton variant="rounded" height={80} style={{ width: "100%" }} />
         ) : listMyTurns && listMyTurns.length > 0 ? (

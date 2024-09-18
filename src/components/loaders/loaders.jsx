@@ -72,7 +72,8 @@ const LoaderMapReady = () => {
     <div
       className="container-loadermapready"
       style={{
-        height: sm ? "200px" : "300px",
+        height: "100%",
+        width:"100%"
       }}
     >
       <li className="dots-mapready" id="dot-1"></li>

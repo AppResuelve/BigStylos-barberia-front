@@ -9,9 +9,7 @@ const LoadAndRefreshProvider = ({ children }) => {
   const [mapLoaded, setMapLoaded] = useState(false);
   const [imgLogoLoaded, setImgLogoLoaded] = useState(false); // Estado para el estado del mapa
   const [minTimePassed, setMinTimePassed] = useState(false); // Estado para el retraso mínimo
-  const [newTurnNotification, setNewTurnNotification] = useState({
-    notiCount: 0,
-  });
+  const [newTurnNotification, setNewTurnNotification] = useState(false);
   
   useEffect(() => {
     const timer = setTimeout(() => {

@@ -150,9 +150,8 @@ const TurnsCartFooter = () => {
             : "El turno ha sido agendado con éxito!",
           "success"
         );
-        setNewTurnNotification((prevState) => {
-          return prevState + 1;
-        });
+        setNewTurnNotification(true);
+        setCookie("NEWTURN-NOTIFICATION", true, 4)
       } catch (error) {
         setLoader(false);
         toastAlert(

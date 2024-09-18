@@ -16,9 +16,11 @@ const CustomCalendarTurns = ({
   setDayIsSelected,
   serviceSelected,
   selectedWorker,
+  turnsButtons,
   setTurnsButtons,
+  turnsCart,
 }) => {
-  const { darkMode, setShowAlert } = useContext(ThemeContext);
+  const { darkMode } = useContext(ThemeContext);
   const daysCalendarCustom = daysMonthCalendarCustom(27, true);
   const { currentMonth, nextMonth, currentYear, nextYear, month1, month2 } =
     daysCalendarCustom;
@@ -52,9 +54,38 @@ const CustomCalendarTurns = ({
           service: serviceSelected.name,
         }
       );
-      const { data } = response;
-      setTurnsButtons(data);
-      setDayIsSelected([day, month]);
+
+      let updatedTurnsButtons = response.data;
+      // Solo filtramos si turnsCart tiene elementos
+      if (turnsCart.length > 0) {
+        console.log("pase");
+
+        updatedTurnsButtons = response.data.filter((button) => {
+          let maxButtonEnd = 0;
+          button.worker.map((wkr) => {
+            maxButtonEnd += wkr.end;
+          });
+          
+          let matches = false;
+          for (let i = 0; i < turnsCart.length; i++) {
+            console.log(button);
+            console.log(turnsCart[i]);
+
+            if (
+              button.ini == turnsCart[i].ini && // Compara la propiedad ini
+              day == turnsCart[i].day && // Compara el día
+              month == turnsCart[i].month // Compara el mes
+            ) {
+              console.log("matchee", button.ini);
+              matches = true;
+              break; // Si encuentra coincidencia, no necesita seguir comparando
+            }
+          }
+          return !matches; // Retorna solo los botones que NO machean la condición
+        });
+      }
+      setTurnsButtons(updatedTurnsButtons); // Actualiza turnsButtons sin los que machean
+      setDayIsSelected([day, month]); // Actualiza el día seleccionado
     } catch (error) {
       console.error("Error al obtener los horarios", error);
       alert("Error al obtener los horarios");
