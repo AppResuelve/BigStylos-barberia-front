@@ -12,12 +12,16 @@ import InputTel from "../inputTel/inputTel";
 import Swal from "sweetalert2";
 import axios from "axios";
 import "./clientNestedList.css";
+import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const ClientNestedList = () => {
   const { darkMode } = useContext(ThemeContext);
   const { userData, openSection, setOpenSection } = useContext(AuthContext);
+  const { newTurnNotification, setNewTurnNotification } = useContext(
+    LoadAndRefreshContext
+  );
   const [newPhoneNumber, setNewPhoneNumber] = useState(userData?.phone ?? "");
   const [refresh, setRefresh] = useState(false);
   const [inputTelError, setInputTelError] = useState("");
@@ -40,6 +44,10 @@ const ClientNestedList = () => {
       return updatedSections;
     });
   };
+
+  useEffect(() => {
+    if (openSection.turnos) setNewTurnNotification(false);
+  }, [openSection]);
 
   const handleUpdatePhone = async () => {
     try {
@@ -146,7 +154,10 @@ const ClientNestedList = () => {
         className="listItembtn-nestedList"
         onClick={() => handleSectionClick("turnos")}
       >
-        <Box sx={{ display: "flex", width: "100%" }}>
+        <Box sx={{ display: "flex", width: "100%", position: "relative" }}>
+          {newTurnNotification && (
+            <label htmlFor="" className="label-notification-nestedList"></label>
+          )}
           <CalendarMonthIcon
             sx={{
               marginRight: "5px",

@@ -49,7 +49,12 @@ const Maps = () => {
   };
 
   return (
-    <div style={{ position: "relative" }}>
+    <div
+      style={{
+        position: "relative",
+        height: sm && expandMap ? "400px" : sm ? "200px" : "300px",
+      }}
+    >
       {!mapLoaded && <LoaderMapReady />}
       <>
         <Map
@@ -58,7 +63,7 @@ const Maps = () => {
           initialViewState={viewport}
           style={{
             width: "100%",
-            height: sm && expandMap ? "400px" : sm ? "200px" : "300px",
+            height: "100%",
             boxShadow: "0px 2px 5px 0px rgba(0, 0, 0, 0.50)",
             borderRadius: "16px",
           }}

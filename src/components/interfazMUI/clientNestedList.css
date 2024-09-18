@@ -48,8 +48,18 @@
 }
 
 .spanErrorInputTel {
-      color: red;
+      color: #db0101;
       font-weight: bold;
+}
+
+.label-notification-nestedList {
+      position: absolute;
+      top: 0%;
+      left: calc(0% - 5px);
+      width: 10px;
+      height: 10px;
+      background-color: #db0101;
+      border-radius: 20px;
 }
 
 @media (min-width:500px) and (max-height: 800px) {}
