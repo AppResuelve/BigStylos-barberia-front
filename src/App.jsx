@@ -22,10 +22,7 @@ function App() {
   const { userData } = useContext(AuthContext);
 
   useEffect(() => {
-    if (
-      "serviceWorker" in navigator &&
-      "PushManager" in window 
-    ) {
+    if ("serviceWorker" in navigator && "PushManager" in window) {
       navigator.serviceWorker
         .register("../firebase-messaging-sw.js")
         .then((registration) => {
