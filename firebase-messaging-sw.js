@@ -4,6 +4,7 @@ importScripts(
 importScripts(
   "https://www.gstatic.com/firebasejs/10.13.2/firebase-messaging-compat.js"
 );
+const VITE_FRONTEND_URL = import.meta.env.VITE_FRONTEND_URL;
 
 const firebaseConfig = {
   apiKey: "AIzaSyA64eJD2gSCTvEIse4Clnfbe4GUR8DL8UA",
@@ -23,11 +24,11 @@ messaging.onBackgroundMessage((payload) => {
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
-    icon: "./src/assets/images/calendar2.png",
+    icon: "",
     badge:
-      "https://res.cloudinary.com/dpqsnv9bu/image/upload/v1725997560/agendate%20app/logotipo/mkqptnajeiq5p3x0qig6.jpg",
+      "",
     data: {
-      url: payload.data?.click_action || "http://localhost:5173/", // URL predeterminada o la que envíes
+      url: payload.data?.click_action || `${VITE_FRONTEND_URL}/`, // URL predeterminada o la que envíes
     },
   };
 
