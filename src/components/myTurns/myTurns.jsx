@@ -74,6 +74,16 @@ const MyTurns = ({ userData }) => {
               container: "my-swal-container",
             },
           });
+          const res = await axios.post(
+            `${VITE_BACKEND_URL}/pushnotifications/send`,
+            {
+              addressee: turn.worker.email,
+              messageData: {
+                title: `${userData.name} ha cancelado un turno.`,
+                body: `El ${turn.service.name} del ${turn.day}/${turn.month} a las ${turn.ini} ha quedado libre.`,
+              },
+            }
+          );
         } catch (error) {
           Swal.fire({
             title: "Error al cancelar el turno",
