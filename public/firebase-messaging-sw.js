@@ -24,7 +24,7 @@ messaging.onBackgroundMessage((payload) => {
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
-    icon: "./src/assets/images/calendar2.png",
+    icon: "../src/assets/images/calendar2.png",
     badge:
       "https://res.cloudinary.com/dpqsnv9bu/image/upload/v1725997560/agendate%20app/logotipo/mkqptnajeiq5p3x0qig6.jpg",
     data: {
