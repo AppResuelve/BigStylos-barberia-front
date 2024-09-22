@@ -19,6 +19,7 @@ import "./App.css";
 function App() {
   const location = useLocation();
   const { pageIsReady } = useContext(LoadAndRefreshContext);
+  const { userData } = useContext(AuthContext);
 
   if ("serviceWorker" in navigator && "PushManager" in window) {
     navigator.serviceWorker
