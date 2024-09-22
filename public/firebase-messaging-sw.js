@@ -27,7 +27,7 @@ messaging.onBackgroundMessage((payload) => {
     badge:
       "https://res.cloudinary.com/dpqsnv9bu/image/upload/v1725997560/agendate%20app/logotipo/mkqptnajeiq5p3x0qig6.jpg",
     data: {
-      url: payload.data?.click_action || `https://app-turnos-rcua.vercel.app/`, // URL predeterminada o la que envíes
+      url: payload.data?.url || `https://app-turnos-rcua.vercel.app/`, // URL predeterminada o la que envíes
     },
   };
 

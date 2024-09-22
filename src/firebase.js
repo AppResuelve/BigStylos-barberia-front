@@ -36,8 +36,6 @@ export const subscribeUserToPush = async (userId) => {
         // Solicitar permiso para mostrar notificaciones
         const permission = await Notification.requestPermission();
         if (permission === "granted") {
-          console.log("me direon permiso");
-
           // Add the public key generated from the console here.
           token = await getToken(messaging, {
             vapidKey:
@@ -53,7 +51,7 @@ export const subscribeUserToPush = async (userId) => {
                 userId,
               }
             );
-            console.log(token);
+            console.log("Usuario suscrito");
           } else {
             console.error(error);
           }
@@ -62,7 +60,6 @@ export const subscribeUserToPush = async (userId) => {
         }
       } else {
         //poner la prop del user pushToken = null
-
         console.error("Permiso para notificaciones no concedido.");
       }
       if (token === null) {
@@ -79,25 +76,6 @@ export const subscribeUserToPush = async (userId) => {
         }
       }
     });
-
-    // // Suscribirse al servicio de push
-    // const subscription = await registration.pushManager.subscribe({
-    //   userVisibleOnly: true, // Debe ser true para garantizar que el usuario vea la notificación
-    //   applicationServerKey: urlBase64ToUint8Array(
-    //     "BMlDO_r9EJzVDqamIEeVsnx2KpikYIuZdpnGvPaXIuE9kpLGqilPxnos9r9jN-cMtlBKUdShH9A0rTk_1DSITkk"
-    //   ), // Clave pública VAPID
-    // });
-
-    // // Enviar la suscripción al servidor para guardarla
-    // await fetch("/api/save-subscription", {
-    //   method: "POST",
-    //   body: JSON.stringify(subscription),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // });
-
-    console.log("Usuario suscrito:" /* subscription */);
   } catch (error) {
     console.error("Error al suscribir al usuario:", error);
   }

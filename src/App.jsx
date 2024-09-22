@@ -19,22 +19,22 @@ import "./App.css";
 function App() {
   const location = useLocation();
   const { pageIsReady } = useContext(LoadAndRefreshContext);
-  const { userData } = useContext(AuthContext);
+
+  if ("serviceWorker" in navigator && "PushManager" in window) {
+    navigator.serviceWorker
+      .register("../firebase-messaging-sw.js")
+      .then((registration) => {
+        console.log("Service Worker registrado con éxito:", registration);
+      })
+      .catch((error) => {
+        console.error("Error al registrar el Service Worker:", error);
+      });
+  }
 
   useEffect(() => {
-    if ("serviceWorker" in navigator && "PushManager" in window) {
-      navigator.serviceWorker
-        .register("../firebase-messaging-sw.js")
-        .then((registration) => {
-          console.log("Service Worker registrado con éxito:", registration);
-          // Aquí es donde suscribes al usuario al servicio de notificaciones push
-          subscribeUserToPush(userData.id);
-        })
-        .catch((error) => {
-          console.error("Error al registrar el Service Worker:", error);
-        });
-    }
-  }, []);
+    // Aquí es donde suscribes al usuario al servicio de notificaciones push
+    subscribeUserToPush(userData.id);
+  }, [pageIsReady]);
 
   useEffect(() => {
     if (pageIsReady) {
