@@ -7,7 +7,6 @@ import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import axios from "axios";
 import "./myTurns.css";
 import Swal from "sweetalert2";
-import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
