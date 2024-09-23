@@ -21,10 +21,10 @@ function App() {
   const { pageIsReady } = useContext(LoadAndRefreshContext);
   const { userData } = useContext(AuthContext);
 
-  useEffect(() => {
-    // Aquí es donde suscribes al usuario al servicio de notificaciones push
-    subscribeUserToPush(userData.id);
-  }, [pageIsReady]);
+  // useEffect(() => {
+  //   // Aquí es donde suscribes al usuario al servicio de notificaciones push
+  //   subscribeUserToPush(userData.email);
+  // }, [pageIsReady]);
 
   useEffect(() => {
     if (pageIsReady) {

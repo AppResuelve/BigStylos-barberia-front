@@ -13,14 +13,14 @@ const CancelledTurnsForWorker = ({ userData }) => {
   const [count, setCount] = useState([]);
   const [selectedDay, setSelectedDay] = useState("");
 
-  const date = new Date();
-  const currentDay = date.getDate();
+  // const date = new Date();
+  // const currentDay = date.getDate();
 
   useEffect(() => {
     const fetchCount = async () => {
       try {
         const response = await axios.post(
-          `${VITE_BACKEND_URL}/cancelledturns/getcount`,
+          `${VITE_BACKEND_URL}/workdays/countworker`,
           { emailWorker: userData.email }
         );
         const { data } = response;
@@ -32,27 +32,19 @@ const CancelledTurnsForWorker = ({ userData }) => {
     fetchCount();
   }, []);
 
-  useEffect(() => {
-    const fetchCancelled = async () => {
-      const [numberDay, numberMonth] = selectedDay.split("/").map(Number);
-      try {
-        const response = await axios.post(
-          `${VITE_BACKEND_URL}/cancelledturns/getforworker`,
-          { emailWorker: userData.email, month: numberMonth, day: numberDay }
-        );
-        const { data } = response;
-        setCancelledTurnsByDays(data);
-      } catch (error) {
-        console.error("Error al obtener los dias cancelados.", error);
-      }
-    };
-    if (selectedDay.length > 0) {
-      fetchCancelled();
+  const handleChangeDay = async (element) => {
+    const [numberDay, numberMonth] = selectedDay.split("/").map(Number);
+    try {
+      const response = await axios.post(
+        `${VITE_BACKEND_URL}/cancelledturns/getforworker`,
+        { emailWorker: userData.email, month: numberMonth, day: numberDay }
+      );
+      const { data } = response;
+      setCancelledTurnsByDays(data);
+      setSelectedDay(element);
+    } catch (error) {
+      console.error("Error al obtener los dias cancelados.", error);
     }
-  }, [selectedDay]);
-
-  const handleChangeDay = (element) => {
-    setSelectedDay(element);
   };
 
   return (

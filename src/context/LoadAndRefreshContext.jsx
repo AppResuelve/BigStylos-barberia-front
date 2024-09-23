@@ -10,7 +10,10 @@ const LoadAndRefreshProvider = ({ children }) => {
   const [imgLogoLoaded, setImgLogoLoaded] = useState(false); // Estado para el estado del mapa
   const [minTimePassed, setMinTimePassed] = useState(false); // Estado para el retraso mínimo
   const [newTurnNotification, setNewTurnNotification] = useState(false);
-  
+  const [redirectToMyServices, setRedirectToMyServices] = useState(false);
+  const [refreshWhoIsComing, setRefreshWhoIsComing] = useState(false);
+  const [refreshWhoIsComingAdmin, setRefreshWhoIsComingAdmin] = useState(false);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setMinTimePassed(true); // Se cumple el retraso de 1 segundo
@@ -34,6 +37,12 @@ const LoadAndRefreshProvider = ({ children }) => {
     setImgLogoLoaded,
     newTurnNotification,
     setNewTurnNotification,
+    redirectToMyServices,
+    setRedirectToMyServices,
+    refreshWhoIsComing,
+    setRefreshWhoIsComing,
+    refreshWhoIsComingAdmin,
+    setRefreshWhoIsComingAdmin,
   };
 
   return (

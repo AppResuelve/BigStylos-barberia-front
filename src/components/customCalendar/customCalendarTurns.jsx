@@ -18,7 +18,7 @@ const CustomCalendarTurns = ({
   selectedWorker,
   setTurnsButtons,
 }) => {
-  const { darkMode, setShowAlert } = useContext(ThemeContext);
+  const { darkMode } = useContext(ThemeContext);
   const daysCalendarCustom = daysMonthCalendarCustom(27, true);
   const { currentMonth, nextMonth, currentYear, nextYear, month1, month2 } =
     daysCalendarCustom;
