@@ -23,7 +23,7 @@ function App() {
 
   // useEffect(() => {
   //   // Aquí es donde suscribes al usuario al servicio de notificaciones push
-  //   subscribeUserToPush(userData.id);
+  //   subscribeUserToPush(userData.email);
   // }, [pageIsReady]);
 
   useEffect(() => {

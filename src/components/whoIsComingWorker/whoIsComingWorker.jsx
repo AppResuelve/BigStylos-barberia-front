@@ -11,8 +11,8 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const WhoIsComingWorker = ({
   userData,
-  refreshForWhoIsComing,
-  setRefreshForWhoIsComing,
+  refreshWhoIsComing,
+  setRefreshWhoIsComing,
 }) => {
   const { darkMode } = useContext(ThemeContext);
   const [turns, setTurns] = useState([]);
@@ -27,9 +27,6 @@ const WhoIsComingWorker = ({
     phone: su cel
     image: su imagen
   } */
-
-  const date = new Date();
-  const currentDay = date.getDate();
 
   useEffect(() => {
     const fetchCount = async () => {
@@ -46,10 +43,11 @@ const WhoIsComingWorker = ({
       }
     };
     fetchCount();
-    if (refreshForWhoIsComing === true) {
-      setRefreshForWhoIsComing(false);
+    if (refreshWhoIsComing === true) {
+      setRefreshWhoIsComing(false);
     }
-  }, [refreshForWhoIsComing]);
+  }, [refreshWhoIsComing]);
+
   useEffect(() => {
     const fetchTurns = async () => {
       const [numberDay, numberMonth] = selectedDay.split("/").map(Number);
@@ -68,10 +66,10 @@ const WhoIsComingWorker = ({
     if (selectedDay !== "" && selectedDay !== undefined) {
       fetchTurns();
     }
-    if (refreshForWhoIsComing == true) {
-      setRefreshForWhoIsComing(false);
+    if (refreshWhoIsComing == true) {
+      setRefreshWhoIsComing(false);
     }
-  }, [selectedDay, refreshForWhoIsComing]);
+  }, [selectedDay, refreshWhoIsComing]);
 
   const handleChangeDay = (element) => {
     setSelectedDay(element);

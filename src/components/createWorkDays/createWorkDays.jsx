@@ -15,6 +15,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import "./createWorkDays.css";
 import toastAlert from "../../helpers/alertFunction";
+import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -24,8 +25,8 @@ const CreateWorkDays = ({
   doCeroServices,
   pendingServices,
 }) => {
-  const { darkMode, setRefreshForWhoIsComing, setRedirectToMyServices } =
-    useContext(ThemeContext);
+  const { darkMode } = useContext(ThemeContext);
+  const { setRefreshWhoIsComing, setRedirectToMyServices } = useContext(LoadAndRefreshContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [isOpen, setIsOpen] = useState(false);
   const [dayIsSelected, setDayIsSelected] = useState({});
@@ -223,7 +224,7 @@ const CreateWorkDays = ({
           );
         }
       }
-      setRefreshForWhoIsComing(true);
+      setRefreshWhoIsComing(true);
       setShowEdit(false);
       setRefreshDays(true);
     } else {
@@ -268,7 +269,7 @@ const CreateWorkDays = ({
             );
             setDayIsSelected({});
             setRefreshDays(true);
-            setRefreshForWhoIsComing(true);
+            setRefreshWhoIsComing(true);
           } catch (error) {
             toastAlert(`Error al borrar el día ${day}/${month}`, "error");
             console.error("Error al borrar el dia:", error);
@@ -288,7 +289,7 @@ const CreateWorkDays = ({
         toastAlert(`el día ${day}/${month} se borró exitosamente`, "success");
         setDayIsSelected({});
         setRefreshDays(true);
-        setRefreshForWhoIsComing(true);
+        setRefreshWhoIsComing(true);
       } catch (error) {
         toastAlert(`Error al borrar el día ${day}/${month}`, "error");
         console.error("Error al borrar el dia:", error);

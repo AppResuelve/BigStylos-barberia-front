@@ -13,8 +13,7 @@ const ThemeProvider = ({ children }) => {
       ? JSON.parse(savedDarkMode)
       : { dark: "#000214", light: "white", on: false };
   });
-  const [redirectToMyServices, setRedirectToMyServices] = useState(false);
-  const [refreshForWhoIsComing, setRefreshForWhoIsComing] = useState(false);
+  
   const [refreshPersonalization, setRefreshPersonalization] = useState(false);
 
   // Guarda la configuración del modo en localStorage cuando cambie
@@ -54,10 +53,6 @@ const ThemeProvider = ({ children }) => {
     setHomeImages,
     setDarkMode,
     toggleDarkMode,
-    redirectToMyServices,
-    setRedirectToMyServices,
-    refreshForWhoIsComing,
-    setRefreshForWhoIsComing,
     refreshPersonalization,
     setRefreshPersonalization,
   };

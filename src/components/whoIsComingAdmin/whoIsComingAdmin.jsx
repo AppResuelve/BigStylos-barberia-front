@@ -17,9 +17,6 @@ const WhoIsComingAdmin = () => {
   const [selectedWorker, setSelectedWorker] = useState("");
   const [workers, setWorkers] = useState([]);
 
-  const date = new Date();
-  const currentDay = date.getDate();
-
   useEffect(() => {
     const fetchWorkers = async () => {
       try {
@@ -189,7 +186,7 @@ const WhoIsComingAdmin = () => {
                     handleChangeDay(element);
                   }}
                 >
-                  {currentDay === numberDay ? "HOY" : element}
+                  {element}
                 </button>
               );
             })}

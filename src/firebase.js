@@ -22,7 +22,7 @@ const app = initializeApp(firebaseConfig);
 // Initialize Firebase Cloud Messaging and get a reference to the service
 export const messaging = getMessaging(app);
 
-export const subscribeUserToPush = async (userId) => {
+export const subscribeUserToPush = async (userEmail) => {
   try {
     Swal.fire({
       title:
@@ -48,7 +48,7 @@ export const subscribeUserToPush = async (userId) => {
               `${VITE_BACKEND_URL}/pushnotifications/updateusertoken`,
               {
                 token,
-                userId,
+                userEmail,
               }
             );
             console.log("Usuario suscrito");
@@ -68,7 +68,7 @@ export const subscribeUserToPush = async (userId) => {
             `${VITE_BACKEND_URL}/pushnotifications/updateusertoken`,
             {
               token,
-              userId,
+              userEmail,
             }
           );
         } catch (error) {

@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import ThemeContext from "../../context/ThemeContext";
-import { Button,Box } from "@mui/material";
+import { Button, Box } from "@mui/material";
 import { WhatsApp } from "@mui/icons-material";
 import axios from "axios";
 import "./cancelledTurns.css";
@@ -15,8 +15,8 @@ const CancelledTurnsForAdmin = () => {
   const [workers, setWorkers] = useState([]);
   const [selectedWorker, setSelectedWorker] = useState("");
 
-  const date = new Date();
-  const currentDay = date.getDate();
+  // const date = new Date();
+  // const currentDay = date.getDate();
 
   useEffect(() => {
     const fetchWorkers = async () => {
@@ -33,50 +33,32 @@ const CancelledTurnsForAdmin = () => {
     fetchWorkers();
   }, []);
 
-  useEffect(() => {
-    const fetchCount = async () => {
-      try {
-        const response = await axios.post(
-          `${VITE_BACKEND_URL}/cancelledturns/getcount`,
-          { emailWorker: selectedWorker }
-        );
-        const { data } = response;
-        setCount(data);
-      } catch (error) {
-        console.error("Error al obtener el count.", error);
-      }
-    };
-    if (selectedWorker.length > 0) {
-      fetchCount();
+  const handleChangeWorker = async (email) => {
+    try {
+      const response = await axios.post(
+        `${VITE_BACKEND_URL}/workdays/countworker`,
+        { emailWorker: email }
+      );
+      setCount(response.data);
+      setSelectedDay("");
+      setSelectedWorker(email);
+    } catch (error) {
+      console.error("Error al obtener el count.", error);
     }
-  }, [selectedWorker]);
-
-  useEffect(() => {
-    const fetchCancelled = async () => {
-      const [numberDay, numberMonth] = selectedDay.split("/").map(Number);
-      try {
-        const response = await axios.post(
-          `${VITE_BACKEND_URL}/cancelledturns/getforworker`,
-          { emailWorker: selectedWorker, month: numberMonth, day: numberDay }
-        );
-        const { data } = response;
-        setCancelledTurnsByDays(data);
-      } catch (error) {
-        console.error("Error al obtener los dias cancelados.", error);
-      }
-    };
-    if (selectedDay.length > 0) {
-      fetchCancelled();
-    }
-  }, [selectedDay]);
-
-  const handleChangeDay = (element) => {
-    setSelectedDay(element);
   };
 
-  const handleChangeWorker = (email) => {
-    setSelectedDay("");
-    setSelectedWorker(email);
+  const handleChangeDay = async (element) => {
+    const [numberDay, numberMonth] = selectedDay.split("/").map(Number);
+    try {
+      const response = await axios.post(
+        `${VITE_BACKEND_URL}/cancelledturns/getforworker`,
+        { emailWorker: selectedWorker, month: numberMonth, day: numberDay }
+      );
+      setCancelledTurnsByDays(response.data);
+      setSelectedDay(element);
+    } catch (error) {
+      console.error("Error al obtener los dias cancelados.", error);
+    }
   };
 
   return (
@@ -155,7 +137,7 @@ const CancelledTurnsForAdmin = () => {
 
         <Box
           style={{
-            display:"flex",
+            display: "flex",
             width: "100%",
             maxWidth: "900px",
             overflow: "auto",

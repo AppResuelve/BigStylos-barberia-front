@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import ThemeContext from "../../context/ThemeContext";
+import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
 import {
   Box,
   Accordion,
@@ -20,13 +21,13 @@ import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const WorkerAcordeon = ({ userData }) => {
+  const { darkMode } = useContext(ThemeContext);
   const {
-    darkMode,
     redirectToMyServices,
     setRedirectToMyServices,
-    refreshForWhoIsComing,
-    setRefreshForWhoIsComing,
-  } = useContext(ThemeContext);
+    refreshWhoIsComing,
+    setRefreshWhoIsComing,
+  } = useContext(LoadAndRefreshContext);
   const [changeNoSaved, setChangeNoSaved] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [schedule, setSchedule] = useState({});
@@ -65,7 +66,6 @@ const WorkerAcordeon = ({ userData }) => {
 
   useEffect(() => {
     const fetchServices = async () => {
-
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/services/`);
         const arrServices = convertToServicesArray(response.data); //pasamos a array de obj servicio antes de setear
@@ -163,7 +163,6 @@ const WorkerAcordeon = ({ userData }) => {
                 schedule={schedule}
                 doCeroServices={doCeroServices}
                 pendingServices={pendingServices}
-                setRefreshForWhoIsComing={setRefreshForWhoIsComing}
               />
             )}
             {expanded === "panel1" && Object.keys(userData).length < 1 && (
@@ -301,8 +300,8 @@ const WorkerAcordeon = ({ userData }) => {
           <AccordionDetails>
             <WhoIsComingWorker
               userData={userData}
-              refreshForWhoIsComing={refreshForWhoIsComing}
-              setRefreshForWhoIsComing={setRefreshForWhoIsComing}
+              refreshWhoIsComing={refreshWhoIsComing}
+              setRefreshWhoIsComing={setRefreshWhoIsComing}
             />
           </AccordionDetails>
         </Accordion>
