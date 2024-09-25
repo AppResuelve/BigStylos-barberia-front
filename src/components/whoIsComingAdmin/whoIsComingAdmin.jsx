@@ -9,7 +9,7 @@ import "./whoIsComing.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const WhoIsComingAdmin = () => {
+const WhoIsComingAdmin = ({ refreshWhoIsComing }) => {
   const { darkMode } = useContext(ThemeContext);
   const [turns, setTurns] = useState([]);
   const [count, setCount] = useState([]);
@@ -29,7 +29,7 @@ const WhoIsComingAdmin = () => {
       }
     };
     fetchWorkers();
-  }, []);
+  }, [refreshWhoIsComing]);
 
   useEffect(() => {
     const fetchCount = async () => {

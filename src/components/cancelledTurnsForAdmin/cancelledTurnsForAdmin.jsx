@@ -7,7 +7,7 @@ import "./cancelledTurns.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const CancelledTurnsForAdmin = () => {
+const CancelledTurnsForAdmin = ({ refreshWhoIsComing }) => {
   const { darkMode } = useContext(ThemeContext);
   const [cancelledTurnsByDays, setCancelledTurnsByDays] = useState([]);
   const [count, setCount] = useState([]);
@@ -31,7 +31,7 @@ const CancelledTurnsForAdmin = () => {
       }
     };
     fetchWorkers();
-  }, []);
+  }, [refreshWhoIsComing]);
 
   const handleChangeWorker = async (email) => {
     try {

@@ -6,7 +6,6 @@ import { verificateFrontResponse } from "../../helpers/verificateFrontResponseMP
 import { getCookie } from "../../helpers/cookies";
 import { getLocalStorage } from "../../helpers/localStorage";
 import defaultImg from "../../assets/icons/no-image-logotipe.png";
-import bellNotificationIcon from "../../assets/icons/bell-on.png";
 import defaultImgLight from "../../assets/icons/no-image-logotipe-light.png";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -19,10 +18,8 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Home = () => {
   const { darkMode, homeImages } = useContext(ThemeContext);
-  const { googleLogin, setIsOpenUserPanel, setOpenSection, userData } =
-    useContext(AuthContext);
-  const { setImgLogoLoaded, newTurnNotification, setNewTurnNotification } =
-    useContext(LoadAndRefreshContext);
+  const { googleLogin, userData } = useContext(AuthContext);
+  const { setImgLogoLoaded } = useContext(LoadAndRefreshContext);
   const navigate = useNavigate();
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
@@ -60,10 +57,10 @@ const Home = () => {
     const isLoggedIn = getCookie("IDSESSION");
     if (!isLoggedIn) {
       Swal.fire({
-        title: "Debes estar loggeado para reservar",
+        title: "Inicia sesión para reservar",
         showDenyButton: true,
         confirmButtonText: "Iniciar sesión",
-        denyButtonText: `Más tarde`,
+        denyButtonText: "Más tarde",
       }).then((result) => {
         if (result.isConfirmed) {
           googleLogin();
@@ -75,15 +72,8 @@ const Home = () => {
     }
   };
 
-  const handleGoToMyTurns = () => {
-    setIsOpenUserPanel(true);
-    setTimeout(() => {
-      setOpenSection({
-        telefono: false,
-        turnos: true,
-      });
-      setNewTurnNotification(false);
-    }, 300);
+  const handleGoToOurServices = () => {
+    navigate("/nuestros-servicios");
   };
 
   return (
@@ -156,22 +146,12 @@ const Home = () => {
             <button
               id="myTurns"
               disabled={!userData}
-              onClick={handleGoToMyTurns}
+              onClick={handleGoToOurServices}
               className="btn-reservar-home"
               style={{ width: "100%" }}
             >
-              Mis turnos
+              Ver servicios
             </button>
-            {newTurnNotification && (
-              <>
-                <label htmlFor="" className="label-count-notification" />
-                <img
-                  src={bellNotificationIcon}
-                  alt="notificacíon de turnos"
-                  className="notification-myturns"
-                />
-              </>
-            )}
           </div>
         </div>
       </section>

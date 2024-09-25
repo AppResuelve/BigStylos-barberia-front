@@ -13,9 +13,10 @@ import {
 } from "@mui/material";
 import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import axios from "axios";
+import discardIcon from "../../assets/icons/left-arrow.png";
 import toastAlert from "../../helpers/alertFunction";
 import DeleteServicesModal from "./deleteServicesModal";
+import axios from "axios";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -54,7 +55,6 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
       setCategoryServices(categoryArray); //renderizar
       setEditableCatSer(categoryArray); //copia para editar
       setCategoryList(extractedCategories); //array categorias
-      // setServiceList(extractedServices); //array servicios
     }
   }, [services]);
 
@@ -108,7 +108,6 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
       // Refresca la lista de servicios después de agregar uno nuevo
       setRefreshServices((prevState) => !prevState);
       setRefreshStatusSession((prevState) => !prevState);
-
       setCategoryName({});
       setShowEdit(false);
     } catch (error) {
@@ -118,36 +117,39 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
   };
 
   const handleUpdateServiceRow = async () => {
-    let { category, prev, current, price, sing, type } = serviceRow;
     try {
-      const response = await axios.put(
-        `${VITE_BACKEND_URL}/services/updateservice`,
-        {
-          category,
-          prev,
-          current,
-          price: price == 0 ? 0 : price,
-          sing: sing == 0 ? 0 : sing,
-          type,
-        }
-      );
-      toastAlert(
-        `Fila del servicio ${current} actualizada correctamente.`,
-        "success"
-      );
-      // Refresca la lista de servicios después de agregar uno nuevo
+      // Iteramos sobre cada servicio en serviceRow
+      for (let serviceName in serviceRow) {
+        const { category, service, price, sing, type } =
+          serviceRow[serviceName];
+
+        // Enviamos la solicitud para actualizar cada fila de servicio
+        const response = await axios.put(
+          `${VITE_BACKEND_URL}/services/updateservice`,
+          {
+            category,
+            service,
+            price: price == 0 ? 0 : price,
+            sing: sing == 0 ? 0 : sing,
+            type,
+          }
+        );
+        toastAlert(
+          `Fila del servicio ${service} actualizada correctamente.`,
+          "success"
+        );
+      }
+      // Refresca la lista de servicios después de actualizar
       setRefreshServices((prevState) => !prevState);
       setRefreshStatusSession((prevState) => !prevState);
       setServiceRow({});
       setShowEdit(false);
     } catch (error) {
-      toastAlert(
-        `Error al actualizar la fila del servicio ${prev} al ${current}.`,
-        "error"
-      );
+      toastAlert(`Error al actualizar el/los servicios.`, "error");
       console.error("Error al actualizar el servicio:", error);
     }
   };
+
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -175,6 +177,8 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
 
   const handleOpenDelete = () => {
     setOpenDelete(true);
+    setServiceRow({})
+    setShowEdit(false)
   };
 
   //handle span
@@ -184,19 +188,31 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
         prev: categoryName,
         current: categoryName,
       });
+      setServiceRow({});
     }
   };
 
   //handle span
-  const handleRowService = (service, category) => {
-    if (showEdit) {
-      setServiceRow({
-        category: category,
-        prev: service.name,
-        current: service.name,
-        price: service.price === 0 ? "" : service.price,
-        sing: service.sing === 0 ? "" : service.sing,
-        type: service.type,
+  const handleRowService = (service, category, discard) => {
+    if (showEdit && !serviceRow[service.name]) {
+      setServiceRow((prevState) => {
+        return {
+          ...prevState, // Hacemos una copia del estado anterior
+          [service.name]: {
+            category: category,
+            service: service.name,
+            price: service.price === 0 ? "" : service.price,
+            sing: service.sing === 0 ? "" : service.sing,
+            type: service.type,
+          },
+        };
+      });
+      setCategoryName({});
+    } else if (showEdit && serviceRow[service.name] && discard === "discard") {
+      setServiceRow((prevState) => {
+        let copyState = { ...prevState }; // Hacemos una copia del estado anterior
+        delete copyState[service.name]; // Eliminamos la propiedad
+        return copyState; // Retornamos el estado actualizado sin la propiedad eliminada
       });
     }
   };
@@ -204,7 +220,6 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
   //handle input
   const handleChangeCategoryName = (e) => {
     let value = e.target.value;
-
     setCategoryName((prevState) => {
       let copyState = { ...prevState };
       copyState.current = value;
@@ -213,27 +228,22 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
   };
 
   //handle input
-  const handleChangeRowService = (field, e) => {
+  const handleChangeRowService = (field, e, serviceName) => {
     let value = e.target.value;
-
     setServiceRow((prevState) => {
       let copyState = { ...prevState };
-      copyState[field] = value;
+      copyState[serviceName] = { ...copyState[serviceName], [field]: value }; // Crea una copia profunda
       return copyState;
     });
   };
 
   const handleDiscard = () => {
-    if (Object.keys(serviceRow).length > 0) {
-      setCategoryName({});
-      setServiceRow({});
-    } else {
-      setShowEdit(false);
-      setEditableCatSer(categoryServices);
-      setCategoryName({});
-      setServiceRow({});
-    }
+    setShowEdit(false);
+    setEditableCatSer(categoryServices);
+    setCategoryName({});
+    setServiceRow({});
   };
+  console.log(serviceRow);
 
   return (
     <div
@@ -279,15 +289,13 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
             options={categoryList}
             sx={{
               width: sm ? "100%" : "50%",
-              margin: "20px 5px 0px 0px",
+              margin: "30px 5px 0px 0px",
               fontFamily: "Jost, sans-serif",
               fontWeight: "bold",
             }}
             value={inputs.category}
             onInputChange={handleCategoryInputChange}
-            isOptionEqualToValue={(option, value) =>
-              option.value === value.value
-            }
+            noOptionsText={null} // No muestra nada cuando no hay opciones
             renderInput={(params) => (
               <TextField {...params} label="Categoría" />
             )}
@@ -295,7 +303,7 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
           <TextField
             sx={{
               width: sm ? "100%" : "50%",
-              margin: sm ? "20px 0px 0px 0px" : "20px 0px 0px 5px",
+              margin: sm ? "30px 0px 0px 0px" : "20px 0px 0px 5px",
               fontFamily: "Jost, sans-serif",
               fontWeight: "bold",
             }}
@@ -323,7 +331,7 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
         <span
           style={{
             padding: "10px",
-            margin: "20px 0px 20px 0px",
+            margin: "20px 0px 30px 0px",
             fontSize: "18px",
             fontWeight: "bold",
             backgroundColor: "lightgray",
@@ -427,339 +435,333 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
           margin: "20px 0px 20px 0px",
         }}
       />
-      <div style={{ marginTop: "10px" }}>
-        <div
-          style={{ width: "100%", display: "flex", borderBottom: "2px solid" }}
-        >
-          <span
-            style={{
-              width: "40%",
-              fontWeight: "bold",
-              fontSize: "18px",
-              padding: "2px",
-            }}
-          >
-            Categorias y servicios
-          </span>
-          <span
-            style={{
-              width: "30%",
-              fontWeight: "bold",
-              fontSize: "18px",
-              borderLeft: "1px solid",
-              padding: "2px",
-            }}
-          >
-            Precio
-          </span>
-          <span
-            style={{
-              width: "20%",
-              fontWeight: "bold",
-              fontSize: "18px",
-              borderLeft: "1px solid",
-              padding: "2px",
-            }}
-          >
-            Seña
-          </span>
-          <span
-            style={{
-              width: "10%",
-              fontWeight: "bold",
-              fontSize: "18px",
-              borderLeft: "1px solid",
-              padding: "2px",
-            }}
-          >
-            Tipo
-          </span>
-        </div>
-        {categoryServices.length < 1 ? (
-          <span
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              height: "40px",
-              fontSize: "18px",
-            }}
-          >
-            No tienes servicios aún
-          </span>
-        ) : (
-          categoryServices.map((elem, index) => {
-            return (
-              <div key={index} style={{ marginTop: "10px" }}>
-                {Object.keys(categoryName).length > 0 &&
-                categoryName.prev === elem.category ? (
-                  <input
-                    type="text"
-                    value={categoryName.current}
-                    onChange={(e) => handleChangeCategoryName(e)}
-                  />
-                ) : (
-                  <span
+      <table
+        style={{ width: "100%", marginTop: "10px", borderCollapse: "collapse" }}
+      >
+        <thead>
+          <tr style={{ borderBottom: "2px solid" }}>
+            <th
+              style={{
+                width: "40%",
+                fontWeight: "bold",
+                fontSize: "18px",
+                padding: "2px",
+              }}
+            >
+              Categorías y servicios
+            </th>
+            <th
+              style={{
+                width: "30%",
+                fontWeight: "bold",
+                fontSize: "18px",
+                borderLeft: "1px solid",
+                padding: "2px",
+              }}
+            >
+              Precio
+            </th>
+            <th
+              style={{
+                width: "20%",
+                fontWeight: "bold",
+                fontSize: "18px",
+                borderLeft: "1px solid",
+                padding: "2px",
+              }}
+            >
+              Seña
+            </th>
+            <th
+              style={{
+                width: "10%",
+                fontWeight: "bold",
+                fontSize: "18px",
+                borderLeft: "1px solid",
+                padding: "2px",
+              }}
+            >
+              Tipo
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {categoryServices.length < 1 ? (
+            <tr>
+              <td
+                colSpan="4"
+                style={{
+                  textAlign: "center",
+                  fontSize: "18px",
+                  height: "40px",
+                }}
+              >
+                No tienes servicios aún
+              </td>
+            </tr>
+          ) : (
+            categoryServices.map((elem, index) => (
+              <React.Fragment key={index}>
+                <tr>
+                  <td
+                    colSpan="4"
                     style={{
-                      fontWeight: "bold",
-                      fontSize: "18px",
-                      padding: "2px",
-                      backgroundColor: showEdit ? "lightgray" : "transparent",
-                      cursor:
-                        !showEdit ||
-                        ((Object.keys(categoryName).length > 0 ||
-                          Object.keys(serviceRow).length > 0) &&
-                          serviceRow.prev !== elem.category)
-                          ? "default"
-                          : "pointer",
-                      filter:
-                        (Object.keys(categoryName).length > 0 ||
-                          Object.keys(serviceRow).length > 0) &&
-                        categoryName !== elem.category
-                          ? "blur(2px)"
-                          : "",
-                      pointerEvents:
-                        (Object.keys(categoryName).length > 0 ||
-                          Object.keys(serviceRow).length > 0) &&
-                        categoryName !== elem.category
-                          ? "none"
-                          : "",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      height: "40px",
+                      padding: "2px 0px",
                     }}
-                    onClick={() => handleCategoryName(elem.category)}
                   >
-                    {elem.category}
-                  </span>
-                )}
-                <hr style={{ border: "1px solid" }} />
-                {elem.services.map((service, index) => {
-                  return (
-                    <React.Fragment key={index}>
-                      <div
+                    {Object.keys(categoryName).length > 0 &&
+                    categoryName.prev === elem.category ? (
+                      <input
+                        type="text"
+                        value={categoryName.current}
+                        onChange={(e) => handleChangeCategoryName(e)}
                         style={{
-                          display: "flex",
+                          height: "100%",
                           width: "100%",
-                          borderBottom: "1px solid",
+                          borderRadius: "5px",
+                          border: "1px solid",
+                          paddingLeft: "5px",
+                          fontSize: "20px",
                         }}
+                      />
+                    ) : (
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          fontSize: "20px",
+                          width: "100%",
+                          padding: "4px",
+                          backgroundColor: showEdit
+                            ? "lightgray"
+                            : "transparent",
+                          cursor:
+                            !showEdit ||
+                            (Object.keys(categoryName).length > 0 &&
+                              categoryName !== elem.category)
+                              ? "default"
+                              : "pointer",
+                          pointerEvents:
+                            Object.keys(categoryName).length > 0 &&
+                            categoryName !== elem.category
+                              ? "none"
+                              : "",
+                        }}
+                        onClick={() => handleCategoryName(elem.category)}
                       >
-                        {Object.keys(serviceRow).length > 0 &&
-                        serviceRow.category === elem.category &&
-                        serviceRow.prev === service.name ? (
-                          <>
-                            <input
-                              type="text"
-                              style={{
-                                width: "40%",
-                                padding: "5px",
-                              }}
-                              value={
-                                serviceRow.prev === service.name &&
-                                serviceRow.current
-                              }
-                              onChange={(e) =>
-                                handleChangeRowService("current", e)
-                              }
-                            />
-                            <input
-                              type="number"
-                              style={{
-                                width: "30%",
-                                padding: "5px",
-                              }}
-                              value={
-                                serviceRow.prev === service.name &&
-                                serviceRow.price
-                              }
-                              onChange={(e) =>
-                                handleChangeRowService("price", e)
-                              }
-                              placeholder="0"
-                            />
-                            <input
-                              type="number"
-                              style={{
-                                width: "20%",
-                                padding: "5px",
-                              }}
-                              value={
-                                serviceRow.prev === service.name &&
-                                serviceRow.sing
-                              }
-                              onChange={(e) =>
-                                handleChangeRowService("sing", e)
-                              }
-                              placeholder="0"
-                            />
-                            <select
-                              style={{
-                                width: "10%",
-                                padding: "5px",
-                              }}
-                              value={
-                                serviceRow.prev === service.name &&
-                                serviceRow.type
-                              }
-                              onChange={(e) =>
-                                handleChangeRowService("type", e)
-                              }
-                            >
-                              <option value="$">$</option>
-                              <option value="%">%</option>
-                            </select>
-                          </>
-                        ) : (
-                          <>
-                            <span
-                              style={{
-                                width: "40%",
-                                padding: "5px",
-                                backgroundColor: showEdit
-                                  ? "lightgray"
-                                  : "transparent",
-                                cursor:
-                                  !showEdit ||
-                                  ((Object.keys(categoryName).length > 0 ||
-                                    Object.keys(serviceRow).length > 0) &&
-                                    serviceRow.prev !== service.name)
-                                    ? "default"
-                                    : "pointer",
-                                filter:
-                                  (Object.keys(categoryName).length > 0 ||
-                                    Object.keys(serviceRow).length > 0) &&
-                                  serviceRow.prev !== service.name
-                                    ? "blur(2px)"
-                                    : "",
-                                pointerEvents:
-                                  (Object.keys(categoryName).length > 0 ||
-                                    Object.keys(serviceRow).length > 0) &&
-                                  serviceRow.prev !== service.name
-                                    ? "none"
-                                    : "",
-                              }}
-                              onClick={() =>
-                                handleRowService(service, elem.category)
-                              }
-                            >
-                              {service.name}
-                            </span>
-                            <span
-                              style={{
-                                width: "30%",
-                                padding: "5px",
-                                fontWeight: "bold",
-                                borderLeft: "1px solid",
-                                backgroundColor: showEdit
-                                  ? "lightgray"
-                                  : "transparent",
-                                cursor:
-                                  !showEdit ||
-                                  ((Object.keys(categoryName).length > 0 ||
-                                    Object.keys(serviceRow).length > 0) &&
-                                    serviceRow.prev !== service.name)
-                                    ? "default"
-                                    : "pointer",
-                                filter:
-                                  (Object.keys(categoryName).length > 0 ||
-                                    Object.keys(serviceRow).length > 0) &&
-                                  serviceRow.prev !== service.name
-                                    ? "blur(2px)"
-                                    : "",
-                                pointerEvents:
-                                  (Object.keys(categoryName).length > 0 ||
-                                    Object.keys(serviceRow).length > 0) &&
-                                  serviceRow.prev !== service.name
-                                    ? "none"
-                                    : "",
-                              }}
-                              onClick={() =>
-                                handleRowService(service, elem.category)
-                              }
-                            >
-                              ${service.price}
-                            </span>
+                        {elem.category}
+                      </span>
+                    )}
+                  </td>
+                </tr>
+                {elem.services.map((service, sIndex) => (
+                  <tr key={sIndex} style={{ borderBottom: "1px solid" }}>
+                    <td
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        width: "100%",
+                        height: "40px",
+                        padding: "2px",
+                        margin: "2px",
+                        borderRadius: "5px",
+                        backgroundColor: "transparent",
+                        cursor: !showEdit ? "default" : "pointer",
+                      }}
+                      onClick={() =>
+                        handleRowService(service, elem.category, "discard")
+                      }
+                    >
+                      {serviceRow[service.name] && (
+                        <img
+                          src={discardIcon}
+                          alt="descartar"
+                          style={{ width: "20px", marginRight: "5px" }}
+                        />
+                      )}
+                      {service.name}
+                    </td>
+                    {Object.keys(serviceRow).length > 0 &&
+                    serviceRow[service.name]?.category === elem.category &&
+                    serviceRow[service.name]?.service === service.name ? (
+                      <>
+                        <td
+                          style={{
+                            width: "30%",
+                            height: "40px",
+                            padding: "2px 2px 2px 0px",
+                          }}
+                        >
+                          <input
+                            type="number"
+                            value={
+                              serviceRow[service.name]?.service ===
+                                service.name && serviceRow[service.name]?.price
+                            }
+                            onChange={(e) =>
+                              handleChangeRowService("price", e, service.name)
+                            }
+                            placeholder="0"
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              paddingLeft: "5px",
+                              borderRadius: "5px",
+                              border: "1px solid",
+                            }}
+                          />
+                        </td>
+                        <td
+                          style={{
+                            width: "20%",
+                            height: "40px",
+                            padding: "2px",
+                          }}
+                        >
+                          <input
+                            type="number"
+                            value={
+                              serviceRow[service.name]?.service ===
+                                service.name && serviceRow[service.name]?.sing
+                            }
+                            onChange={(e) =>
+                              handleChangeRowService("sing", e, service.name)
+                            }
+                            placeholder="0"
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              paddingLeft: "5px",
+                              borderRadius: "5px",
+                              border: "1px solid",
+                            }}
+                          />
+                        </td>
+                        <td
+                          style={{
+                            width: "10%",
+                            height: "40px",
+                            padding: "2px 0px 2px 2px",
+                          }}
+                        >
+                          <select
+                            value={
+                              serviceRow[service.name]?.service ===
+                                service.name && serviceRow[service.name]?.type
+                            }
+                            onChange={(e) =>
+                              handleChangeRowService("type", e, service.name)
+                            }
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              borderRadius: "5px",
+                              border: "1px solid",
+                            }}
+                          >
+                            <option value="$">$</option>
+                            <option value="%">%</option>
+                          </select>
+                        </td>
+                      </>
+                    ) : (
+                      <>
+                        <td
+                          style={{
+                            width: "30%",
+                            padding: "5px",
+                            height: "40px",
+                            borderRadius: "5px",
+                            fontWeight: "bold",
+                            borderLeft: "1px solid",
+                            backgroundColor: showEdit
+                              ? "lightgray"
+                              : "transparent",
+                            cursor:
+                              !showEdit ||
+                              serviceRow[service.name]?.service === service.name
+                                ? "default"
+                                : "pointer",
+                            pointerEvents:
+                              serviceRow[service.name]?.service === service.name
+                                ? "none"
+                                : "",
+                          }}
+                          onClick={() =>
+                            handleRowService(service, elem.category)
+                          }
+                        >
+                          ${service.price}
+                        </td>
+                        <td
+                          style={{
+                            width: "20%",
+                            padding: "5px",
+                            height: "40px",
 
-                            <span
-                              style={{
-                                width: "20%",
-                                padding: "5px",
-                                fontWeight: "bold",
-                                borderLeft: "1px solid",
-                                backgroundColor: showEdit
-                                  ? "lightgray"
-                                  : "transparent",
-                                cursor:
-                                  !showEdit ||
-                                  ((Object.keys(categoryName).length > 0 ||
-                                    Object.keys(serviceRow).length > 0) &&
-                                    serviceRow.prev !== service.name)
-                                    ? "default"
-                                    : "pointer",
-                                filter:
-                                  (Object.keys(categoryName).length > 0 ||
-                                    Object.keys(serviceRow).length > 0) &&
-                                  serviceRow.prev !== service.name
-                                    ? "blur(2px)"
-                                    : "",
-                                pointerEvents:
-                                  (Object.keys(categoryName).length > 0 ||
-                                    Object.keys(serviceRow).length > 0) &&
-                                  serviceRow.prev !== service.name
-                                    ? "none"
-                                    : "",
-                              }}
-                              onClick={() =>
-                                handleRowService(service, elem.category)
-                              }
-                            >
-                              {service.type === "$"
-                                ? `${service.type}${service.sing}`
-                                : `${service.sing}${service.type}`}
-                            </span>
-                            <span
-                              style={{
-                                width: "10%",
-                                padding: "5px",
-                                fontWeight: "bold",
-                                borderLeft: "1px solid",
-                                backgroundColor: showEdit
-                                  ? "lightgray"
-                                  : "transparent",
-                                cursor:
-                                  !showEdit ||
-                                  ((Object.keys(categoryName).length > 0 ||
-                                    Object.keys(serviceRow).length > 0) &&
-                                    serviceRow.prev !== service.name)
-                                    ? "default"
-                                    : "pointer",
-                                filter:
-                                  (Object.keys(categoryName).length > 0 ||
-                                    Object.keys(serviceRow).length > 0) &&
-                                  serviceRow.prev !== service.name
-                                    ? "blur(2px)"
-                                    : "",
-                                pointerEvents:
-                                  (Object.keys(categoryName).length > 0 ||
-                                    Object.keys(serviceRow).length > 0) &&
-                                  serviceRow.prev !== service.name
-                                    ? "none"
-                                    : "",
-                              }}
-                              onClick={() =>
-                                handleRowService(service, elem.category)
-                              }
-                            >
-                              {service.type}
-                            </span>
-                          </>
-                        )}
-                      </div>
-                    </React.Fragment>
-                  );
-                })}
-              </div>
-            );
-          })
-        )}
-      </div>
+                            fontWeight: "bold",
+                            borderLeft: "1px solid",
+                            backgroundColor: showEdit
+                              ? "lightgray"
+                              : "transparent",
+                            cursor:
+                              !showEdit ||
+                              serviceRow[service.name]?.service === service.name
+                                ? "default"
+                                : "pointer",
+                            pointerEvents:
+                              serviceRow[service.name]?.service === service.name
+                                ? "none"
+                                : "",
+                          }}
+                          onClick={() =>
+                            handleRowService(service, elem.category)
+                          }
+                        >
+                          {service.type === "$"
+                            ? `${service.type}${service.sing}`
+                            : `${service.sing}${service.type}`}
+                        </td>
+                        <td
+                          style={{
+                            width: "10%",
+                            padding: "5px",
+                            height: "40px",
+
+                            fontWeight: "bold",
+                            borderLeft: "1px solid",
+                            backgroundColor: showEdit
+                              ? "lightgray"
+                              : "transparent",
+                            cursor:
+                              !showEdit ||
+                              serviceRow[service.name]?.service === service.name
+                                ? "default"
+                                : "pointer",
+                            pointerEvents:
+                              serviceRow[service.name]?.service === service.name
+                                ? "none"
+                                : "",
+                          }}
+                          onClick={() =>
+                            handleRowService(service, elem.category)
+                          }
+                        >
+                          {service.type}
+                        </td>
+                      </>
+                    )}
+                  </tr>
+                ))}
+              </React.Fragment>
+            ))
+          )}
+        </tbody>
+      </table>
+
       <div
         style={{
           display: "flex",
@@ -791,7 +793,7 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
               }}
               onClick={handleDiscard}
             >
-              Descartar
+              {`Descartar (${Object.keys(serviceRow).length})`}
             </Button>
           )}
           <hr
@@ -823,22 +825,18 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
         ) : Object.keys(serviceRow).length > 0 ? (
           <Button
             variant="contained"
-            disabled={serviceRow.current.length < 1 ? true : false}
+            disabled={Object.keys(serviceRow).length < 1 ? true : false}
             onClick={handleUpdateServiceRow}
             sx={{ fontFamily: "Jost,sans serif" }}
           >
-            Guardar fila
+            {Object.keys(serviceRow).length > 1
+              ? `Guardar filas`
+              : `Guardar fila`}
           </Button>
         ) : (
           <Button
             variant="contained"
-            disabled={
-              showEdit &&
-              Object.keys(serviceRow).length > 0 &&
-              Object.keys(serviceRow).length > 0
-                ? false
-                : true
-            }
+            disabled={true}
             sx={{ fontFamily: "Jost,sans serif" }}
           >
             Guardar

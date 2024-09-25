@@ -13,7 +13,7 @@ import toastAlert from "../../helpers/alertFunction";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const Users = () => {
+const Users = ({ setRefreshWhoIsComing }) => {
   const { darkMode } = useContext(ThemeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [add, setAdd] = useState(false);
@@ -51,10 +51,11 @@ const Users = () => {
       toastAlert(
         user.worker
           ? `El usuario ${user.name} ahora es cliente`
-          : `El usuario ${user.name} ahora es empleado.`,
+          : `El usuario ${user.name} ahora es profesional.`,
         "success"
       );
       setAdd(!add);
+      setRefreshWhoIsComing((prevState) => !prevState);
     } catch {
       toastAlert("Error al modificar el rol del usuario.", "error");
     }

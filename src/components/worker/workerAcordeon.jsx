@@ -22,17 +22,16 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const WorkerAcordeon = ({ userData }) => {
   const { darkMode } = useContext(ThemeContext);
-  const {
-    redirectToMyServices,
-    setRedirectToMyServices,
-    refreshWhoIsComing,
-    setRefreshWhoIsComing,
-  } = useContext(LoadAndRefreshContext);
+  const { redirectToMyServices, setRedirectToMyServices } = useContext(
+    LoadAndRefreshContext
+  );
   const [changeNoSaved, setChangeNoSaved] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [schedule, setSchedule] = useState({});
   const [pendingServices, setPendingServices] = useState(false);
   const [doCeroServices, setDoCeroServices] = useState(false);
+  const [refreshWhoIsComing, setRefreshWhoIsComing] = useState(false);
+
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   /* estados locales del componente myServices */
   const [services, setServices] = useState([]);
@@ -163,6 +162,8 @@ const WorkerAcordeon = ({ userData }) => {
                 schedule={schedule}
                 doCeroServices={doCeroServices}
                 pendingServices={pendingServices}
+                refreshWhoIsComing={refreshWhoIsComing}
+                setRefreshWhoIsComing={setRefreshWhoIsComing}
               />
             )}
             {expanded === "panel1" && Object.keys(userData).length < 1 && (

@@ -34,6 +34,7 @@ const AdminAcordeon = () => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [changeNoSaved, setChangeNoSaved] = useState({}); //estado para alertar cuando hay cambios sin guardar en cualquiera de los componentes
   const [services, setServices] = useState({});
+  const [refreshWhoIsComing, setRefreshWhoIsComing] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -242,7 +243,9 @@ const AdminAcordeon = () => {
             >
               Apertura y cierre
             </h2>
-            {remaining && <span className="span-administration">(Pendiente)</span>}
+            {remaining && (
+              <span className="span-administration">(Pendiente)</span>
+            )}
           </Box>
         </AccordionSummary>
         <AccordionDetails>
@@ -343,7 +346,10 @@ const AdminAcordeon = () => {
           </h2>
         </AccordionSummary>
         <AccordionDetails>
-          <Users />
+          <Users
+            refreshWhoIsComing={refreshWhoIsComing}
+            setRefreshWhoIsComing={setRefreshWhoIsComing}
+          />
         </AccordionDetails>
       </Accordion>
       {/* ********************************************************************************************************* */}
@@ -430,7 +436,7 @@ const AdminAcordeon = () => {
           </h2>
         </AccordionSummary>
         <AccordionDetails>
-          <WhoIsComingAdmin />
+          <WhoIsComingAdmin refreshWhoIsComing={refreshWhoIsComing} />
         </AccordionDetails>
       </Accordion>
       {/* ********************************************************************************************************* */}
@@ -472,7 +478,7 @@ const AdminAcordeon = () => {
           </h2>
         </AccordionSummary>
         <AccordionDetails>
-          <CancelledTurnsForAdmin />
+          <CancelledTurnsForAdmin refreshWhoIsComing={refreshWhoIsComing} />
         </AccordionDetails>
       </Accordion>
       {/* ********************************************************************************************************* */}

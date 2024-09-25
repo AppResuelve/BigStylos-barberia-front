@@ -1,0 +1,20 @@
+.container-ourservices {
+      padding-top: 60px;
+}
+
+.section-btn-reservar-ourservices {
+      position: fixed;
+      width: 100%;
+      left: 0%;
+      bottom: 0%;
+      display: flex;
+}
+
+.container-btn-reservar-ourservices {
+      margin: 0 auto;
+      width: 100%;
+      max-width: 600px;
+      justify-content: space-between;
+      padding: 10px;
+      border-radius: 20px 20px 0px 0px;
+}

@@ -15,6 +15,7 @@ import { messaging, subscribeUserToPush } from "./firebase.js";
 import { onMessage } from "firebase/messaging";
 import toastAlert from "./helpers/alertFunction.js";
 import "./App.css";
+import OurServices from "./components/ourServices/ourServices.jsx";
 
 function App() {
   const location = useLocation();
@@ -38,10 +39,11 @@ function App() {
     <>
       {location.pathname !== "/requestDenied401" && <Nav />}
       <Routes>
-        <Route path="/turns" element={<Turns />} />
         <Route path="/" element={<Home />} />
+        <Route path="/turns" element={<Turns />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/worker" element={<Worker />} />
+        <Route path="/nuestros-servicios" element={<OurServices />} />
         <Route path="/requestDenied401" element={<NotFound />} />
       </Routes>
       {(location.pathname === "/" || location.pathname === "/turns") && (
