@@ -27,6 +27,9 @@ const CustomCalendarPlannedC = ({
   const getDayPosition = getToday() + 1;
   const [hasTurnInSelectedDay, setHasTurnInSelectedDay] = useState(false);
 
+  console.log(days, "-------days")
+
+
   const handleDay = (day, month) => {
     if (dayIsSelected && dayIsSelected[month] && dayIsSelected[month][day]) {
       // Si ya existe en dayIsSelected, lo quitamos
