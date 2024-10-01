@@ -11,8 +11,8 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
-import "./home.css";
 import { LoaderMapReady } from "../loaders/loaders";
+import "./home.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -71,10 +71,10 @@ const Home = () => {
       navigate("/turns");
     }
   };
-
-  const handleGoToOurServices = () => {
-    navigate("/nuestros-servicios");
-  };
+  // habilitar el el handle cuando se habilite el button de abajo ⬇️
+  // const handleGoToOurServices = () => {
+  //   navigate("/nuestros-servicios");
+  // };
 
   return (
     <div
@@ -85,7 +85,7 @@ const Home = () => {
         flexDirection: "column",
         justifyContent: "space-between",
         alignItems: "center",
-        backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
+        backgroundColor: "var(--bg-color)",
         // backgroundImage: `url('ruta/a/la/imagen.jpg')`, // Cambia la ruta a tu imagen
         // backgroundSize: "cover", // Ajusta cómo se escala la imagen
         // backgroundPosition: "center", // Posiciona la imagen
@@ -110,7 +110,7 @@ const Home = () => {
         )}
         <div
           style={{
-            background: `linear-gradient(to bottom, ${darkMode.light}, transparent)`,
+            background: `linear-gradient(to bottom, var(--bg-color), var(--transparent)`,
           }}
           className="image-overlay"
         ></div>
@@ -120,7 +120,7 @@ const Home = () => {
         style={{
           height: md ? "135px" : "70px",
           borderRadius: "20px 20px 0px 0px",
-          background: `linear-gradient(to bottom, lightgray, transparent)`,
+          background: `linear-gradient(to bottom, var(--bg-color-secondary), var(--transparent))`,
         }}
       >
         <div
@@ -133,11 +133,13 @@ const Home = () => {
           <button
             onClick={handleReserveClick}
             className="btn-reservar-home"
-            style={{ width: md ? "100%" : "calc(50% - 5px)" }}
+            // style={{ width: md ? "100%" : "calc(50% - 5px)" }}
+            // habilitar el style de ⬆️ cuando se habilite el button de abajo ⬇️
+            style={{ width: "100%" }}
           >
             Reservar turno
           </button>
-          <div
+          {/* <div
             style={{
               position: "relative",
               width: !md ? "calc(50% - 5px)" : "100%",
@@ -152,7 +154,7 @@ const Home = () => {
             >
               Ver servicios
             </button>
-          </div>
+          </div> */}
         </div>
       </section>
     </div>

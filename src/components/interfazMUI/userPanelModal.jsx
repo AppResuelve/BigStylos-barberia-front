@@ -3,8 +3,10 @@ import ThemeContext from "../../context/ThemeContext";
 import AuthContext from "../../context/AuthContext";
 import noUser from "../../assets/icons/noUser.png";
 import closeIcon from "../../assets/icons/close.png";
+import storeConfigIcon from "../../assets/icons/store-config.png";
+import workerConfigIcon from "../../assets/icons/worker-config.png";
 import LogoutButton from "../logout/logout";
-import { Dialog, Backdrop, Slide, Box } from "@mui/material";
+import { Dialog, Backdrop, Slide } from "@mui/material";
 import { useMediaQueryHook } from "./useMediaQuery";
 import { NavLink } from "react-router-dom";
 import ClientNestedList from "./clientNestedList";
@@ -50,16 +52,16 @@ const UserPanelModal = () => {
           height: "100%",
           overflowY: "auto",
           paddingBottom: "70px",
-          backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
+          backgroundColor: "var(--bg-color)",
         }}
       >
         <header
           className="header-userpanelmodal"
           style={{
             position: "fixed",
-            backgroundColor: "lightgray",
+            backgroundColor: "var(--bg-color)",
             zIndex: "1",
-            boxShadow: "0px 6px 5px -3px rgb(0,0,0,0.5)",
+            boxShadow: "0px 6px 5px -5px rgb(0,0,0,0.5)",
           }}
         >
           <div
@@ -76,56 +78,29 @@ const UserPanelModal = () => {
                 src={userData?.image ? userData.image : noUser}
                 alt="mi perfil"
               />
-              <span
-                style={{
-                  color: darkMode.on ? "white" : darkMode.dark,
-                  fontSize: "22px",
-                }}
-              >
-                {userData?.name}
-              </span>
+              <span style={{ fontSize: "22px" }}>{userData?.name}</span>
             </div>
-
-            <img
-              className="img-close-userModal"
-              src={closeIcon}
-              alt=""
-              onClick={handleClose}
-            />
+            <button className="btn-close-usermodal" onClick={handleClose}>
+              <img src={closeIcon} alt="cerrar" />
+            </button>
           </div>
-          <hr
-            style={{
-              border: "none",
-              height: "2px",
-              backgroundColor: darkMode.on ? "white" : darkMode.dark,
-            }}
-          />
+          <hr style={{ margin: "0px 5px 0px 5px" }} />
         </header>
         <section style={{ padding: "55px 10px 10px 10px" }}>
           {/* seccion del admin */}
           {userData !== 1 && userData.admin && (
             <section onClick={() => setIsOpenUserPanel(false)}>
-              <NavLink
-                to="/admin"
-                style={{ textDecoration: "none", color: "black" }}
-              >
-                <Box>
+              <NavLink to="/admin" style={{ textDecoration: "none" }}>
                   <button
                     className="btn-userModal"
                     style={{
-                      color: darkMode.on ? "white" : darkMode.dark,
-                      fontWeight: "bold",
+                      color: "var(--text-color)",
                     }}
                   >
+                    <img src={storeConfigIcon} alt="administración del local" />
                     Administración del local
                   </button>
-                  <hr
-                    className="hr-userModal"
-                    style={{
-                      backgroundColor: darkMode.on ? "white" : darkMode.dark,
-                    }}
-                  />
-                </Box>
+                  <hr className="hr-userModal" />
               </NavLink>
             </section>
           )}
@@ -134,25 +109,16 @@ const UserPanelModal = () => {
             <section onClick={() => setIsOpenUserPanel(false)}>
               <NavLink
                 to="/worker"
-                style={{ textDecoration: "none", color: darkMode.dark }}
+                style={{ textDecoration: "none" }}
               >
-                <Box>
-                  <button
-                    className="btn-userModal"
-                    style={{
-                      color: darkMode.on ? "white" : darkMode.dark,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Administracíon del profesional
-                  </button>
-                  <hr
-                    className="hr-userModal"
-                    style={{
-                      backgroundColor: darkMode.on ? "white" : darkMode.dark,
-                    }}
-                  />
-                </Box>
+                <button
+                  className="btn-userModal"
+                  style={{ color: "var(--text-color)" }}
+                >
+                  <img src={workerConfigIcon} alt="administración del local" />
+                  <span>Administracíon del profesional</span>
+                </button>
+                <hr className="hr-userModal" />
               </NavLink>
             </section>
           )}

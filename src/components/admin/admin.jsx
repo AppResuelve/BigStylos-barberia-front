@@ -8,19 +8,32 @@ import { AdminWorkerSkeleton } from "../loaders/skeletons";
 
 const Admin = () => {
   const { darkMode } = useContext(ThemeContext);
-  const { userData } = useContext(AuthContext);
+  const { userData, dataErrorPage, setDataErrorPage } = useContext(AuthContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (userData !== 1) {
       if (!userData.admin) {
-        navigate("/requestDenied401");
+        setDataErrorPage({
+          status: 401,
+          text: "No tienes permiso para acceder a esta dirección.",
+        });
       }
     } else if (userData === false) {
-      navigate("/requestDenied401");
+      setDataErrorPage({
+        status: 401,
+        text: "No tienes permiso para acceder a esta dirección.",
+      });
     }
   }, [userData]);
+
+  useEffect(() => {
+    // Después de que se actualice `dataErrorPage`, realizamos la navegación
+    if (dataErrorPage.status === 401) {
+      navigate("/denied-access");
+    }
+  }, [dataErrorPage]);
 
   return (
     <div

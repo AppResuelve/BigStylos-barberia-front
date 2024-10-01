@@ -16,7 +16,7 @@ const LoginButton = () => {
       }}
     >
       {userIsReady ? (
-        <span className="span-btn-nav">entra con google</span>
+        <span className="span-btn-nav">Entra con google</span>
       ) : (
         <LoaderUserReady />
       )}

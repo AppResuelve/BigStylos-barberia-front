@@ -10,6 +10,7 @@
         font-family: Jost, sans-serif;
         cursor: pointer;
         transition: .2s;
+        background-color: var(--bg-color-secondary);
   }
 
   .btn-loginout-login:disabled {
@@ -17,16 +18,17 @@
         cursor: auto;
   }
 
+  .btn-loginout-logout img {
+        filter: var(--filter-invert);
+  }
+
   .btn-loginout-logout:hover {
-        background-color: #da0000;
-
-  }
-  .btn-loginout-logout:hover img {
-        filter: invert(100%) brightness(100%) hue-rotate(180deg);
+        background-color: var(--color-error);
 
   }
 
-  .btn-loginout-logout:hover span {
-        filter: invert(100%) brightness(100%) hue-rotate(180deg);
-        font-weight: bold;
+  .btn-loginout-logout span {
+        /* filter: invert(100%) brightness(100%) hue-rotate(180deg); */
+        letter-spacing: .3px;
+        /* font-weight: bold; */
   }
