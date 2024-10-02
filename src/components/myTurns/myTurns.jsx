@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import ThemeContext from "../../context/ThemeContext";
-import { Box, Button, Skeleton } from "@mui/material";
+import { Skeleton } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import formatHour from "../../functions/formatHour";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
@@ -101,7 +101,6 @@ const MyTurns = ({ userData }) => {
       }
     });
   };
-  console.log(listMyTurns);
 
   return (
     <div className="div-container-myturns">
@@ -111,51 +110,40 @@ const MyTurns = ({ userData }) => {
         ) : listMyTurns && listMyTurns.length > 0 ? (
           listMyTurns.map((turn, index) => {
             return (
-              <Box
-                key={index}
-                className="box-container-turn-myTurns"
-                sx={{
-                  backgroundColor: darkMode.on ? "white" : "#d6d6d5",
-                }}
-              >
-                <Box
-                  sx={{
+              <div key={index} className="box-container-turn-myTurns">
+                <div
+                  style={{
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "center",
                     alignItems: "center",
                   }}
                 >
-                  <h3 className="h3-myTurns">{turn.service.name}</h3>
-                  <h4 className="h4-myTurns">
+                  <span id="servicename">{turn.service.name}</span>
+                  <span className="h4-myTurns">
                     El día: {turn.day}/{turn.month} a las {formatHour(turn.ini)}
-                  </h4>
-                  <hr style={{ width: "100%" }} />
-                </Box>
-                <Box
-                  sx={{
+                  </span>
+                </div>
+                <hr style={{ width: "100%" }} />
+                <div
+                  style={{
                     display: "flex",
                     justifyContent: "space-between",
                     padding: "4px",
                   }}
                 >
-                  <Box
-                    className={sm ? "ticker-container" : ""}
-                    sx={{ width: "80%" }}
-                  >
-                    <h4 className="h4-myTurns">Profesional:</h4>
-                    <h4 className={sm ? "ticker-text" : "h4-myTurns"}>
-                      {turn.worker.name}
-                    </h4>
-                  </Box>
+                  <div className={"ticker-container"}>
+                    <span>Profesional:</span>
+                    <span>{turn.worker.name}</span>
+                  </div>
                   <button
                     className="btn-cancel-myTurns"
                     onClick={() => handleSubmit(turn)}
                   >
                     <DeleteOutlineIcon />
                   </button>
-                </Box>
-              </Box>
+                </div>
+              </div>
             );
           })
         ) : (

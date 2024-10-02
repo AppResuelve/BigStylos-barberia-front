@@ -30,6 +30,8 @@
    --transparent: #2f2e3e00;
    --filter-invert: invert(.8);
    --accent-color: #208de7;
+   --accent-color-hover: #0379d9;
+
  }
 
  * {
@@ -38,6 +40,7 @@
    box-sizing: border-box;
    font-family: 'Jost', sans-serif;
    --color-error: #db0101;
+   --color-disponibility: #31d34c;
  }
 
 

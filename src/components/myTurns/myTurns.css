@@ -32,6 +32,24 @@
       /* Ajusta la duración según tus preferencias */
 }
 
+.box-container-turn-myTurns {
+      background-color: var(--bg-color-secondary);
+      padding: 10px;
+      border-radius: 15px;
+      margin: 10px 5px 10px 5px;
+}
+
+.box-container-turn-myTurns span {
+      font-size: 18px;
+
+}
+
+.box-container-turn-myTurns #servicename {
+      font-size: 20px;
+      font-weight: bold;
+}
+
+
 @keyframes tickerAnimation {
       0% {
             transform: translateX(50%);
@@ -42,60 +60,9 @@
       }
 }
 
-@media (min-width:500px) and (max-height: 800px) {
-      .box-container-turn-myTurns {
-            padding: 10px;
-            border-radius: 15px;
-            margin: 10px 5px 10px 5px;
-      }
-
-      .h3-myTurns {
-            font-size: 18px;
-            font-weight: bold;
-      }
-
-      .h4-myTurns {
-            font-size: 18px;
-      }
+@media (min-width:500px) and (max-height: 800px) {}
 
 
-}
+@media (min-width:500px) and (min-height: 801px) and (max-height: 1000px) {}
 
-
-@media (min-width:500px) and (min-height: 801px) and (max-height: 1000px) {
-      .box-container-turn-myTurns {
-            padding: 10px;
-            border-radius: 15px;
-            margin: 10px 5px 10px 5px;
-      }
-
-      .h3-myTurns {
-            font-size: 18px;
-            font-weight: bold;
-      }
-
-      .h4-myTurns {
-            font-size: 18px;
-      }
-
-
-}
-
-@media (max-width:500px) and (max-height: 1000px) {
-      .box-container-turn-myTurns {
-            padding: 10px;
-            border-radius: 15px;
-            margin: 10px 5px 10px 5px;
-      }
-
-      .h3-myTurns {
-            font-size: 18px;
-            font-weight: bold;
-      }
-
-      .h4-myTurns {
-            font-size: 18px;
-      }
-
-
-}
+@media (max-width:500px) and (max-height: 1000px) {}

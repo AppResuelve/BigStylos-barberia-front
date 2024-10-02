@@ -50,8 +50,6 @@ const Turns = () => {
   const serviceAccordionRef = useRef(null);
   const workerAccordionRef = useRef(null);
 
-  console.log(days, "days---------");
-
   useEffect(() => {
     if (userData === false) {
       Swal.fire({
@@ -216,44 +214,42 @@ const Turns = () => {
   return (
     <div
       className="container-turns"
-      style={{
-        marginBottom: turnsCart.length > 0 ? "85px" : "0px", //condicion con el cart
-      }}
+      // style={{
+      //   marginBottom: turnsCart.length > 0 ? "85px" : "0px", //condicion con el cart
+      // }}
     >
+      <div className="div-bg-turns"></div>
       {dayIsSelected.length < 1 ? (
         <div className="subcontainer-turns">
           {/* seccion seleccion de servicio */}
           <div
             style={{
-              position: "relative",
               zIndex: "2",
               width: "100%",
               height: "100%",
-              backgroundColor: "white", //revisar cuando se cambie el color
+              backgroundColor: "var(--bg-color-hover)", //revisar cuando se cambie el color
               borderRadius: "20px",
-
               marginBottom: "25px",
+              display: "flex",
+              flexDirection: "column",
             }}
           >
-            <h2
+            <span
               style={{
-                color: !darkMode.on
-                  ? darkMode.dark
-                  : expanded === "panel2"
-                  ? darkMode.dark
-                  : "white",
-                marginLeft: "20px",
+                fontSize: "20px",
+                color: "var(--text-color)",
+                margin: "5px 5px 5px 20px",
               }}
             >
               Seleccione un servicio
-            </h2>
+            </span>
             <Accordion
               ref={serviceAccordionRef} // Referencia al acordeón de servicios
               style={{
                 borderRadius: "20px",
                 padding: "5px",
                 boxShadow: "0px 5px 10px -5px rgba(0,0,0,0.50)",
-                backgroundColor: !darkMode.on ? darkMode.light : darkMode.dark,
+                backgroundColor: "var(--bg-color-secondary)",
               }}
               expanded={expanded === "panel1"}
               onChange={handleChange("panel1")}
@@ -261,14 +257,22 @@ const Turns = () => {
               {Object.keys(serviceSelected).length > 0 && (
                 <AccordionSummary
                   style={{
-                    backgroundColor: expanded === "panel1" ? "#d6d6d5" : "",
+                    backgroundColor:
+                      expanded === "panel1"
+                        ? "var( --bg-color-hover)"
+                        : "var(--transparent)",
                     borderRadius: "20px",
                     height: "60px",
                   }}
                   expandIcon={
                     <ExpandMoreIcon
                       fontSize="large"
-                      sx={{ color: expanded === "panel1" ? "" : "#2196f3" }}
+                      sx={{
+                        color:
+                          expanded === "panel1"
+                            ? "var(--text-color)"
+                            : "var(--accent-color)",
+                      }}
                     />
                   }
                   aria-controls="panel1bh-content"
@@ -281,20 +285,16 @@ const Turns = () => {
                           ? serviceSelected.img
                           : servicesIcon
                       }
+                      style={{
+                        filter:
+                          serviceSelected.img !== ""
+                            ? "none"
+                            : "var(--filter-invert)",
+                      }}
                       alt="service-selected-icon"
                       className="img-service-selected-turns"
                     />
-                    <span
-                      style={{
-                        color: !darkMode.on
-                          ? darkMode.dark
-                          : expanded === "panel1"
-                          ? darkMode.dark
-                          : "white",
-                      }}
-                    >
-                      {serviceSelected.name}
-                    </span>
+                    <span>{serviceSelected.name}</span>
                   </div>
                 </AccordionSummary>
               )}
@@ -308,11 +308,12 @@ const Turns = () => {
                       style={{
                         width: "100%",
                         height: "38px",
-                        backgroundColor: "lightgray",
+                        backgroundColor: "var(--bg-color)",
                         fontSize: "20px",
                         fontWeight: "bold",
                         display: "flex",
                         alignItems: "center",
+                        border: "2px solid var(--bg-color-medium)",
                         marginTop:
                           Object.keys(serviceSelected).length > 0
                             ? "10px"
@@ -335,12 +336,8 @@ const Turns = () => {
                                 flexDirection: "column",
                                 backgroundColor:
                                   serviceSelected.name === service
-                                    ? "#2688ff"
-                                    : "rgba(255, 255, 255, 0.48)",
-                                color:
-                                  serviceSelected.name === service
-                                    ? "white"
-                                    : "black",
+                                    ? "var(--accent-color)"
+                                    : "var(--bg-color)",
                               }}
                               onClick={() =>
                                 handleServiceChange(
@@ -361,6 +358,11 @@ const Turns = () => {
                                       ? catServices[category][service].img
                                       : servicesIcon
                                   }
+                                  style={{
+                                    filter: catServices[category][service].img
+                                      ? "none"
+                                      : "var(--filter-invert)",
+                                  }}
                                   alt="im-service"
                                   className="img-service-turns"
                                 />
@@ -403,29 +405,31 @@ const Turns = () => {
           </div>
           {Object.keys(serviceSelected).length > 0 && (
             <>
-              <div>
-                <h2
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  backgroundColor: "var(--bg-color-hover)", //revisar cuando se cambie el color
+                  borderRadius: "20px",
+                  marginBottom: "25px",
+                }}
+              >
+                <span
                   style={{
-                    color: !darkMode.on
-                      ? darkMode.dark
-                      : expanded === "panel2"
-                      ? darkMode.dark
-                      : "white",
-                    marginLeft: "20px",
+                    fontSize: "20px",
+                    color: "var(--text-color)",
+                    margin: "5px 5px 5px 20px",
                   }}
                 >
                   Seleccione un profesional
-                </h2>
+                </span>
                 <Accordion
                   ref={workerAccordionRef} // Referencia al acordeón de trabajadores
                   style={{
                     padding: "5px",
                     borderRadius: "20px",
                     boxShadow: "0px 5px 10px -5px rgba(0,0,0,0.50)",
-
-                    backgroundColor: !darkMode.on
-                      ? darkMode.light
-                      : darkMode.dark,
+                    backgroundColor: "var(--bg-color-secondary)",
                   }}
                   expanded={expanded === "panel2"}
                   onChange={handleChange("panel2")}
@@ -433,13 +437,21 @@ const Turns = () => {
                   <AccordionSummary
                     style={{
                       borderRadius: "20px",
-                      backgroundColor: expanded === "panel2" ? "#d6d6d5" : "",
+                      backgroundColor:
+                        expanded === "panel2"
+                          ? "var( --bg-color-hover)"
+                          : "var(--transparent)",
                       height: "60px",
                     }}
                     expandIcon={
                       <ExpandMoreIcon
                         fontSize="large"
-                        sx={{ color: expanded === "panel2" ? "" : "#2196f3" }}
+                        sx={{
+                          color:
+                            expanded === "panel2"
+                              ? "var(--text-color)"
+                              : "var(--accent-color)",
+                        }}
                       />
                     }
                     aria-controls="panel2bh-content"
@@ -449,6 +461,12 @@ const Turns = () => {
                       <img
                         src={selectedWorker.image}
                         alt="worker-seleccionado"
+                        style={{
+                          filter:
+                            selectedWorker.name === "cualquiera"
+                              ? "var(--filter-invert)"
+                              : "none",
+                        }}
                       />
                       <span>
                         {selectedWorker.name === "cualquiera"
@@ -470,15 +488,22 @@ const Turns = () => {
                                 width: sm ? "100%" : "fit-content",
                                 backgroundColor:
                                   selectedWorker.email === worker.email
-                                    ? "#2688ff"
-                                    : "rgba(255, 255, 255, 0.48)",
-                                color:
-                                  selectedWorker.email === worker.email
-                                    ? "white"
-                                    : "black",
+                                    ? "var(--accent-color)"
+                                    : "var(--bg-color)",
                               }}
                             >
-                              <img src={worker.image} alt={worker.name} />
+                              <img
+                                src={worker.image}
+                                alt={worker.name}
+                                style={{
+                                  filter:
+                                    (selectedWorker.name === worker.name &&
+                                      worker.name == "cualquiera") ||
+                                    worker.name == "cualquiera"
+                                      ? "var(--filter-invert)"
+                                      : "none",
+                                }}
+                              />
                               <span>
                                 {worker.name === "cualquiera"
                                   ? "Sin preferencia"
@@ -491,7 +516,24 @@ const Turns = () => {
                   </AccordionDetails>
                 </Accordion>
               </div>
-              <div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  backgroundColor: "var(--bg-color-hover)", //revisar cuando se cambie el color
+                  borderRadius: "20px",
+                  marginBottom: "25px",
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: "20px",
+                    color: "var(--text-color)",
+                    margin: "5px 5px 5px 20px",
+                  }}
+                >
+                  Seleccione un día
+                </span>
                 <CustomCalendarTurns
                   days={workerDays}
                   dayIsSelected={dayIsSelected}
@@ -505,12 +547,7 @@ const Turns = () => {
           )}
         </div>
       ) : (
-        <div
-          className="subcontainer-selectedday-turns"
-          style={{
-            backgroundColor: "lightgray",
-          }}
-        >
+        <div className="subcontainer-selectedday-turns">
           <section className="section-btnback-dayselected">
             <button
               className="btn-img-back-turns"
@@ -546,14 +583,15 @@ const Turns = () => {
                         <button
                           key={index}
                           style={{
-                            backgroundColor: dayInCart ? "#2688ff" : "",
-                            color: dayInCart ? "white" : "",
+                            backgroundColor: dayInCart
+                              ? "var(--accent-color)"
+                              : "var(--color-disponibility)",
                             pointerEvents: dayInCart ? "none" : "",
                           }}
                           className="turnsbtn-turns"
                           onClick={() => handleSelectTime(btn)}
                         >
-                          {formatHour(btn.ini)}
+                          <span>{formatHour(btn.ini)}</span>
                         </button>
                       );
                     })}
@@ -561,7 +599,7 @@ const Turns = () => {
               </div>
               <hr
                 style={{
-                  border: "1px solid #d8d8d8",
+                  border: "1px solid var(--bg-color-medium)",
                   width: "100%",
                   borderRadius: "10px",
                 }}
@@ -579,7 +617,6 @@ const Turns = () => {
                     turnsButtons.map((btn, index) => {
                       if (btn.ini < 720) return;
                       let dayInCart = false;
-                      let disabled = false;
                       let uniqueKey = `${dayIsSelected[0]}+${dayIsSelected[1]}+${serviceSelected.name}+${btn.ini}`;
                       if (auxCart[uniqueKey]) {
                         dayInCart = true;
@@ -589,14 +626,15 @@ const Turns = () => {
                         <button
                           key={index}
                           style={{
-                            backgroundColor: dayInCart ? "#2688ff" : "",
-                            color: dayInCart ? "white" : "",
+                            backgroundColor: dayInCart
+                              ? "var(--accent-color)"
+                              : "var(--color-disponibility)",
                             pointerEvents: dayInCart ? "none" : "",
                           }}
                           className="turnsbtn-turns"
                           onClick={() => handleSelectTime(btn)}
                         >
-                          {formatHour(btn.ini)}
+                          <span>{formatHour(btn.ini)}</span>
                         </button>
                       );
                     })}
