@@ -28,7 +28,6 @@ const AuthProvider = ({ children }) => {
     const fetchData = async () => {
       try {
         const response = await authenticateUsers();
-
         if (response.auth) {
           setUserData(response.user);
           setUserIsReady(true);

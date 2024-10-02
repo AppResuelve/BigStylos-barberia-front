@@ -20,7 +20,7 @@ import ErrorPage from "./components/errorPage/errorPage.jsx";
 function App() {
   const location = useLocation();
   const { pageIsReady } = useContext(LoadAndRefreshContext);
-  const { userData, dataErrorPage } = useContext(AuthContext);
+  const { userData } = useContext(AuthContext);
 
   // useEffect(() => {
   //   // Aquí es donde suscribes al usuario al servicio de notificaciones push
@@ -48,15 +48,12 @@ function App() {
     <>
       {/* Renderiza Nav si la ruta actual no está en hideNavRoutes */}
       {hideNavRoutes.includes(location.pathname) && <Nav />}
-      {/* {showErrorRoutes.includes(location.pathname) && (
-        <ErrorPage dataErrorPage={dataErrorPage} />
-      )} */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/turns" element={<Turns />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/worker" element={<Worker />} />
-        <Route path="*" element={<ErrorPage dataErrorPage={dataErrorPage} />} />
+        <Route path="*" element={<ErrorPage />} />
         <Route path="/nuestros-servicios" element={<OurServices />} />
         {/* Mostrar NotFound solo si la ruta actual no está definida o es /requestDenied401 */}
       </Routes>

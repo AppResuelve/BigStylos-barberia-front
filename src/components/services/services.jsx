@@ -17,6 +17,7 @@ import discardIcon from "../../assets/icons/left-arrow.png";
 import toastAlert from "../../helpers/alertFunction";
 import DeleteServicesModal from "./deleteServicesModal";
 import axios from "axios";
+import { LoaderLinearProgress } from "../loaders/loaders";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -150,7 +151,6 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
     }
   };
 
-
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     if (name === "price" || name === "sing") {
@@ -177,8 +177,8 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
 
   const handleOpenDelete = () => {
     setOpenDelete(true);
-    setServiceRow({})
-    setShowEdit(false)
+    setServiceRow({});
+    setShowEdit(false);
   };
 
   //handle span
@@ -243,7 +243,6 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
     setCategoryName({});
     setServiceRow({});
   };
-  console.log(serviceRow);
 
   return (
     <div
@@ -252,18 +251,7 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
         flexDirection: "column",
       }}
     >
-      {loadingServices ? (
-        <LinearProgress sx={{ height: "2px", marginBottom: "15px" }} />
-      ) : (
-        <hr
-          style={{
-            marginBottom: "15px",
-            border: "none",
-            height: "2px",
-            backgroundColor: "#2196f3",
-          }}
-        />
-      )}
+      <LoaderLinearProgress loadingServices={loadingServices} />
       <div
         style={{
           display: "flex",
@@ -275,11 +263,10 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
         <span
           style={{
             fontSize: "18px",
-            fontWeight: "bold",
             width: "100%",
             padding: "10px",
             borderRadius: "5px",
-            backgroundColor: "lightgray",
+            backgroundColor: "var(--bg-color)",
           }}
         >
           Selecciona o agrega categorias o servicios.
@@ -333,8 +320,7 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
             padding: "10px",
             margin: "20px 0px 30px 0px",
             fontSize: "18px",
-            fontWeight: "bold",
-            backgroundColor: "lightgray",
+            backgroundColor: "var(--bg-color)",
             borderRadius: "5px",
           }}
         >
@@ -430,8 +416,7 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
       <hr
         style={{
           width: "100%",
-          border: "2px solid lightgray",
-          borderRadius: "10px",
+          border: "2px solid var(--bg-color-medium)",
           margin: "20px 0px 20px 0px",
         }}
       />
@@ -439,7 +424,7 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
         style={{ width: "100%", marginTop: "10px", borderCollapse: "collapse" }}
       >
         <thead>
-          <tr style={{ borderBottom: "2px solid" }}>
+          <tr style={{ borderBottom: "1px solid var(--text-color)" }}>
             <th
               style={{
                 width: "40%",
@@ -455,7 +440,7 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
                 width: "30%",
                 fontWeight: "bold",
                 fontSize: "18px",
-                borderLeft: "1px solid",
+                borderLeft: "1px solid var(--text-color)",
                 padding: "2px",
               }}
             >
@@ -466,7 +451,7 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
                 width: "20%",
                 fontWeight: "bold",
                 fontSize: "18px",
-                borderLeft: "1px solid",
+                borderLeft: "1px solid var(--text-color)",
                 padding: "2px",
               }}
             >
@@ -477,7 +462,7 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
                 width: "10%",
                 fontWeight: "bold",
                 fontSize: "18px",
-                borderLeft: "1px solid",
+                borderLeft: "1px solid var(--text-color)",
                 padding: "2px",
               }}
             >
@@ -531,13 +516,12 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
                     ) : (
                       <span
                         style={{
-                          fontWeight: "bold",
                           fontSize: "20px",
                           width: "100%",
                           padding: "4px",
                           backgroundColor: showEdit
-                            ? "lightgray"
-                            : "transparent",
+                            ? "var(--bg-color)"
+                            : "var(--transparent)",
                           cursor:
                             !showEdit ||
                             (Object.keys(categoryName).length > 0 &&
@@ -579,7 +563,11 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
                         <img
                           src={discardIcon}
                           alt="descartar"
-                          style={{ width: "20px", marginRight: "5px" }}
+                          style={{
+                            width: "20px",
+                            marginRight: "5px",
+                            filter: "var(--filter-invert)",
+                          }}
                         />
                       )}
                       {service.name}
@@ -678,8 +666,8 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
                             fontWeight: "bold",
                             borderLeft: "1px solid",
                             backgroundColor: showEdit
-                              ? "lightgray"
-                              : "transparent",
+                              ? "var(--bg-color)"
+                              : "var(--transparent)",
                             cursor:
                               !showEdit ||
                               serviceRow[service.name]?.service === service.name
@@ -705,8 +693,8 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
                             fontWeight: "bold",
                             borderLeft: "1px solid",
                             backgroundColor: showEdit
-                              ? "lightgray"
-                              : "transparent",
+                              ? "var(--bg-color)"
+                              : "var(--transparent)",
                             cursor:
                               !showEdit ||
                               serviceRow[service.name]?.service === service.name
@@ -734,8 +722,8 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
                             fontWeight: "bold",
                             borderLeft: "1px solid",
                             backgroundColor: showEdit
-                              ? "lightgray"
-                              : "transparent",
+                              ? "var(--bg-color)"
+                              : "var(--transparent)",
                             cursor:
                               !showEdit ||
                               serviceRow[service.name]?.service === service.name
@@ -761,7 +749,6 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
           )}
         </tbody>
       </table>
-
       <div
         style={{
           display: "flex",
@@ -798,10 +785,10 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
           )}
           <hr
             style={{
-              border: "2px solid",
+              border: "2px solid var(--bg-color-medium)",
               borderRadius: "10px",
               margin: "0px 6px",
-              color: "lightgray",
+              height: "35px",
             }}
           />
           <Button

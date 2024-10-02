@@ -1,15 +1,27 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import ThemeContext from "../../context/ThemeContext";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import toHome from "../../assets/icons/home.png";
 import imgFondoError from "../../assets/images/mano-error.png";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import "./errorPage.css";
+import AuthContext from "../../context/AuthContext";
 
-const ErrorPage = ({ dataErrorPage }) => {
+const ErrorPage = () => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
   const { darkMode } = useContext(ThemeContext);
+  const { dataErrorPage,setDataErrorPage } = useContext(AuthContext);
+  console.log(dataErrorPage);
+  const location = useLocation();
+  useEffect(() => {
+    if (location.pathname === "/denied-access") {
+      setDataErrorPage({
+        status: "401",
+        text: "No tienes permiso para acceder a esta dirección.",
+      });
+    }
+  },[])
   return (
     <div
       className="container-errorpage"

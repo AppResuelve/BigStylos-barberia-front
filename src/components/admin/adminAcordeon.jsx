@@ -104,43 +104,39 @@ const AdminAcordeon = () => {
 
   return (
     <div
-      className="container-adminacordeon"
+      className="container-adminaccordion"
       style={{ paddingTop: sm ? "30px" : "70px" }}
     >
       <Accordion
-        style={{
-          borderRadius: "0px 0px 5px 5px",
-          marginBottom: "5px",
-          boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
-          backgroundColor: !darkMode.on ? darkMode.light : darkMode.dark,
+        className="container-accordion"
+        sx={{
+          marginBottom: expanded === "panel1" ? "20px" : "5px",
         }}
         expanded={expanded === "panel1"}
         onChange={handleChange("panel1")}
       >
         <AccordionSummary
           sx={{
-            backgroundColor: expanded === "panel1" ? "#d6d6d5" : "",
-            borderRadius: "2px",
+            backgroundColor:
+              expanded === "panel1"
+                ? "var(--bg-color-hover)"
+                : "var(--bg-color-secondary)",
+            borderRadius: "15px",
           }}
           expandIcon={
             <ExpandMoreIcon
-              sx={{ color: expanded === "panel1" ? "" : "#2196f3" }}
+              sx={{
+                color:
+                  expanded === "panel1"
+                    ? "var(--text-color)"
+                    : "var(--accent-color)",
+              }}
             />
           }
           aria-controls="panel1bh-content"
           id="panel1bh-header"
         >
-          <h2
-            style={{
-              color: !darkMode.on
-                ? darkMode.dark
-                : expanded === "panel1"
-                ? darkMode.dark
-                : "white",
-            }}
-          >
-            Categorias y servicios
-          </h2>
+          <h2 style={{ color: "var(--text-color)" }}>Categorias y servicios</h2>
         </AccordionSummary>
         <AccordionDetails>
           <Services
@@ -154,38 +150,35 @@ const AdminAcordeon = () => {
       </Accordion>
       {/* ********************************************************************************************************* */}
       <Accordion
-        style={{
-          marginBottom: "5px",
-          borderRadius: "0px 0px 5px 5px",
-          boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
-          backgroundColor: !darkMode.on ? darkMode.light : darkMode.dark,
+        className="container-accordion"
+        sx={{
+          marginBottom: expanded === "panel2" ? "20px" : "5px",
         }}
         expanded={expanded === "panel2"}
         onChange={handleChange("panel2")}
       >
         <AccordionSummary
-          sx={{
-            backgroundColor: expanded === "panel2" ? "#d6d6d5" : "",
+          style={{
+            backgroundColor:
+              expanded === "panel2"
+                ? "var(--bg-color-hover)"
+                : "var(--bg-color-secondary)",
+            borderRadius: "15px",
           }}
           expandIcon={
             <ExpandMoreIcon
-              sx={{ color: expanded === "panel2" ? "" : "#2196f3" }}
+              sx={{
+                color:
+                  expanded === "panel2"
+                    ? "var(--text-color)"
+                    : "var(--accent-color)",
+              }}
             />
           }
           aria-controls="panel2bh-content"
           id="panel2bh-header"
         >
-          <h2
-            style={{
-              color: !darkMode.on
-                ? darkMode.dark
-                : expanded === "panel2"
-                ? darkMode.dark
-                : "white",
-            }}
-          >
-            Dias laborales
-          </h2>
+          <h2 style={{ color: "var(--text-color)" }}>Dias laborales</h2>
         </AccordionSummary>
         <AccordionDetails>
           {Object.keys(schedule).length > 0 && !loading ? (
@@ -203,22 +196,29 @@ const AdminAcordeon = () => {
       </Accordion>
       {/* ********************************************************************************************************* */}
       <Accordion
+        className="container-accordion"
         style={{
-          marginBottom: "5px",
-          borderRadius: "0px 0px 5px 5px",
-          boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
-          backgroundColor: !darkMode.on ? darkMode.light : darkMode.dark,
+          marginBottom: expanded === "panel3" ? "20px" : "5px",
         }}
         expanded={expanded === "panel3"}
         onChange={handleChange("panel3")}
       >
         <AccordionSummary
           sx={{
-            backgroundColor: expanded === "panel3" ? "#d6d6d5" : "",
+            backgroundColor:
+              expanded === "panel3"
+                ? "var(--bg-color-hover)"
+                : "var(--bg-color-secondary)",
+            borderRadius: "15px",
           }}
           expandIcon={
             <ExpandMoreIcon
-              sx={{ color: expanded === "panel3" ? "" : "#2196f3" }}
+              sx={{
+                color:
+                  expanded === "panel3"
+                    ? "var(--text-color)"
+                    : "var(--accent-color)",
+              }}
             />
           }
           aria-controls="panel3bh-content"
@@ -232,17 +232,7 @@ const AdminAcordeon = () => {
               width: "100%",
             }}
           >
-            <h2
-              style={{
-                color: !darkMode.on
-                  ? darkMode.dark
-                  : expanded === "panel3"
-                  ? darkMode.dark
-                  : "white",
-              }}
-            >
-              Apertura y cierre
-            </h2>
+            <h2 style={{ color: "var(--text-color)" }}>Apertura y cierre</h2>
             {remaining && (
               <span className="span-administration">(Pendiente)</span>
             )}
@@ -264,38 +254,35 @@ const AdminAcordeon = () => {
       </Accordion>
       {/* ********************************************************************************************************* */}
       <Accordion
+        className="container-accordion"
         style={{
-          marginBottom: "5px",
-          borderRadius: "0px 0px 5px 5px",
-          boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
-          backgroundColor: !darkMode.on ? darkMode.light : darkMode.dark,
+          marginBottom: expanded === "panel4" ? "20px" : "5px",
         }}
         expanded={expanded === "panel4"}
         onChange={handleChange("panel4")}
       >
         <AccordionSummary
           sx={{
-            backgroundColor: expanded === "panel4" ? "#d6d6d5" : "",
+            backgroundColor:
+              expanded === "panel4"
+                ? "var(--bg-color-hover)"
+                : "var(--bg-color-secondary)",
+            borderRadius: "15px",
           }}
           expandIcon={
             <ExpandMoreIcon
-              sx={{ color: expanded === "panel4" ? "" : "#2196f3" }}
+              sx={{
+                color:
+                  expanded === "panel4"
+                    ? "var(--text-color)"
+                    : "var(--accent-color)",
+              }}
             />
           }
           aria-controls="panel4bh-content"
           id="panel4bh-header"
         >
-          <h2
-            style={{
-              color: !darkMode.on
-                ? darkMode.dark
-                : expanded === "panel4"
-                ? darkMode.dark
-                : "white",
-            }}
-          >
-            Cierre programado
-          </h2>
+          <h2 style={{ color: "var(--text-color)" }}>Cierre programado</h2>
         </AccordionSummary>
         <AccordionDetails sx={{ p: 1 }}>
           {Object.keys(schedule).length > 0 && !loading ? (
@@ -312,38 +299,35 @@ const AdminAcordeon = () => {
       </Accordion>
       {/* ********************************************************************************************************* */}
       <Accordion
+        className="container-accordion"
         style={{
-          marginBottom: "5px",
-          borderRadius: "0px 0px 5px 5px",
-          boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
-          backgroundColor: !darkMode.on ? darkMode.light : darkMode.dark,
+          marginBottom: expanded === "panel5" ? "20px" : "5px",
         }}
         expanded={expanded === "panel5"}
         onChange={handleChange("panel5")}
       >
         <AccordionSummary
           sx={{
-            backgroundColor: expanded === "panel5" ? "#d6d6d5" : "",
+            backgroundColor:
+              expanded === "panel5"
+                ? "var(--bg-color-hover)"
+                : "var(--bg-color-secondary)",
+            borderRadius: "15px",
           }}
           expandIcon={
             <ExpandMoreIcon
-              sx={{ color: expanded === "panel5" ? "" : "#2196f3" }}
+              sx={{
+                color:
+                  expanded === "panel5"
+                    ? "var(--text-color)"
+                    : "var(--accent-color)",
+              }}
             />
           }
           aria-controls="panel5bh-content"
           id="panel5bh-header"
         >
-          <h2
-            style={{
-              color: !darkMode.on
-                ? darkMode.dark
-                : expanded === "panel5"
-                ? darkMode.dark
-                : "white",
-            }}
-          >
-            Usuarios
-          </h2>
+          <h2 style={{ color: "var(--text-color)" }}>Usuarios</h2>
         </AccordionSummary>
         <AccordionDetails>
           <Users
@@ -354,39 +338,35 @@ const AdminAcordeon = () => {
       </Accordion>
       {/* ********************************************************************************************************* */}
       <Accordion
+        className="container-accordion"
         style={{
-          marginBottom: "5px",
-          borderRadius: "0px 0px 5px 5px",
-
-          boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
-          backgroundColor: !darkMode.on ? darkMode.light : darkMode.dark,
+          marginBottom: expanded === "panel6" ? "20px" : "5px",
         }}
         expanded={expanded === "panel6"}
         onChange={handleChange("panel6")}
       >
         <AccordionSummary
           sx={{
-            backgroundColor: expanded === "panel6" ? "#d6d6d5" : "",
+            backgroundColor:
+              expanded === "panel6"
+                ? "var(--bg-color-hover)"
+                : "var(--bg-color-secondary)",
+            borderRadius: "15px",
           }}
           expandIcon={
             <ExpandMoreIcon
-              sx={{ color: expanded === "panel6" ? "" : "#2196f3" }}
+              sx={{
+                color:
+                  expanded === "panel6"
+                    ? "var(--text-color)"
+                    : "var(--accent-color)",
+              }}
             />
           }
           aria-controls="panel6bh-content"
           id="panel6bh-header"
         >
-          <h2
-            style={{
-              color: !darkMode.on
-                ? darkMode.dark
-                : expanded === "panel6"
-                ? darkMode.dark
-                : "white",
-            }}
-          >
-            Personalización
-          </h2>
+          <h2 style={{ color: "var(--text-color)" }}>Personalización</h2>
         </AccordionSummary>
         <AccordionDetails>
           <Personalization
@@ -400,11 +380,9 @@ const AdminAcordeon = () => {
       </Accordion>
       {/* ********************************************************************************************************* */}
       <Accordion
+        className="container-accordion"
         style={{
-          borderRadius: "0px 0px 5px 5px",
-          marginBottom: "5px",
-          boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
-          backgroundColor: !darkMode.on ? darkMode.light : darkMode.dark,
+          marginBottom: expanded === "panel7" ? "20px" : "5px",
         }}
         expanded={expanded === "panel7"}
         onChange={handleChange("panel7")}
@@ -412,70 +390,62 @@ const AdminAcordeon = () => {
         <AccordionSummary
           sx={{
             display: "flex",
-            backgroundColor: expanded === "panel7" ? "#d6d6d5" : "",
-            borderRadius: "2px",
+            backgroundColor:
+              expanded === "panel7"
+                ? "var(--bg-color-hover)"
+                : "var(--bg-color-secondary)",
+            borderRadius: "15px",
           }}
           expandIcon={
             <ExpandMoreIcon
-              sx={{ color: expanded === "panel7" ? "" : "#2196f3" }}
+              sx={{
+                color:
+                  expanded === "panel7"
+                    ? "var(--text-color)"
+                    : "var(--accent-color)",
+              }}
             />
           }
           aria-controls="panel7bh-content"
           id="panel7bh-header"
         >
-          <h2
-            style={{
-              color: !darkMode.on
-                ? darkMode.dark
-                : expanded === "panel7"
-                ? darkMode.dark
-                : "white",
-            }}
-          >
-            Agenda de turnos
-          </h2>
+          <h2 style={{ color: "var(--text-color)" }}>Agenda de turnos</h2>
         </AccordionSummary>
         <AccordionDetails>
           <WhoIsComingAdmin refreshWhoIsComing={refreshWhoIsComing} />
         </AccordionDetails>
       </Accordion>
-      {/* ********************************************************************************************************* */}
+      {/********************************************************************************************************** */}
       <Accordion
+        className="container-accordion"
         style={{
-          borderRadius: "0px 0px 5px 5px",
-          marginBottom: "5px",
-          boxShadow: "0px 25px 25px -10px rgba(0,0,0,0.57)",
-          backgroundColor: !darkMode.on ? darkMode.light : darkMode.dark,
-
-          border: "none",
+          marginBottom: expanded === "panel8" ? "20px" : "5px",
         }}
         expanded={expanded === "panel8"}
         onChange={handleChange("panel8")}
       >
         <AccordionSummary
           sx={{
-            backgroundColor: expanded === "panel8" ? "#d6d6d5" : "",
-            borderRadius: "2px",
+            backgroundColor:
+              expanded === "panel8"
+                ? "var(--bg-color-hover)"
+                : "var(--bg-color-secondary)",
+            borderRadius: "15px",
           }}
           expandIcon={
             <ExpandMoreIcon
-              sx={{ color: expanded === "panel8" ? "" : "#2196f3" }}
+              sx={{
+                color:
+                  expanded === "panel8"
+                    ? "var(--text-color)"
+                    : "var(--accent-color)",
+              }}
             />
           }
           aria-controls="panel8bh-content"
           id="panel8bh-header"
         >
-          <h2
-            style={{
-              color: !darkMode.on
-                ? darkMode.dark
-                : expanded === "panel8"
-                ? darkMode.dark
-                : "white",
-            }}
-          >
-            Turnos cancelados
-          </h2>
+          <h2 style={{ color: "var(--text-color)" }}>Turnos cancelados</h2>
         </AccordionSummary>
         <AccordionDetails>
           <CancelledTurnsForAdmin refreshWhoIsComing={refreshWhoIsComing} />

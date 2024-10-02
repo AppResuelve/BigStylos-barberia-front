@@ -6,18 +6,17 @@
  /* light theme */
  :root {
    --bg-color: #E6E6E6;
-   --bg-color-secondary: #cbcbcb;
+   --bg-color-secondary: #c3c3c3;
    --bg-color-medium: lightgray;
    --bg-color-hover: lightgray;
    --text-color: #18181c;
    --transparent: #e6e6e600;
-   --filter-invert: invert(0);
+   --filter-invert: invert(.1);
    --accent-color: #208de7;
    --accent-color-hover: #0379d9;
    /* --accent-color-selected: #208de7; */
    /* --bg-color-selected: #E6E6E6; */
    /* --bg-color-secondary-selected: #cbcbcb; */
-
  }
 
  /* dark theme */
@@ -31,7 +30,6 @@
    --filter-invert: invert(.8);
    --accent-color: #208de7;
    --accent-color-hover: #0379d9;
-
  }
 
  * {
@@ -60,7 +58,7 @@
 
  }
 
- span {
+ span, td, th{
    color: var(--text-color);
  }
 
@@ -69,7 +67,6 @@
    height: 1px;
    border: none;
    border-radius: 10px;
-
  }
 
  /* Estilos para motores Webkit y blink (Chrome, Safari, Opera...) */
@@ -94,4 +91,9 @@
 
  .my-swal-container {
    z-index: 99999;
+ }
+
+ .MuiAccordion-root::before {
+   display: none !important;
+   /* Eliminar el pseudo-elemento */
  }

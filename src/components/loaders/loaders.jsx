@@ -2,6 +2,7 @@ import mercadoPagoIcon from "../../assets/images/mercadopago.png";
 import securePayIcon from "../../assets/icons/secure-pay.png";
 import "./loaders.css";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
+import { LinearProgress } from "@mui/material";
 const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
 const LoaderToBuy = ({ redirect }) => {
@@ -43,6 +44,16 @@ const LoaderUserReady = () => {
   );
 };
 
+const LoaderUserImgReady = () => {
+  return (
+    <div className="container-loaderuserimgready">
+      <li className="dots-userimgready" id="dot-1"></li>
+      <li className="dots-userimgready" id="dot-2"></li>
+      <li className="dots-userimgready" id="dot-3"></li>
+    </div>
+  );
+};
+
 const LoaderPage = () => {
   return (
     <div className="container-page">
@@ -73,7 +84,7 @@ const LoaderMapReady = () => {
       className="container-loadermapready"
       style={{
         height: "100%",
-        width:"100%"
+        width: "100%",
       }}
     >
       <li className="dots-mapready" id="dot-1"></li>
@@ -83,4 +94,31 @@ const LoaderMapReady = () => {
   );
 };
 
-export { LoaderToBuy, LoaderUserReady, LoaderPage, LoaderMapReady };
+const LoaderLinearProgress = ({ loadingServices }) => {
+  return (
+    <>
+      <LinearProgress
+        variant={!loadingServices ? "determinate" : "indeterminate"} // Establece el modo determinado
+        value={!loadingServices ? 100 : null} // Establece el progreso al 100%
+        sx={{
+          height: !loadingServices ? "0px" : "4px",
+          borderRadius: "5px",
+          marginBottom: !loadingServices ? "17px" : "13px",
+          bgcolor: "var(--bg-color)", // Fondo de la barra
+          "& .MuiLinearProgress-bar": {
+            backgroundColor: "var(--accent-color)", // Color de la barra de progreso
+          },
+        }}
+      />
+    </>
+  );
+};
+
+export {
+  LoaderToBuy,
+  LoaderUserReady,
+  LoaderUserImgReady,
+  LoaderPage,
+  LoaderMapReady,
+  LoaderLinearProgress,
+};

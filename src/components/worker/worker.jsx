@@ -8,32 +8,19 @@ import AuthContext from "../../context/AuthContext";
 
 const Worker = () => {
   const { darkMode } = useContext(ThemeContext);
-  const { userData, dataErrorPage, setDataErrorPage } = useContext(AuthContext);
+  const { userData } = useContext(AuthContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (userData !== 1) {
       if (!userData.worker) {
-        setDataErrorPage({
-          status: 401,
-          text: "No tienes permiso para acceder a esta dirección.",
-        });
+        navigate("/denied-access");
       }
     } else if (userData === false) {
-      setDataErrorPage({
-        status: 401,
-        text: "No tienes permiso para acceder a esta dirección.",
-      });
-    }
-  }, [userData]);
-
-  useEffect(() => {
-    // Después de que se actualice `dataErrorPage`, realizamos la navegación
-    if (dataErrorPage.status === 401) {
       navigate("/denied-access");
     }
-  }, [dataErrorPage]);
+  }, [userData]);
 
   return (
     <div

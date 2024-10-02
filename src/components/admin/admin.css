@@ -1,10 +1,18 @@
-.container-adminacordeon {
+.container-adminaccordion {
       display: flex;
       flex-direction: column;
       width: 95vw;
       max-width: 900px;
 }
 
-.span-administration {
-      color: red;
+.container-accordion {
+      border-radius: 18px !important;
+      padding: 5px !important;
+      background-color: var(--bg-color-secondary) !important;
+      box-shadow: 0px 2px 3px -2px rgb(0, 0, 0, 0.5) !important;
 }
+
+.span-administration {
+      color: var(--color-error);
+}
+

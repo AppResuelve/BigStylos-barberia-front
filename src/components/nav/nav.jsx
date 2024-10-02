@@ -11,7 +11,7 @@ import bellOnNotificationIcon from "../../assets/icons/bell-on.png";
 import bellOffNotificationIcon from "../../assets/icons/bell-off.png";
 import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
 import "./nav.css";
-import { LoaderMapReady } from "../loaders/loaders";
+import { LoaderUserImgReady} from "../loaders/loaders";
 
 const Nav = () => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
@@ -23,6 +23,7 @@ const Nav = () => {
   );
   const location = useLocation();
   const [userImgLoaded, setUserImgLoaded] = useState(false);
+  console.log(userData.image);
 
   const handleGoToMyTurns = () => {
     setIsOpenUserPanel(true);
@@ -102,11 +103,12 @@ const Nav = () => {
               >
                 <img
                   className="img-user-nav"
+                  loading="lazy"
                   onLoad={() => setUserImgLoaded(true)}
-                  src={userData.image || noUser}
+                  src={userData.image||null }
                   alt="mi perfil"
                 />
-                {!userImgLoaded && <LoaderMapReady />}
+                {!userImgLoaded && <LoaderUserImgReady />}
               </button>
             )}
           </div>

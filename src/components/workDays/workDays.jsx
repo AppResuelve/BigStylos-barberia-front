@@ -185,10 +185,10 @@ const WorkDays = ({ schedule, refresh, setRefresh, setChangeNoSaved }) => {
             )}
             <hr
               style={{
-                border: "2px solid",
+                border: "2px solid var(--bg-color-medium)",
                 borderRadius: "10px",
                 margin: "0px 6px",
-                color: "lightgray",
+                height: "35px",
               }}
             />
 
