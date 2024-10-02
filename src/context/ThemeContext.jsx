@@ -11,14 +11,23 @@ const ThemeProvider = ({ children }) => {
     const savedDarkMode = localStorage.getItem("darkMode");
     return savedDarkMode
       ? JSON.parse(savedDarkMode)
-      : { dark: "#000214", light: "white", on: false };
+      : { dark: "#2f2e3e", light: "white", on: false };
   });
-  
+
   const [refreshPersonalization, setRefreshPersonalization] = useState(false);
 
   // Guarda la configuración del modo en localStorage cuando cambie
   useEffect(() => {
     localStorage.setItem("darkMode", JSON.stringify(darkMode));
+    document.documentElement.setAttribute(
+      "data-theme",
+      darkMode.on ? "dark" : "light"
+    );
+
+    // Modificar la variable CSS --bg-color según el modo
+    // if (!darkMode.on) {
+    //   document.documentElement.style.setProperty("--bg-color", darkMode.light); // Color para modo oscuro
+    // }
   }, [darkMode]);
 
   const toggleDarkMode = () => {
@@ -32,8 +41,7 @@ const ThemeProvider = ({ children }) => {
     const fetchImages = async () => {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/personalization`);
-        
-        setHomeImages(response.data.allImages)
+        setHomeImages(response.data.allImages);
         setDarkMode((prevMode) => ({
           ...prevMode,
           light: response.data.allColors[0],

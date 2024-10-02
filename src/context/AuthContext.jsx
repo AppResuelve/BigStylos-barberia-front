@@ -19,12 +19,15 @@ const AuthProvider = ({ children }) => {
     telefono: false,
     turnos: false,
   });
+  const [dataErrorPage, setDataErrorPage] = useState({
+    status: 404,
+    text: "No hemos encontrado la dirección que estás buscando.",
+  });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await authenticateUsers();
-
         if (response.auth) {
           setUserData(response.user);
           setUserIsReady(true);
@@ -117,6 +120,8 @@ const AuthProvider = ({ children }) => {
     googleLogin,
     userIsReady,
     setUserIsReady,
+    dataErrorPage,
+    setDataErrorPage,
   };
   return <AuthContext.Provider value={data}>{children}</AuthContext.Provider>;
 };

@@ -21,28 +21,25 @@
        padding: 5px;
        border: none;
        font-family: Jost, sans serif;
+       background-color: var(--bg-color-secondary);
+       font-size: 16px;
        cursor: pointer;
        transition: .2s;
  }
 
- .btn-img-home-nav:disabled {
-       pointer-events: none;
-       background-color: rgb(242, 242, 242);
-       cursor: auto;
- }
-
  .btn-img-home-nav:hover {
-       background-color: white;
+       background-color: var(--bg-color-hover);
  }
 
  .img-home-nav {
        margin-bottom: 3px;
-       width: 32px;
-       height: 32px;
+       width: 28px;
+       height: 28px;
  }
 
  .span-btn-nav {
        margin: 5px;
+       color: var(--text-color);
  }
 
  .btn-userProfile {

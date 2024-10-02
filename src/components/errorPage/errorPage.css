@@ -1,0 +1,28 @@
+.container-errorpage {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100svh;
+      background-color: var(--bg-color);
+      padding: 15px;
+}
+
+.img-errorpage {
+      position: absolute;
+      top: calc(0% - 40px);
+      left: calc(0% - 60px);
+      transform: rotateZ(150deg);
+      width: 300px;
+      height: auto;
+}
+
+#img-errorpage2 {
+      position: absolute;
+      top: calc(0% - 40px);
+      right: calc(0% - 40px);
+      transform: rotateZ(-50deg);
+      width: 230px;
+      height: auto;
+}

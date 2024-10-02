@@ -2,11 +2,11 @@ import { useEffect, useState, useContext } from "react";
 import ThemeContext from "../../context/ThemeContext";
 import AuthContext from "../../context/AuthContext";
 import ListItemButton from "@mui/material/ListItemButton";
-import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import phoneIcon from "../../assets/icons/phone.png";
+import calendarIcon from "../../assets/icons/calendar.png";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import { Box, Collapse, List } from "@mui/material";
+import { Collapse, List } from "@mui/material";
 import MyTurns from "../myTurns/myTurns";
 import InputTel from "../inputTel/inputTel";
 import Swal from "sweetalert2";
@@ -93,26 +93,14 @@ const ClientNestedList = () => {
         className="listItembtn-nestedList"
         onClick={() => handleSectionClick("telefono")}
       >
-        <Box sx={{ display: "flex", width: "100%" }}>
-          <LocalPhoneIcon
-            sx={{
-              marginRight: "5px",
-              color: darkMode.on ? "white" : darkMode.dark,
-            }}
-          />
-          <span
-            className="span-nestedList"
-            style={{
-              color: darkMode.on ? "white" : darkMode.dark,
-            }}
-          >
-            Teléfono
-          </span>
-        </Box>
+        <div className="container-img-span-clientlist">
+          <img src={phoneIcon} alt="mi teléfono" />
+          <span className="span-nestedList">Mi teléfono</span>
+        </div>
         {openSection.telefono ? (
-          <ExpandLess sx={{ color: darkMode.on ? "white" : darkMode.dark }} />
+          <ExpandLess sx={{ color: "var(--text-color)" }} />
         ) : (
-          <ExpandMore sx={{ color: "#2196f3" }} />
+          <ExpandMore sx={{ color: "var(--accent-color)" }} />
         )}
       </ListItemButton>
       <Collapse
@@ -138,45 +126,28 @@ const ClientNestedList = () => {
               disabled={inputTelError ? true : false}
               onClick={handleUpdatePhone}
             >
-              Guardar
+              <span style={{ color: !darkMode.on && "white" }}>Guardar</span>
             </button>
           </div>
         </List>
       </Collapse>
-      <hr
-        className="hr-userModal"
-        style={{
-          backgroundColor: darkMode.on ? "white" : darkMode.dark,
-        }}
-      />
+      <hr className="hr-userModal" />
       {/*////// contenido de seccion turnos dentro de miperfil //////*/}
       <ListItemButton
         className="listItembtn-nestedList"
         onClick={() => handleSectionClick("turnos")}
       >
-        <Box sx={{ display: "flex", width: "100%", position: "relative" }}>
+        <div className="container-img-span-clientlist">
           {newTurnNotification && (
             <label htmlFor="" className="label-notification-nestedList"></label>
           )}
-          <CalendarMonthIcon
-            sx={{
-              marginRight: "5px",
-              color: darkMode.on ? "white" : darkMode.dark,
-            }}
-          />
-          <span
-            className="span-nestedList"
-            style={{
-              color: darkMode.on ? "white" : darkMode.dark,
-            }}
-          >
-            Mis turnos
-          </span>
-        </Box>
+          <img src={calendarIcon} alt="mis turnos" />
+          <span className="span-nestedList">Mis turnos</span>
+        </div>
         {openSection.turnos ? (
-          <ExpandLess sx={{ color: darkMode.on ? "white" : darkMode.dark }} />
+          <ExpandLess sx={{ color: "var(--text-color)" }} />
         ) : (
-          <ExpandMore sx={{ color: "#2196f3" }} />
+          <ExpandMore sx={{ color: "var(--accent-color)" }} />
         )}
       </ListItemButton>
       <Collapse
@@ -188,12 +159,7 @@ const ClientNestedList = () => {
           <MyTurns userData={userData} />
         </List>
       </Collapse>
-      <hr
-        className="hr-userModal"
-        style={{
-          backgroundColor: darkMode.on ? "white" : darkMode.dark,
-        }}
-      />
+      <hr className="hr-userModal" />
     </div>
   );
 };

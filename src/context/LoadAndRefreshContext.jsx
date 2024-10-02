@@ -11,8 +11,6 @@ const LoadAndRefreshProvider = ({ children }) => {
   const [minTimePassed, setMinTimePassed] = useState(false); // Estado para el retraso mínimo
   const [newTurnNotification, setNewTurnNotification] = useState(false);
   const [redirectToMyServices, setRedirectToMyServices] = useState(false);
-  const [refreshWhoIsComing, setRefreshWhoIsComing] = useState(false);
-  const [refreshWhoIsComingAdmin, setRefreshWhoIsComingAdmin] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -39,10 +37,7 @@ const LoadAndRefreshProvider = ({ children }) => {
     setNewTurnNotification,
     redirectToMyServices,
     setRedirectToMyServices,
-    refreshWhoIsComing,
-    setRefreshWhoIsComing,
-    refreshWhoIsComingAdmin,
-    setRefreshWhoIsComingAdmin,
+ 
   };
 
   return (

@@ -15,12 +15,10 @@ const Worker = () => {
   useEffect(() => {
     if (userData !== 1) {
       if (!userData.worker) {
-        navigate("/requestDenied401");
+        navigate("/denied-access");
       }
     } else if (userData === false) {
-      navigate("/requestDenied401");
-    } else {
-      return;
+      navigate("/denied-access");
     }
   }, [userData]);
 

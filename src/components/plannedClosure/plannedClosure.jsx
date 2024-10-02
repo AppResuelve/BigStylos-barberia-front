@@ -91,6 +91,7 @@ const PlannedClosure = ({ schedule }) => {
               }
             );
             toastAlert("Día deshabilitado exitosamente.", "success");
+            console.log('deshabilitando')
             handleCancel();
             setRefresh(!refresh);
           } catch (error) {
@@ -187,24 +188,20 @@ const PlannedClosure = ({ schedule }) => {
             )}
             <hr
               style={{
-                border: "2px solid",
+                border: "2px solid var(--bg-color-medium)",
                 borderRadius: "10px",
                 margin: "0px 6px",
-                color: "lightgray",
+                height: "35px",
               }}
             />
-
             {toggle.remove ? (
               <Button
                 color="error"
-                // variant="outlined"
                 style={{
-                  color: "#ff4800eb",
+                  color: "var(--color-error)",
                   fontFamily: "Jost",
                   fontWeight: "bold",
                   letterSpacing: "1px",
-                  // border: "2px solid",
-                  // padding:"4px"
                 }}
                 onClick={() => handleToggle("remove-discard")}
               >
@@ -214,7 +211,7 @@ const PlannedClosure = ({ schedule }) => {
               <Button color="error" onClick={() => handleToggle("remove")}>
                 <DeleteOutlineIcon
                   sx={{
-                    color: "#ff4800eb",
+                    color: "var(--color-error)",
                   }}
                 />
               </Button>

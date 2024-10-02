@@ -15,10 +15,10 @@ const Admin = () => {
   useEffect(() => {
     if (userData !== 1) {
       if (!userData.admin) {
-        navigate("/requestDenied401");
+        navigate("/denied-access");
       }
     } else if (userData === false) {
-      navigate("/requestDenied401");
+      navigate("/denied-access");
     }
   }, [userData]);
 
@@ -28,7 +28,7 @@ const Admin = () => {
         overflow: "auto",
         display: "flex",
         flexDirection: "column",
-        backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
+        backgroundColor: "var(--bg-color)",
         alignItems: "center",
         height: "100vh",
         paddingTop: "70px",

@@ -30,7 +30,7 @@ const LogoutButton = () => {
       onClick={handleLogOut}
     >
       <img src={logOutIcon} alt="logout" width={30} />
-      <span className="span-btn-nav">Salir</span>
+      <span className="span-btn-nav">Cerrar sesión</span>
     </button>
   );
 };

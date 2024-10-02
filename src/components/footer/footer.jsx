@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useContext } from "react";
 import ThemeContext from "../../context/ThemeContext";
 import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
 import Slider from "react-slick";
@@ -9,37 +9,16 @@ import gama from "../../assets/images/gama.png";
 import silkey from "../../assets/images/silkey.png";
 import babyliss from "../../assets/images/babyliss.png";
 import pantene from "../../assets/images/pantene.png";
-import { Box } from "@mui/material";
 import Maps from "../maps/maps";
 import instagram from "../../assets/icons/instagram.png";
 import facebook from "../../assets/icons/facebook.png";
 import whatsapp from "../../assets/icons/whatsapp.png";
-import "./footer.css";
-import { convertToRGB } from "../../helpers/convertColorToRgb";
 import { NavLink } from "react-router-dom";
-import { LoaderMapReady } from "../loaders/loaders";
+import "./footer.css";
 
 const Footer = () => {
   const { darkMode } = useContext(ThemeContext);
   const { pageIsReady } = useContext(LoadAndRefreshContext);
-  const [colorRGB, setColorRGB] = useState("");
-  const [invertedColorRGB, setInvertedColorRGB] = useState("");
-
-  useEffect(() => {
-    let invertedColor;
-    let color;
-    if (darkMode.on) {
-      color = convertToRGB(darkMode.dark);
-      invertedColor = convertToRGB(darkMode.light);
-      setColorRGB(color);
-      setInvertedColorRGB(invertedColor);
-    } else {
-      color = convertToRGB(darkMode.light);
-      invertedColor = convertToRGB(darkMode.dark);
-      setColorRGB(color);
-      setInvertedColorRGB(invertedColor);
-    }
-  }, [darkMode]);
 
   // Configuración del carrusel
   const settings = {
@@ -71,7 +50,7 @@ const Footer = () => {
         width: "100%",
         height: "100%",
         overflow: "hidden",
-        backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
+        backgroundColor: "var(--bg-color)",
       }}
     >
       <div
@@ -92,7 +71,7 @@ const Footer = () => {
             width: "90%",
             fontSize: "20px",
             marginBottom: "10px",
-            color: darkMode.on ? "#e6e6e6" : "black",
+            color: "var(--text-color)",
           }}
         >
           Algunas de las marcas con las que trabajamos:
@@ -106,8 +85,8 @@ const Footer = () => {
             margin: "30px 0px 10px 0px",
           }}
         />
-        <Box
-          sx={{
+        <div
+          style={{
             position: "relative",
             display: "flex",
             alignSelf: "center",
@@ -117,7 +96,7 @@ const Footer = () => {
             width: "100%",
             maxWidth: "900px",
             pointerEvents: "none",
-            bgcolor: darkMode.on ? darkMode.light : "",
+            backgroundColor: "var(--bg-color)",
           }}
         >
           {/* Degradado a la izquierda */}
@@ -132,7 +111,7 @@ const Footer = () => {
               left: 0,
               width: "150px", // Ancho de la sombra
               height: "165px",
-              background: `linear-gradient(to left, rgba(${colorRGB.r},${colorRGB.g},${colorRGB.b},0), rgba(${colorRGB.r},${colorRGB.g},${colorRGB.b},1))`,
+              background: `linear-gradient(to left, var(--transparent), var(--bg-color))`,
             }}
           ></div>
 
@@ -216,10 +195,10 @@ const Footer = () => {
               right: 0,
               width: "150px", // Ancho de la sombra
               height: "165px",
-              background: `linear-gradient(to right, rgba(${colorRGB.r},${colorRGB.g},${colorRGB.b},0), rgba(${colorRGB.r},${colorRGB.g},${colorRGB.b},1))`,
+              background: `linear-gradient(to right, var(--transparent), var(--bg-color))`,
             }}
           ></div>
-        </Box>
+        </div>
       </div>
       <hr
         style={{
@@ -244,7 +223,6 @@ const Footer = () => {
           style={{
             margin: "10px 0px 5px 15px",
             fontSize: "18px",
-            color: darkMode.on ? "#e6e6e6" : "black",
           }}
         >
           Puedes encontrarnos aquí:
@@ -257,9 +235,7 @@ const Footer = () => {
           flexDirection: "column",
           alignItems: "center",
           width: "100%",
-          backgroundColor: "red",
-          color: darkMode.on ? "#e6e6e6" : "black",
-          background: `linear-gradient(to top, lightgray, transparent)`,
+          background: `linear-gradient(to top,  var(--bg-color-secondary), var(--transparent))`,
         }}
       >
         <div
@@ -312,8 +288,8 @@ const Footer = () => {
             flexDirection: "column",
           }}
         >
-          <h4>Olavarria, Bs As, Argentina</h4>
-          <h4>Todos los derechos reservados @2024 </h4>
+          <span>Olavarria, Bs As, Argentina</span>
+          <span>Todos los derechos reservados @2024 </span>
         </div>
       </section>
     </footer>

@@ -12,10 +12,9 @@ import shouldDisableButton from "../../helpers/shouldDisableButton";
 import daysMonthCalendarCustom from "../../functions/daysMonthCalendarCustom";
 import obtainDayName from "../../functions/obtainDayName";
 import Swal from "sweetalert2";
+import toastAlert from "../../helpers/alertFunction";
 import axios from "axios";
 import "./createWorkDays.css";
-import toastAlert from "../../helpers/alertFunction";
-import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -24,9 +23,9 @@ const CreateWorkDays = ({
   schedule,
   doCeroServices,
   pendingServices,
+  setRefreshWhoIsComing,
 }) => {
   const { darkMode } = useContext(ThemeContext);
-  const { setRefreshWhoIsComing, setRedirectToMyServices } = useContext(LoadAndRefreshContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [isOpen, setIsOpen] = useState(false);
   const [dayIsSelected, setDayIsSelected] = useState({});
@@ -224,7 +223,7 @@ const CreateWorkDays = ({
           );
         }
       }
-      setRefreshWhoIsComing(true);
+      setRefreshWhoIsComing((prevState) => !prevState);
       setShowEdit(false);
       setRefreshDays(true);
     } else {
@@ -269,7 +268,7 @@ const CreateWorkDays = ({
             );
             setDayIsSelected({});
             setRefreshDays(true);
-            setRefreshWhoIsComing(true);
+            setRefreshWhoIsComing((prevState) => !prevState);
           } catch (error) {
             toastAlert(`Error al borrar el día ${day}/${month}`, "error");
             console.error("Error al borrar el dia:", error);
@@ -289,7 +288,7 @@ const CreateWorkDays = ({
         toastAlert(`el día ${day}/${month} se borró exitosamente`, "success");
         setDayIsSelected({});
         setRefreshDays(true);
-        setRefreshWhoIsComing(true);
+        setRefreshWhoIsComing((prevState) => !prevState);
       } catch (error) {
         toastAlert(`Error al borrar el día ${day}/${month}`, "error");
         console.error("Error al borrar el dia:", error);

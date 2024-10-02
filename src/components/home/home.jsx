@@ -6,23 +6,20 @@ import { verificateFrontResponse } from "../../helpers/verificateFrontResponseMP
 import { getCookie } from "../../helpers/cookies";
 import { getLocalStorage } from "../../helpers/localStorage";
 import defaultImg from "../../assets/icons/no-image-logotipe.png";
-import bellNotificationIcon from "../../assets/icons/bell-on.png";
 import defaultImgLight from "../../assets/icons/no-image-logotipe-light.png";
 import Swal from "sweetalert2";
 import axios from "axios";
 import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
-import "./home.css";
 import { LoaderMapReady } from "../loaders/loaders";
+import "./home.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Home = () => {
   const { darkMode, homeImages } = useContext(ThemeContext);
-  const { googleLogin, setIsOpenUserPanel, setOpenSection, userData } =
-    useContext(AuthContext);
-  const { setImgLogoLoaded, newTurnNotification, setNewTurnNotification } =
-    useContext(LoadAndRefreshContext);
+  const { googleLogin, userData } = useContext(AuthContext);
+  const { setImgLogoLoaded } = useContext(LoadAndRefreshContext);
   const navigate = useNavigate();
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
 
@@ -60,10 +57,10 @@ const Home = () => {
     const isLoggedIn = getCookie("IDSESSION");
     if (!isLoggedIn) {
       Swal.fire({
-        title: "Debes estar loggeado para reservar",
+        title: "Inicia sesión para reservar",
         showDenyButton: true,
         confirmButtonText: "Iniciar sesión",
-        denyButtonText: `Más tarde`,
+        denyButtonText: "Más tarde",
       }).then((result) => {
         if (result.isConfirmed) {
           googleLogin();
@@ -74,17 +71,10 @@ const Home = () => {
       navigate("/turns");
     }
   };
-
-  const handleGoToMyTurns = () => {
-    setIsOpenUserPanel(true);
-    setTimeout(() => {
-      setOpenSection({
-        telefono: false,
-        turnos: true,
-      });
-      setNewTurnNotification(false);
-    }, 300);
-  };
+  // habilitar el el handle cuando se habilite el button de abajo ⬇️
+  // const handleGoToOurServices = () => {
+  //   navigate("/nuestros-servicios");
+  // };
 
   return (
     <div
@@ -95,7 +85,7 @@ const Home = () => {
         flexDirection: "column",
         justifyContent: "space-between",
         alignItems: "center",
-        backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
+        backgroundColor: "var(--bg-color)",
         // backgroundImage: `url('ruta/a/la/imagen.jpg')`, // Cambia la ruta a tu imagen
         // backgroundSize: "cover", // Ajusta cómo se escala la imagen
         // backgroundPosition: "center", // Posiciona la imagen
@@ -120,7 +110,7 @@ const Home = () => {
         )}
         <div
           style={{
-            background: `linear-gradient(to bottom, ${darkMode.light}, transparent)`,
+            background: `linear-gradient(to bottom, var(--bg-color), var(--transparent)`,
           }}
           className="image-overlay"
         ></div>
@@ -130,7 +120,7 @@ const Home = () => {
         style={{
           height: md ? "135px" : "70px",
           borderRadius: "20px 20px 0px 0px",
-          background: `linear-gradient(to bottom, lightgray, transparent)`,
+          background: `linear-gradient(to bottom, var(--bg-color-secondary), var(--transparent))`,
         }}
       >
         <div
@@ -143,11 +133,13 @@ const Home = () => {
           <button
             onClick={handleReserveClick}
             className="btn-reservar-home"
-            style={{ width: md ? "100%" : "calc(50% - 5px)" }}
+            // style={{ width: md ? "100%" : "calc(50% - 5px)" }}
+            // habilitar el style de ⬆️ cuando se habilite el button de abajo ⬇️
+            style={{ width: "100%" }}
           >
             Reservar turno
           </button>
-          <div
+          {/* <div
             style={{
               position: "relative",
               width: !md ? "calc(50% - 5px)" : "100%",
@@ -156,23 +148,13 @@ const Home = () => {
             <button
               id="myTurns"
               disabled={!userData}
-              onClick={handleGoToMyTurns}
+              onClick={handleGoToOurServices}
               className="btn-reservar-home"
               style={{ width: "100%" }}
             >
-              Mis turnos
+              Ver servicios
             </button>
-            {newTurnNotification && (
-              <>
-                <label htmlFor="" className="label-count-notification" />
-                <img
-                  src={bellNotificationIcon}
-                  alt="notificacíon de turnos"
-                  className="notification-myturns"
-                />
-              </>
-            )}
-          </div>
+          </div> */}
         </div>
       </section>
     </div>

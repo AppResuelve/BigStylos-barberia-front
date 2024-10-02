@@ -7,14 +7,14 @@ import "../cancelledTurnsForAdmin/cancelledTurns.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const CancelledTurnsForWorker = ({ userData }) => {
+const CancelledTurnsForWorker = ({
+  userData,
+  refreshWhoIsComing,
+}) => {
   const { darkMode } = useContext(ThemeContext);
   const [cancelledTurnsByDays, setCancelledTurnsByDays] = useState([]);
   const [count, setCount] = useState([]);
   const [selectedDay, setSelectedDay] = useState("");
-
-  // const date = new Date();
-  // const currentDay = date.getDate();
 
   useEffect(() => {
     const fetchCount = async () => {
@@ -25,12 +25,13 @@ const CancelledTurnsForWorker = ({ userData }) => {
         );
         const { data } = response;
         setCount(data);
+        setSelectedDay(data[0]);
       } catch (error) {
         console.error("Error al obtener el count.", error);
       }
     };
     fetchCount();
-  }, []);
+  }, [refreshWhoIsComing]);
 
   const handleChangeDay = async (element) => {
     const [numberDay, numberMonth] = selectedDay.split("/").map(Number);

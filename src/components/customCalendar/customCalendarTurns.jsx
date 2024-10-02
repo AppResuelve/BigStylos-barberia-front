@@ -66,38 +66,36 @@ const CustomCalendarTurns = ({
       style={{
         width: "100%",
         display: "flex",
+        backgroundColor: "var(--bg-color-secondary)",
+        borderRadius: "20px",
+        padding:"6px",
       }}
     >
       <div className="div-container-calendar">
         <div className="line7day">
           {daysOfWeek.map((day) => (
-            <h4
-              key={day}
-              style={{ color: darkMode.on ? "white" : darkMode.dark }}
-            >
-              {day}
-            </h4>
+            <span key={day}>{day}</span>
           ))}
         </div>
         <div className="line7-calendar">
           {daysCalendarCustom.month1.map((day, index) => {
             let dayName = obtainDayName(day, currentMonth, currentYear);
-            let colorDay = "#e8e8e8"; // Inicializar colorDay fuera del mapeo
+            let colorDay = "var(--bg-color)"; // Inicializar colorDay fuera del mapeo
             let disable = true;
             if (days[currentMonth] && days[currentMonth][day]) {
               disable = false;
-              colorDay = "#2688ff";
+              colorDay = "var(--color-disponibility)";
             }
             if (noWork[currentMonth] && noWork[currentMonth][day]) {
               disable = true;
-              colorDay = "gray";
+              colorDay = "var(--bg-color-medium)";
             }
             if (
               !schedule[dayName] ||
               (schedule[dayName].open === 0 && schedule[dayName].close === 1440)
             ) {
               disable = true;
-              colorDay = "gray";
+              colorDay = "var(--bg-color-medium)";
             }
 
             return (
@@ -112,15 +110,11 @@ const CustomCalendarTurns = ({
                     dayIsSelected.length > 0 &&
                     dayIsSelected[0] == day &&
                     dayIsSelected[1] == currentMonth
-                      ? "#2196f3"
+                      ? "var(--accent-color)"
                       : colorDay,
                   color: disable ? "#9f9f9f" : "white",
                   fontSize:
-                    dayIsSelected.length > 0 &&
-                    dayIsSelected[0] == day &&
-                    dayIsSelected[1] == currentMonth
-                      ? "25px"
-                      : "",
+                    days[currentMonth] && days[currentMonth][day] ? "22px" : "",
                   cursor: disable ? "" : "pointer",
                 }}
               >
@@ -128,26 +122,24 @@ const CustomCalendarTurns = ({
               </button>
             );
           })}
-
           {daysCalendarCustom.month2.map((day, index) => {
             let dayName = obtainDayName(day, nextMonth, nextYear);
-            let colorDay = "#e8e8e8"; // Inicializar colorDay fuera del mapeo
+            let colorDay = "var(--bg-color)"; // Inicializar colorDay fuera del mapeo
             let disable = true;
             if (days[nextMonth] && days[nextMonth][day]) {
               disable = false;
-              colorDay = "#2688ff";
+              colorDay = "var(--color-disponibility)";
             }
             if (noWork[nextMonth] && noWork[nextMonth][day]) {
               disable = true;
-              colorDay = "gray";
+              colorDay = "var(--bg-color-medium)";
             }
-
             if (
               !schedule[dayName] ||
               (schedule[dayName].open === 0 && schedule[dayName].close === 1440)
             ) {
               disable = true;
-              colorDay = "gray";
+              colorDay = "var(--bg-color-medium)";
             }
 
             return (
@@ -163,16 +155,12 @@ const CustomCalendarTurns = ({
                     dayIsSelected.length > 0 &&
                     dayIsSelected[0] == day &&
                     dayIsSelected[1] == nextMonth
-                      ? "#2196f3"
+                      ? "var(--accent-color)"
                       : colorDay,
-                  color: disable ? "#9f9f9f" : "white",
+                  color: disable ? "white" : "white",
 
                   fontSize:
-                    dayIsSelected.length > 0 &&
-                    dayIsSelected[0] == day &&
-                    dayIsSelected[1] == nextMonth
-                      ? "20px"
-                      : "",
+                    days[currentMonth] && days[currentMonth][day] ? "22px" : "",
                   cursor: disable ? "" : "pointer",
                 }}
               >

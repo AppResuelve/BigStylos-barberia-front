@@ -122,7 +122,7 @@ const WhoIsComingWorker = ({
                   }}
                   onClick={() => handleChangeDay(element)}
                 >
-                  {index === 0 ? "HOY" : element}
+                  {element}
                 </Button>
               );
             })}
