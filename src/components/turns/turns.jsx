@@ -27,8 +27,6 @@ const Turns = () => {
   const {
     turnsCart,
     setTurnsCart,
-    auxCart,
-    setAuxCart,
     dayIsSelected,
     setDayIsSelected,
   } = useContext(CartContext);
@@ -179,38 +177,18 @@ const Turns = () => {
   };
 
   const handleSelectTime = (btn) => {
-    console.log(serviceSelected);
 
-    setAuxCart((prevState) => {
-      if (Object.keys(prevState).length >= 3) return prevState;
-
-      let copyState = { ...prevState };
-
-      // Crear una clave única usando los valores seleccionados
-      const uniqueKey = `${dayIsSelected[0]}+${dayIsSelected[1]}+${serviceSelected.name}+${btn.ini}`;
-      // Añadir o actualizar la entrada en el objeto de estado
-      copyState[uniqueKey] = btn.worker;
-
-      return copyState;
-    });
-    setTurnsCart((prevState) => {
-      // Limitamos a 3 turnos por carrito
-      if (prevState.length >= 3) return prevState;
-      let copyState = [...prevState];
-      copyState.push({
-        id: `${dayIsSelected[0]}+${dayIsSelected[1]}+${serviceSelected.name}+${btn.ini}`,
+    setTurnsCart(
+        {id: `${dayIsSelected[0]}+${dayIsSelected[1]}+${serviceSelected.name}+${btn.ini}`,
         worker: btn.worker,
         ini: btn.ini,
         user: userData.email,
         day: dayIsSelected[0],
         month: dayIsSelected[1],
         service: serviceSelected,
-        quantity: 1,
-      });
-      return copyState;
-    });
-  };
-
+        quantity: 1,}
+      );
+    }
   return (
     <div
       className="container-turns"
@@ -576,7 +554,7 @@ const Turns = () => {
                       if (btn.ini >= 720) return;
                       let dayInCart = false;
                       let uniqueKey = `${dayIsSelected[0]}+${dayIsSelected[1]}+${serviceSelected.name}+${btn.ini}`;
-                      if (auxCart[uniqueKey]) {
+                      if (turnsCart.id === uniqueKey) {
                         dayInCart = true;
                       }
                       return (
@@ -618,7 +596,7 @@ const Turns = () => {
                       if (btn.ini < 720) return;
                       let dayInCart = false;
                       let uniqueKey = `${dayIsSelected[0]}+${dayIsSelected[1]}+${serviceSelected.name}+${btn.ini}`;
-                      if (auxCart[uniqueKey]) {
+                      if (turnsCart.id === uniqueKey) {
                         dayInCart = true;
                       }
                       // if(auxCart[])

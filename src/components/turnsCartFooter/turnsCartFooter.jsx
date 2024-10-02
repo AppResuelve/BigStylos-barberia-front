@@ -21,18 +21,7 @@ const TurnsCartFooter = () => {
   const [openCart, setOpenCart] = useState(false);
   const [urlInitPoint, setUrlInitPoint] = useState(null);
   const [loader, setLoader] = useState(false);
-  const [total, setTotal] = useState(0); // Estado para el total del carrito
 
-  useEffect(() => {
-    // Calcular el total del carrito basado en el quantity de cada turno
-    const totalAmount = turnsCart.reduce((acc, turn) => {
-      const quantity = turn.quantity || 1;
-      const price = turn.service.sing || 0; // Suponiendo que 'sing' es el precio
-      return acc + quantity * price;
-    }, 0);
-
-    setTotal(totalAmount);
-  }, [turnsCart]);
 
   useEffect(() => {
     // Manejar el evento de popstate
@@ -53,7 +42,7 @@ const TurnsCartFooter = () => {
   }, []);
 
   // Si no hay turnos en el carrito, no renderizar nada
-  if (turnsCart.length === 0) {
+  if (Object.keys(turnsCart).length === 0) {
     return null; // No renderiza nada
   }
 
@@ -65,63 +54,35 @@ const TurnsCartFooter = () => {
     });
   };
 
-  const handleAdd = (turn) => {
+  const handleAdd = () => {
     setTurnsCart((prevState) => {
-      return prevState.map((t) => {
-        if (t.id === turn.id) {
-          if (t.quantity === t.worker.length) return t; // No incrementar si ya se alcanzó el límite
-          return { ...t, quantity: (t.quantity || 0) + 1 };
+          if (prevState.quantity === prevState.worker.length) return prevState; // No incrementar si ya se alcanzó el límite
+          return { ...prevState, quantity: (prevState.quantity || 0) + 1 };
         }
-        return t;
-      });
+      );
+  };
+
+  const handleSubtract = () => {
+    setTurnsCart((prevState) => {
+          if (prevState.quantity <= 1) return prevState; // No decrementar si ya es 1 o menos
+          return { ...prevState, quantity: prevState.quantity - 1 };
     });
   };
 
-  const handleSubtract = (turn) => {
-    setTurnsCart((prevState) => {
-      return prevState.map((t) => {
-        if (t.id === turn.id) {
-          if (t.quantity <= 1) return t; // No decrementar si ya es 1 o menos
-          return { ...t, quantity: t.quantity - 1 };
-        }
-        return t;
-      });
-    });
-  };
-
-  const handleDeleteTurn = (turn) => {
-    setTurnsCart((prevState) => {
-      const updatedCart = prevState.filter((t) => t.id !== turn.id);
-      // Si el carrito está vacío después de eliminar el turno, cerrar el carrito
-      if (updatedCart.length === 0) {
-        setOpenCart(false);
-      }
-      return updatedCart;
-    });
-    setAuxCart((prevState) => {
-      const { [turn.id]: _, ...rest } = prevState;
-      return rest;
-    });
+  const handleDeleteTurn = () => {
+    setTurnsCart({});
+    setOpenCart(false)
   };
 
   const handleBuy = async () => {
-    let cartWithSing = [];
-    let cartNoSing = [];
     setLoader(true);
-    turnsCart.map((turn) => {
-      if (turn.service.sing != 0) {
-        cartWithSing.push(turn);
-      } else {
-        cartNoSing.push(turn);
-      }
-    });
-    if (cartWithSing.length > 0) {
+    if (turnsCart.service.sing != 0 ) {
       try {
         const response = await axios.post(
           `${VITE_BACKEND_URL}/mercadopago/create_preference`,
           {
-            arrayItems: turnsCart,
-            cartWithSing,
+            arrayItems: [turnsCart],
+            cartWithSing: [turnsCart],
           }
         );
         setUrlInitPoint(response.data.init_point);
@@ -138,28 +99,20 @@ const TurnsCartFooter = () => {
     } else {
       try {
         const response = await axios.put(`${VITE_BACKEND_URL}/workdays/turn`, {
-          arrayItems: cartNoSing,
+          arrayItems: [turnsCart],
         });
         setLoader(false);
-        setTurnsCart([]);
-        setAuxCart({});
+        setTurnsCart({});
         setDayIsSelected([]);
         toastAlert(
-          cartNoSing.length > 1
-            ? "Los turnos han sidos agendados con éxito!"
-            : "El turno ha sido agendado con éxito!",
+          "El turno ha sido agendado con éxito!",
           "success"
         );
         setNewTurnNotification(true);
         setCookie("NEWTURN-NOTIFICATION", true, 4)
       } catch (error) {
         setLoader(false);
-        toastAlert(
-          cartNoSing.length > 1
-            ? "Error al agendar los turnos."
-            : "Error al agendar el turno",
-          "error"
-        );
+        toastAlert("Error al agendar el turno", "error");
         console.log(error);
       }
     }
@@ -174,110 +127,54 @@ const TurnsCartFooter = () => {
         ></div>
       )}
       <div
-        className={
-          openCart
-            ? "container-turnscartfooter-open"
-            : "container-turnscartfooter"
-        }
+        className={"container-turnscartfooter-open"}
       >
         <div
-          className={
-            openCart
-              ? "subcontainer-turnscartfooter-open"
-              : "subcontainer-turnscartfooter"
-          }
+          className={"subcontainer-turnscartfooter-open"}
         >
-          <div
-            className="extend-cart-btn"
-            onClick={handleToggleCart}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: openCart ? "center" : "",
-            }}
-          >
-            <img
-              src={backIcon}
-              alt="expand"
-              style={{
-                rotate: openCart ? "-90deg" : "90deg",
-              }}
-            />
-          </div>
-          {!openCart ? (
-            <>
-              <span>
-                {turnsCart.length > 0
-                  ? `Turnos seleccionados: ${turnsCart.length}`
-                  : "Turnos seleccionados: 0"}
-              </span>
-              <button onClick={handleToggleCart}>Mostrar</button>
-            </>
-          ) : (
-            <>
-              {turnsCart.map((turn, index) => {
-                return (
-                  <div key={index} className="container-each-turn">
-                    <div className="sub-container1-each-turn">
-                      <div style={{ display: "flex", flexDirection: "column" }}>
-                        <span>{turn.service.name}</span>
-                        <span>
-                          {`${turn.day}/${turn.month} a las ${formatHour(
-                            turn.ini
-                          )}`}
-                        </span>
-                      </div>
-                      <div id="minor-plas">
-                        {turn.quantity < 2 ? (
-                          <button
-                            id="deleteturn-button"
-                            onClick={() => handleDeleteTurn(turn)}
-                          >
-                            <img src={trashIcon} alt="delete turno" />
-                          </button>
-                        ) : (
-                          <button onClick={() => handleSubtract(turn)}>
-                            -
-                          </button>
-                        )}
-                        <span>{turn.quantity || 1}</span>
-                        <button onClick={() => handleAdd(turn)}>+</button>
-                      </div>
-                    </div>
-                    {turn.service.sing != 0 && (
-                      <>
-                        <hr />
-                        <div className="sub-container2-each-turn">
-                          <img src={hasSingIcon} alt="requiere seña" />
-                          <span>${turn.service.sing}</span>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                );
-              })}
-              {total !== 0 && (
-                <div className="div-container-totalsing-turns">
-                  <hr className="hr-totalsing-turns" />
-                  <span>Total a señar: ${total}</span>
-                </div>
-              )}
-
-              <div className="div-btns-pay-mp">
-                {loader ? (
-                  <LoaderToBuy redirect={false} />
-                ) : urlInitPoint ? (
-                  <>
-                    <LoaderToBuy redirect={true} />
-                  </>
-                ) : (
-                  <button onClick={handleBuy} className="btn-sing-pay">
-                    Agendar y Señar
-                  </button>
-                )}
+          <div className="container-each-turn">
+            <div className="sub-container1-each-turn">
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <span>{turnsCart.service.name}</span>
+                <span>
+                  {`${turnsCart.day}/${turnsCart.month} a las ${formatHour(turnsCart.ini)}`}
+                </span>
               </div>
-            </>
-          )}
+              <div id="minor-plas">
+                {turnsCart.quantity < 2 ? (
+                  <button id="deleteturn-button" onClick={handleDeleteTurn}>
+                    <img src={trashIcon} alt="delete turno" />
+                  </button>
+                ) : (
+                  <button onClick={handleSubtract}>-</button>
+                )}
+                <span>{turnsCart.quantity || 1}</span>
+                <button onClick={handleAdd}>+</button>
+              </div>
+            </div>
+            {turnsCart.service.sing != 0 && (
+              <>
+                <hr />
+                <div className="sub-container2-each-turn">
+                  <img src={hasSingIcon} alt="requiere seña" />
+                  <span>${turnsCart.service.sing}</span>
+                </div>
+              </>
+            )}
+          </div>
+          <div className="div-btns-pay-mp">
+            {loader ? (
+              <LoaderToBuy redirect={false} />
+            ) : urlInitPoint ? (
+              <>
+                <LoaderToBuy redirect={true} />
+              </>
+            ) : (
+              <button onClick={handleBuy} className="btn-sing-pay">
+                Agendar y Señar
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </>
