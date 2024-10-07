@@ -12,7 +12,7 @@ const VITE_GOOGLE_OAUTH_CLIENT_ID = import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID;
 
   if ("serviceWorker" in navigator && "PushManager" in window) {
     navigator.serviceWorker
-      .register("../firebase-messaging-sw.js")
+      .register("/firebase-messaging-sw.js")
       .then((registration) => {
         console.log("Service Worker registrado con éxito:", registration);
       })
