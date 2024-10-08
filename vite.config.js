@@ -1,5 +1,4 @@
 // vite.config.js
-// recuerda quitar la config de vercel
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
@@ -10,4 +9,9 @@ export default defineConfig({
       external: ["react-dom/client"],
     },
   },
+  // server: {
+  //   proxy: {
+      
+  //   }
+  // }
 });
