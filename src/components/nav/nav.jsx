@@ -23,7 +23,6 @@ const Nav = () => {
   );
   const location = useLocation();
   const [userImgLoaded, setUserImgLoaded] = useState(false);
-  console.log(userData.image);
 
   const handleGoToMyTurns = () => {
     setIsOpenUserPanel(true);

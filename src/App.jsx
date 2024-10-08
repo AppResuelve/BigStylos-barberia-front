@@ -53,7 +53,7 @@ function App() {
         <Route path="/turns" element={<Turns />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/worker" element={<Worker />} />
-        {/* <Route path="*" element={<ErrorPage />} /> */}
+        <Route path="*" element={<ErrorPage />} />
         <Route path="/nuestros-servicios" element={<OurServices />} />
         {/* Mostrar NotFound solo si la ruta actual no está definida o es /requestDenied401 */}
       </Routes>
