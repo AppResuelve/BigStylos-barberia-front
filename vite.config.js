@@ -2,6 +2,8 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 export default defineConfig({
   plugins: [react()],
   build: {
@@ -9,9 +11,13 @@ export default defineConfig({
       external: ["react-dom/client"],
     },
   },
-  // server: {
-  //   proxy: {
-      
-  //   }
-  // }
+  server: {
+    proxy: {
+      // Proxy todas las solicitudes al backend directamente
+      "/": {
+        target: VITE_BACKEND_URL,
+        changeOrigin: true, // Si necesitas evitar problemas de CORS
+      },
+    },
+  },
 });
