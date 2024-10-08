@@ -39,6 +39,11 @@ const ThemeProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchImages = async () => {
+      if (!VITE_BACKEND_URL) {
+        console.error("Backend URL is not defined");
+        return;
+      }
+
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/personalization`);
         setHomeImages(response.data.allImages);
