@@ -1,8 +1,12 @@
 // vite.config.js
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import dotenv from "dotenv";
 
-const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+// Cargar las variables de entorno desde el archivo .env
+dotenv.config();
+
+const VITE_BACKEND_URL = process.env.VITE_BACKEND_URL;
 
 export default defineConfig({
   plugins: [react()],
