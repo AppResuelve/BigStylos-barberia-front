@@ -25,6 +25,7 @@ const LoadAndRefreshProvider = ({ children }) => {
       setPageIsReady(true); // Solo si todo está listo y pasó el tiempo mínimo
     }
   }, [userData, imgLogoLoaded, minTimePassed]);
+console.log(imgLogoLoaded,"este es el logoloaded");
 
   const data = {
     pageIsReady,

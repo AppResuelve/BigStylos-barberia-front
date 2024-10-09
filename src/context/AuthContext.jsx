@@ -23,7 +23,6 @@ const AuthProvider = ({ children }) => {
     status: 404,
     text: "No hemos encontrado la dirección que estás buscando.",
   });
-  console.log("pase por el authcontext");
 
   useEffect(() => {
     const fetchData = async () => {
