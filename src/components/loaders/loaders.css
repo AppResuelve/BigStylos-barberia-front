@@ -153,9 +153,9 @@
       top: calc(50%);
       left: calc(50% - 15px);
       display: flex;
-      /* margin: 15px 10px 10px 10px; */
-      gap: 6px;
       list-style: none;
+      gap: 6px;
+      z-index: 1;
 }
 
 .dots-userimgready {
