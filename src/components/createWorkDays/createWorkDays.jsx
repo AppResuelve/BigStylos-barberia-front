@@ -15,6 +15,7 @@ import Swal from "sweetalert2";
 import toastAlert from "../../helpers/alertFunction";
 import axios from "axios";
 import "./createWorkDays.css";
+import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -26,6 +27,7 @@ const CreateWorkDays = ({
   setRefreshWhoIsComing,
 }) => {
   const { darkMode } = useContext(ThemeContext);
+  const { setRedirectToMyServices } = useContext(LoadAndRefreshContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [isOpen, setIsOpen] = useState(false);
   const [dayIsSelected, setDayIsSelected] = useState({});

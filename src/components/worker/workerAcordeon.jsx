@@ -34,7 +34,7 @@ const WorkerAcordeon = ({ userData }) => {
 
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   /* estados locales del componente myServices */
-  const [services, setServices] = useState([]);
+  const [services, setServices] = useState(null);
   const [timeEdit, setTimeEdit] = useState({});
 
   // Efecto para inicializar timeEdit con userData.services
@@ -45,7 +45,12 @@ const WorkerAcordeon = ({ userData }) => {
   }, [userData]);
 
   useEffect(() => {
-    if (timeEdit && Object.keys(timeEdit).length > 0 && services.length > 0) {
+    if (
+      timeEdit &&
+      Object.keys(timeEdit).length > 0 &&
+      services !== null &&
+      services.length > 0
+    ) {
       let onePending = false;
       let allZero = true;
       for (const prop in timeEdit) {
@@ -169,7 +174,7 @@ const WorkerAcordeon = ({ userData }) => {
             {expanded === "panel1" && Object.keys(userData).length < 1 && (
               <LinearProgress />
             )}
-            {services !== 1 && services.length == 0 && (
+            {services !== null && services.length == 0 && (
               <h4
                 style={{
                   display: "flex",
@@ -237,7 +242,7 @@ const WorkerAcordeon = ({ userData }) => {
                   Pendiente
                 </h4>
               )}
-              {services !== 1 && services.length == 0 && (
+              {services !== null && services.length == 0 && (
                 <h4
                   style={{
                     color: "red",

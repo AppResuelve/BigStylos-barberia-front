@@ -22,7 +22,25 @@ const Nav = () => {
     LoadAndRefreshContext
   );
   const location = useLocation();
+  const [userImageSrc, setUserImageSrc] = useState(noUser); // Iniciar con imagen por defecto
   const [userImgLoaded, setUserImgLoaded] = useState(false);
+
+  useEffect(() => {
+    if (userData.image) {
+      const img = new Image(); // Crear nueva imagen
+      img.src = userData.image; // Asignar la URL de la imagen del usuario
+      img.onload = () => {
+        setUserImageSrc(userData.image); // Actualizar con la imagen del usuario cuando esté lista
+        setUserImgLoaded(true); // Marcar la imagen como cargada
+      };
+      img.onerror = () => {
+        setUserImageSrc(noUser); // Si hay error, cargar el icono por defecto
+        setUserImgLoaded(true); // Aún así marcar como "cargada" para ocultar el loader
+      };
+    } else {
+      setUserImgLoaded(true); // Si no hay imagen en userData, marcar como "cargada"
+    }
+  }, [userData.image]);
 
   const handleGoToMyTurns = () => {
     setIsOpenUserPanel(true);
@@ -103,8 +121,8 @@ const Nav = () => {
                 <img
                   className="img-user-nav"
                   loading="lazy"
-                  onLoad={() => setUserImgLoaded(true)}
-                  src={userData.image||null }
+                  // onLoad={() => setUserImgLoaded(true)}
+                  src={userImageSrc}
                   alt="mi perfil"
                 />
                 {!userImgLoaded && <LoaderUserImgReady />}

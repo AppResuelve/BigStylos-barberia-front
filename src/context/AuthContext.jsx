@@ -33,14 +33,13 @@ const AuthProvider = ({ children }) => {
           setUserIsReady(true);
           setCookie("IDSESSION", response.user.email, 360);
         } else {
-          console.log("pase pa poner el user en false");
           setUserData(false);
           setUserIsReady(true);
         }
       } catch (error) {
         setUserIsReady(true);
         setUserData(false);
-        console.log("Error en authenticateUsers", error);
+        console.error("Error en authenticateUsers", error);
       }
     };
 
