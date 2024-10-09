@@ -121,9 +121,9 @@ const Nav = () => {
                 <img
                   className="img-user-nav"
                   loading="lazy"
-                  // onLoad={() => setUserImgLoaded(true)}
                   src={userImageSrc}
                   alt="mi perfil"
+                  style={{ display: userImgLoaded ? "block" : "none" }}
                 />
                 {(!userImgLoaded || userImageSrc === null) && (
                   <LoaderUserImgReady />
