@@ -22,7 +22,7 @@ const Nav = () => {
     LoadAndRefreshContext
   );
   const location = useLocation();
-  const [userImageSrc, setUserImageSrc] = useState(noUser); // Iniciar con imagen por defecto
+  const [userImageSrc, setUserImageSrc] = useState(null); // Iniciar con imagen por defecto
   const [userImgLoaded, setUserImgLoaded] = useState(false);
 
   useEffect(() => {
@@ -125,7 +125,9 @@ const Nav = () => {
                   src={userImageSrc}
                   alt="mi perfil"
                 />
-                {!userImgLoaded && <LoaderUserImgReady />}
+                {(!userImgLoaded || userImageSrc === null) && (
+                  <LoaderUserImgReady />
+                )}
               </button>
             )}
           </div>
