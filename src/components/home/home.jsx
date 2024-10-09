@@ -22,6 +22,8 @@ const Home = () => {
   const { setImgLogoLoaded } = useContext(LoadAndRefreshContext);
   const navigate = useNavigate();
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
+console.log(defaultImg, "defaultImg");
+console.log(defaultImgLight, "defaultImgLight");
 
   useEffect(async () => {
     // Extraer la URL y sus parámetros
