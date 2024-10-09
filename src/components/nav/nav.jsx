@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useEffect, useContext, useState } from "react";
 import ThemeContext from "../../context/ThemeContext";
 import AuthContext from "../../context/AuthContext";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
@@ -11,7 +11,7 @@ import bellOnNotificationIcon from "../../assets/icons/bell-on.png";
 import bellOffNotificationIcon from "../../assets/icons/bell-off.png";
 import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
 import "./nav.css";
-import { LoaderUserImgReady} from "../loaders/loaders";
+import { LoaderUserImgReady } from "../loaders/loaders";
 
 const Nav = () => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
