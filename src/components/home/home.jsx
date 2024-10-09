@@ -97,7 +97,7 @@ const Home = () => {
             onLoad={() => setImgLogoLoaded(true)}
             className="img-logotipo-home"
             src={
-              homeImages && homeImages[0] && homeImages[0][1]
+              homeImages && homeImages[0] && homeImages[0][1] !==""
                 ? homeImages[0][1]
                 : darkMode.on
                 ? defaultImgLight
