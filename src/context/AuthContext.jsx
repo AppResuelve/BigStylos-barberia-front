@@ -23,6 +23,7 @@ const AuthProvider = ({ children }) => {
     status: 404,
     text: "No hemos encontrado la dirección que estás buscando.",
   });
+  console.log("pase por el authcontext");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,6 +34,7 @@ const AuthProvider = ({ children }) => {
           setUserIsReady(true);
           setCookie("IDSESSION", response.user.email, 360);
         } else {
+          console.log("pase pa poner el user en false");
           setUserData(false);
           setUserIsReady(true);
         }
