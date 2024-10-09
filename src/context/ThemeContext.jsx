@@ -59,6 +59,8 @@ const ThemeProvider = ({ children }) => {
 
     fetchImages();
   }, [refreshPersonalization]);
+  
+  console.log(homeImages, "este es el home images");
 
   const data = {
     darkMode,
