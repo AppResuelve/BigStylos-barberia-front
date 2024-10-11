@@ -8,9 +8,9 @@ import { LoaderToBuy } from "../loaders/loaders";
 import { setCookie } from "../../helpers/cookies";
 import { setLocalStorage } from "../../helpers/localStorage";
 import toastAlert from "../../helpers/alertFunction";
+import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
 import axios from "axios";
 import "./turnsCartFooter.css";
-import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -18,7 +18,7 @@ const TurnsCartFooter = () => {
   const { turnsCart, setTurnsCart, setAuxCart, setDayIsSelected } =
     useContext(CartContext);
   const { setNewTurnNotification } = useContext(LoadAndRefreshContext);
-  const [openCart, setOpenCart] = useState(false);
+  const [openCart, setOpenCart] = useState(true);
   const [urlInitPoint, setUrlInitPoint] = useState(null);
   const [loader, setLoader] = useState(false);
 
@@ -120,12 +120,12 @@ const TurnsCartFooter = () => {
 
   return (
     <>
-      {openCart && (
+      {/* {openCart && (
         <div
           className="backdrop-turnscartfooter"
           onClick={handleToggleCart}
         ></div>
-      )}
+      )} */}
       <div
         className={"container-turnscartfooter-open"}
       >
@@ -171,7 +171,7 @@ const TurnsCartFooter = () => {
               </>
             ) : (
               <button onClick={handleBuy} className="btn-sing-pay">
-                Agendar y Señar
+               {turnsCart.service.sing!= 0 ? "Agendar y señar":"Agendar"}
               </button>
             )}
           </div>

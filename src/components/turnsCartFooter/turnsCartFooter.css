@@ -55,7 +55,7 @@
       height: fit-content;
       max-width: 900px;
       border-radius: 25px 25px 0px 0px;
-      background-color: white;
+      background-color: var(--bg-color);
       box-shadow: 0px -2px 5px -2px rgba(0, 0, 0, 0.5);
       gap: 10px;
 }
@@ -87,12 +87,12 @@
       /* height: 60px; */
       padding: 10px;
       border-radius: 10px;
-      background-color: lightgray;
+      background-color: var(--bg-color-secondary);
       /* margin-top: 10px; */
 }
 
 .container-each-turn hr {
-      border: 2px solid white;
+      border: 2px solid var(--bg-color-medium);
       width: 100%;
       border-radius: 10px;
 }
@@ -210,7 +210,12 @@
       width: 100%;
       border: none;
       height: 40px;
-      border-radius: 5px;
-      box-shadow: 0px 2px 5px -2px rgb(0, 0, 0, 0.5);
+      border-radius: 6px;
+      background-color: var(--text-color);
+      color: var(--bg-color);
+      box-shadow: 0px 3px 5px -2px rgb(0, 0, 0, 0.8);
       cursor: pointer;
+      font-size: 18px;
+      font-weight: bold;
+      letter-spacing: .7px;
 }

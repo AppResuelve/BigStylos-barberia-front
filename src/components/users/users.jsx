@@ -154,7 +154,8 @@ const Users = ({ setRefreshWhoIsComing }) => {
             width: "100%",
             borderRadius: "5px",
             paddingLeft: "10px",
-            backgroundColor: darkMode.on ? "white" : "#d6d6d5",
+            backgroundColor: "var(--bg-color-hover)",
+            color:"var(--text-color)"
           }}
         />
       </Box>

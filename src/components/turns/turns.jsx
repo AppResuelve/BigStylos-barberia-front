@@ -24,12 +24,8 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const Turns = () => {
   const { darkMode } = useContext(ThemeContext);
   const { userData } = useContext(AuthContext);
-  const {
-    turnsCart,
-    setTurnsCart,
-    dayIsSelected,
-    setDayIsSelected,
-  } = useContext(CartContext);
+  const { turnsCart, setTurnsCart, dayIsSelected, setDayIsSelected } =
+    useContext(CartContext);
   const { sm } = useMediaQueryHook();
   const [catServices, setCatServices] = useState({});
   const [serviceSelected, setServiceSelected] = useState({});
@@ -47,6 +43,7 @@ const Turns = () => {
   // Referencias para los acordeones
   const serviceAccordionRef = useRef(null);
   const workerAccordionRef = useRef(null);
+  console.log(dayIsSelected);
 
   useEffect(() => {
     if (userData === false) {
@@ -110,6 +107,12 @@ const Turns = () => {
       setDayIsSelected([]);
     };
   }, []); // El array vacío asegura que este useEffect solo se ejecute una vez, en el desmontaje
+
+  useEffect(() => {
+    if (dayIsSelected.length > 0) {
+      window.scrollTo({ top: 0, behavior: "smooth" }); // Hace scroll hacia arriba con animación suave
+    }
+  }, [dayIsSelected]);
 
   const handleServiceChange = (serviceName, service) => {
     if (serviceSelected.name !== serviceName) {
@@ -177,18 +180,17 @@ const Turns = () => {
   };
 
   const handleSelectTime = (btn) => {
-
-    setTurnsCart(
-        {id: `${dayIsSelected[0]}+${dayIsSelected[1]}+${serviceSelected.name}+${btn.ini}`,
-        worker: btn.worker,
-        ini: btn.ini,
-        user: userData.email,
-        day: dayIsSelected[0],
-        month: dayIsSelected[1],
-        service: serviceSelected,
-        quantity: 1,}
-      );
-    }
+    setTurnsCart({
+      id: `${dayIsSelected[0]}+${dayIsSelected[1]}+${serviceSelected.name}+${btn.ini}`,
+      worker: btn.worker,
+      ini: btn.ini,
+      user: userData.email,
+      day: dayIsSelected[0],
+      month: dayIsSelected[1],
+      service: serviceSelected,
+      quantity: 1,
+    });
+  };
   return (
     <div
       className="container-turns"
@@ -500,7 +502,8 @@ const Turns = () => {
                   flexDirection: "column",
                   backgroundColor: "var(--bg-color-hover)", //revisar cuando se cambie el color
                   borderRadius: "20px",
-                  marginBottom: "25px",
+                  marginBottom:
+                    Object.keys(turnsCart).length > 0 ? "220px" : "25px",
                 }}
               >
                 <span
@@ -525,7 +528,12 @@ const Turns = () => {
           )}
         </div>
       ) : (
-        <div className="subcontainer-selectedday-turns">
+        <div
+          className="subcontainer-selectedday-turns"
+          style={{
+            marginBottom: Object.keys(turnsCart).length > 0 ? "140px" : "25px",
+          }}
+        >
           <section className="section-btnback-dayselected">
             <button
               className="btn-img-back-turns"

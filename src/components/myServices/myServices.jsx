@@ -143,7 +143,8 @@ const MyServices = ({
             width: "100%",
             borderRadius: "5px",
             paddingLeft: "10px",
-            backgroundColor: darkMode.on ? "white" : "#d6d6d5",
+            backgroundColor: "var(--bg-color-hover)",
+            color: "var(--text-color)",
           }}
         />
       </Box>
@@ -248,7 +249,8 @@ const MyServices = ({
                             height: "40px",
                             width: "100px",
                             marginLeft: "10px",
-                            backgroundColor: darkMode.on ? "white" : "#d6d6d5",
+                            color: "var(--text-color)", // Color del texto seleccionado
+                            backgroundColor: "var(--bg-color-hover)", // Fondo del select
                             fontFamily: "Jost, sans-serif",
                             fontWeight: "bold",
                           }}
@@ -257,6 +259,14 @@ const MyServices = ({
                           onChange={(event) =>
                             handleSelectChange(event, element.name)
                           }
+                          MenuProps={{
+                            PaperProps: {
+                              style: {
+                                backgroundColor: "var(--bg-color-hover)", // Fondo del menú desplegable
+                                color: "var(--text-color)", // Color del texto en el menú
+                              },
+                            },
+                          }}
                         >
                           {timeArray.map((minute, index) => (
                             <MenuItem
@@ -267,6 +277,7 @@ const MyServices = ({
                               style={{
                                 fontFamily: "Jost, sans-serif",
                                 fontWeight: "bold",
+                                color: "var(--text-color)",
                               }}
                             >
                               {minute === 0 ? "..." : formatHour(minute)}
@@ -324,14 +335,20 @@ const MyServices = ({
           >
             <Button
               onClick={handleCancel}
-              sx={{ fontFamily: "Jost, sans-serif" }}
+              sx={{
+                fontFamily: "Jost, sans-serif",
+              }}
             >
               Descartar
             </Button>
             <Button
               onClick={handleSubmit}
               disabled={!changeNoSaved}
-              sx={{ fontFamily: "Jost, sans-serif", width: "100px" }}
+              sx={{
+                fontFamily: "Jost, sans-serif",
+                width: "100px",
+                color: "var(--text-color)",
+              }}
               variant="contained"
             >
               Guardar

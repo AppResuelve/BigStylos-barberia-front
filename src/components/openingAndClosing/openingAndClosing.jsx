@@ -126,13 +126,22 @@ const OpeningAndClosing = ({ schedule, refresh, setRefresh, setRemaining }) => {
                     height: "40px",
                     minWidth: "90px",
                     marginLeft: "5px",
-                    backgroundColor: darkMode.on ? "white" : "#d6d6d5",
+                    color: "var(--text-color)", // Color del texto seleccionado
+                    backgroundColor: "var(--bg-color-hover)",
                     fontFamily: "Jost, sans-serif",
                     fontWeight: "bold",
                   }}
                   disabled={showEdit ? false : true}
                   value={timeEdit[index]?.open ? timeEdit[index]?.open : 0}
                   onChange={(event) => handleSelectChange(event, index, "open")}
+                  MenuProps={{
+                    PaperProps: {
+                      style: {
+                        backgroundColor: "var(--bg-color-hover)", // Fondo del menú desplegable
+                        color: "var(--text-color)", // Color del texto en el menú
+                      },
+                    },
+                  }}
                 >
                   {timeArray.map((minute, index) => (
                     <MenuItem
@@ -141,6 +150,7 @@ const OpeningAndClosing = ({ schedule, refresh, setRefresh, setRemaining }) => {
                       style={{
                         fontFamily: "Jost, sans-serif",
                         fontWeight: "bold",
+                        color: "var(--text-color)",
                       }}
                     >
                       {formatHour(minute)}
@@ -154,7 +164,8 @@ const OpeningAndClosing = ({ schedule, refresh, setRefresh, setRemaining }) => {
                     height: "40px",
                     minWidth: "90px",
                     marginLeft: "5px",
-                    backgroundColor: darkMode.on ? "white" : "#d6d6d5",
+                    color: "var(--text-color)", // Color del texto seleccionado
+                    backgroundColor: "var(--bg-color-hover)",
                     fontFamily: "Jost, sans-serif",
                     fontWeight: "bold",
                   }}
@@ -163,6 +174,14 @@ const OpeningAndClosing = ({ schedule, refresh, setRefresh, setRemaining }) => {
                   onChange={(event) =>
                     handleSelectChange(event, index, "close")
                   }
+                  MenuProps={{
+                    PaperProps: {
+                      style: {
+                        backgroundColor: "var(--bg-color-hover)", // Fondo del menú desplegable
+                        color: "var(--text-color)", // Color del texto en el menú
+                      },
+                    },
+                  }}
                 >
                   {timeArray.map((minute, index) => (
                     <MenuItem
@@ -171,6 +190,7 @@ const OpeningAndClosing = ({ schedule, refresh, setRefresh, setRemaining }) => {
                       style={{
                         fontFamily: "Jost, sans-serif",
                         fontWeight: "bold",
+                        color: "var(--text-color)",
                       }}
                     >
                       {formatHour(minute)}
