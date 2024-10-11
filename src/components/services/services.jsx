@@ -8,7 +8,6 @@ import {
   MenuItem,
   Select,
   TextField,
-  LinearProgress,
   Autocomplete,
 } from "@mui/material";
 import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
@@ -277,32 +276,53 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
             sx={{
               width: sm ? "100%" : "50%",
               margin: "30px 5px 0px 0px",
-              fontFamily: "Jost, sans-serif",
-              fontWeight: "bold",
             }}
             value={inputs.category}
             onInputChange={handleCategoryInputChange}
             noOptionsText={null} // No muestra nada cuando no hay opciones
             renderInput={(params) => (
-              <TextField {...params} label="Categoría" />
+              <TextField
+                {...params}
+                label="Categoría"
+                placeholder="ej: Corte y barba."
+                InputLabelProps={{
+                  shrink: true,
+                  style: { color: "var(--text-color)" },
+                }}
+                InputProps={{
+                  style: {
+                    fontFamily: "Jost, sans-serif",
+                    fontWeight: "bold",
+                    color: "var(--text-color)",
+                    backgroundColor: "var(--bg-color-hover)",
+                  },
+                }}
+              />
             )}
           />
           <TextField
             sx={{
               width: sm ? "100%" : "50%",
-              margin: sm ? "30px 0px 0px 0px" : "20px 0px 0px 5px",
-              fontFamily: "Jost, sans-serif",
-              fontWeight: "bold",
+              margin: sm ? "30px 0px 0px 0px" : "30px 0px 0px 5px",
             }}
             id="filled-text"
             label="Servicio"
             type="text"
             name="service"
             value={inputs.service}
-            placeholder="ej: corte de pelo"
+            placeholder="ej: Corte de pelo."
             onChange={handleInputChange}
             InputLabelProps={{
               shrink: true,
+              style: { color: "var(--text-color)" },
+            }}
+            InputProps={{
+              style: {
+                fontFamily: "Jost, sans-serif",
+                fontWeight: "bold",
+                color: "var(--text-color)",
+                backgroundColor: "var(--bg-color-hover)",
+              },
             }}
           />
         </div>
@@ -343,9 +363,18 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
             value={inputs.price}
             placeholder="0"
             onChange={handleInputChange}
-            InputProps={{ inputProps: { min: 0 } }}
             InputLabelProps={{
               shrink: true,
+              style: { color: "var(--text-color)" },
+            }}
+            InputProps={{
+              inputProps: { min: 0 },
+              style: {
+                fontFamily: "Jost, sans-serif",
+                fontWeight: "bold",
+                color: "var(--text-color)",
+                backgroundColor: "var(--bg-color-hover)",
+              },
             }}
           />
           <TextField
@@ -360,35 +389,57 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
             value={inputs.sing}
             placeholder="0"
             onChange={handleInputChange}
-            InputProps={{ inputProps: { min: 0 } }}
             InputLabelProps={{
               shrink: true,
+              style: { color: "var(--text-color)" },
+            }}
+            InputProps={{
+              inputProps: { min: 0 },
+              style: {
+                fontFamily: "Jost, sans-serif",
+                fontWeight: "bold",
+                color: "var(--text-color)",
+                backgroundColor: "var(--bg-color-hover)",
+              },
             }}
           />
           <Select
             sx={{
               width: sm ? "calc(20% - 10px)" : "20%",
-              margin: "0px 0px 0px 10px ",
+              margin: "0px 0px 0px 10px",
+              fontFamily: "Jost, sans-serif",
+              fontWeight: "bold",
+              color: "var(--text-color)", // Color del texto seleccionado
+              backgroundColor: "var(--bg-color-hover)", // Fondo del select
             }}
-            label=""
             name="type"
             value={inputs.type}
             onChange={handleInputChange}
+            MenuProps={{
+              PaperProps: {
+                style: {
+                  backgroundColor: "var(--bg-color-hover)", // Fondo del menú desplegable
+                  color: "var(--text-color)", // Color del texto en el menú
+                },
+              },
+            }}
           >
             <MenuItem
               value="$"
-              style={{
+              sx={{
                 fontFamily: "Jost, sans-serif",
                 fontWeight: "bold",
+                color: "var(--text-color)",
               }}
             >
               $
             </MenuItem>
             <MenuItem
               value="%"
-              style={{
+              sx={{
                 fontFamily: "Jost, sans-serif",
                 fontWeight: "bold",
+                color: "var(--text-color)",
               }}
             >
               %

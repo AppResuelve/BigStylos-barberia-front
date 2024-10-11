@@ -158,7 +158,7 @@ const AdminAcordeon = () => {
         onChange={handleChange("panel2")}
       >
         <AccordionSummary
-          style={{
+          sx={{
             backgroundColor:
               expanded === "panel2"
                 ? "var(--bg-color-hover)"

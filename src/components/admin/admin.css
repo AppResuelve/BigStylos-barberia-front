@@ -1,3 +1,13 @@
+.container-administration {
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--bg-color);
+      align-items: center;
+      height: 100vh;
+      padding-top: 70px;
+}
+
 .container-adminaccordion {
       display: flex;
       flex-direction: column;
@@ -15,4 +25,3 @@
 .span-administration {
       color: var(--color-error);
 }
-

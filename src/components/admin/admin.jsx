@@ -23,17 +23,7 @@ const Admin = () => {
   }, [userData]);
 
   return (
-    <div
-      style={{
-        overflow: "auto",
-        display: "flex",
-        flexDirection: "column",
-        backgroundColor: "var(--bg-color)",
-        alignItems: "center",
-        height: "100vh",
-        paddingTop: "70px",
-      }}
-    >
+    <div className="container-administration">
       {userData === 1 ? (
         <AdminWorkerSkeleton numAcordeon={[1, 2, 3, 4, 5, 6, 7, 8]} />
       ) : userData.admin ? ( // Puedes mostrar un componente de carga o un mensaje mientras se determina el estado de isAdmin

@@ -23,17 +23,7 @@ const Worker = () => {
   }, [userData]);
 
   return (
-    <div
-      style={{
-        overflow: "auto",
-        display: "flex",
-        flexDirection: "column",
-        backgroundColor: darkMode.on ? darkMode.dark : darkMode.light,
-        alignItems: "center",
-        height: "100vh",
-        paddingTop: "70px",
-      }}
-    >
+    <div className="container-administration">
       {userData === 1 ? (
         <AdminWorkerSkeleton numAcordeon={[1, 2, 3, 4]} />
       ) : userData.worker ? (
