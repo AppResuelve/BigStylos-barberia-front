@@ -6,7 +6,6 @@ import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import toHome from "../../assets/icons/home.png";
 import UserPanelModal from "../interfazMUI/userPanelModal";
 import LoginButton from "../login/loginButton";
-import noUser from "../../assets/icons/noUser.png";
 import bellOnNotificationIcon from "../../assets/icons/bell-on.png";
 import bellOffNotificationIcon from "../../assets/icons/bell-off.png";
 import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
@@ -23,7 +22,8 @@ const Nav = () => {
     LoadAndRefreshContext
   );
   const location = useLocation();
-  const [userImageSrc, setUserImageSrc] = useState(null); // Iniciar con imagen por defecto
+
+  // Elimina la imagen por defecto (noUser) y usa el loader como default
   const [userImgLoaded, setUserImgLoaded] = useState(false);
 
   useEffect(() => {
@@ -31,15 +31,13 @@ const Nav = () => {
       const img = new Image(); // Crear nueva imagen
       img.src = userData.image; // Asignar la URL de la imagen del usuario
       img.onload = () => {
-        setUserImageSrc(userData.image); // Actualizar con la imagen del usuario cuando esté lista
         setUserImgLoaded(true); // Marcar la imagen como cargada
       };
       img.onerror = () => {
-        setUserImageSrc(noUser); // Si hay error, cargar el icono por defecto
-        setUserImgLoaded(true); // Aún así marcar como "cargada" para ocultar el loader
+        setUserImgLoaded(true); // Marcar como "cargada" para ocultar el loader
       };
     } else {
-      setUserImgLoaded(true); // Si no hay imagen en userData, marcar como "cargada"
+      setUserImgLoaded(true); // Si no hay imagen, marcar como "cargada"
     }
   }, [userData.image]);
 
@@ -127,15 +125,16 @@ const Nav = () => {
                 style={{ position: "relative" }}
                 onClick={() => setIsOpenUserPanel(true)}
               >
-                <img
-                  className="img-user-nav"
-                  loading="lazy"
-                  src={userImageSrc}
-                  alt="mi perfil"
-                  style={{ display: userImgLoaded ? "block" : "none" }}
-                />
-                {(!userImgLoaded || userImageSrc === null) && (
-                  <LoaderUserImgReady />
+                {/* Mostrar imagen del usuario si está cargada */}
+                {userData.image && userImgLoaded ? (
+                  <img
+                    className="img-user-nav"
+                    loading="lazy"
+                    src={userData.image}
+                    alt="mi perfil"
+                  />
+                ) : (
+                  <LoaderUserImgReady /> // Mostrar el loader si no hay imagen
                 )}
               </button>
             )}
@@ -146,4 +145,5 @@ const Nav = () => {
     </>
   );
 };
+
 export default Nav;
