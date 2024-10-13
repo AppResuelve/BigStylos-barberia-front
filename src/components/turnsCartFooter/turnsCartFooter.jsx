@@ -148,7 +148,13 @@ const TurnsCartFooter = () => {
                   <button onClick={handleSubtract}>-</button>
                 )}
                 <span>{turnsCart.quantity || 1}</span>
-                <button onClick={handleAdd}>+</button>
+                <button
+                  className="button-add-worker-tcf"
+                  onClick={handleAdd}
+                  disabled={turnsCart.worker.length === turnsCart.quantity}
+                >
+                  +
+                </button>
               </div>
             </div>
             {turnsCart.service.sing != 0 && (

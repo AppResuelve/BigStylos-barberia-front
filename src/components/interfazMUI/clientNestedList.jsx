@@ -47,8 +47,10 @@ const ClientNestedList = () => {
   };
 
   useEffect(() => {
-    if (openSection.turnos) setNewTurnNotification(false);
-    deleteCookie("NEWTURN-NOTIFICATION");
+    if (openSection.turnos) {
+      setNewTurnNotification(false);
+      deleteCookie("NEWTURN-NOTIFICATION");
+    }
   }, [openSection]);
 
   const handleUpdatePhone = async () => {
