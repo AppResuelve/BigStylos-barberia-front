@@ -1,5 +1,9 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  UNSAFE_NavigationContext,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import ThemeContext from "../../context/ThemeContext";
 import AuthContext from "../../context/AuthContext";
 import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
@@ -40,10 +44,10 @@ const Turns = () => {
   const [days, setDays] = useState({});
   const [turnsButtons, setTurnsButtons] = useState([]);
   const navigate = useNavigate();
+  const location = useLocation();
   // Referencias para los acordeones
   const serviceAccordionRef = useRef(null);
   const workerAccordionRef = useRef(null);
-  console.log(dayIsSelected);
 
   useEffect(() => {
     if (userData === false) {
@@ -102,17 +106,12 @@ const Turns = () => {
   }, [serviceSelected]);
 
   useEffect(() => {
-    // Función de limpieza que se ejecuta cuando el componente se desmonta
+    // Este efecto se ejecuta cuando el componente se desmonta
     return () => {
-      setDayIsSelected([]);
+      setDayIsSelected([]); // Limpieza del estado
+      setTurnsCart({});
     };
-  }, []); // El array vacío asegura que este useEffect solo se ejecute una vez, en el desmontaje
-
-  useEffect(() => {
-    if (dayIsSelected.length > 0) {
-      window.scrollTo({ top: 0, behavior: "smooth" }); // Hace scroll hacia arriba con animación suave
-    }
-  }, [dayIsSelected]);
+  }, []);
 
   const handleServiceChange = (serviceName, service) => {
     if (serviceSelected.name !== serviceName) {
@@ -161,20 +160,28 @@ const Turns = () => {
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
+
+    let navHeight;
     if (isExpanded) {
-      // Desplazar el scroll hasta el acordeón correspondiente y tener en cuenta la altura de la navegación
-      if (panel === "panel1" && serviceAccordionRef.current) {
-        serviceAccordionRef.current.scrollIntoView({
+      const ref = panel === "panel1" ? serviceAccordionRef : workerAccordionRef;
+
+      if (ref.current) {
+        navHeight = panel === "panel1" ? 0 : 140; // Altura de tu navegación fija, ajústalo según sea necesario
+
+        // Desplazar a la posición calculada
+        window.scrollTo({
+          top: navHeight,
           behavior: "smooth",
-          block: "start",
         });
-        window.scrollBy(0, -60); // Ajustar el scroll por la altura de la navegación
-      } else if (panel === "panel2" && workerAccordionRef.current) {
-        workerAccordionRef.current.scrollIntoView({
+      }
+    } else {
+      if (panel === "panel1") {
+        navHeight = 140;
+        // Desplazar a la posición calculada
+        window.scrollTo({
+          top: navHeight, // Ajuste según la altura de la navegación y la posición
           behavior: "smooth",
-          block: "start",
         });
-        window.scrollBy(0, -60); // Ajustar el scroll por la altura de la navegación
       }
     }
   };
@@ -203,6 +210,7 @@ const Turns = () => {
         <div className="subcontainer-turns">
           {/* seccion seleccion de servicio */}
           <div
+            ref={serviceAccordionRef} // Referencia al acordeón de servicios
             style={{
               zIndex: "2",
               width: "100%",
@@ -224,7 +232,6 @@ const Turns = () => {
               Seleccione un servicio
             </span>
             <Accordion
-              ref={serviceAccordionRef} // Referencia al acordeón de servicios
               style={{
                 borderRadius: "20px",
                 padding: "5px",
@@ -386,6 +393,7 @@ const Turns = () => {
           {Object.keys(serviceSelected).length > 0 && (
             <>
               <div
+                ref={workerAccordionRef} // Referencia al acordeón de trabajadores
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -404,7 +412,6 @@ const Turns = () => {
                   Seleccione un profesional
                 </span>
                 <Accordion
-                  ref={workerAccordionRef} // Referencia al acordeón de trabajadores
                   style={{
                     padding: "5px",
                     borderRadius: "20px",
@@ -503,7 +510,12 @@ const Turns = () => {
                   backgroundColor: "var(--bg-color-hover)", //revisar cuando se cambie el color
                   borderRadius: "20px",
                   marginBottom:
-                    Object.keys(turnsCart).length > 0 ? "220px" : "25px",
+                    Object.keys(turnsCart).length > 0 &&
+                    turnsCart.service.sing != 0
+                      ? "260px"
+                      : Object.keys(turnsCart).length > 0
+                      ? "220px"
+                      : "25px",
                 }}
               >
                 <span
@@ -531,7 +543,12 @@ const Turns = () => {
         <div
           className="subcontainer-selectedday-turns"
           style={{
-            marginBottom: Object.keys(turnsCart).length > 0 ? "140px" : "25px",
+            marginBottom:
+              Object.keys(turnsCart).length > 0 && turnsCart.service.sing != 0
+                ? "250px"
+                : Object.keys(turnsCart).length > 0
+                ? "210px"
+                : "25px",
           }}
         >
           <section className="section-btnback-dayselected">
@@ -542,9 +559,15 @@ const Turns = () => {
               <img src={leftArrowBack} alt="atrás" />
               <span>Descartar el día</span>
             </button>
-            <span style={{ marginRight: "15px", fontWeight: "bold" }}>{`${
-              dayIsSelected[0]
-            } de ${obtainMonthName(dayIsSelected[1])}`}</span>
+            <span
+              style={{
+                marginRight: "15px",
+                fontWeight: "bold",
+                fontSize: "20px",
+              }}
+            >{`${dayIsSelected[0]} de ${obtainMonthName(
+              dayIsSelected[1]
+            )}`}</span>
           </section>
           {turnsButtons.length > 0 ? (
             <section className="section-turnsbtns-turns">
@@ -586,11 +609,12 @@ const Turns = () => {
               <hr
                 style={{
                   border: "1px solid var(--bg-color-medium)",
-                  width: "100%",
+                  width: "95%",
                   borderRadius: "10px",
+                  margin: "0 auto",
                 }}
               />
-              <div style={{ margin: "35px 0px 35px 0px" }}>
+              <div style={{ margin: "35px 0px 0px 0px" }}>
                 <div
                   style={{
                     display: "flex",
@@ -607,7 +631,6 @@ const Turns = () => {
                       if (turnsCart.id === uniqueKey) {
                         dayInCart = true;
                       }
-                      // if(auxCart[])
                       return (
                         <button
                           key={index}

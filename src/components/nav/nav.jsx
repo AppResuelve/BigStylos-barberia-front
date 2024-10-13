@@ -12,6 +12,7 @@ import bellOffNotificationIcon from "../../assets/icons/bell-off.png";
 import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
 import "./nav.css";
 import { LoaderUserImgReady } from "../loaders/loaders";
+import { deleteCookie, getCookie } from "../../helpers/cookies";
 
 const Nav = () => {
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
@@ -50,8 +51,16 @@ const Nav = () => {
         turnos: true,
       });
       setNewTurnNotification(false);
+      deleteCookie("NEWTURN-NOTIFICATION");
     }, 300);
   };
+
+  useEffect(() => {
+    const isNotification = getCookie("NEWTURN-NOTIFICATION");
+    if (isNotification) {
+      setNewTurnNotification(true);
+    }
+  }, []);
 
   return (
     <>

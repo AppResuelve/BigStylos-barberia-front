@@ -31,7 +31,7 @@ const AuthProvider = ({ children }) => {
         if (response.auth) {
           setUserData(response.user);
           setUserIsReady(true);
-          setCookie("IDSESSION", response.user.email, 360);
+          setCookie("IDSESSION", response.user.email, 10080);
         } else {
           setUserData(false);
           setUserIsReady(true);

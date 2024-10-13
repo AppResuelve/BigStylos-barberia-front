@@ -16,12 +16,17 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const TurnsCartFooter = () => {
   const { turnsCart, setTurnsCart, setAuxCart, setDayIsSelected } =
-    useContext(CartContext);
+  useContext(CartContext);
   const { setNewTurnNotification } = useContext(LoadAndRefreshContext);
   const [openCart, setOpenCart] = useState(true);
   const [urlInitPoint, setUrlInitPoint] = useState(null);
   const [loader, setLoader] = useState(false);
-
+  
+  useEffect(() => {
+    return () => {
+      setUrlInitPoint(null); 
+    };
+  }, []);
 
   useEffect(() => {
     // Manejar el evento de popstate
@@ -56,27 +61,26 @@ const TurnsCartFooter = () => {
 
   const handleAdd = () => {
     setTurnsCart((prevState) => {
-          if (prevState.quantity === prevState.worker.length) return prevState; // No incrementar si ya se alcanzó el límite
-          return { ...prevState, quantity: (prevState.quantity || 0) + 1 };
-        }
-      );
+      if (prevState.quantity === prevState.worker.length) return prevState; // No incrementar si ya se alcanzó el límite
+      return { ...prevState, quantity: (prevState.quantity || 0) + 1 };
+    });
   };
 
   const handleSubtract = () => {
     setTurnsCart((prevState) => {
-          if (prevState.quantity <= 1) return prevState; // No decrementar si ya es 1 o menos
-          return { ...prevState, quantity: prevState.quantity - 1 };
+      if (prevState.quantity <= 1) return prevState; // No decrementar si ya es 1 o menos
+      return { ...prevState, quantity: prevState.quantity - 1 };
     });
   };
 
   const handleDeleteTurn = () => {
     setTurnsCart({});
-    setOpenCart(false)
+    setOpenCart(false);
   };
 
   const handleBuy = async () => {
     setLoader(true);
-    if (turnsCart.service.sing != 0 ) {
+    if (turnsCart.service.sing != 0) {
       try {
         const response = await axios.post(
           `${VITE_BACKEND_URL}/mercadopago/create_preference`,
@@ -104,12 +108,9 @@ const TurnsCartFooter = () => {
         setLoader(false);
         setTurnsCart({});
         setDayIsSelected([]);
-        toastAlert(
-          "El turno ha sido agendado con éxito!",
-          "success"
-        );
+        toastAlert("El turno ha sido agendado con éxito!", "success");
         setNewTurnNotification(true);
-        setCookie("NEWTURN-NOTIFICATION", true, 4)
+        setCookie("NEWTURN-NOTIFICATION", true, 300);
       } catch (error) {
         setLoader(false);
         toastAlert("Error al agendar el turno", "error");
@@ -126,18 +127,16 @@ const TurnsCartFooter = () => {
           onClick={handleToggleCart}
         ></div>
       )} */}
-      <div
-        className={"container-turnscartfooter-open"}
-      >
-        <div
-          className={"subcontainer-turnscartfooter-open"}
-        >
+      <div className={"container-turnscartfooter-open"}>
+        <div className={"subcontainer-turnscartfooter-open"}>
           <div className="container-each-turn">
             <div className="sub-container1-each-turn">
               <div style={{ display: "flex", flexDirection: "column" }}>
                 <span>{turnsCart.service.name}</span>
                 <span>
-                  {`${turnsCart.day}/${turnsCart.month} a las ${formatHour(turnsCart.ini)}`}
+                  {`${turnsCart.day}/${turnsCart.month} a las ${formatHour(
+                    turnsCart.ini
+                  )}`}
                 </span>
               </div>
               <div id="minor-plas">
@@ -166,12 +165,10 @@ const TurnsCartFooter = () => {
             {loader ? (
               <LoaderToBuy redirect={false} />
             ) : urlInitPoint ? (
-              <>
-                <LoaderToBuy redirect={true} />
-              </>
+              <LoaderToBuy redirect={true} />
             ) : (
               <button onClick={handleBuy} className="btn-sing-pay">
-               {turnsCart.service.sing!= 0 ? "Agendar y señar":"Agendar"}
+                {turnsCart.service.sing != 0 ? "Agendar y señar" : "Agendar"}
               </button>
             )}
           </div>

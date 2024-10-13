@@ -10,9 +10,10 @@ import { Collapse, List } from "@mui/material";
 import MyTurns from "../myTurns/myTurns";
 import InputTel from "../inputTel/inputTel";
 import Swal from "sweetalert2";
-import axios from "axios";
-import "./clientNestedList.css";
 import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
+import axios from "axios";
+import { deleteCookie } from "../../helpers/cookies";
+import "./clientNestedList.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -47,6 +48,7 @@ const ClientNestedList = () => {
 
   useEffect(() => {
     if (openSection.turnos) setNewTurnNotification(false);
+    deleteCookie("NEWTURN-NOTIFICATION");
   }, [openSection]);
 
   const handleUpdatePhone = async () => {
@@ -88,7 +90,7 @@ const ClientNestedList = () => {
 
   return (
     <div style={{ position: "relative" }}>
-      {/* ////// contenido de seccion telefono dentro de miperfil ////// */}
+      {/* ////// contenido de seccion telefono ////// */}
       <ListItemButton
         className="listItembtn-nestedList"
         onClick={() => handleSectionClick("telefono")}
@@ -132,7 +134,7 @@ const ClientNestedList = () => {
         </List>
       </Collapse>
       <hr className="hr-userModal" />
-      {/*////// contenido de seccion turnos dentro de miperfil //////*/}
+      {/*////// contenido de seccion turnos //////*/}
       <ListItemButton
         className="listItembtn-nestedList"
         onClick={() => handleSectionClick("turnos")}

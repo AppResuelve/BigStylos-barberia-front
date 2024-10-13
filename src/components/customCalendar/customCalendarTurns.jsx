@@ -53,6 +53,7 @@ const CustomCalendarTurns = ({
         }
       );
       const { data } = response;
+      window.scrollTo({ top: 0, behavior: "instant" });
       setTurnsButtons(data);
       setDayIsSelected([day, month]);
     } catch (error) {
