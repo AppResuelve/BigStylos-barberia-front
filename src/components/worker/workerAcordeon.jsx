@@ -145,20 +145,7 @@ const WorkerAcordeon = ({ userData }) => {
             aria-controls="panel1bh-content"
             id="panel1bh-header"
           >
-            <h2
-              style={{
-                color:
-                  redirectToMyServices && darkMode.on
-                    ? "white"
-                    : !darkMode.on
-                    ? darkMode.dark
-                    : expanded === "panel1"
-                    ? darkMode.dark
-                    : "white",
-              }}
-            >
-              Dias de trabajo
-            </h2>
+            <h2 style={{ color: "var(--text-color)" }}>Dias de trabajo</h2>
           </AccordionSummary>
           <AccordionDetails>
             {expanded === "panel1" && Object.keys(userData).length > 0 && (

@@ -140,7 +140,6 @@
 
 .section-turnsbtns-turns {
       background-color: var(--bg-color-secondary);
-      overflow-y: scroll;
       height: 100%;
       width: 100%;
       border-radius: 18px;

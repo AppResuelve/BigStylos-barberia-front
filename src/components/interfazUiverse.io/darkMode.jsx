@@ -7,9 +7,7 @@ const DarkMode = () => {
 
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-      <span style={{ color: darkMode.on ? "white" : "black" }}>
-        {darkMode.on ? "Oscuro" : "Claro"}
-      </span>
+      <span>{darkMode.on ? "Oscuro" : "Claro"}</span>
       <div className="container-switch" onClick={toggleDarkMode}>
         <input
           type="checkbox"

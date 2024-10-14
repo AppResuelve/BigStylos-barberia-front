@@ -16,15 +16,15 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const TurnsCartFooter = () => {
   const { turnsCart, setTurnsCart, setAuxCart, setDayIsSelected } =
-  useContext(CartContext);
+    useContext(CartContext);
   const { setNewTurnNotification } = useContext(LoadAndRefreshContext);
   const [openCart, setOpenCart] = useState(true);
   const [urlInitPoint, setUrlInitPoint] = useState(null);
   const [loader, setLoader] = useState(false);
-  
+
   useEffect(() => {
     return () => {
-      setUrlInitPoint(null); 
+      setUrlInitPoint(null);
     };
   }, []);
 
@@ -159,10 +159,9 @@ const TurnsCartFooter = () => {
             </div>
             {turnsCart.service.sing != 0 && (
               <>
-                <hr />
                 <div className="sub-container2-each-turn">
                   <img src={hasSingIcon} alt="requiere seña" />
-                  <span>${turnsCart.service.sing}</span>
+                  <span>Total: ${turnsCart.service.sing * turnsCart.quantity}</span>
                 </div>
               </>
             )}

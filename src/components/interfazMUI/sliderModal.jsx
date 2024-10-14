@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import ThemeContext from "../../context/ThemeContext";
 import Slide from "@mui/material/Slide";
-import { Dialog, Grid, Slider, Box, Button, Backdrop } from "@mui/material";
+import { Dialog, Slider, Box, Button, Backdrop } from "@mui/material";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import time from "../../helpers/arrayTime";
 import HelpIcon from "@mui/icons-material/Help";
@@ -15,7 +15,6 @@ const SliderModal = ({
   userData,
   isOpen,
   setIsOpen,
-  setSubmit,
   openClose,
   timeSelected,
   setTimeSelected,
@@ -24,29 +23,26 @@ const SliderModal = ({
   const { darkMode } = useContext(ThemeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [timeResult, setTimeResult] = useState([]); // aca estaran los values convertidos a time de back
+  const [values, setValues] = useState([
+    [660, 840],
+    [660, 840],
+  ]); // Solo 2 rangos
+  const [isChecked, setIsChecked] = useState(false);
   const handleClose = () => setIsOpen(false);
 
   const obtenerDuracionMaxima = (obj) => {
     let duracionMaxima = 0;
     for (const key in obj.services) {
       const servicio = obj.services[key];
-
       if (servicio && typeof servicio.duration === "number") {
         if (duracionMaxima === 0 || servicio.duration > duracionMaxima) {
           duracionMaxima = servicio.duration;
         }
       }
     }
-
     return duracionMaxima;
   };
-
   const maxDelay = obtenerDuracionMaxima(userData);
-
-  const [values, setValues] = useState([
-    [660, 840],
-    [660, 840],
-  ]); // Solo 2 rangos
 
   useEffect(() => {
     setValues([
@@ -82,12 +78,13 @@ const SliderModal = ({
     setValues(newValues);
   };
 
+  const handleCheckboxChange = () => {
+    setIsChecked((prevChecked) => !prevChecked);
+  };
+
   return (
     <div>
       <Dialog
-        sx={{
-          height: "100vh",
-        }}
         fullScreen={sm}
         TransitionComponent={Transition}
         fullWidth={true}
@@ -97,40 +94,38 @@ const SliderModal = ({
         slots={{ backdrop: Backdrop }}
         slotProps={{
           backdrop: {
-            timeout: 500,
+            timeout: 300,
           },
         }}
       >
         <Box
           sx={{
-            height: sm ? "100vh" : "500px",
-            backgroundColor: darkMode.on ? darkMode.dark : "white",
-            p: 3,
+            height: sm ? "100vh" : "fit-content",
+            backgroundColor: "var(--bg-color)",
+            p: 2,
             display: "flex",
             flexDirection: sm ? "row" : "column",
             justifyContent: "space-between",
-            paddingBottom: sm ? "80px" : "",
+            gap: "20px",
           }}
         >
           {!sm && (
-            <Box
-              sx={{
+            <div
+              style={{
                 display: "flex",
                 justifyContent: "center",
+                alignItems: "center",
                 width: "100%",
-                marginBottom: "15px",
-                borderBottom: "2px solid #2196f3",
+                paddingBottom: "10px",
+                borderBottom: "2px solid var(--bg-color-secondary)",
+                gap: "10px",
               }}
             >
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <h2 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
-                  Selección de horarios por rango
-                </h2>
-                <Button>
-                  <HelpIcon />
-                </Button>
-              </Box>
-            </Box>
+              <h2 style={{ color: "var(--text-color)" }}>
+                Selección de horarios por rango
+              </h2>
+              <HelpIcon />
+            </div>
           )}
           {/* ///// sección del Slider de materialUI /////  */}
           <div
@@ -138,17 +133,22 @@ const SliderModal = ({
               display: "flex",
               alignItems: "center",
               flexDirection: sm ? "row" : "column",
-              justifyContent: sm ? "center" : "",
-              width: sm ? "40%" : "",
+              justifyContent: sm ? "center" : "space-between",
+              // width: sm ? "40%" : "",
+              backgroundColor: "var(--bg-color-secondary)",
+              borderRadius: "10px",
+              height: sm ? "100%" : "120px",
+              padding: "10px",
             }}
           >
             {values.map((value, index) => {
               return (
                 <Slider
                   sx={{
-                    height: sm ? "90vh" : "10px", // grosor del slider---------------------
+                    height: sm ? "90vh" : "15px", // grosor del slider---------------------
                     width: sm ? "10px" : "95%",
                   }}
+                  disabled={index === 1 && !isChecked}
                   key={index}
                   value={value}
                   onChange={(event, newValue) =>
@@ -160,46 +160,47 @@ const SliderModal = ({
                   max={openClose[1]}
                   step={30}
                   orientation={sm ? "vertical" : "horizontal"}
+                  componentsProps={{
+                    valueLabel: {
+                      sx: {
+                        backgroundColor: "var(--accent-color)", // Cambia el fondo del label
+                        color: "var(--text-color)", // Cambia el color del texto
+                        fontSize: "18px",
+                        fontWeight: "bold", // Cambia el tamaño de la fuente
+                        borderRadius: "5px", // Ajusta el borde del label
+                        padding: "4px", // Ajusta el padding
+                      },
+                    },
+                  }}
                   marks={marks.map((mark) => {
                     if (index === 0 && mark.value % 60 === 0) {
                       // Solo renderiza los markLabels para el primer slider y si es divisible por 60
                       return {
                         ...mark,
                         label: (
-                          <span
+                          <div
                             key={mark.value}
                             style={{
-                              fontSize: "11px",
-                              borderRadius: "5px",
-                              padding: "5px",
-                              color:
-                                values.some(
-                                  ([start, end]) =>
-                                    mark.value >= start && mark.value <= end
-                                ) && darkMode.on
-                                  ? darkMode.dark
-                                  : values.some(
-                                      ([start, end]) =>
-                                        mark.value >= start && mark.value <= end
-                                    ) && !darkMode.on
-                                  ? "white"
-                                  : darkMode.dark,
-                              backgroundColor:
-                                values.some(
-                                  ([start, end]) =>
-                                    mark.value >= start && mark.value <= end
-                                ) && darkMode.on
-                                  ? "#d6d6d5"
-                                  : values.some(
-                                      ([start, end]) =>
-                                        mark.value >= start && mark.value <= end
-                                    ) && !darkMode.on
-                                  ? darkMode.dark
-                                  : "",
+                              fontSize: "12px",
+                              borderRadius: "15px",
+                              padding: "4px",
+                              margin: sm ? "0px" : "7px",
+                              color: values.some(
+                                ([start, end]) =>
+                                  mark.value >= start && mark.value <= end
+                              )
+                                ? "var(--bg-color)"
+                                : "var(--text-color)",
+                              backgroundColor: values.some(
+                                ([start, end]) =>
+                                  mark.value >= start && mark.value <= end
+                              )
+                                ? "var(--text-color)"
+                                : "var(--bg-color)",
                             }}
                           >
                             {formatHour(mark.label)}
-                          </span>
+                          </div>
                         ),
                       };
                     } else {
@@ -217,97 +218,142 @@ const SliderModal = ({
             style={{
               display: "flex",
               flexDirection: "column",
-              alignItems: "center",
               justifyContent: "space-between",
               width: sm ? "60%" : "100%",
-              height: sm ? "100%" : "40%",
+              height: "100%",
+              paddingRight: sm ? "10px" : "0px",
             }}
           >
             {sm && (
-              <Box
-                sx={{
+              <div
+                style={{
                   display: "flex",
                   justifyContent: "center",
+                  alignItems: "center",
                   width: "100%",
-                  marginBottom: "15px",
-                  borderBottom: "2px solid #2196f3",
+                  paddingBottom: "10px",
+                  borderBottom: "2px solid var(--bg-color-secondary)",
+                  gap: "10px",
                 }}
               >
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    color: darkMode.on ? "white" : darkMode.dark,
-                  }}
-                >
-                  <h2>Selecciona el horario</h2>
-                  <Button>
-                    <HelpIcon />
-                  </Button>
-                </Box>
-              </Box>
+                <h2 style={{ color: "var(--text-color)" }}>
+                  Selección de horarios
+                </h2>
+                <HelpIcon />
+              </div>
             )}
-            <Grid
-              container
-              gap={sm ? 5 : 0}
-              sx={{
-                height: sm ? "200px" : "",
+            <div
+              style={{
+                display: "flex",
+                flexDirection: sm ? "column" : "row",
+                justifyContent: sm ? "" : "space-between",
+                gap: "15px",
               }}
             >
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={6}
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-around",
-                  alignItems: "center",
-                  borderRadius: "5px",
-                  border: "2px solid #2196f3",
+              <div
+                style={{
+                  width: sm ? "100%" : "50%",
+                  backgroundColor: "var(--bg-color-secondary)",
                   padding: "10px",
-                  color: darkMode.on ? "white" : darkMode.dark,
+                  borderRadius: "15px",
                 }}
               >
-                <Box>
-                  <h2>{formatHour(values[0][0])}</h2>
-                </Box>
-                <h2>a</h2>
-
-                <Box>
-                  <h2>{formatHour(values[0][1])}</h2>
-                </Box>
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={6}
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-around",
-                  alignItems: "center",
-                  borderRadius: "5px",
-                  border: "2px solid #2196f3",
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <span>Turno 1 (Habilitado)</span>
+                  {/* <div className="container-switch">
+                    <input
+                      type="checkbox"
+                      className="checkbox"
+                      checked={darkMode.on ? true : false}
+                    />
+                    <label className="switch">
+                      <span className="slider"></span>
+                    </label>
+                  </div> */}
+                </div>
+                <hr
+                  style={{ color: "var(--bg-color-medium)", marginTop: "5px" }}
+                />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                    borderRadius: "5px",
+                    padding: "10px",
+                    color: "var(--text-color)",
+                  }}
+                >
+                  <h2>{formatHour(values[0][0])}hs</h2>
+                  <h2>a</h2>
+                  <h2>{formatHour(values[0][1])}hs</h2>
+                </div>
+              </div>
+              <div
+                style={{
+                  width: sm ? "100%" : "50%",
+                  backgroundColor: "var(--bg-color-secondary)",
                   padding: "10px",
-                  color: darkMode.on ? "white" : darkMode.dark,
+                  borderRadius: "15px",
                 }}
               >
-                <Box>
-                  <h2>{formatHour(values[1][0])}</h2>
-                </Box>
-                <h2>a</h2>
-                <Box>
-                  <h2>{formatHour(values[1][1])}</h2>
-                </Box>
-              </Grid>
-            </Grid>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <span>
+                    Turno 2 {isChecked ? "(Habilitado)" : "(Deshabilitado)"}
+                  </span>
+                  <div
+                    className="container-switch"
+                    onClick={handleCheckboxChange}
+                  >
+                    <input
+                      type="checkbox"
+                      className="checkbox"
+                      checked={isChecked}
+                      onChange={handleCheckboxChange}
+                    />
+                    <label className="switch">
+                      <span className="slider"></span>
+                    </label>
+                  </div>
+                </div>
+                <hr
+                  style={{ color: "var(--bg-color-medium)", marginTop: "5px" }}
+                />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                    borderRadius: "5px",
+                    padding: "10px",
+                    color: "var(--text-color)",
+                  }}
+                >
+                  <h2>{formatHour(values[1][0])}hs</h2>
+                  <h2>a</h2>
+                  <h2>{formatHour(values[1][1])}hs</h2>
+                </div>
+              </div>
+            </div>
             <Box
               sx={{
                 display: "flex",
                 flexDirection: sm ? "column" : "row-reverse",
-                width: sm ? "80%" : "100%",
-                justifyContent: sm ? "center" : "space-between",
+                width: "100%",
+                justifyContent: sm ? "" : "space-between",
+                marginTop: "20px",
               }}
             >
               <Button
@@ -315,25 +361,19 @@ const SliderModal = ({
                 sx={{
                   fontFamily: "Jost, sans-serif",
                   fontWeight: "bold",
-                  marginBottom: sm ? "25px" : "",
+                  marginBottom: sm ? "15px" : "",
                 }}
                 onClick={() => {
                   handleSubmit(timeSelected, values), handleClose();
                 }}
               >
-                Confirmar
+                Confirmar Día
               </Button>
               <Button
                 variant="outlined"
                 style={{
                   fontFamily: "Jost, sans-serif",
                   fontWeight: "bold",
-                  marginBottom: sm ? "25px" : "",
-                  borderRadius: "50px",
-                  border: "2px solid ",
-                  display: "flex",
-                  alignSelf: sm ? "center" : "",
-                  width: sm ? "70%" : "",
                 }}
                 onClick={() => {
                   handleClose();
@@ -343,7 +383,7 @@ const SliderModal = ({
                   ]);
                 }}
               >
-                Volver
+                Descartar
               </Button>
             </Box>
           </div>
