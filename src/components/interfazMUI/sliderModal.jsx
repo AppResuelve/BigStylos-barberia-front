@@ -101,6 +101,7 @@ const SliderModal = ({
         <Box
           sx={{
             height: sm ? "100vh" : "fit-content",
+            width: "100%",
             backgroundColor: "var(--bg-color)",
             p: 2,
             display: "flex",
@@ -163,12 +164,63 @@ const SliderModal = ({
                   componentsProps={{
                     valueLabel: {
                       sx: {
+                        width: "55px",
                         backgroundColor: "var(--accent-color)", // Cambia el fondo del label
-                        color: "var(--text-color)", // Cambia el color del texto
                         fontSize: "18px",
                         fontWeight: "bold", // Cambia el tamaño de la fuente
                         borderRadius: "5px", // Ajusta el borde del label
                         padding: "4px", // Ajusta el padding
+                        "& span": {
+                          color: "white", // Cambia el color del texto del valueLabel
+                        },
+                      },
+                    },
+                    rail: {
+                      sx: {
+                        backgroundColor: "var(--bg-color)",
+                      },
+                    },
+                    track: {
+                      sx: {
+                        zIndex: "1",
+                        width: sm && index === 1 && !isChecked ? "6px" : "12px",
+                        height:
+                          !sm && index === 1 && !isChecked ? "8px" : "13px",
+                        backgroundColor:
+                          index === 1 && !isChecked
+                            ? "var(--accent-color-disabled)"
+                            : "var(--accent-color)",
+                        border:
+                          index === 1 && !isChecked
+                            ? "none"
+                            : "2px solid var(--accent-color)", // Cambia el color del texto
+                      },
+                    },
+                    mark: {
+                      sx: {
+                        borderRadius: "10px",
+                        backgroundColor: "var(--bg-color)",
+                        width: "4px",
+                        height: "4px",
+                      },
+                    },
+                    // perillas (thumb)
+                    thumb: {
+                      sx: {
+                        zIndex: "2",
+                        width: index === 1 && !isChecked ? "18px" : "22px", // Ajusta el tamaño de la perilla
+                        height: index === 1 && !isChecked ? "18px" : "22px", // Ajusta el tamaño de la perilla
+                        backgroundColor: "white", // Color de fondo de la perilla
+                        border:
+                          index === 1 && !isChecked
+                            ? "none"
+                            : "2px solid var(--accent-color-hover)", // Borde de la perilla
+                        "&:hover": {
+                          boxShadow: "0 0 0 8px rgba(0, 0, 0, 0.16)", // Efecto hover (sombra)
+                        },
+                        "&.Mui-active": {
+                          boxShadow: "0 0 0 14px rgba(0, 0, 0, 0.16)", // Sombra cuando está activa
+                        },
                       },
                     },
                   }}
@@ -247,6 +299,7 @@ const SliderModal = ({
                 display: "flex",
                 flexDirection: sm ? "column" : "row",
                 justifyContent: sm ? "" : "space-between",
+                width: "100%",
                 gap: "15px",
               }}
             >

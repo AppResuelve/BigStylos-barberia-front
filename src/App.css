@@ -13,7 +13,6 @@
    --transparent: #e6e6e600;
    --filter-invert: invert(.1);
    --accent-color: #208de7;
-   --accent-color-hover: #0379d9;
    /* --accent-color-selected: #208de7; */
    /* --bg-color-selected: #E6E6E6; */
    /* --bg-color-secondary-selected: #cbcbcb; */
@@ -29,7 +28,6 @@
    --transparent: #2f2e3e00;
    --filter-invert: invert(.8);
    --accent-color: #208de7;
-   --accent-color-hover: #0379d9;
  }
 
  * {
@@ -39,6 +37,10 @@
    font-family: 'Jost', sans-serif;
    --color-error: #db0101;
    --color-disponibility: #2db644;
+   --accent-color-disabled: #97d0ff;
+
+   --accent-color-hover: #0379d9;
+
  }
 
 
@@ -58,7 +60,7 @@
 
  }
 
- span, td, th{
+ span, td, th {
    color: var(--text-color);
  }
 
