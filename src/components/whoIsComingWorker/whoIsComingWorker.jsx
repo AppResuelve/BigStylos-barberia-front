@@ -1,7 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import ThemeContext from "../../context/ThemeContext";
 import { Button, Box } from "@mui/material";
-import { WhatsApp } from "@mui/icons-material";
 import noUserImg from "../../assets/icons/noUser.png";
 import formatHour from "../../functions/formatHour";
 import axios from "axios";
@@ -18,15 +17,7 @@ const WhoIsComingWorker = ({
   const [turns, setTurns] = useState([]);
   const [count, setCount] = useState([]);
   const [selectedDay, setSelectedDay] = useState("");
-  /*  turns contiene:
-  {
-    email: el email del cliente
-    name: el name del cliente
-    ini: el minuto de inicio de su turno
-    fin: minuto final de su turno
-    phone: su cel
-    image: su imagen
-  } */
+  const [selectedTimes, setSelectedTimes] = useState({ ini: "", end: "", ini2: "", end2: "" });
 
   useEffect(() => {
     const fetchCount = async () => {
@@ -37,7 +28,13 @@ const WhoIsComingWorker = ({
         );
         const { data } = response;
         setCount(data);
-        setSelectedDay(data[0]);
+        setSelectedDay(data[0].day); // Selecciona el primer día al inicio
+        setSelectedTimes({
+          ini: data[0].ini,
+          end: data[0].end,
+          ini2: data[0].ini2,
+          end2: data[0].end2
+        });
       } catch (error) {
         console.error("Error al obtener el count.", error);
       }
@@ -59,20 +56,25 @@ const WhoIsComingWorker = ({
         const { data } = response;
         setTurns(data);
       } catch (error) {
-        console.error("Error al obtener los dias con turnos.", error);
+        console.error("Error al obtener los turnos.", error);
       }
     };
-    //condicional de estado 0 de la app (undefined)
     if (selectedDay !== "" && selectedDay !== undefined) {
       fetchTurns();
     }
-    if (refreshWhoIsComing == true) {
+    if (refreshWhoIsComing === true) {
       setRefreshWhoIsComing(false);
     }
   }, [selectedDay, refreshWhoIsComing]);
 
   const handleChangeDay = (element) => {
-    setSelectedDay(element);
+    setSelectedDay(element.day);
+    setSelectedTimes({
+      ini: element.ini,
+      end: element.end,
+      ini2: element.ini2,
+      end2: element.end2
+    });
   };
 
   return (
@@ -88,7 +90,7 @@ const WhoIsComingWorker = ({
       <Box
         className="box-container-ctfw"
         style={{
-          overFlow: "scroll",
+          overflow: "scroll",
           marginBottom: "20px",
         }}
       >
@@ -102,27 +104,29 @@ const WhoIsComingWorker = ({
         >
           {count.length > 0 &&
             count.map((element, index) => {
+              const isSelected = selectedDay === element.day;
+
               return (
                 <Button
                   variant="contained"
                   key={index}
                   style={{
-                    backgroundColor:
-                      selectedDay == element && darkMode.on
-                        ? "white"
-                        : selectedDay == element && !darkMode.on
-                        ? "black"
-                        : "",
-                    color:
-                      selectedDay == element && darkMode.on ? "black" : "white",
-                    margin: "5px 5px 0px 5px",
+                    backgroundColor: element.turn
+                      ? isSelected
+                        ? "#4caf50" // Verde cuando `turn` es true y seleccionado
+                        : "#8bc34a" // Verde claro cuando `turn` es true y no seleccionado
+                      : isSelected
+                        ? "#f44336" // Rojo cuando `turn` es false y seleccionado
+                        : "#e57373", // Rojo claro cuando `turn` es false y no seleccionado
+                    color: "white",
+                    margin: "5px",
                     fontFamily: "Jost, sans-serif",
                     fontWeight: "bold",
                     letterSpacing: "1.5px",
                   }}
                   onClick={() => handleChangeDay(element)}
                 >
-                  {element}
+                  {element.day}
                 </Button>
               );
             })}
@@ -143,6 +147,23 @@ const WhoIsComingWorker = ({
       <Box
         style={{ overflow: "scroll", maxHeight: "350px", marginTop: "20px" }}
       >
+        <Box>
+          <h3 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
+            Horario del Jornal:
+          </h3>
+          <Box style={{ display: "flex", gap: "10px" }}> {/* Usamos flexbox */}
+            <p style={{ color: darkMode.on ? "white" : darkMode.dark }}>
+              {`De ${formatHour(selectedTimes.ini)} a ${formatHour(selectedTimes.end)}`}
+            </p>
+            {selectedTimes.ini2 && selectedTimes.end2 && (
+              <p style={{ color: darkMode.on ? "white" : darkMode.dark }}>
+                {`y de ${formatHour(selectedTimes.ini2)} a ${formatHour(selectedTimes.end2)}`}
+              </p>
+            )}
+          </Box>
+        </Box>
+
+
         {turns.length > 0 &&
           turns.map((element, index) => (
             <Box key={index}>
@@ -190,14 +211,20 @@ const WhoIsComingWorker = ({
                       backgroundColor: element.image
                         ? ""
                         : darkMode.on
-                        ? "white"
-                        : "",
+                          ? "white"
+                          : "",
                     }}
                   ></img>
                 </Box>
                 <hr />
                 <h4 className="h-time-hic">
                   {`${formatHour(element.ini)} - ${formatHour(element.end)}`}
+                  {element.ini2 && element.end2 && (
+                    <>
+                      <br />
+                      {`${formatHour(element.ini2)} - ${formatHour(element.end2)}`}
+                    </>
+                  )}
                 </h4>
                 <hr />
                 <Box
@@ -228,9 +255,6 @@ const WhoIsComingWorker = ({
                         }}
                       >
                         <h4>{element.phone}</h4>
-                        {element.phone !== "no requerido" && (
-                          <WhatsApp color="success" />
-                        )}
                       </button>
                     </a>
                   ) : (
@@ -255,7 +279,7 @@ const WhoIsComingWorker = ({
             }}
           >
             <h4 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
-              No tiene turnos para este día
+              No hay turnos para este día.
             </h4>
           </Box>
         )}

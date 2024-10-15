@@ -11,12 +11,13 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const WhoIsComingAdmin = ({ refreshWhoIsComing }) => {
   const { darkMode } = useContext(ThemeContext);
+  const [workers, setWorkers] = useState([]);
+  const [selectedWorker, setSelectedWorker] = useState("");
+  const [selectedDay, setSelectedDay] = useState("");
   const [turns, setTurns] = useState([]);
   const [count, setCount] = useState([]);
-  const [selectedDay, setSelectedDay] = useState("");
-  const [selectedWorker, setSelectedWorker] = useState("");
-  const [workers, setWorkers] = useState([]);
 
+  // Fetch workers data
   useEffect(() => {
     const fetchWorkers = async () => {
       try {
@@ -25,57 +26,59 @@ const WhoIsComingAdmin = ({ refreshWhoIsComing }) => {
         );
         setWorkers(response.data);
       } catch (error) {
-        console.error("Error al obtener workers.", error);
+        console.error("Error fetching workers.", error);
       }
     };
     fetchWorkers();
   }, [refreshWhoIsComing]);
 
+  // Fetch count of available days for the selected worker
   useEffect(() => {
     const fetchCount = async () => {
-      try {
-        const response = await axios.post(
-          `${VITE_BACKEND_URL}/workdays/countworker`,
-          { emailWorker: selectedWorker }
-        );
-        setCount(response.data);
-        // setSelectedDay(data[0]);
-      } catch (error) {
-        console.error("Error al obtener el count.", error);
+      if (selectedWorker) {
+        try {
+          const response = await axios.post(
+            `${VITE_BACKEND_URL}/workdays/countworker`,
+            { emailWorker: selectedWorker }
+          );
+          setCount(response.data);
+          setSelectedDay(""); // Reset selected day
+          setTurns([]); // Clear turns when changing worker
+        } catch (error) {
+          console.error("Error fetching count.", error);
+        }
       }
     };
-    if (selectedWorker !== "") {
-      fetchCount();
-    }
+    fetchCount();
   }, [selectedWorker]);
 
+  // Fetch turns for the selected worker and day
   useEffect(() => {
     const fetchTurns = async () => {
-      const [numberDay, numberMonth] = selectedDay.split("/").map(Number);
-      try {
-        const response = await axios.post(
-          `${VITE_BACKEND_URL}/workdays/whoiscoming`,
-          { emailWorker: selectedWorker, month: numberMonth, day: numberDay }
-        );
-        setTurns(response.data);
-      } catch (error) {
-        console.error("Error al obtener los dias cancelados.", error);
+      if (selectedDay) {
+        const [numberDay, numberMonth] = selectedDay.split("/").map(Number);
+        try {
+          const response = await axios.post(
+            `${VITE_BACKEND_URL}/workdays/whoiscoming`,
+            { emailWorker: selectedWorker, month: numberMonth, day: numberDay }
+          );
+          setTurns(response.data);
+        } catch (error) {
+          console.error("Error fetching turns.", error);
+        }
       }
     };
-    //condicional de estado 0 de la app (undefined)
-    if (selectedDay !== "") {
-      fetchTurns();
-    }
-  }, [selectedDay]);
+    fetchTurns();
+  }, [selectedDay, selectedWorker]);
 
-  const handleChangeDay = (element) => {
-    setSelectedDay(element);
+  // Handle worker selection
+  const handleChangeWorker = (email) => {
+    setSelectedWorker(email);
   };
 
-  const handleChangeWorker = (email) => {
-    setSelectedDay("");
-    setTurns([]);
-    setSelectedWorker(email);
+  // Handle day selection
+  const handleChangeDay = (day) => {
+    setSelectedDay(day);
   };
 
   return (
@@ -89,134 +92,60 @@ const WhoIsComingAdmin = ({ refreshWhoIsComing }) => {
         }}
       />
       <div className="box-container-ctfw">
-        {/* **************** */}
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            overflowY: "scroll",
-            maxHeight: "120px",
-          }}
-        >
+        <div style={{ display: "flex", flexWrap: "wrap", overflowY: "scroll", maxHeight: "120px" }}>
           {workers.length > 0 &&
-            workers.map((element, index) => {
-              return (
-                <button
-                  className="btn-worker-wic"
-                  key={index}
-                  style={{
-                    backgroundColor:
-                      selectedWorker == element.email && darkMode.on
-                        ? "white"
-                        : selectedWorker == element.email && !darkMode.on
-                        ? "black"
-                        : "",
-                    color:
-                      selectedWorker == element.email && darkMode.on
-                        ? "black"
-                        : "white",
-                  }}
-                  onClick={() => {
-                    handleChangeWorker(element.email);
-                  }}
-                >
-                  <img src={element.image} alt="trabajador" />
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "start",
-                      marginLeft: "5px",
-                    }}
-                  >
-                    <span
-                      id="email"
-                      style={{
-                        color:
-                          selectedWorker == element.email
-                            ? "#a3a3a3"
-                            : "#727272",
-                      }}
-                    >
-                      {element.email}
-                    </span>
-                    <span
-                      style={{
-                        color:
-                          selectedWorker == element.email
-                            ? "#a3a3a3"
-                            : "#727272",
-                      }}
-                    >
-                      {element.name}
-                    </span>
-                  </div>
-                </button>
-              );
-            })}
+            workers.map((worker, index) => (
+              <button
+                className="btn-worker-wic"
+                key={index}
+                style={{
+                  backgroundColor: selectedWorker === worker.email ? (darkMode.on ? "white" : "black") : "",
+                  color: selectedWorker === worker.email ? (darkMode.on ? "black" : "white") : "white",
+                }}
+                onClick={() => handleChangeWorker(worker.email)}
+              >
+                <img src={worker.image} alt="Worker" />
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "start", marginLeft: "5px" }}>
+                  <span style={{ color: selectedWorker === worker.email ? "#a3a3a3" : "#727272" }}>
+                    {worker.email}
+                  </span>
+                  <span style={{ color: selectedWorker === worker.email ? "#a3a3a3" : "#727272" }}>
+                    {worker.name}
+                  </span>
+                </div>
+              </button>
+            ))}
         </div>
 
-        <Box
-          style={{
-            display: "flex",
-            width: "100%",
-            maxWidth: "900px",
-            overflow: "auto",
-            marginTop: "20px",
-          }}
-        >
+        <Box style={{ display: "flex", width: "100%", maxWidth: "900px", overflow: "auto", marginTop: "20px" }}>
           {count.length > 0 &&
-            count.map((element, index) => {
-              const [numberDay, numberMonth] = element.split("/");
-
-              return (
-                <button
-                  key={index}
-                  className="btn-day-wic"
-                  style={{
-                    backgroundColor:
-                      selectedDay == element && darkMode.on
-                        ? "white"
-                        : selectedDay == element && !darkMode.on
-                        ? "black"
-                        : "",
-                    color: selectedDay == element ? "white" : "black",
-                  }}
-                  onClick={() => {
-                    handleChangeDay(element);
-                  }}
-                >
-                  {element}
-                </button>
-              );
-            })}
-          {count.length < 1 && selectedWorker !== "" && (
-            <h2
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                padding: "10px",
-                color: darkMode.on ? "white" : darkMode.dark,
-              }}
-            >
-              Todavía no hay dias
+            count.map((day, index) => (
+              <button
+                key={index}
+                className="btn-day-wic"
+                style={{
+                  backgroundColor: selectedDay === day ? (darkMode.on ? "white" : "black") : "",
+                  color: selectedDay === day ? "white" : "black",
+                }}
+                onClick={() => handleChangeDay(day)}
+              >
+                {day}
+              </button>
+            ))}
+          {count.length < 1 && selectedWorker && (
+            <h2 style={{ display: "flex", justifyContent: "center", padding: "10px", color: darkMode.on ? "white" : darkMode.dark }}>
+              Todavía no hay días
             </h2>
           )}
         </Box>
-        <Box
-          style={{ overflow: "scroll", maxHeight: "350px", marginTop: "20px" }}
-        >
-          {turns.length > 0 &&
-            turns.map((element, index) => (
+
+        <Box style={{ overflow: "scroll", maxHeight: "350px", marginTop: "20px" }}>
+          {turns.length > 0 ? (
+            turns.map((turn, index) => (
               <Box key={index}>
                 {index === 0 && (
                   <Box>
-                    <Box
-                      style={{
-                        display: "flex",
-                        color: darkMode.on ? "white" : darkMode.dark,
-                      }}
-                    >
+                    <Box style={{ display: "flex", color: darkMode.on ? "white" : darkMode.dark }}>
                       <h3 className="h-name-hic">Nombre</h3>
                       <hr />
                       <h3 className="h-time-hic">Horario</h3>
@@ -228,58 +157,34 @@ const WhoIsComingAdmin = ({ refreshWhoIsComing }) => {
                     <hr className="hr-hic" />
                   </Box>
                 )}
-                <Box
-                  style={{
-                    display: "flex",
-                    color: darkMode.on ? "white" : darkMode.dark,
-                  }}
-                >
-                  <Box
-                    className="h-name-hic"
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                    <h4>{element.name}</h4>
+                <Box style={{ display: "flex", color: darkMode.on ? "white" : darkMode.dark }}>
+                  <Box className="h-name-hic" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <h4>{turn.name}</h4>
                     <img
-                      src={element.image ? element.image : noUserImg}
-                      alt="imagen de perfil"
+                      src={turn.image ? turn.image : noUserImg}
+                      alt="Profile"
                       style={{
                         width: "30px",
                         borderRadius: "50px",
-                        backgroundColor: element.image
-                          ? ""
-                          : darkMode.on
-                          ? "white"
-                          : "",
+                        backgroundColor: turn.image ? "" : (darkMode.on ? "white" : ""),
                       }}
-                    ></img>
+                    />
                   </Box>
                   <hr />
                   <h4 className="h-time-hic">
-                    {`${formatHour(element.ini)} - ${formatHour(element.end)}`}
+                    {`${formatHour(turn.ini)} - ${formatHour(turn.end)}`}
                   </h4>
                   <hr />
-                  <Box
-                    className={darkMode.on ? "h-phone-hic-dark" : "h-phone-hic"}
-                  >
-                    {element.phone ? (
+                  <Box className={darkMode.on ? "h-phone-hic-dark" : "h-phone-hic"}>
+                    {turn.phone ? (
                       <a
-                        href={`whatsapp://send?phone=${element.phone}&text=Recuerda que tienes reserva en la barbería, revisa en la página, sección "Mis Turnos".e`}
+                        href={`whatsapp://send?phone=${turn.phone}&text=Recuerda que tienes reserva en la barbería, revisa en la página, sección "Mis Turnos".`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        style={{
-                          textDecoration: "none",
-                        }}
+                        style={{ textDecoration: "none" }}
                       >
                         <button
-                          className={
-                            element.phone === "no requerido"
-                              ? "btn-wsp-ctfw-false"
-                              : "btn-wsp-ctfw"
-                          }
+                          className={turn.phone === "no requerido" ? "btn-wsp-ctfw-false" : "btn-wsp-ctfw"}
                           style={{
                             fontFamily: "Jost, sans-serif",
                             fontWeight: "bold",
@@ -291,35 +196,28 @@ const WhoIsComingAdmin = ({ refreshWhoIsComing }) => {
                             alignItems: "center",
                           }}
                         >
-                          <h4>{element.phone}</h4>
-                          {element.phone !== "no requerido" && (
-                            <WhatsApp color="success" />
-                          )}
+                          <h4>{turn.phone}</h4>
+                          {turn.phone !== "no requerido" && <WhatsApp color="success" />}
                         </button>
                       </a>
                     ) : (
                       <span>No disponible</span>
                     )}
                   </Box>
-
                   <hr />
-                  <h4 className="h-email-hic">{element.email}</h4>
+                  <h4 className="h-email-hic">{turn.email}</h4>
                 </Box>
                 <hr className="hr-hic" />
               </Box>
-            ))}
-          {turns.length < 1 && selectedDay !== "" && (
-            <Box
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                marginTop: "15px",
-              }}
-            >
-              <h4 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
-                No tienes turnos para este día
-              </h4>
-            </Box>
+            ))
+          ) : (
+            selectedDay && (
+              <Box style={{ display: "flex", justifyContent: "center", marginTop: "15px" }}>
+                <h4 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
+                  No tienes turnos para este día
+                </h4>
+              </Box>
+            )
           )}
         </Box>
       </div>
