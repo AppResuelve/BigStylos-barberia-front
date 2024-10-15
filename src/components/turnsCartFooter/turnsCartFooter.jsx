@@ -11,6 +11,8 @@ import toastAlert from "../../helpers/alertFunction";
 import LoadAndRefreshContext from "../../context/LoadAndRefreshContext";
 import axios from "axios";
 import "./turnsCartFooter.css";
+import AuthContext from "../../context/AuthContext";
+import Swal from "sweetalert2";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -18,6 +20,7 @@ const TurnsCartFooter = () => {
   const { turnsCart, setTurnsCart, setAuxCart, setDayIsSelected } =
     useContext(CartContext);
   const { setNewTurnNotification } = useContext(LoadAndRefreshContext);
+  const { userData } = useContext(AuthContext);
   const [openCart, setOpenCart] = useState(true);
   const [urlInitPoint, setUrlInitPoint] = useState(null);
   const [loader, setLoader] = useState(false);
@@ -28,36 +31,36 @@ const TurnsCartFooter = () => {
     };
   }, []);
 
-  useEffect(() => {
-    // Manejar el evento de popstate
-    const handlePopState = (event) => {
-      if (event.state && event.state.openCart !== undefined) {
-        setOpenCart(event.state.openCart);
-      } else {
-        setOpenCart(false);
-      }
-    };
+  // useEffect(() => {
+  //   // Manejar el evento de popstate
+  //   const handlePopState = (event) => {
+  //     if (event.state && event.state.openCart !== undefined) {
+  //       setOpenCart(event.state.openCart);
+  //     } else {
+  //       setOpenCart(false);
+  //     }
+  //   };
 
-    // Escuchar el evento popstate
-    window.addEventListener("popstate", handlePopState);
-    // Limpiar el evento al desmontar el componente
-    return () => {
-      window.removeEventListener("popstate", handlePopState);
-    };
-  }, []);
+  //   // Escuchar el evento popstate
+  //   window.addEventListener("popstate", handlePopState);
+  //   // Limpiar el evento al desmontar el componente
+  //   return () => {
+  //     window.removeEventListener("popstate", handlePopState);
+  //   };
+  // }, []);
 
-  // Si no hay turnos en el carrito, no renderizar nada
-  if (Object.keys(turnsCart).length === 0) {
-    return null; // No renderiza nada
-  }
+  // // Si no hay turnos en el carrito, no renderizar nada
+  // if (Object.keys(turnsCart).length === 0) {
+  //   return null; // No renderiza nada
+  // }
 
-  const handleToggleCart = () => {
-    setOpenCart((prevOpenCart) => {
-      const newOpenCart = !prevOpenCart;
-      window.history.pushState({ openCart: newOpenCart }, "");
-      return newOpenCart;
-    });
-  };
+  // const handleToggleCart = () => {
+  //   setOpenCart((prevOpenCart) => {
+  //     const newOpenCart = !prevOpenCart;
+  //     window.history.pushState({ openCart: newOpenCart }, "");
+  //     return newOpenCart;
+  //   });
+  // };
 
   const handleAdd = () => {
     setTurnsCart((prevState) => {
@@ -77,47 +80,84 @@ const TurnsCartFooter = () => {
     setTurnsCart({});
     setOpenCart(false);
   };
+  console.log(turnsCart);
 
-  const handleBuy = async () => {
-    setLoader(true);
-    if (turnsCart.service.sing != 0) {
-      try {
-        const response = await axios.post(
-          `${VITE_BACKEND_URL}/mercadopago/create_preference`,
-          {
-            arrayItems: [turnsCart],
-            cartWithSing: [turnsCart],
-          }
-        );
-        setUrlInitPoint(response.data.init_point);
-        setLocalStorage("CART_ID", response.data.turns);
-        setCookie("PREFERENCE_ID", response.data.preference_id, 4);
-        setLoader(false);
-        setTimeout(() => {
-          window.location.href = response.data.init_point;
-        }, 3000);
-      } catch (error) {
-        setLoader(false);
-        console.log(error);
-      }
-    } else {
-      try {
-        const response = await axios.put(`${VITE_BACKEND_URL}/workdays/turn`, {
-          arrayItems: [turnsCart],
-        });
-        setLoader(false);
-        setTurnsCart({});
-        setDayIsSelected([]);
-        toastAlert("El turno ha sido agendado con éxito!", "success");
-        setNewTurnNotification(true);
-        setCookie("NEWTURN-NOTIFICATION", true, 300);
-      } catch (error) {
-        setLoader(false);
-        toastAlert("Error al agendar el turno", "error");
-        console.log(error);
-      }
-    }
-  };
+ const handleBuy = async () => {
+   let formattedTurn = { ...turnsCart };
+   let userConfirmed = true; // Variable para confirmar si se ingresó un nombre válido
+
+   if (userData.worker || userData.admin) {
+     const { isConfirmed, value } = await Swal.fire({
+       title: "Ingresa el nombre de tu cliente.",
+       input: "text", // Cambiado a "text" para nombre
+       inputPlaceholder: "Ej: Esteban Quito.",
+       inputAttributes: {
+         maxlength: 30, // Ajuste de longitud para un nombre
+         pattern: "^[a-zA-ZÀ-ÿ\\s]{1,30}$", // Validación de letras y espacios
+         required: true, // Campo obligatorio
+       },
+       confirmButtonText: "Agendar",
+       preConfirm: (value) => {
+         if (!value) {
+           Swal.showValidationMessage("Por favor, ingresa un nombre.");
+         } else if (!/^[a-zA-ZÀ-ÿ\s]{1,30}$/.test(value)) {
+           Swal.showValidationMessage("El nombre ingresado no es válido.");
+         } else {
+           return value; // Devuelve el nombre si es válido
+         }
+       },
+       allowOutsideClick: false, // Evita cerrar el modal al hacer clic fuera de él
+     });
+
+     if (isConfirmed) {
+       formattedTurn.user = value;
+     } else {
+       userConfirmed = false; // El usuario no confirmó o canceló el modal
+     }
+   }
+
+   if (!userConfirmed) return; // Si no se confirmó el nombre, detener el proceso
+
+   setLoader(true); // Solo activar el loader si se confirmó
+   if (formattedTurn.service.sing != 0) {
+     try {
+       const response = await axios.post(
+         `${VITE_BACKEND_URL}/mercadopago/create_preference`,
+         {
+           arrayItems: [formattedTurn],
+           cartWithSing: [formattedTurn],
+         }
+       );
+       setUrlInitPoint(response.data.init_point);
+       setLocalStorage("CART_ID", response.data.turns);
+       setCookie("PREFERENCE_ID", response.data.preference_id, 4);
+       setLoader(false);
+       setTimeout(() => {
+         window.location.href = response.data.init_point;
+       }, 3000);
+     } catch (error) {
+       setLoader(false);
+       console.log(error);
+     }
+   } else {
+     try {
+       const response = await axios.put(`${VITE_BACKEND_URL}/workdays/turn`, {
+         arrayItems: [formattedTurn],
+       });
+       setLoader(false);
+       setTurnsCart({});
+       setDayIsSelected([]);
+       toastAlert("El turno ha sido agendado con éxito!", "success");
+       setNewTurnNotification(true);
+       setCookie("NEWTURN-NOTIFICATION", true, 300);
+     } catch (error) {
+       setLoader(false);
+       toastAlert("Error al agendar el turno", "error");
+       console.log(error);
+     }
+   }
+ };
+
 
   return (
     <>
@@ -161,7 +201,9 @@ const TurnsCartFooter = () => {
               <>
                 <div className="sub-container2-each-turn">
                   <img src={hasSingIcon} alt="requiere seña" />
-                  <span>Total: ${turnsCart.service.sing * turnsCart.quantity}</span>
+                  <span>
+                    Total: ${turnsCart.service.sing * turnsCart.quantity}
+                  </span>
                 </div>
               </>
             )}
