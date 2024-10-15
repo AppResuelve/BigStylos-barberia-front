@@ -107,7 +107,7 @@ const SliderModal = ({
             display: "flex",
             flexDirection: sm ? "row" : "column",
             justifyContent: "space-between",
-            // gap: "20px",
+            gap: "15px",
           }}
         >
           {!sm && (
@@ -135,7 +135,7 @@ const SliderModal = ({
               alignItems: "center",
               flexDirection: sm ? "row" : "column",
               justifyContent: sm ? "center" : "space-between",
-              // width: sm ? "40%" : "",
+              width: sm ? "40%" : "",
               backgroundColor: "var(--bg-color-secondary)",
               borderRadius: "10px",
               height: sm ? "100%" : "120px",
@@ -146,7 +146,7 @@ const SliderModal = ({
               return (
                 <Slider
                   sx={{
-                    height: sm ? "90vh" : "15px", // grosor del slider---------------------
+                    height: sm ? "96%" : "15px", // grosor del slider---------------------
                     width: sm ? "10px" : "95%",
                   }}
                   disabled={index === 1 && !isChecked}
@@ -236,7 +236,7 @@ const SliderModal = ({
                               fontSize: "12px",
                               borderRadius: "15px",
                               padding: "4px",
-                              margin: sm ? "0px" : "7px",
+                              margin: sm ? "4px" : "7px",
                               color: values.some(
                                 ([start, end]) =>
                                   mark.value >= start && mark.value <= end
@@ -271,9 +271,9 @@ const SliderModal = ({
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
-              width: sm ? "60%" : "100%",
+              width: sm ? "100%" : "100%",
               height: "100%",
-              paddingRight: sm ? "10px" : "0px",
+              // paddingRight: sm ? "10px" : "0px",
             }}
           >
             {sm && (
@@ -306,18 +306,15 @@ const SliderModal = ({
               <div
                 style={{
                   width: sm ? "100%" : "50%",
+                  height: "110px",
                   backgroundColor: "var(--bg-color-secondary)",
                   padding: "10px",
                   borderRadius: "15px",
+                  display: "flex",
+                  flexDirection: "column",
                 }}
               >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
+                <div style={{ height: "70px" }}>
                   <span>Turno 1 (Habilitado)</span>
                   {/* <div className="container-switch">
                     <input
@@ -331,16 +328,23 @@ const SliderModal = ({
                   </div> */}
                 </div>
                 <hr
-                  style={{ color: "var(--bg-color-medium)", marginTop: "5px" }}
+                  style={{
+                    marginTop: "5px",
+                    width: "100%",
+                    border: "1px solid var(--bg-color-medium)",
+                  }}
                 />
                 <div
                   style={{
+                    width: "100%",
+                    height: "100%",
                     display: "flex",
-                    justifyContent: "space-around",
+                    justifyContent: "space-between",
                     alignItems: "center",
                     borderRadius: "5px",
                     padding: "10px",
                     color: "var(--text-color)",
+                    fontSize: "13px",
                   }}
                 >
                   <h2>{formatHour(values[0][0])}hs</h2>
@@ -351,19 +355,22 @@ const SliderModal = ({
               <div
                 style={{
                   width: sm ? "100%" : "50%",
+                  height: "110px",
                   backgroundColor: "var(--bg-color-secondary)",
                   padding: "10px",
                   borderRadius: "15px",
+                  display: "flex",
+                  flexDirection: "column",
                 }}
               >
                 <div
                   style={{
                     display: "flex",
-                    alignItems: "center",
                     justifyContent: "space-between",
+                    height: "70px",
                   }}
                 >
-                  <span>
+                  <span style={{ width: sm ? "80px" : "fit-content" }}>
                     Turno 2 {isChecked ? "(Habilitado)" : "(Deshabilitado)"}
                   </span>
                   <div
@@ -382,16 +389,23 @@ const SliderModal = ({
                   </div>
                 </div>
                 <hr
-                  style={{ color: "var(--bg-color-medium)", marginTop: "5px" }}
+                  style={{
+                    marginTop: "5px",
+                    width: "100%",
+                    border: "1px solid var(--bg-color-medium)",
+                  }}
                 />
                 <div
                   style={{
+                    width: "100%",
+                    height: "100%",
                     display: "flex",
-                    justifyContent: "space-around",
+                    justifyContent: "space-between",
                     alignItems: "center",
                     borderRadius: "5px",
                     padding: "10px",
                     color: "var(--text-color)",
+                    fontSize: "13px",
                   }}
                 >
                   <h2>{formatHour(values[1][0])}hs</h2>
