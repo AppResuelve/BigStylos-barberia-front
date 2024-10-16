@@ -9,12 +9,11 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const CancelledTurnsForAdmin = ({ refreshWhoIsComing }) => {
   const { darkMode } = useContext(ThemeContext);
-  const [cancelledTurnsByDays, setCancelledTurnsByDays] = useState([]);
-  const [count, setCount] = useState([]);
-  const [selectedDay, setSelectedDay] = useState("");
   const [workers, setWorkers] = useState([]);
   const [selectedWorker, setSelectedWorker] = useState("");
-
+  const [selectedDay, setSelectedDay] = useState("");
+  const [cancelledTurnsByDays, setCancelledTurnsByDays] = useState([]);
+  const [count, setCount] = useState([]);
   // const date = new Date();
   // const currentDay = date.getDate();
 
@@ -33,32 +32,49 @@ const CancelledTurnsForAdmin = ({ refreshWhoIsComing }) => {
     fetchWorkers();
   }, [refreshWhoIsComing]);
 
-  const handleChangeWorker = async (email) => {
-    try {
-      const response = await axios.post(
-        `${VITE_BACKEND_URL}/workdays/countworker`,
-        { emailWorker: email }
-      );
-      setCount(response.data);
-      setSelectedDay("");
-      setSelectedWorker(email);
-    } catch (error) {
-      console.error("Error al obtener el count.", error);
-    }
+  useEffect(() => {
+    const fetchCount = async () => {
+      if (selectedWorker) {
+        try {
+          const response = await axios.post(
+            `${VITE_BACKEND_URL}/cancelledturns/getcount`,
+            { emailWorker: selectedWorker }
+          );
+          setCount(response.data);
+          setSelectedDay(""); // Reset selected day
+          setCancelledTurnsByDays([]); // Clear turns when changing worker
+        } catch (error) {
+          console.error("Error fetching count.", error);
+        }
+      }
+    };
+    fetchCount();
+  }, [selectedWorker]);
+
+  useEffect(() => {
+    const fetchCancelledTurns = async () => {
+      if (selectedDay) {
+        const [numberDay, numberMonth] = selectedDay.split("/").map(Number);
+        try {
+          const response = await axios.post(
+            `${VITE_BACKEND_URL}/cancelledturns/getforworker`,
+            { emailWorker: selectedWorker, month: numberMonth, day: numberDay }
+          );
+          setCancelledTurnsByDays(response.data);
+        } catch (error) {
+          console.error("Error fetching turns.", error);
+        }
+      }
+    };
+    fetchCancelledTurns();
+  }, [selectedDay, selectedWorker]);
+
+  const handleChangeWorker = (email) => {
+    setSelectedWorker(email);
   };
 
-  const handleChangeDay = async (element) => {
-    const [numberDay, numberMonth] = selectedDay.split("/").map(Number);
-    try {
-      const response = await axios.post(
-        `${VITE_BACKEND_URL}/cancelledturns/getforworker`,
-        { emailWorker: selectedWorker, month: numberMonth, day: numberDay }
-      );
-      setCancelledTurnsByDays(response.data);
-      setSelectedDay(element);
-    } catch (error) {
-      console.error("Error al obtener los dias cancelados.", error);
-    }
+  const handleChangeDay = (element) => {
+    setSelectedDay(element);
   };
 
   return (
@@ -79,61 +95,32 @@ const CancelledTurnsForAdmin = ({ refreshWhoIsComing }) => {
         }}
       >
         {/* ********************************************** */}
-        <Box
-          style={{
-            display: "flex",
-            width: "100%",
-            overflow: "scroll",
-          }}
-        >
+        <div className="box-container-ctfw">
+        <div style={{ display: "flex", flexWrap: "wrap", overflowY: "scroll", maxHeight: "120px" }}>
           {workers.length > 0 &&
-            workers.map((element, index) => {
-              return (
-                <Button
-                  variant="contained"
-                  key={index}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "start",
-                    backgroundColor:
-                      selectedWorker == element.email && darkMode.on
-                        ? "white"
-                        : selectedWorker == element.email && !darkMode.on
-                        ? "black"
-                        : "",
-                    color:
-                      selectedWorker == element.email && darkMode.on
-                        ? "black"
-                        : "white",
-                    margin: "5px",
-                    minWidth: "180px",
-                    overflow: "hidden",
-                    fontFamily: "Jost, sans-serif",
-                    fontWeight: "bold",
-                    lineHeight: "1.2",
-                  }}
-                  onClick={() => {
-                    handleChangeWorker(element.email);
-                  }}
-                >
-                  <h3 style={{ textTransform: "lowercase" }}>
-                    {element.email}
-                  </h3>
-                  <h5
-                    style={{
-                      color:
-                        selectedWorker == element.email && darkMode.on
-                          ? "#a3a3a3"
-                          : "#cccaca",
-                    }}
-                  >
-                    {element.name}
-                  </h5>
-                </Button>
-              );
-            })}
-        </Box>
+            workers.map((worker, index) => (
+              <button
+                className="btn-worker-wic"
+                key={index}
+                style={{
+                  backgroundColor: selectedWorker === worker.email ? (darkMode.on ? "white" : "black") : "",
+                  color: selectedWorker === worker.email ? (darkMode.on ? "black" : "white") : "white",
+                }}
+                onClick={() => handleChangeWorker(worker.email)}
+              >
+                <img src={worker.image} alt="Worker" />
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "start", marginLeft: "5px" }}>
+                  <span style={{ color: selectedWorker === worker.email ? "#a3a3a3" : "#727272" }}>
+                    {worker.email}
+                  </span>
+                  <span style={{ color: selectedWorker === worker.email ? "#a3a3a3" : "#727272" }}>
+                    {worker.name}
+                  </span>
+                </div>
+              </button>
+            ))}
+        </div>
+        </div>
 
         <Box
           style={{

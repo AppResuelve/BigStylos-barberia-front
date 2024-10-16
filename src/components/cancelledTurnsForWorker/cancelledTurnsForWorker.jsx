@@ -1,31 +1,30 @@
 import { useEffect, useState, useContext } from "react";
 import ThemeContext from "../../context/ThemeContext";
-import { Button, Box } from "@mui/material";
+import { Button, Box, Typography } from "@mui/material";
 import { WhatsApp } from "@mui/icons-material";
 import axios from "axios";
 import "../cancelledTurnsForAdmin/cancelledTurns.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-const CancelledTurnsForWorker = ({
-  userData,
-  refreshWhoIsComing,
-}) => {
+const CancelledTurnsForWorker = ({ userData, refreshWhoIsComing }) => {
   const { darkMode } = useContext(ThemeContext);
+  const [selectedDay, setSelectedDay] = useState("");
   const [cancelledTurnsByDays, setCancelledTurnsByDays] = useState([]);
   const [count, setCount] = useState([]);
-  const [selectedDay, setSelectedDay] = useState("");
+
+  console.log(count, "count --------")
 
   useEffect(() => {
     const fetchCount = async () => {
       try {
         const response = await axios.post(
-          `${VITE_BACKEND_URL}/workdays/countworker`,
+          `${VITE_BACKEND_URL}/cancelledturns/getcount`,
           { emailWorker: userData.email }
         );
         const { data } = response;
         setCount(data);
-        setSelectedDay(data[0]);
+        setSelectedDay(data[0]?.day); // Usa el primer día si está disponible
       } catch (error) {
         console.error("Error al obtener el count.", error);
       }
@@ -33,19 +32,26 @@ const CancelledTurnsForWorker = ({
     fetchCount();
   }, [refreshWhoIsComing]);
 
-  const handleChangeDay = async (element) => {
-    const [numberDay, numberMonth] = selectedDay.split("/").map(Number);
-    try {
-      const response = await axios.post(
-        `${VITE_BACKEND_URL}/cancelledturns/getforworker`,
-        { emailWorker: userData.email, month: numberMonth, day: numberDay }
-      );
-      const { data } = response;
-      setCancelledTurnsByDays(data);
-      setSelectedDay(element);
-    } catch (error) {
-      console.error("Error al obtener los dias cancelados.", error);
-    }
+  useEffect(() => {
+    const fetchCancelledTurns = async () => {
+      if (selectedDay) {
+        const [numberDay, numberMonth] = selectedDay.split("/").map(Number);
+        try {
+          const response = await axios.post(
+            `${VITE_BACKEND_URL}/cancelledturns/getforworker`,
+            { emailWorker: userData.email, month: numberMonth, day: numberDay }
+          );
+          setCancelledTurnsByDays(response.data);
+        } catch (error) {
+          console.error("Error fetching turns.", error);
+        }
+      }
+    };
+    fetchCancelledTurns();
+  }, [selectedDay]);
+
+  const handleChangeDay = (element) => {
+    setSelectedDay(element);
   };
 
   return (
@@ -61,7 +67,7 @@ const CancelledTurnsForWorker = ({
       <Box
         className="box-container-ctfw"
         style={{
-          overFlow: "scroll",
+          overflow: "scroll",
           marginBottom: "20px",
         }}
       >
@@ -73,35 +79,26 @@ const CancelledTurnsForWorker = ({
             overflow: "auto",
           }}
         >
-          {count.length > 0 &&
-            count.map((element, index) => {
-              return (
-                <Button
-                  variant="contained"
-                  key={index}
-                  style={{
-                    backgroundColor:
-                      selectedDay == element && darkMode.on
-                        ? "white"
-                        : selectedDay == element && !darkMode.on
-                        ? "black"
-                        : "",
-                    color:
-                      selectedDay == element && darkMode.on ? "black" : "white",
-                    margin: "5px",
-                    fontFamily: "Jost, sans-serif",
-                    fontWeight: "bold",
-                  }}
-                  onClick={() => {
-                    handleChangeDay(element);
-                  }}
-                >
-                  {element}
-                </Button>
-              );
-            })}
-          {count.length < 1 && (
-            <h2
+          {count.length > 0 ? (
+            count.map((element, index) => (
+              <Button
+                variant="contained"
+                key={index}
+                style={{
+                  backgroundColor: selectedDay === element.day && darkMode.on ? "white" : selectedDay === element.day ? "black" : "",
+                  color: selectedDay === element.day && darkMode.on ? "black" : "white",
+                  margin: "5px",
+                  fontFamily: "Jost, sans-serif",
+                  fontWeight: "bold",
+                }}
+                onClick={() => handleChangeDay(element)}
+              >
+                {element}
+              </Button>
+            ))
+          ) : (
+            <Typography
+              variant="h6"
               style={{
                 display: "flex",
                 justifyContent: "center",
@@ -109,8 +106,8 @@ const CancelledTurnsForWorker = ({
                 color: darkMode.on ? "white" : darkMode.dark,
               }}
             >
-              Todavía no tienes dias
-            </h2>
+              Todavía no tienes días
+            </Typography>
           )}
         </Box>
       </Box>
@@ -118,11 +115,11 @@ const CancelledTurnsForWorker = ({
         className="box-container-ctfw"
         sx={{
           width: "100%",
-          overFlow: "scroll",
+          overflow: "scroll",
         }}
       >
         <Box style={{ overflow: "scroll", maxHeight: "350px" }}>
-          {cancelledTurnsByDays.length > 0 &&
+          {cancelledTurnsByDays.length > 0 ? (
             cancelledTurnsByDays.map((element, index) => (
               <Box key={index}>
                 {index === 0 && (
@@ -133,13 +130,13 @@ const CancelledTurnsForWorker = ({
                         color: darkMode.on ? "white" : darkMode.dark,
                       }}
                     >
-                      <h3 className="h-email-ctfw">Email</h3>
+                      <Typography variant="h6" className="h-email-ctfw">Email</Typography>
                       <hr />
-                      <h3 className="h-whocancelled-ctfw">Quien canceló?</h3>
+                      <Typography variant="h6" className="h-whocancelled-ctfw">¿Quién canceló?</Typography>
                       <hr />
-                      <h3 className="h-phone-ctfw">Celular</h3>
+                      <Typography variant="h6" className="h-phone-ctfw">Celular</Typography>
                       <hr />
-                      <h3 className="h-day-ctfw">Día</h3>
+                      <Typography variant="h6" className="h-day-ctfw">Día</Typography>
                     </Box>
                     <hr className="hr-ctfw" />
                   </Box>
@@ -150,17 +147,11 @@ const CancelledTurnsForWorker = ({
                     color: darkMode.on ? "white" : darkMode.dark,
                   }}
                 >
-                  <h4 className="h-email-ctfw">{element.email}</h4>
+                  <Typography variant="body1" className="h-email-ctfw">{element.email}</Typography>
                   <hr />
-                  <h4 className="h-whocancelled-ctfw">
-                    {element.howCancelled}
-                  </h4>
+                  <Typography variant="body1" className="h-whocancelled-ctfw">{element.howCancelled}</Typography>
                   <hr />
-                  <Box
-                    className={
-                      darkMode.on ? "h-phone-ctfw-dark" : "h-phone-ctfw"
-                    }
-                  >
+                  <Box className={darkMode.on ? "h-phone-ctfw-dark" : "h-phone-ctfw"}>
                     {element.phone !== "no requerido" ? (
                       <a
                         href={`whatsapp://send?phone=${element.phone}&text=Su turno para la barbería ha sido cancelado, por favor realice una nueva reserva.`}
@@ -168,12 +159,8 @@ const CancelledTurnsForWorker = ({
                         rel="noopener noreferrer"
                         style={{ textDecoration: "none" }}
                       >
-                        <button
-                          className={
-                            element.phone === "no requerido"
-                              ? "btn-wsp-ctfw-false"
-                              : "btn-wsp-ctfw"
-                          }
+                        <Button
+                          className={element.phone === "no requerido" ? "btn-wsp-ctfw-false" : "btn-wsp-ctfw"}
                           style={{
                             fontFamily: "Jost, sans-serif",
                             fontWeight: "bold",
@@ -185,23 +172,33 @@ const CancelledTurnsForWorker = ({
                             alignItems: "center",
                           }}
                         >
-                          <h4>{element.phone}</h4>
-                          {element.phone !== "no requerido" && (
-                            <WhatsApp color="success" />
-                          )}
-                        </button>
+                          <Typography variant="body1">{element.phone}</Typography>
+                          <WhatsApp color="success" />
+                        </Button>
                       </a>
                     ) : (
-                      <h4>{element.phone}</h4>
+                      <Typography variant="body1">{element.phone}</Typography>
                     )}
                   </Box>
-
                   <hr />
-                  <h4 className="h-day-ctfw">{selectedDay}</h4>
+                  <Typography variant="body1" className="h-day-ctfw">{selectedDay}</Typography>
                 </Box>
                 <hr className="hr-ctfw" />
               </Box>
-            ))}
+            ))
+          ) : (
+            <Typography
+              variant="body1"
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                padding: "10px",
+                color: darkMode.on ? "white" : darkMode.dark,
+              }}
+            >
+              No hay turnos cancelados para este día.
+            </Typography>
+          )}
         </Box>
       </Box>
     </div>
