@@ -13,7 +13,6 @@ const ThemeProvider = ({ children }) => {
       ? JSON.parse(savedDarkMode)
       : { dark: "#2f2e3e", light: "white", on: false };
   });
-
   const [refreshPersonalization, setRefreshPersonalization] = useState(false);
 
   // Guarda la configuración del modo en localStorage cuando cambie

@@ -19,13 +19,19 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const ClientNestedList = () => {
   const { darkMode } = useContext(ThemeContext);
-  const { userData, openSection, setOpenSection } = useContext(AuthContext);
+  const {
+    userData,
+    openSection,
+    setOpenSection,
+    newPhoneNumber,
+    setNewPhoneNumber,
+    inputTelError,
+    setInputTelError,
+  } = useContext(AuthContext);
   const { newTurnNotification, setNewTurnNotification } = useContext(
     LoadAndRefreshContext
   );
-  const [newPhoneNumber, setNewPhoneNumber] = useState(userData?.phone ?? "");
   const [refresh, setRefresh] = useState(false);
-  const [inputTelError, setInputTelError] = useState("");
 
   const handleSectionClick = (section) => {
     setOpenSection((prevSections) => {
@@ -118,8 +124,8 @@ const ClientNestedList = () => {
               <InputTel
                 newPhoneNumber={newPhoneNumber}
                 setNewPhoneNumber={setNewPhoneNumber}
-                inputTelError={inputTelError}
                 setInputTelError={setInputTelError}
+                userData={userData}
               />
               {inputTelError && (
                 <span className="spanErrorInputTel">{inputTelError}</span>
@@ -127,7 +133,7 @@ const ClientNestedList = () => {
             </div>
             <button
               className={"my-button-upadatephone"}
-              disabled={inputTelError ? true : false}
+              disabled={inputTelError !== "" ? true : false}
               onClick={handleUpdatePhone}
             >
               <span style={{ color: !darkMode.on && "white" }}>Guardar</span>

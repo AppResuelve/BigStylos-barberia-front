@@ -27,6 +27,7 @@ const UserPanelModal = () => {
     setIsOpenUserPanel(false),
       setOpenSection({ telefono: false, turnos: false });
   };
+  
   return (
     <Dialog
       style={{

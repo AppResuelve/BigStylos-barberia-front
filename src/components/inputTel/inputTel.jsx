@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/bootstrap.css";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
@@ -7,8 +7,14 @@ const InputTel = ({
   newPhoneNumber,
   setNewPhoneNumber,
   setInputTelError,
+  userData,
 }) => {
   const [country, setCountry] = useState("ar"); // país predeterminado
+
+  useEffect(() => {
+    if (userData !== undefined && userData !== 1)
+      setNewPhoneNumber(userData.phone);
+  }, [userData]);
 
   const handleKeyDown = (e) => {
     // Manejar el evento cuando se presiona Enter
@@ -17,7 +23,6 @@ const InputTel = ({
       handleUpdatePhone();
     }
   };
-
   const handleChangePhone = (value, countryData) => {
     setNewPhoneNumber(value);
     setCountry(countryData.countryCode);
@@ -41,27 +46,27 @@ const InputTel = ({
   };
 
   return (
-      <PhoneInput
-        inputProps={{
-          name: "phone",
-          required: true,
-          autoFocus: true,
-        }}
-        country={country}
-        value={newPhoneNumber}
-        onChange={handleChangePhone}
-        onKeyDown={handleKeyDown}
-        enableSearch={true}
-        inputStyle={{
-          width: "100%",
-          height: "45px",
-          fontFamily: "Jost",
-          fontWeight: "bold",
-          fontSize: "18px",
-          marginBottom: "5px",
-          borderRadius:"10px"
-        }}
-      />
+    <PhoneInput
+      inputProps={{
+        name: "phone",
+        required: true,
+        autoFocus: true,
+      }}
+      country={country}
+      value={newPhoneNumber}
+      onChange={handleChangePhone}
+      onKeyDown={handleKeyDown}
+      enableSearch={true}
+      inputStyle={{
+        width: "100%",
+        height: "45px",
+        fontFamily: "Jost",
+        fontWeight: "bold",
+        fontSize: "18px",
+        marginBottom: "5px",
+        borderRadius: "10px",
+      }}
+    />
   );
 };
 

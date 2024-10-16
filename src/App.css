@@ -38,7 +38,6 @@
    --color-error: #db0101;
    --color-disponibility: #2db644;
    --accent-color-disabled: #97d0ff;
-
    --accent-color-hover: #0379d9;
 
  }
@@ -95,7 +94,39 @@
    z-index: 99999;
  }
 
+ .custom-swal-modal {
+   background-color: var(--bg-color-hover);
+   color: var(--text-color);
+   border-radius: 20px;
+ }
+
+ .custom-swal-body {
+   overflow: visible !important;
+   z-index: 2 !important;
+ }
+
+ .custom-confirm-button {
+   background-color: var(--accent-color);
+   border-radius: 5px;
+ }
+
+ .custom-cancel-button {
+   background-color: var(--bg-color-secondary);
+   border-radius: 5px;
+ }
+
  .MuiAccordion-root::before {
    display: none !important;
    /* Eliminar el pseudo-elemento */
+ }
+
+ #phone-input-p-container {
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+   width: 100%;
+   padding: 10px;
+   background-color: var(--bg-color);
+   border-radius: 10px;
+   margin-top: 10px;
  }

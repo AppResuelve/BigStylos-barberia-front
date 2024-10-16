@@ -5,6 +5,9 @@ import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import Swal from "sweetalert2";
 import toastAlert from "../helpers/alertFunction";
+import ReactDOM from "react-dom";
+import InputTel from "../components/inputTel/inputTel";
+import { useRef } from "react";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -23,6 +26,11 @@ const AuthProvider = ({ children }) => {
     status: 404,
     text: "No hemos encontrado la dirección que estás buscando.",
   });
+  const [newPhoneNumber, setNewPhoneNumber] = useState(userData?.phone ?? "");
+  const [inputTelError, setInputTelError] = useState("");
+  // Crear referencias para newPhoneNumber e inputTelError
+  const phoneNumberRef = useRef(newPhoneNumber);
+  const inputTelErrorRef = useRef(inputTelError);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,27 +71,49 @@ const AuthProvider = ({ children }) => {
       if (response.data.phone === "") {
         Swal.fire({
           title: "Necesitamos tu número de teléfono por única vez.",
-          input: "tel", // Usamos 'tel' para indicar que es un campo para números telefónicos
-          inputPlaceholder: "Ingresa tu número de teléfono",
-          inputAttributes: {
-            maxlength: 15, // Opcional: limitar la longitud del número de teléfono
-            pattern: "[0-9]{10,15}", // Validación básica de números (mínimo 10 dígitos)
-            required: true, // Campo obligatorio
+          html: `
+        <div id="phone-input-container"></div>
+        <div id="phone-input-p-container">
+        <p class="text-muted">Para qué necesitamos tú número?</p>
+        <p class="text-muted">✅ Para enviarte recordatorios.</p>
+        <p class="text-muted">✅ Para avisarte de algún cambio en tús turnos.</p>
+        </div>
+      `,
+          customClass: {
+            popup: "custom-swal-modal",
+            htmlContainer: "custom-swal-body",
+            confirmButton: "custom-confirm-button",
+          },
+          didOpen: () => {
+            const div = document.getElementById("phone-input-container");
+            ReactDOM.render(
+              <InputTel
+                newPhoneNumber={newPhoneNumber}
+                setNewPhoneNumber={(value) => {
+                  setNewPhoneNumber(value);
+                  phoneNumberRef.current = value; // Guardar en referencia
+                }}
+                setInputTelError={(error) => {
+                  setInputTelError(error);
+                  inputTelErrorRef.current = error; // Actualiza la referencia
+                }}
+              />,
+              div
+            );
           },
           confirmButtonText: "Guardar",
-          preConfirm: (value) => {
-            if (!value) {
-              Swal.showValidationMessage(
-                "Por favor, ingresa un número de teléfono"
-              );
-            } else if (!/^\d{10,15}$/.test(value)) {
-              // Validación personalizada para solo permitir dígitos
-              Swal.showValidationMessage("El número ingresado no es válido");
+          preConfirm: () => {
+            const currentPhoneNumber = phoneNumberRef.current; // Obtiene el valor actual de la referencia
+            const currentInputTelError = inputTelErrorRef.current;
+
+            if (currentPhoneNumber === "" || currentInputTelError !== "") {
+              Swal.showValidationMessage("El número ingresado no es válido.");
+              return false;
             } else {
-              return value; // Devuelve el número si es válido
+              return currentPhoneNumber; // Devuelve el número si es válido
             }
           },
-          allowOutsideClick: false, // Evita cerrar el modal al hacer clic fuera de él
+          allowOutsideClick: false,
         }).then(async (result) => {
           if (result.isConfirmed) {
             // Aquí manejas el número de teléfono ingresado
@@ -93,6 +123,7 @@ const AuthProvider = ({ children }) => {
                 email: response.data.email,
                 newPhoneNumber: phoneNumber,
               });
+              setUserData(res.data);
               toastAlert("Telefono guardado exitosamente!", "success");
             } catch (error) {
               toastAlert("Error al guardar el numero de teléfono.", "error");
@@ -122,6 +153,10 @@ const AuthProvider = ({ children }) => {
     setUserIsReady,
     dataErrorPage,
     setDataErrorPage,
+    newPhoneNumber,
+    setNewPhoneNumber,
+    inputTelError,
+    setInputTelError,
   };
   return <AuthContext.Provider value={data}>{children}</AuthContext.Provider>;
 };
