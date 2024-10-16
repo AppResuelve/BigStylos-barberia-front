@@ -14,7 +14,6 @@ const CancelledTurnsForAdmin = ({ refreshWhoIsComing }) => {
   const [selectedDay, setSelectedDay] = useState("");
   const [cancelledTurnsByDays, setCancelledTurnsByDays] = useState([]);
   const [count, setCount] = useState([]);
-  console.log(count, "-----count")
   // const date = new Date();
   // const currentDay = date.getDate();
 

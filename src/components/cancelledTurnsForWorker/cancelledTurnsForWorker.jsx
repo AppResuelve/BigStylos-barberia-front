@@ -9,15 +9,17 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const CancelledTurnsForWorker = ({ userData, refreshWhoIsComing }) => {
   const { darkMode } = useContext(ThemeContext);
+  const [selectedDay, setSelectedDay] = useState("");
   const [cancelledTurnsByDays, setCancelledTurnsByDays] = useState([]);
   const [count, setCount] = useState([]);
-  const [selectedDay, setSelectedDay] = useState("");
+
+  console.log(count, "count --------")
 
   useEffect(() => {
     const fetchCount = async () => {
       try {
         const response = await axios.post(
-          `${VITE_BACKEND_URL}/workdays/countworker`,
+          `${VITE_BACKEND_URL}/cancelledturns/getcount`,
           { emailWorker: userData.email }
         );
         const { data } = response;
@@ -30,19 +32,26 @@ const CancelledTurnsForWorker = ({ userData, refreshWhoIsComing }) => {
     fetchCount();
   }, [refreshWhoIsComing]);
 
-  const handleChangeDay = async (element) => {
-    const [numberDay, numberMonth] = selectedDay.split("/").map(Number);
-    try {
-      const response = await axios.post(
-        `${VITE_BACKEND_URL}/cancelledturns/getforworker`,
-        { emailWorker: userData.email, month: numberMonth, day: numberDay }
-      );
-      const { data } = response;
-      setCancelledTurnsByDays(data);
-      setSelectedDay(element);
-    } catch (error) {
-      console.error("Error al obtener los días cancelados.", error);
-    }
+  useEffect(() => {
+    const fetchCancelledTurns = async () => {
+      if (selectedDay) {
+        const [numberDay, numberMonth] = selectedDay.split("/").map(Number);
+        try {
+          const response = await axios.post(
+            `${VITE_BACKEND_URL}/cancelledturns/getforworker`,
+            { emailWorker: userData.email, month: numberMonth, day: numberDay }
+          );
+          setCancelledTurnsByDays(response.data);
+        } catch (error) {
+          console.error("Error fetching turns.", error);
+        }
+      }
+    };
+    fetchCancelledTurns();
+  }, [selectedDay]);
+
+  const handleChangeDay = (element) => {
+    setSelectedDay(element);
   };
 
   return (
@@ -82,9 +91,9 @@ const CancelledTurnsForWorker = ({ userData, refreshWhoIsComing }) => {
                   fontFamily: "Jost, sans-serif",
                   fontWeight: "bold",
                 }}
-                onClick={() => handleChangeDay(element.day)}
+                onClick={() => handleChangeDay(element)}
               >
-                {element.day}
+                {element}
               </Button>
             ))
           ) : (
