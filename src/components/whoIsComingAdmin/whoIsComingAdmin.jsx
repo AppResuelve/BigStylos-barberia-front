@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import ThemeContext from "../../context/ThemeContext";
-import { Box } from "@mui/material";
+import { Button, Box } from "@mui/material";
 import { WhatsApp } from "@mui/icons-material";
 import noUserImg from "../../assets/icons/noUser.png";
 import formatHour from "../../functions/formatHour";
@@ -14,6 +14,7 @@ const WhoIsComingAdmin = ({ refreshWhoIsComing }) => {
   const [workers, setWorkers] = useState([]);
   const [selectedWorker, setSelectedWorker] = useState("");
   const [selectedDay, setSelectedDay] = useState("");
+  const [selectedTimes, setSelectedTimes] = useState({ ini: "", end: "", ini2: "", end2: "" });
   const [turns, setTurns] = useState([]);
   const [count, setCount] = useState([]);
 
@@ -77,8 +78,14 @@ const WhoIsComingAdmin = ({ refreshWhoIsComing }) => {
   };
 
   // Handle day selection
-  const handleChangeDay = (day) => {
-    setSelectedDay(day);
+  const handleChangeDay = (element) => {
+    setSelectedDay(element.day);
+    setSelectedTimes({
+      ini: element.ini,
+      end: element.end,
+      ini2: element.ini2,
+      end2: element.end2
+    });
   };
 
   return (
@@ -118,25 +125,62 @@ const WhoIsComingAdmin = ({ refreshWhoIsComing }) => {
         </div>
 
         <Box style={{ display: "flex", width: "100%", maxWidth: "900px", overflow: "auto", marginTop: "20px" }}>
-          {count.length > 0 &&
-            count.map((day, index) => (
-              <button
-                key={index}
-                className="btn-day-wic"
-                style={{
-                  backgroundColor: selectedDay === day ? (darkMode.on ? "white" : "black") : "",
-                  color: selectedDay === day ? "white" : "black",
-                }}
-                onClick={() => handleChangeDay(day)}
-              >
-                {day}
-              </button>
-            ))}
+        {count.length > 0 &&
+            count.map((element, index) => {
+              const isSelected = selectedDay === element.day;
+
+              return (
+                <Button
+                  variant="contained"
+                  key={index}
+                  style={{
+                    backgroundColor: element.turn
+                      ? isSelected
+                        ? "#4caf50" // Verde cuando `turn` es true y seleccionado
+                        : "#8bc34a" // Verde claro cuando `turn` es true y no seleccionado
+                      : isSelected
+                        ? "#f44336" // Rojo cuando `turn` es false y seleccionado
+                        : "#e57373", // Rojo claro cuando `turn` es false y no seleccionado
+                    color: "white",
+                    margin: "5px",
+                    fontFamily: "Jost, sans-serif",
+                    fontWeight: "bold",
+                    letterSpacing: "1.5px",
+                  }}
+                  onClick={() => handleChangeDay(element)}
+                >
+                  {element.day}
+                </Button>
+              );
+            })}
           {count.length < 1 && selectedWorker && (
             <h2 style={{ display: "flex", justifyContent: "center", padding: "10px", color: darkMode.on ? "white" : darkMode.dark }}>
               Todavía no hay días
             </h2>
           )}
+        </Box>
+
+        <Box
+        sx={{height:"60px", bgcolor: "var(--bg-color)", display: "flex", alignItems: "center", marginTop: "10px", padding: "10px", borderRadius:"15px"}}
+        >
+          
+          {Object.keys(selectedDay).length > 0 &&
+            <>
+            <h3 style={{ color: darkMode.on ? "white" : darkMode.dark }}>
+            Horario del Jornal:
+          </h3>
+          <Box style={{ display: "flex", gap: "10px" }}> {/* Usamos flexbox */}
+            <p style={{ color: darkMode.on ? "white" : darkMode.dark }}>
+              {`De ${formatHour(selectedTimes.ini)} a ${formatHour(selectedTimes.end)}`}
+            </p>
+            {selectedTimes.ini2 && selectedTimes.end2 && (
+              <p style={{ color: darkMode.on ? "white" : darkMode.dark }}>
+                {`y de ${formatHour(selectedTimes.ini2)} a ${formatHour(selectedTimes.end2)}`}
+              </p>
+            )}
+          </Box>
+          </>
+}
         </Box>
 
         <Box style={{ overflow: "scroll", maxHeight: "350px", marginTop: "20px" }}>
