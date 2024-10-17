@@ -24,6 +24,8 @@ const InputTel = ({
     }
   };
   const handleChangePhone = (value, countryData) => {
+    console.log(countryData);
+    
     setNewPhoneNumber(value);
     setCountry(countryData.countryCode);
     validatePhone(value, countryData.countryCode);
@@ -65,6 +67,22 @@ const InputTel = ({
         fontSize: "18px",
         marginBottom: "5px",
         borderRadius: "10px",
+        backgroundColor: "var(--bg-color-secondary)",
+        color: "var(--text-color)",
+      }}
+      dropdownStyle={{
+        borderRadius: "10px", // Bordes redondeados del dropdown
+        maxHeight: "140px", // Altura máxima del dropdown
+        backgroundColor: "var(--bg-color)", // Color de fondo del dropdown
+      }}
+      searchStyle={{
+        display: "flex",
+        width: "100%",
+        marginLeft: "-5px",
+        borderRadius: "5px", // Bordes redondeados
+        fontSize: "16px", // Tamaño de fuente
+
+        border: "1px solid var(--accent-color)", // Borde del campo de búsqueda
       }}
     />
   );

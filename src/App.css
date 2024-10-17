@@ -12,7 +12,8 @@
    --text-color: #18181c;
    --transparent: #e6e6e600;
    --filter-invert: invert(.1);
-   --accent-color: #208de7;
+   --accent-color: rgb(32, 141, 231);
+   --color-shadow-icon-swal: 195, 195, 195;
    /* --accent-color-selected: #208de7; */
    /* --bg-color-selected: #E6E6E6; */
    /* --bg-color-secondary-selected: #cbcbcb; */
@@ -27,7 +28,9 @@
    --text-color: #d9d9d9;
    --transparent: #2f2e3e00;
    --filter-invert: invert(.8);
-   --accent-color: #208de7;
+   --accent-color: rgb(32, 141, 231);
+   --color-shadow-icon-swal: 25, 24, 34;
+
  }
 
  * {
@@ -35,11 +38,10 @@
    margin: 0;
    box-sizing: border-box;
    font-family: 'Jost', sans-serif;
-   --color-error: #db0101;
+   --color-error: rgb(219, 1, 1);
    --color-disponibility: #2db644;
    --accent-color-disabled: #97d0ff;
    --accent-color-hover: #0379d9;
-
  }
 
 
@@ -90,7 +92,7 @@
    height: 2px;
  }
 
- .my-swal-container {
+ .custom-swal-container {
    z-index: 99999;
  }
 
@@ -98,11 +100,20 @@
    background-color: var(--bg-color-hover);
    color: var(--text-color);
    border-radius: 20px;
+   padding: 0px 10px 10px 10px;
  }
 
  .custom-swal-body {
    overflow: visible !important;
    z-index: 2 !important;
+   /* text-align: left !important; */
+ }
+ 
+ /* Estilos para el contenedor de los botones */
+ .swal2-actions {
+   justify-content: flex-end;
+   width: 100%;
+   gap: 5px;
  }
 
  .custom-confirm-button {
@@ -110,23 +121,45 @@
    border-radius: 5px;
  }
 
- .custom-cancel-button {
+ .custom-confirm-button-error {
+   background-color: var(--color-error);
+   border-radius: 5px;
+ }
+
+ .custom-deny-button {
    background-color: var(--bg-color-secondary);
    border-radius: 5px;
  }
 
- .MuiAccordion-root::before {
-   display: none !important;
-   /* Eliminar el pseudo-elemento */
+ .custom-icon-swal {
+   background-color: var(--bg-color-secondary);
+   box-shadow: 0px 4px 0px rgb(var(--color-shadow-icon-swal));
+   border-radius: 25px;
+ }
+
+ .custom-icon-success-swal {
+   background-color: var(--bg-color-secondary);
+   box-shadow: 0px 4px 0px rgb(var(--color-shadow-icon-swal));
  }
 
  #phone-input-p-container {
    display: flex;
    flex-direction: column;
-   align-items: flex-start;
+   /* align-items: flex-start; */
+   text-align: left;
    width: 100%;
    padding: 10px;
    background-color: var(--bg-color);
    border-radius: 10px;
    margin-top: 10px;
+ }
+
+ .text-p-swal {
+   font-size: 18px;
+   font-weight: bold;
+ }
+
+ .MuiAccordion-root::before {
+   display: none !important;
+   /* Eliminar el pseudo-elemento */
  }

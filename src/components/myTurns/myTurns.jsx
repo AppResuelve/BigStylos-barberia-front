@@ -36,12 +36,19 @@ const MyTurns = ({ userData }) => {
   const handleSubmit = async (turn) => {
     Swal.fire({
       title: "Estas a punto de cancelar el turno, deseas continuar?",
-      icon: "warning",
+      icon: "error",
       showDenyButton: true,
+      denyButtonText: "Descartar",
       confirmButtonText: "Continuar",
-      denyButtonText: `Volver`,
+      reverseButtons: true,
+      backdrop: `rgba(0,0,0,0.8)`,
       customClass: {
-        container: "my-swal-container",
+        container: "custom-swal-container",
+        popup: "custom-swal-modal",
+        actions: "swal2-actions",
+        confirmButton: "custom-confirm-button-error",
+        denyButton: "custom-deny-button",
+        icon: "custom-icon-swal",
       },
     }).then(async (result) => {
       if (result.isConfirmed) {

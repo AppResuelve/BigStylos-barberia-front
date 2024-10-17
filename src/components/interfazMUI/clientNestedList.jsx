@@ -57,6 +57,10 @@ const ClientNestedList = () => {
       setNewTurnNotification(false);
       deleteCookie("NEWTURN-NOTIFICATION");
     }
+    if (!openSection.telefono) {
+      setNewPhoneNumber(userData.phone);
+      setInputTelError(true);
+    }
   }, [openSection]);
 
   const handleUpdatePhone = async () => {
@@ -75,7 +79,7 @@ const ClientNestedList = () => {
           position: "bottom-end",
           showConfirmButton: false,
           customClass: {
-            container: "my-swal-container",
+            container: "custom-swal-container",
           },
         });
         setRefresh(!refresh);
@@ -89,7 +93,7 @@ const ClientNestedList = () => {
         position: "bottom-end",
         showConfirmButton: false,
         customClass: {
-          container: "my-swal-container",
+          container: "custom-swal-container",
         },
       });
       console.error("Error al cambiar el numero de teléfono:", error);

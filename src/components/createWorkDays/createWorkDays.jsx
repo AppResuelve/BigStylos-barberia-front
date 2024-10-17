@@ -108,10 +108,23 @@ const CreateWorkDays = ({
   const handleEdit = () => {
     if (pendingServices || doCeroServices) {
       Swal.fire({
-        title: "Para crear un día NO debes tener servicios pendientes.",
+        title: "Antes de crear un día debes configurar tus servicios.",
+        text: "🚨Ten en cuenta que debes tener al menos 1 servicio habilitado, sin pendientes.",
+        closeButtonHtml: true,
         showDenyButton: true,
         confirmButtonText: "Ir a mis servicios",
-        denyButtonText: `Más tarde`,
+        denyButtonText: "Más tarde",
+        reverseButtons: true,
+        backdrop: `rgba(0,0,0,0.8)`,
+        customClass: {
+          container: "custom-swal-container",
+          htmlContainer: "custom-swal-body",
+          popup: "custom-swal-modal",
+          actions: "swal2-actions",
+          confirmButton: "custom-confirm-button-error",
+          denyButton: "custom-deny-button",
+          icon: "custom-icon-swal",
+        },
       }).then((result) => {
         if (result.isConfirmed) {
           setRedirectToMyServices(true);

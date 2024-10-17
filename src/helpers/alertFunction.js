@@ -17,3 +17,24 @@ const toastAlert = (title, icon) => {
 
 export { toastAlert };
 export default toastAlert;
+
+
+// Swal.fire({
+//   title: "Estas a punto de cancelar el turno, deseas continuar?",
+//   icon: "error",
+//   showDenyButton: true,
+//   denyButtonText: "Descartar",
+//   confirmButtonText: "Continuar",
+//   reverseButtons: true,
+//   backdrop: `rgba(0,0,0,0.8)`,
+//   customClass: {
+//     backdrop: "custom-backdrop-swal",
+//     container: "custom-swal-container",
+//     popup: "custom-swal-modal",
+//     htmlContainer: "custom-swal-body",
+//     actions: "swal2-actions",
+//     confirmButton: "custom-confirm-button-error",
+//     denyButton: "custom-deny-button-error",
+//     icon: "custom-icon-swal",
+//   },
+// });

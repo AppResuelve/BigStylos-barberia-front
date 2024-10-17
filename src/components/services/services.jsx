@@ -279,8 +279,10 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
             }}
             value={inputs.category}
             onInputChange={handleCategoryInputChange}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
             noOptionsText={null} // No muestra nada cuando no hay opciones
             renderInput={(params) => (
+              
               <TextField
                 {...params}
                 label="Categoría"
@@ -290,6 +292,7 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
                   style: { color: "var(--text-color)" },
                 }}
                 InputProps={{
+                  ...params.InputProps, // Asegura que pase las props correctas del Autocomplete
                   style: {
                     fontFamily: "Jost, sans-serif",
                     fontWeight: "bold",

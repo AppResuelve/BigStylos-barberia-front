@@ -1,3 +1,8 @@
+.container-dialog-DeleteServicesModal {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+}
+
 .header-DeleteServicesModal {
       width: 100%;
       display: flex;
@@ -13,9 +18,11 @@
 .header-DeleteServicesModal img {
       width: 15px;
       height: 15px;
+      filter: var(--filter-invert);
 }
 
 .body-DeleteServicesModal {
+
       width: 100%;
       display: flex;
       flex-direction: column;
@@ -29,7 +36,7 @@
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
-      padding: 4px;
+      padding: 8px;
       border-radius: 12px;
       transition: .2s;
 }
@@ -44,7 +51,7 @@
 
 
 .div-category-DelServiceModal:hover {
-      background-color: lightgray;
+      background-color: var(--bg-color-hover);
 }
 
 .div-service-DelServiceModal {
@@ -53,14 +60,14 @@
       justify-content: space-between;
       align-items: center;
       margin: 4px 0px 4px 0px;
-      padding: 4px;
+      padding: 4px 8px 4px 4px;
       border-radius: 12px;
       transition: .2s;
       cursor: pointer;
 }
 
 .div-service-DelServiceModal:hover {
-      background-color: lightgray;
+      background-color: var(--bg-color-hover);
 }
 
 .div-service-DelServiceModal span {

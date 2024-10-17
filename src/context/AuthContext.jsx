@@ -27,7 +27,7 @@ const AuthProvider = ({ children }) => {
     text: "No hemos encontrado la dirección que estás buscando.",
   });
   const [newPhoneNumber, setNewPhoneNumber] = useState(userData?.phone ?? "");
-  const [inputTelError, setInputTelError] = useState("");
+  const [inputTelError, setInputTelError] = useState(true);
   // Crear referencias para newPhoneNumber e inputTelError
   const phoneNumberRef = useRef(newPhoneNumber);
   const inputTelErrorRef = useRef(inputTelError);
@@ -74,9 +74,9 @@ const AuthProvider = ({ children }) => {
           html: `
         <div id="phone-input-container"></div>
         <div id="phone-input-p-container">
-        <p class="text-muted">Para qué necesitamos tú número?</p>
-        <p class="text-muted">✅ Para enviarte recordatorios.</p>
-        <p class="text-muted">✅ Para avisarte de algún cambio en tús turnos.</p>
+          <p class="text-p-swal">Para qué necesitamos tú número?</p>
+          <p>⏰ Para enviarte recordatorios.</p>
+          <p>🔄️ Para avisarte de algún cambio en tús turnos.</p>
         </div>
       `,
           customClass: {

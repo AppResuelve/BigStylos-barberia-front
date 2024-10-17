@@ -23,14 +23,21 @@ const DeleteServicesModal = ({
 
   const handleDeleteCatSer = async () => {
     Swal.fire({
-      title:
-        "Estas a punto de borrar servicios o categorias. Deseas continuar?",
-      icon: "warning",
+      title: "Esta acción es destructiva. Deseas continuar?",
+      icon: "error",
       showDenyButton: true,
-      confirmButtonText: "Borrar",
-      denyButtonText: "Más tarde",
+      denyButtonText: "Descartar",
+      confirmButtonText: "Continuar",
+      reverseButtons: true,
+      backdrop: `rgba(0,0,0,0.8)`,
       customClass: {
-        container: "my-swal-container",
+        backdrop: "custom-backdrop-swal",
+        container: "custom-swal-container",
+        popup: "custom-swal-modal",
+        actions: "swal2-actions",
+        confirmButton: "custom-confirm-button-error",
+        denyButton: "custom-deny-button",
+        icon: "custom-icon-swal",
       },
     }).then(async (result) => {
       if (result.isConfirmed) {
@@ -50,11 +57,9 @@ const DeleteServicesModal = ({
             showConfirmButton: false,
             showCloseButton: true,
             customClass: {
-              container: "my-swal-container",
+              container: "custom-swal-container",
             },
           });
-          console.log(response.data);
-          
           setRefreshStatusSession((prevState) => !prevState);
           //en vez de hacer refresh se puede setear los estados servicios
           //con el result.(luego de ejecutar la funcion convertCategoryService)
@@ -150,7 +155,6 @@ const DeleteServicesModal = ({
       }
       return category;
     });
-
     setEditableCatSer(updatedCategoryServices);
   };
 
@@ -165,164 +169,164 @@ const DeleteServicesModal = ({
       onClose={handleClose}
       aria-describedby="alert-dialog-description"
     >
-      <header className="header-DeleteServicesModal">
-        <h1>Elimina categorias y/o servicios.</h1>
-        <IconButton
-          onClick={handleClose}
-          variant="contained"
-          sx={{
-            width: "40px",
-            height: "40px",
-          }}
-        >
-          <img src={closeBtn} alt="cerrar" />
-        </IconButton>
-      </header>
-      <hr />
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          height: "100%",
-        }}
-      >
-        <div className="body-DeleteServicesModal">
-          {categoryServices.length < 1 ? (
-            <span
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                height: "40px",
-                fontSize: "18px",
-              }}
-            >
-              No tienes servicios aún
-            </span>
-          ) : (
-            editableCatSer.map((elem, categoryIndex) => {
-              return (
-                <section key={categoryIndex} style={{ marginBottom: "15px" }}>
-                  <div
-                    className="div-category-DelServiceModal"
-                    onClick={() =>
-                      handleCheckboxChange(
-                        {
-                          target: {
-                            checked: !elem.deleted,
-                            name: "category",
-                          },
-                        },
-                        elem
-                      )
-                    }
-                  >
-                    <span>{capitalizeFirstLetter(elem.category)}</span>
-                    <input
-                      type="checkbox"
-                      style={{
-                        width: "22px",
-                        height: "22px",
-                        accentColor: "red",
-                        cursor: "pointer",
-                      }}
-                      checked={elem.deleted}
-                      onChange={(e) => e.stopPropagation()}
-                    />
-                  </div>
-                  <hr />
-                  {elem.services.map((service, serviceIndex) => {
-                    let lastService = elem.services.length - 1 === serviceIndex;
-                    return (
-                      <div
-                        key={serviceIndex}
-                        style={{
-                          display: "flex",
-                          width: "100%",
-                          paddingTop: serviceIndex === 0 ? "5px" : 0,
-                        }}
-                      >
-                        <hr
-                          style={{
-                            border: "1px solid",
-                            width: "1px",
-                            height: lastService ? "25px" : "40px",
-                          }}
-                        />
-                        <hr
-                          style={{
-                            border: "1px solid",
-                            transform: "rotateZ(90deg)",
-                            margin: "19px 15px 10px 4px",
-                            height: "10px",
-                          }}
-                        />
-                        <div
-                          className="div-service-DelServiceModal"
-                          onClick={() =>
-                            handleCheckboxChange(
-                              {
-                                target: { checked: !service.deleted, name: "" },
-                              },
-                              elem,
-                              service.name
-                            )
-                          }
-                        >
-                          <span>{service.name}</span>
-                          <input
-                            type="checkbox"
-                            style={{
-                              width: "22px",
-                              height: "22px",
-                              accentColor: "red",
-                              cursor: "pointer",
-                            }}
-                            checked={service.deleted}
-                            onChange={(e) => e.stopPropagation()}
-                          />
-                        </div>
-                      </div>
-                    );
-                  })}
-                </section>
-              );
-            })
-          )}
-        </div>
-        <footer className="footer-DeleteServicesModal">
-          <Button
+      <div className="container-dialog-DeleteServicesModal">
+        <header className="header-DeleteServicesModal">
+          <h1>Elimina categorias y/o servicios.</h1>
+          <IconButton
             onClick={handleClose}
-            sx={{
-              fontFamily: "Jost",
-              fontWeight: "bold",
-              letterSpacing: "1px",
-            }}
-          >
-            Descartar
-          </Button>
-          <Button
             variant="contained"
             sx={{
-              fontFamily: "Jost",
-              letterSpacing: "1px",
+              width: "40px",
+              height: "40px",
             }}
-            disabled={servicesToDelete.length > 0 ? false : true}
-            onClick={handleDeleteCatSer}
           >
-            Borrar
-          </Button>
-        </footer>
+            <img src={closeBtn} alt="cerrar" />
+          </IconButton>
+        </header>
+        <hr />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            height: "100%",
+          }}
+        >
+          <div className="body-DeleteServicesModal">
+            {categoryServices.length < 1 ? (
+              <span
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  height: "40px",
+                  fontSize: "18px",
+                }}
+              >
+                No tienes servicios aún
+              </span>
+            ) : (
+              editableCatSer.map((elem, categoryIndex) => {
+                return (
+                  <section key={categoryIndex} style={{ marginBottom: "15px" }}>
+                    <div
+                      className="div-category-DelServiceModal"
+                      onClick={() =>
+                        handleCheckboxChange(
+                          {
+                            target: {
+                              checked: !elem.deleted,
+                              name: "category",
+                            },
+                          },
+                          elem
+                        )
+                      }
+                    >
+                      <span>{capitalizeFirstLetter(elem.category)}</span>
+                      <input
+                        type="checkbox"
+                        style={{
+                          width: "22px",
+                          height: "22px",
+                          accentColor: "var(--color-error)",
+                          cursor: "pointer",
+                        }}
+                        checked={elem.deleted}
+                        onChange={(e) => e.stopPropagation()}
+                      />
+                    </div>
+                    <hr />
+                    {elem.services.map((service, serviceIndex) => {
+                      let lastService =
+                        elem.services.length - 1 === serviceIndex;
+                      return (
+                        <div
+                          key={serviceIndex}
+                          style={{
+                            display: "flex",
+                            width: "100%",
+                            paddingTop: serviceIndex === 0 ? "5px" : 0,
+                          }}
+                        >
+                          <hr
+                            style={{
+                              border: "2px solid var(--bg-color-medium)",
+                              // width: "0px",
+                              height: lastService ? "28px" : "40px",
+                            }}
+                          />
+                          <hr
+                            style={{
+                              border: "2px solid var(--bg-color-medium)",
+                              transform: "rotateZ(90deg)",
+                              margin: "19px 15px 10px 2px",
+                              height: "15px",
+                            }}
+                          />
+                          <div
+                            className="div-service-DelServiceModal"
+                            onClick={() =>
+                              handleCheckboxChange(
+                                {
+                                  target: {
+                                    checked: !service.deleted,
+                                    name: "",
+                                  },
+                                },
+                                elem,
+                                service.name
+                              )
+                            }
+                          >
+                            <span>{service.name}</span>
+                            <input
+                              type="checkbox"
+                              style={{
+                                width: "22px",
+                                height: "22px",
+                                accentColor: "var(--color-error)",
+                                cursor: "pointer",
+                              }}
+                              checked={service.deleted}
+                              onChange={(e) => e.stopPropagation()}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </section>
+                );
+              })
+            )}
+          </div>
+          <footer className="footer-DeleteServicesModal">
+            <Button
+              onClick={handleClose}
+              sx={{
+                fontFamily: "Jost",
+                fontWeight: "bold",
+                letterSpacing: "1px",
+              }}
+            >
+              Descartar
+            </Button>
+            <Button
+              variant="contained"
+              sx={{
+                fontFamily: "Jost",
+                letterSpacing: "1px",
+              }}
+              disabled={servicesToDelete.length > 0 ? false : true}
+              onClick={handleDeleteCatSer}
+            >
+              Borrar
+            </Button>
+          </footer>
+        </div>
       </div>
     </Dialog>
   );
 };
 
 export default DeleteServicesModal;
-
-/* <label className="container-checkbox"> */
-/* <div
-    className="checkmark"
-   ></div>
-   </label> */
