@@ -169,6 +169,16 @@ const DeleteServicesModal = ({
       onClose={handleClose}
       aria-describedby="alert-dialog-description"
     >
+      {sm&&<div
+        style={{
+          width: "100%",
+          height: "100vh",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          backgroundColor: "var(--bg-color)",
+        }}
+      ></div>}
       <div className="container-dialog-DeleteServicesModal">
         <header className="header-DeleteServicesModal">
           <h1>Elimina categorias y/o servicios.</h1>
@@ -324,9 +334,11 @@ const DeleteServicesModal = ({
           </Button>
           <Button
             variant="contained"
+            color="error"
             sx={{
               fontFamily: "Jost",
               letterSpacing: "1px",
+              bgcolor: "var(--color-error)",
             }}
             disabled={servicesToDelete.length > 0 ? false : true}
             onClick={handleDeleteCatSer}

@@ -2,6 +2,7 @@
       position: relative;
       background-color: var(--bg-color);
       color: var(--text-color);
+      z-index: 1;
 }
 
 .header-DeleteServicesModal {
@@ -29,6 +30,7 @@
       flex-direction: column;
       justify-content: space-between;
       padding: 10px;
+
 }
 
 .div-category-DelServiceModal {
