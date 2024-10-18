@@ -190,9 +190,16 @@ const DeleteServicesModal = ({
             flexDirection: "column",
             justifyContent: "space-between",
             height: "100%",
+            marginBottom: sm ? "0px" : "60px",
           }}
         >
-          <div className="body-DeleteServicesModal">
+          <div
+            className="body-DeleteServicesModal"
+            style={{
+              overflowY: sm ? "" : "scroll",
+              maxHeight: sm ? "" : "400px",
+            }}
+          >
             {categoryServices.length < 1 ? (
               <span
                 style={{
@@ -300,30 +307,33 @@ const DeleteServicesModal = ({
               })
             )}
           </div>
-          <footer className="footer-DeleteServicesModal">
-            <Button
-              onClick={handleClose}
-              sx={{
-                fontFamily: "Jost",
-                fontWeight: "bold",
-                letterSpacing: "1px",
-              }}
-            >
-              Descartar
-            </Button>
-            <Button
-              variant="contained"
-              sx={{
-                fontFamily: "Jost",
-                letterSpacing: "1px",
-              }}
-              disabled={servicesToDelete.length > 0 ? false : true}
-              onClick={handleDeleteCatSer}
-            >
-              Borrar
-            </Button>
-          </footer>
         </div>
+        <footer
+          className="footer-DeleteServicesModal"
+          style={{ position: sm ? "fixed" : "absolute" }}
+        >
+          <Button
+            onClick={handleClose}
+            sx={{
+              fontFamily: "Jost",
+              fontWeight: "bold",
+              letterSpacing: "1px",
+            }}
+          >
+            Descartar
+          </Button>
+          <Button
+            variant="contained"
+            sx={{
+              fontFamily: "Jost",
+              letterSpacing: "1px",
+            }}
+            disabled={servicesToDelete.length > 0 ? false : true}
+            onClick={handleDeleteCatSer}
+          >
+            Borrar
+          </Button>
+        </footer>
       </div>
     </Dialog>
   );

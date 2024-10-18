@@ -26,6 +26,7 @@ const AuthProvider = ({ children }) => {
     status: 404,
     text: "No hemos encontrado la dirección que estás buscando.",
   });
+  const [noPhone, setNoPhone] = useState(false); // Estado para desplegar swal
   const [newPhoneNumber, setNewPhoneNumber] = useState(userData?.phone ?? "");
   const [inputTelError, setInputTelError] = useState(true);
   // Crear referencias para newPhoneNumber e inputTelError
@@ -54,6 +55,73 @@ const AuthProvider = ({ children }) => {
     fetchData();
   }, [refreshStatusSession]);
 
+  useEffect(() => {
+    if (noPhone) {
+      Swal.fire({
+        title: "Necesitamos tu número de teléfono por única vez.",
+        html: `
+        <div id="phone-input-container"></div>
+        <div id="phone-input-p-container">
+          <p class="text-p-swal">Para qué necesitamos tú número?</p>
+          <p>⏰ Para enviarte recordatorios.</p>
+          <p>🔄️ Para avisarte de algún cambio en tús turnos.</p>
+        </div>
+      `,
+        customClass: {
+          popup: "custom-swal-modal",
+          htmlContainer: "custom-swal-body",
+          confirmButton: "custom-confirm-button",
+        },
+        didOpen: () => {
+          const div = document.getElementById("phone-input-container");
+          ReactDOM.render(
+            <InputTel
+              newPhoneNumber={newPhoneNumber}
+              setNewPhoneNumber={(value) => {
+                setNewPhoneNumber(value);
+                phoneNumberRef.current = value; // Guardar en referencia
+              }}
+              setInputTelError={(error) => {
+                setInputTelError(error);
+                inputTelErrorRef.current = error; // Actualiza la referencia
+              }}
+            />,
+            div
+          );
+        },
+        confirmButtonText: "Guardar",
+        preConfirm: () => {
+          const currentPhoneNumber = phoneNumberRef.current; // Obtiene el valor actual de la referencia
+          const currentInputTelError = inputTelErrorRef.current;
+
+          if (currentPhoneNumber === "" || currentInputTelError !== "") {
+            Swal.showValidationMessage("El número ingresado no es válido.");
+            return false;
+          } else {
+            return currentPhoneNumber; // Devuelve el número si es válido
+          }
+        },
+        allowOutsideClick: false,
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          // Aquí manejas el número de teléfono ingresado
+          try {
+            const phoneNumber = result.value;
+            const res = await axios.put(`${VITE_BACKEND_URL}/users/update`, {
+              email: userData.email,
+              newPhoneNumber: phoneNumber,
+            });
+            setUserData(res.data);
+            toastAlert("Telefono guardado exitosamente!", "success");
+          } catch (error) {
+            toastAlert("Error al guardar el numero de teléfono.", "error");
+            console.error("Error al cambiar el numero de teléfono:", error);
+          }
+        }
+      });
+    }
+  }, [noPhone]);
+
   const googleLogin = useGoogleLogin({
     onSuccess: async (codeResponse) => {
       setUserIsReady(false);
@@ -69,68 +137,7 @@ const AuthProvider = ({ children }) => {
         return !prevStatusSession;
       });
       if (response.data.phone === "") {
-        Swal.fire({
-          title: "Necesitamos tu número de teléfono por única vez.",
-          html: `
-        <div id="phone-input-container"></div>
-        <div id="phone-input-p-container">
-          <p class="text-p-swal">Para qué necesitamos tú número?</p>
-          <p>⏰ Para enviarte recordatorios.</p>
-          <p>🔄️ Para avisarte de algún cambio en tús turnos.</p>
-        </div>
-      `,
-          customClass: {
-            popup: "custom-swal-modal",
-            htmlContainer: "custom-swal-body",
-            confirmButton: "custom-confirm-button",
-          },
-          didOpen: () => {
-            const div = document.getElementById("phone-input-container");
-            ReactDOM.render(
-              <InputTel
-                newPhoneNumber={newPhoneNumber}
-                setNewPhoneNumber={(value) => {
-                  setNewPhoneNumber(value);
-                  phoneNumberRef.current = value; // Guardar en referencia
-                }}
-                setInputTelError={(error) => {
-                  setInputTelError(error);
-                  inputTelErrorRef.current = error; // Actualiza la referencia
-                }}
-              />,
-              div
-            );
-          },
-          confirmButtonText: "Guardar",
-          preConfirm: () => {
-            const currentPhoneNumber = phoneNumberRef.current; // Obtiene el valor actual de la referencia
-            const currentInputTelError = inputTelErrorRef.current;
-
-            if (currentPhoneNumber === "" || currentInputTelError !== "") {
-              Swal.showValidationMessage("El número ingresado no es válido.");
-              return false;
-            } else {
-              return currentPhoneNumber; // Devuelve el número si es válido
-            }
-          },
-          allowOutsideClick: false,
-        }).then(async (result) => {
-          if (result.isConfirmed) {
-            // Aquí manejas el número de teléfono ingresado
-            try {
-              const phoneNumber = result.value;
-              const res = await axios.put(`${VITE_BACKEND_URL}/users/update`, {
-                email: response.data.email,
-                newPhoneNumber: phoneNumber,
-              });
-              setUserData(res.data);
-              toastAlert("Telefono guardado exitosamente!", "success");
-            } catch (error) {
-              toastAlert("Error al guardar el numero de teléfono.", "error");
-              console.error("Error al cambiar el numero de teléfono:", error);
-            }
-          }
-        });
+        setNoPhone(true);
       }
     },
     flow: "auth-code",

@@ -110,7 +110,6 @@ const CreateWorkDays = ({
       Swal.fire({
         title: "Antes de crear un día debes configurar tus servicios.",
         text: "🚨Ten en cuenta que debes tener al menos 1 servicio habilitado, sin pendientes.",
-        closeButtonHtml: true,
         showDenyButton: true,
         confirmButtonText: "Ir a mis servicios",
         denyButtonText: "Más tarde",
@@ -121,7 +120,7 @@ const CreateWorkDays = ({
           htmlContainer: "custom-swal-body",
           popup: "custom-swal-modal",
           actions: "swal2-actions",
-          confirmButton: "custom-confirm-button-error",
+          confirmButton: "custom-confirm-button",
           denyButton: "custom-deny-button",
           icon: "custom-icon-swal",
         },

@@ -571,7 +571,10 @@ const Turns = () => {
           </section>
           {turnsButtons.length > 0 ? (
             <section className="section-turnsbtns-turns">
-              <div style={{ marginBottom: "35px" }}>
+              <div style={{ marginTop: "5px" }}>
+                <span style={{ padding: "15px", fontSize: "18px" }}>
+                  Turno mañana
+                </span>
                 <div
                   style={{
                     display: "flex",
@@ -580,6 +583,7 @@ const Turns = () => {
                     gap: "8px",
                   }}
                 >
+                  {/* turno mañana */}
                   {turnsButtons.length > 0 &&
                     turnsButtons.map((btn, index) => {
                       if (btn.ini >= 720) return;
@@ -614,7 +618,13 @@ const Turns = () => {
                   margin: "0 auto",
                 }}
               />
-              <div style={{ margin: "35px 0px 0px 0px" }}>
+              {/* turno tarde */}
+
+              <div style={{ marginTop: "10px" }}>
+                <span style={{ padding: "15px", fontSize: "18px" }}>
+                  Turno tarde
+                </span>
+
                 <div
                   style={{
                     display: "flex",
@@ -625,7 +635,55 @@ const Turns = () => {
                 >
                   {turnsButtons.length > 0 &&
                     turnsButtons.map((btn, index) => {
-                      if (btn.ini < 720) return;
+                      if (btn.ini < 720 || btn.ini >= 1200) return;
+                      let dayInCart = false;
+                      let uniqueKey = `${dayIsSelected[0]}+${dayIsSelected[1]}+${serviceSelected.name}+${btn.ini}`;
+                      if (turnsCart.id === uniqueKey) {
+                        dayInCart = true;
+                      }
+                      return (
+                        <button
+                          key={index}
+                          style={{
+                            backgroundColor: dayInCart
+                              ? "var(--accent-color)"
+                              : "var(--color-disponibility)",
+                            pointerEvents: dayInCart ? "none" : "",
+                          }}
+                          className="turnsbtn-turns"
+                          onClick={() => handleSelectTime(btn)}
+                        >
+                          <span>{formatHour(btn.ini)}</span>
+                        </button>
+                      );
+                    })}
+                </div>
+              </div>
+              <hr
+                style={{
+                  border: "1px solid var(--bg-color-medium)",
+                  width: "95%",
+                  borderRadius: "10px",
+                  margin: "0 auto",
+                }}
+              />
+              {/* turno noche */}
+              <div style={{ margin: "10px 0px 0px 0px" }}>
+                <span style={{ padding: "15px", fontSize: "18px" }}>
+                  Turno noche
+                </span>
+
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    margin: "10px",
+                    gap: "8px",
+                  }}
+                >
+                  {turnsButtons.length > 0 &&
+                    turnsButtons.map((btn, index) => {
+                      if (btn.ini < 1200) return;
                       let dayInCart = false;
                       let uniqueKey = `${dayIsSelected[0]}+${dayIsSelected[1]}+${serviceSelected.name}+${btn.ini}`;
                       if (turnsCart.id === uniqueKey) {

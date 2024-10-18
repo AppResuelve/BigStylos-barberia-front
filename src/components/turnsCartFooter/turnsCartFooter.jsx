@@ -96,50 +96,50 @@ const TurnsCartFooter = () => {
 
   const handleBuy = async () => {
     let formattedTurn = { ...turnsCart };
-    let userConfirmed = true; // Variable para confirmar si se ingresó un nombre válido
+    // let userConfirmed = true; // Variable para confirmar si se ingresó un nombre válido
     let phoneConfirmed = true; // Variable para confirmar si se ingresó un telefono válido
-    if (userData.worker || userData.admin) {
-      const { isConfirmed, value } = await Swal.fire({
-        title: "Ingresa el nombre de tu cliente.",
-        input: "text", // Cambiado a "text" para nombre
-        inputPlaceholder: "Ej: Esteban Quito.",
-        inputAttributes: {
-          maxlength: 30, // Ajuste de longitud para un nombre
-          pattern: "^[a-zA-ZÀ-ÿ\\s]{1,30}$", // Validación de letras y espacios
-          required: true, // Campo obligatorio
-        },
-        showConfirmButton: true,
-        showDenyButton: true,
-        confirmButtonText: "Agendar",
-        denyButtonText: "Cancelar",
-        reverseButtons: true,
-        backdrop: `rgba(0,0,0,0.8)`,
-        customClass: {
-          popup: "custom-swal-modal",
-          actions: "swal2-actions",
-          htmlContainer: "custom-swal-body",
-          confirmButton: "custom-confirm-button",
-          denyButton: "custom-deny-button",
-        },
-        preConfirm: (value) => {
-          if (!value) {
-            Swal.showValidationMessage("Por favor, ingresa un nombre.");
-          } else if (!/^[a-zA-ZÀ-ÿ\s]{1,30}$/.test(value)) {
-            Swal.showValidationMessage("El nombre ingresado no es válido.");
-          } else {
-            return value; // Devuelve el nombre si es válido
-          }
-        },
-        allowOutsideClick: false, // Evita cerrar el modal al hacer clic fuera de él
-      });
+    // if (userData.worker || userData.admin) {
+    //   const { isConfirmed, value } = await Swal.fire({
+    //     title: "Ingresa el nombre de tu cliente.",
+    //     input: "text", // Cambiado a "text" para nombre
+    //     inputPlaceholder: "Ej: Esteban Quito.",
+    //     inputAttributes: {
+    //       maxlength: 30, // Ajuste de longitud para un nombre
+    //       pattern: "^[a-zA-ZÀ-ÿ\\s]{1,30}$", // Validación de letras y espacios
+    //       required: true, // Campo obligatorio
+    //     },
+    //     showConfirmButton: true,
+    //     showDenyButton: true,
+    //     confirmButtonText: "Agendar",
+    //     denyButtonText: "Cancelar",
+    //     reverseButtons: true,
+    //     backdrop: `rgba(0,0,0,0.8)`,
+    //     customClass: {
+    //       popup: "custom-swal-modal",
+    //       actions: "swal2-actions",
+    //       htmlContainer: "custom-swal-body",
+    //       confirmButton: "custom-confirm-button",
+    //       denyButton: "custom-deny-button",
+    //     },
+    //     preConfirm: (value) => {
+    //       if (!value) {
+    //         Swal.showValidationMessage("Por favor, ingresa un nombre.");
+    //       } else if (!/^[a-zA-ZÀ-ÿ\s]{1,30}$/.test(value)) {
+    //         Swal.showValidationMessage("El nombre ingresado no es válido.");
+    //       } else {
+    //         return value; // Devuelve el nombre si es válido
+    //       }
+    //     },
+    //     allowOutsideClick: false, // Evita cerrar el modal al hacer clic fuera de él
+    //   });
 
-      if (isConfirmed) {
-        formattedTurn.user = value;
-      } else {
-        userConfirmed = false; // El usuario no confirmó o canceló el modal
-      }
-    }
-    if (!userConfirmed) return; // Si no se confirmó el nombre, detener el proceso
+    //   if (isConfirmed) {
+    //     formattedTurn.user = value;
+    //   } else {
+    //     userConfirmed = false; // El usuario no confirmó o canceló el modal
+    //   }
+    // }
+    // if (!userConfirmed) return; // Si no se confirmó el nombre, detener el proceso
     if (userData.phone == "") {
       const { isConfirmed, value } = await Swal.fire({
         title: "Necesitamos tu número de teléfono por única vez.",

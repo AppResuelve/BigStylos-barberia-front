@@ -250,7 +250,6 @@ const Services = ({ setRefreshServices, loadingServices, services }) => {
         flexDirection: "column",
       }}
     >
-      <LoaderLinearProgress loadingServices={loadingServices} />
       <div
         style={{
           display: "flex",

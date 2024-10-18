@@ -7,8 +7,8 @@ import AdminAcordeon from "./adminAcordeon";
 import { AdminWorkerSkeleton } from "../loaders/skeletons";
 
 const Admin = () => {
-  const { darkMode } = useContext(ThemeContext);
   const { userData } = useContext(AuthContext);
+  const { darkMode } = useContext(ThemeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const navigate = useNavigate();
 

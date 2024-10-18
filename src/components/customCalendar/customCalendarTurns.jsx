@@ -69,7 +69,7 @@ const CustomCalendarTurns = ({
         display: "flex",
         backgroundColor: "var(--bg-color-secondary)",
         borderRadius: "20px",
-        padding:"6px",
+        padding: "6px",
       }}
     >
       <div className="div-container-calendar">
@@ -161,7 +161,7 @@ const CustomCalendarTurns = ({
                   color: disable ? "white" : "white",
 
                   fontSize:
-                    days[currentMonth] && days[currentMonth][day] ? "22px" : "",
+                    days[nextMonth] && days[nextMonth][day] ? "22px" : "",
                   cursor: disable ? "" : "pointer",
                 }}
               >

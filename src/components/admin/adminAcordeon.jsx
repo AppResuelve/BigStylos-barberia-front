@@ -20,6 +20,7 @@ import CancelledTurnsForAdmin from "../cancelledTurnsForAdmin/cancelledTurnsForA
 import Swal from "sweetalert2";
 import "./admin.css";
 import axios from "axios";
+import { LoaderLinearProgress } from "../loaders/loaders";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -30,7 +31,10 @@ const AdminAcordeon = () => {
   const [refresh, setRefresh] = useState(false);
   const [refreshServices, setRefreshServices] = useState(false);
   const [remaining, setRemaining] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState({
+    services: true,
+    schedule: true,
+  });
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [changeNoSaved, setChangeNoSaved] = useState({}); //estado para alertar cuando hay cambios sin guardar en cualquiera de los componentes
   const [services, setServices] = useState({});
@@ -39,11 +43,14 @@ const AdminAcordeon = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading((prevState) => ({ ...prevState, services: true })); // Empieza la carga de services
         const response = await axios.get(`${VITE_BACKEND_URL}/services`);
         const { data } = response;
-        setServices(data);
+        setServices(data); // Setea los servicios obtenidos
+        setLoading((prevState) => ({ ...prevState, services: false })); // Termina la carga de services
       } catch (error) {
         console.error("Error al obtener los servicios:", error);
+        setLoading((prevState) => ({ ...prevState, services: false }));
       }
     };
     fetchData();
@@ -52,13 +59,15 @@ const AdminAcordeon = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading((prevState) => ({ ...prevState, schedule: true })); // Empieza la carga de schedule
         const response = await axios.get(`${VITE_BACKEND_URL}/schedule`);
         const { data } = response;
         setSchedule(data.businessSchedule);
-        setLoading(false);
+        setLoading((prevState) => ({ ...prevState, schedule: false }));
       } catch (error) {
         console.error("Error al obtener los horarios", error);
         alert("Error al obtener los horarios");
+        setLoading((prevState) => ({ ...prevState, schedule: false }));
       }
     };
     fetchData();
@@ -139,13 +148,15 @@ const AdminAcordeon = () => {
           <h2 style={{ color: "var(--text-color)" }}>Categorias y servicios</h2>
         </AccordionSummary>
         <AccordionDetails>
-          <Services
-            services={services}
-            refreshServices={refreshServices}
-            setRefreshServices={setRefreshServices}
-            // loadingServices={loadingServices}
-            // setLoadingServices={setLoadingServices}
-          />
+          {loading.services ? (
+            <LoaderLinearProgress loadingServices={loading.services} />
+          ) : (
+            <Services
+              services={services}
+              refreshServices={refreshServices}
+              setRefreshServices={setRefreshServices}
+            />
+          )}
         </AccordionDetails>
       </Accordion>
       {/* ********************************************************************************************************* */}
@@ -181,7 +192,9 @@ const AdminAcordeon = () => {
           <h2 style={{ color: "var(--text-color)" }}>Dias laborales</h2>
         </AccordionSummary>
         <AccordionDetails>
-          {Object.keys(schedule).length > 0 && !loading ? (
+          {loading.schedule ? (
+            <LoaderLinearProgress loadingServices={loading.schedule} />
+          ) : (
             <WorkDays
               schedule={schedule}
               setSchedule={setSchedule}
@@ -189,8 +202,6 @@ const AdminAcordeon = () => {
               setRefresh={setRefresh}
               setChangeNoSaved={setChangeNoSaved}
             />
-          ) : (
-            <LinearProgress sx={{ height: "2px", marginBottom: "15px" }} />
           )}
         </AccordionDetails>
       </Accordion>
@@ -239,7 +250,9 @@ const AdminAcordeon = () => {
           </Box>
         </AccordionSummary>
         <AccordionDetails>
-          {Object.keys(schedule).length > 0 && !loading ? (
+          {loading.schedule ? (
+            <LoaderLinearProgress loadingServices={loading.schedule} />
+          ) : (
             <OpeningAndClosing
               schedule={schedule}
               setSchedule={setSchedule}
@@ -247,8 +260,6 @@ const AdminAcordeon = () => {
               setRefresh={setRefresh}
               setRemaining={setRemaining}
             />
-          ) : (
-            <LinearProgress sx={{ height: "2px", marginBottom: "15px" }} />
           )}
         </AccordionDetails>
       </Accordion>
@@ -285,15 +296,15 @@ const AdminAcordeon = () => {
           <h2 style={{ color: "var(--text-color)" }}>Cierre programado</h2>
         </AccordionSummary>
         <AccordionDetails sx={{ p: 1 }}>
-          {Object.keys(schedule).length > 0 && !loading ? (
+          {loading.schedule ? (
+            <LoaderLinearProgress loadingServices={loading.schedule} />
+          ) : (
             <PlannedClosure
               schedule={schedule}
               setSchedule={setSchedule}
               refresh={refresh}
               setRefresh={setRefresh}
             />
-          ) : (
-            <LinearProgress sx={{ height: "2px", marginBottom: "15px" }} />
           )}
         </AccordionDetails>
       </Accordion>
@@ -369,13 +380,16 @@ const AdminAcordeon = () => {
           <h2 style={{ color: "var(--text-color)" }}>Personalización</h2>
         </AccordionSummary>
         <AccordionDetails>
-          <Personalization
-            services={services}
-            refreshServices={refreshServices}
-            setRefreshServices={setRefreshServices}
-            changeNoSaved={changeNoSaved}
-            setChangeNoSaved={setChangeNoSaved}
-          />
+          {loading.services ? (
+            <LoaderLinearProgress loadingServices={loading.services} />
+          ) : (
+            <Personalization
+              services={services}
+              refreshServices={refreshServices}
+              setRefreshServices={setRefreshServices}
+              changeNoSaved={changeNoSaved}
+              setChangeNoSaved={setChangeNoSaved}
+            />)}
         </AccordionDetails>
       </Accordion>
       {/* ********************************************************************************************************* */}
@@ -411,7 +425,7 @@ const AdminAcordeon = () => {
         >
           <h2 style={{ color: "var(--text-color)" }}>Agenda de turnos</h2>
         </AccordionSummary>
-        <AccordionDetails>
+        <AccordionDetails sx={{ p: 0 }}>
           <WhoIsComingAdmin refreshWhoIsComing={refreshWhoIsComing} />
         </AccordionDetails>
       </Accordion>
