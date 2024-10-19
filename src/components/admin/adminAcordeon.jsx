@@ -389,7 +389,8 @@ const AdminAcordeon = () => {
               setRefreshServices={setRefreshServices}
               changeNoSaved={changeNoSaved}
               setChangeNoSaved={setChangeNoSaved}
-            />)}
+            />
+          )}
         </AccordionDetails>
       </Accordion>
       {/* ********************************************************************************************************* */}
@@ -461,11 +462,10 @@ const AdminAcordeon = () => {
         >
           <h2 style={{ color: "var(--text-color)" }}>Turnos cancelados</h2>
         </AccordionSummary>
-        <AccordionDetails>
+        <AccordionDetails sx={{ p: 0 }}>
           <CancelledTurnsForAdmin refreshWhoIsComing={refreshWhoIsComing} />
         </AccordionDetails>
       </Accordion>
-      {/* ********************************************************************************************************* */}
     </div>
   );
 };

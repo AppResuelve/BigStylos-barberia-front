@@ -27,7 +27,6 @@ const CustomCalendarPlannedC = ({
   const getDayPosition = getToday() + 1;
   const [hasTurnInSelectedDay, setHasTurnInSelectedDay] = useState(false);
 
-  console.log(days, "-------days")
 
 
   const handleDay = (day, month) => {

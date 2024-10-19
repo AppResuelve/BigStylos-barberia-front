@@ -1,7 +1,10 @@
 import { useEffect, useState, useContext } from "react";
 import ThemeContext from "../../context/ThemeContext";
 import { Button, Box, Typography } from "@mui/material";
+import { LoaderUserReady } from "../loaders/loaders";
 import { WhatsApp } from "@mui/icons-material";
+import noUserImg from "../../assets/icons/noUser.png";
+import formatHour from "../../functions/formatHour";
 import axios from "axios";
 import "../cancelledTurnsForAdmin/cancelledTurns.css";
 
@@ -12,22 +15,23 @@ const CancelledTurnsForWorker = ({ userData, refreshWhoIsComing }) => {
   const [selectedDay, setSelectedDay] = useState("");
   const [cancelledTurnsByDays, setCancelledTurnsByDays] = useState([]);
   const [count, setCount] = useState([]);
-
-  console.log(count, "count --------")
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchCount = async () => {
+      setIsLoading(true);
+
       try {
         const response = await axios.post(
           `${VITE_BACKEND_URL}/cancelledturns/getcount`,
           { emailWorker: userData.email }
         );
-        const { data } = response;
-        setCount(data);
-        setSelectedDay(data[0]?.day); // Usa el primer día si está disponible
+        setCount(response.data);
+        setSelectedDay(response.data[0]); // Usa el primer día si está disponible
       } catch (error) {
         console.error("Error al obtener el count.", error);
       }
+      setIsLoading(false);
     };
     fetchCount();
   }, [refreshWhoIsComing]);
@@ -55,152 +59,236 @@ const CancelledTurnsForWorker = ({ userData, refreshWhoIsComing }) => {
   };
 
   return (
-    <div>
+    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
       <hr
         style={{
-          marginBottom: "15px",
+          margin: "10px auto 0px auto",
           border: "none",
           height: "2px",
-          backgroundColor: "#2196f3",
+          backgroundColor: "var(--accent-color)",
+          width: "95%",
         }}
       />
-      <Box
-        className="box-container-ctfw"
+      <div
         style={{
-          overflow: "scroll",
-          marginBottom: "20px",
+          display: "flex",
+          width: "100%",
+          height: "50px",
+          overflow: "auto",
+          backgroundColor: count.length < 1 ? "var(--accent-color)" : "",
+          borderRadius: "12px",
         }}
       >
-        <Box
-          style={{
-            display: "flex",
-            width: "100%",
-            maxWidth: "900px",
-            overflow: "auto",
-          }}
-        >
-          {count.length > 0 ? (
-            count.map((element, index) => (
+        {isLoading ? (
+          <div
+            style={{
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              margin: "0 auto",
+            }}
+          >
+            <LoaderUserReady />
+          </div>
+        ) : count.length > 0 ? (
+          count.map((element, index) => {
+            const isSelected = selectedDay === element;
+            return (
               <Button
                 variant="contained"
                 key={index}
                 style={{
-                  backgroundColor: selectedDay === element.day && darkMode.on ? "white" : selectedDay === element.day ? "black" : "",
-                  color: selectedDay === element.day && darkMode.on ? "black" : "white",
+                  backgroundColor: isSelected
+                    ? "var(--accent-color)"
+                    : "var(--color-disponibility)",
+                  color: "white",
                   margin: "5px",
                   fontFamily: "Jost, sans-serif",
                   fontWeight: "bold",
+                  letterSpacing: "1.5px",
+                  height: "40px",
+                  borderRadius: "10px",
+                  minWidth: "60px",
+                  maxWidth: "60px",
                 }}
                 onClick={() => handleChangeDay(element)}
               >
                 {element}
               </Button>
-            ))
-          ) : (
-            <Typography
-              variant="h6"
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                padding: "10px",
-                color: darkMode.on ? "white" : darkMode.dark,
-              }}
-            >
-              Todavía no tienes días
-            </Typography>
-          )}
-        </Box>
-      </Box>
-      <Box
-        className="box-container-ctfw"
-        sx={{
-          width: "100%",
-          overflow: "scroll",
-        }}
-      >
-        <Box style={{ overflow: "scroll", maxHeight: "350px" }}>
-          {cancelledTurnsByDays.length > 0 ? (
-            cancelledTurnsByDays.map((element, index) => (
-              <Box key={index}>
-                {index === 0 && (
-                  <Box>
-                    <Box
-                      style={{
-                        display: "flex",
-                        color: darkMode.on ? "white" : darkMode.dark,
-                      }}
-                    >
-                      <Typography variant="h6" className="h-email-ctfw">Email</Typography>
-                      <hr />
-                      <Typography variant="h6" className="h-whocancelled-ctfw">¿Quién canceló?</Typography>
-                      <hr />
-                      <Typography variant="h6" className="h-phone-ctfw">Celular</Typography>
-                      <hr />
-                      <Typography variant="h6" className="h-day-ctfw">Día</Typography>
-                    </Box>
-                    <hr className="hr-ctfw" />
-                  </Box>
-                )}
-                <Box
+            );
+          })
+        ) : (
+          <span
+            style={{
+              display: "flex",
+              height: "40px",
+              margin: "0 auto",
+              alignItems: "center",
+              color: "white",
+              fontSize: "18px",
+            }}
+          >
+            No tienes días creados
+          </span>
+        )}
+      </div>
+      {cancelledTurnsByDays.length > 0 ? (
+        <div
+          style={{
+            width: "100%",
+            overflow: "scroll",
+            maxHeight: "350px",
+            backgroundColor: "var(--bg-color)",
+            borderRadius: "10px",
+          }}
+        >
+          <table>
+            <thead style={{ pointerEvents: "none" }}>
+              <tr>
+                <th style={{ maxWidth: "180px" }}>Usuario que canceló</th>
+                <th
                   style={{
-                    display: "flex",
-                    color: darkMode.on ? "white" : darkMode.dark,
+                    minWidth: "180px",
                   }}
                 >
-                  <Typography variant="body1" className="h-email-ctfw">{element.email}</Typography>
-                  <hr />
-                  <Typography variant="body1" className="h-whocancelled-ctfw">{element.howCancelled}</Typography>
-                  <hr />
-                  <Box className={darkMode.on ? "h-phone-ctfw-dark" : "h-phone-ctfw"}>
-                    {element.phone !== "no requerido" ? (
+                  Profesional
+                </th>
+                <th
+                  style={{
+                    minWidth: "120px",
+                  }}
+                >
+                  Horario
+                </th>
+                <th
+                  style={{
+                    minWidth: "160px",
+                  }}
+                >
+                  Celular
+                </th>
+                <th
+                  style={{
+                    minWidth: "180px",
+                  }}
+                >
+                  Email Usuario
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {cancelledTurnsByDays.map((turn, index) => (
+                <tr key={index}>
+                  <td
+                    style={{
+                      maxWidth: "250px",
+                      overflowX: "hidden",
+                      padding: 0,
+                      border: "none",
+                    }}
+                  >
+                    <td
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                      }}
+                    >
+                      <img
+                        src={turn.image ? turn.image : noUserImg}
+                        alt="Profile"
+                        style={{
+                          width: "30px",
+                          borderRadius: "50px",
+                          filter: turn.image ? "" : "var(--filter-invert)",
+                        }}
+                      />
+                      <span>{turn.howCancelled}</span>
+                    </td>
+                  </td>
+                  <td
+                    style={{
+                      maxWidth: "250px",
+                      overflowX: "hidden",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                    }}
+                  >
+                    <img
+                      src={turn.image ? turn.image : noUserImg}
+                      alt="Profile"
+                      style={{
+                        width: "30px",
+                        borderRadius: "50px",
+                        filter: turn.image ? "" : "var(--filter-invert)",
+                      }}
+                    />
+                    <span>{turn.nameWorker}</span>
+                  </td>
+                  <td
+                    style={{
+                      maxWidth: "180px",
+                      overflowX: "hidden",
+                    }}
+                  >{`${formatHour(turn.turn.ini)} - ${formatHour(
+                    turn.turn.end
+                  )}`}</td>
+                  <td
+                    style={{
+                      maxWidth: "180px",
+                      overflowX: "hidden",
+                    }}
+                  >
+                    {turn.phone !== "no requerido" ? (
                       <a
-                        href={`whatsapp://send?phone=${element.phone}&text=Su turno para la barbería ha sido cancelado, por favor realice una nueva reserva.`}
+                        href={`whatsapp://send?phone=${turn.phone}&text=Recuerda que tienes reserva en la barbería, revisa en la página, sección "Mis Turnos".`}
                         target="_blank"
                         rel="noopener noreferrer"
                         style={{ textDecoration: "none" }}
                       >
-                        <Button
-                          className={element.phone === "no requerido" ? "btn-wsp-ctfw-false" : "btn-wsp-ctfw"}
-                          style={{
-                            fontFamily: "Jost, sans-serif",
-                            fontWeight: "bold",
-                            border: "none",
-                            cursor: "pointer",
-                            width: "100%",
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                          }}
-                        >
-                          <Typography variant="body1">{element.phone}</Typography>
+                        <button className="btn-wsp-ctfw">
                           <WhatsApp color="success" />
-                        </Button>
+                          <span>{turn.phone}</span>
+                        </button>
                       </a>
                     ) : (
-                      <Typography variant="body1">{element.phone}</Typography>
+                      turn.phone
                     )}
-                  </Box>
-                  <hr />
-                  <Typography variant="body1" className="h-day-ctfw">{selectedDay}</Typography>
-                </Box>
-                <hr className="hr-ctfw" />
-              </Box>
-            ))
-          ) : (
-            <Typography
-              variant="body1"
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                padding: "10px",
-                color: darkMode.on ? "white" : darkMode.dark,
-              }}
-            >
-              No hay turnos cancelados para este día.
-            </Typography>
-          )}
-        </Box>
-      </Box>
+                  </td>
+                  <td
+                    style={{
+                      maxWidth: "220px",
+                      overflowX: "hidden",
+                    }}
+                  >
+                    {turn.emailUser}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        selectedDay !== "" && (
+          <span
+            style={{
+              display: "flex",
+              margin: "0 auto",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+              backgroundColor: "var(--accent-color)",
+              borderRadius: "12px",
+              height: "40px",
+              color: "white",
+              fontSize: "18px",
+            }}
+          >
+            No hay turnos para este día
+          </span>
+        )
+      )}
     </div>
   );
 };

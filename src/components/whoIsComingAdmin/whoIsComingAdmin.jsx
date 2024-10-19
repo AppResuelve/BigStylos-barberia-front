@@ -2,7 +2,6 @@ import { useEffect, useState, useContext } from "react";
 import ThemeContext from "../../context/ThemeContext";
 import {
   Button,
-  Box,
   Accordion,
   AccordionSummary,
   AccordionDetails,
@@ -11,10 +10,10 @@ import { WhatsApp } from "@mui/icons-material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import noUserImg from "../../assets/icons/noUser.png";
 import formatHour from "../../functions/formatHour";
-import axios from "axios";
-import "./whoIsComing.css";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { LoaderUserReady } from "../loaders/loaders";
+import axios from "axios";
+import "./whoIsComing.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -31,11 +30,10 @@ const WhoIsComingAdmin = ({ refreshWhoIsComing }) => {
   });
   const [turns, setTurns] = useState([]);
   const [count, setCount] = useState([]);
-  const [expanded, setExpanded] = useState("");
+  const [expanded, setExpanded] = useState("accordion");
   const { sm } = useMediaQueryHook();
   const [isLoading, setIsLoading] = useState(false);
 
-  // Fetch workers data
   useEffect(() => {
     const fetchWorkers = async () => {
       try {
@@ -50,7 +48,6 @@ const WhoIsComingAdmin = ({ refreshWhoIsComing }) => {
     fetchWorkers();
   }, [refreshWhoIsComing]);
 
-  // Fetch count of available days for the selected worker
   useEffect(() => {
     const fetchCount = async () => {
       if (Object.keys(selectedWorker).length > 0) {
@@ -113,7 +110,6 @@ const WhoIsComingAdmin = ({ refreshWhoIsComing }) => {
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
-  console.log(isLoading);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
@@ -122,7 +118,7 @@ const WhoIsComingAdmin = ({ refreshWhoIsComing }) => {
           margin: "10px auto 0px auto",
           border: "none",
           height: "2px",
-          backgroundColor: "#2196f3",
+          backgroundColor: "var(--accent-color)",
           width: "95%",
         }}
       />
@@ -209,6 +205,7 @@ const WhoIsComingAdmin = ({ refreshWhoIsComing }) => {
         style={{
           display: "flex",
           width: "100%",
+          height: "50px",
           overflow: "auto",
           backgroundColor:
             count.length < 1 && Object.keys(selectedWorker).length > 0
@@ -218,7 +215,16 @@ const WhoIsComingAdmin = ({ refreshWhoIsComing }) => {
         }}
       >
         {isLoading ? (
-          <LoaderUserReady />
+          <div
+            style={{
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              margin: "0 auto",
+            }}
+          >
+            <LoaderUserReady />
+          </div>
         ) : count.length > 0 ? (
           count.map((element, index) => {
             const isSelected = selectedDay === element.day;
@@ -308,85 +314,106 @@ const WhoIsComingAdmin = ({ refreshWhoIsComing }) => {
             borderRadius: "10px",
           }}
         >
-          <Box
-            style={{
-              display: "flex",
-              color: darkMode.on ? "white" : darkMode.dark,
-            }}
-          >
-            <h3 className="h-name-hic">Nombre</h3>
-            <hr />
-            <h3 className="h-time-hic">Horario</h3>
-            <hr />
-            <h3 className="h-phone-hic">Celular</h3>
-            <hr />
-            <h3 className="h-email-hic">Email</h3>
-          </Box>
-          <hr className="hr-hic" />
-          {turns.map((turn, index) => (
-            <Box key={index}>
-              <Box
-                style={{
-                  display: "flex",
-                }}
-              >
-                <div
-                  className="h-name-hic"
+          <table>
+            <thead style={{ pointerEvents: "none" }}>
+              <tr>
+                <th style={{ minWidth: "200px", maxWidth: "210px" }}>
+                  Cliente
+                </th>
+                <th
                   style={{
-                    display: "flex",
-                    // justifyContent: "space-between",
-                    alignItems: "center",
-                    gap: "10px",
+                    minWidth: "120px",
                   }}
                 >
-                  <img
-                    src={turn.image ? turn.image : noUserImg}
-                    alt="Profile"
-                    style={{
-                      width: "30px",
-                      borderRadius: "50px",
-                    }}
-                  />
-                  <span>{turn.name}</span>
-                </div>
-                <hr />
-                <span className="h-time-hic">
-                  {`${formatHour(turn.ini)} - ${formatHour(turn.end)}`}
-                </span>
-                <hr />
-                <div
-                  className={darkMode.on ? "h-phone-hic-dark" : "h-phone-hic"}
+                  Horario
+                </th>
+
+                <th
+                  style={{
+                    minWidth: "160px",
+                  }}
                 >
-                  {turn.phone ? (
-                    <a
-                      href={`whatsapp://send?phone=${turn.phone}&text=Recuerda que tienes reserva en la barbería, revisa en la página, sección "Mis Turnos".`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ textDecoration: "none" }}
+                  Celular
+                </th>
+                <th
+                  style={{
+                    minWidth: "180px",
+                  }}
+                >
+                  Email
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {turns.map((turn, index) => (
+                <tr key={index}>
+                  <td
+                    style={{
+                      maxWidth: "200px",
+                      overflowX: "hidden",
+                      padding: 0,
+                      border: "none",
+                    }}
+                  >
+                    <td
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                      }}
                     >
-                      <button
-                        className={
-                          turn.phone === "no requerido"
-                            ? "btn-wsp-ctfw-false"
-                            : "btn-wsp-ctfw"
-                        }
+                      <img
+                        src={turn.image ? turn.image : noUserImg}
+                        alt="Profile"
+                        style={{
+                          width: "30px",
+                          borderRadius: "50px",
+                          filter: turn.image ? "" : "var(--filter-invert)",
+                        }}
+                      />
+                      <span>{turn.name}</span>
+                    </td>
+                  </td>
+                  <td
+                    style={{
+                      maxWidth: "180px",
+                      overflowX: "hidden",
+                    }}
+                  >{`${formatHour(turn.ini)} - ${formatHour(turn.end)}`}</td>
+                  <td
+                    style={{
+                      maxWidth: "180px",
+                      overflowX: "hidden",
+                    }}
+                  >
+                    {turn.phone !== "no requerido" ? (
+                      <a
+                        href={`whatsapp://send?phone=${turn.phone}&text=Recuerda que tienes reserva en la barbería, revisa en la página, sección "Mis Turnos".`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ textDecoration: "none" }}
                       >
-                        {turn.phone !== "no requerido" && (
+                        <button className="btn-wsp-ctfw">
                           <WhatsApp color="success" />
-                        )}
-                        <span>{turn.phone}</span>
-                      </button>
-                    </a>
-                  ) : (
-                    <span>No disponible</span>
-                  )}
-                </div>
-                <hr />
-                <span className="h-email-hic">{turn.email}</span>
-              </Box>
-              <hr className="hr-hic" />
-            </Box>
-          ))}
+                          <span>{turn.phone}</span>
+                        </button>
+                      </a>
+                    ) : (
+                      turn.phone
+                    )}
+                  </td>
+                  <td
+                    style={{
+                      maxWidth: "220px",
+                      overflowX: "hidden",
+                    }}
+                  >
+                    {turn.email}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       ) : (
         selectedDay !== "" && (

@@ -280,7 +280,7 @@ const WorkerAcordeon = ({ userData }) => {
           >
             <h2 style={{ color: "var(--text-color)" }}>Agenda de turnos</h2>
           </AccordionSummary>
-          <AccordionDetails>
+          <AccordionDetails sx={{ p: 0 }}>
             <WhoIsComingWorker
               userData={userData}
               refreshWhoIsComing={refreshWhoIsComing}
@@ -320,7 +320,7 @@ const WorkerAcordeon = ({ userData }) => {
           >
             <h2 style={{ color: "var(--text-color)" }}>Turnos cancelados</h2>
           </AccordionSummary>
-          <AccordionDetails>
+          <AccordionDetails sx={{ p: 0 }}>
             <CancelledTurnsForWorker userData={userData} />
           </AccordionDetails>
         </Accordion>

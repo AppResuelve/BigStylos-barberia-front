@@ -91,7 +91,6 @@ const PlannedClosure = ({ schedule }) => {
               }
             );
             toastAlert("Día deshabilitado exitosamente.", "success");
-            console.log('deshabilitando')
             handleCancel();
             setRefresh(!refresh);
           } catch (error) {
@@ -136,7 +135,6 @@ const PlannedClosure = ({ schedule }) => {
       }
     }
   };
-  console.log(dayIsSelected);
 
   return (
     <div>

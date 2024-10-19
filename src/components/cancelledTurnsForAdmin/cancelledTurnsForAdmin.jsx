@@ -1,7 +1,17 @@
 import { useEffect, useState, useContext } from "react";
 import ThemeContext from "../../context/ThemeContext";
-import { Button, Box } from "@mui/material";
+import {
+  Button,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { WhatsApp } from "@mui/icons-material";
+import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
+import { LoaderUserReady } from "../loaders/loaders";
+import noUserImg from "../../assets/icons/noUser.png";
+import formatHour from "../../functions/formatHour";
 import axios from "axios";
 import "./cancelledTurns.css";
 
@@ -10,12 +20,13 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const CancelledTurnsForAdmin = ({ refreshWhoIsComing }) => {
   const { darkMode } = useContext(ThemeContext);
   const [workers, setWorkers] = useState([]);
-  const [selectedWorker, setSelectedWorker] = useState("");
+  const [selectedWorker, setSelectedWorker] = useState({});
   const [selectedDay, setSelectedDay] = useState("");
   const [cancelledTurnsByDays, setCancelledTurnsByDays] = useState([]);
   const [count, setCount] = useState([]);
-  // const date = new Date();
-  // const currentDay = date.getDate();
+  const [expanded, setExpanded] = useState("accordion");
+  const { sm } = useMediaQueryHook();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchWorkers = async () => {
@@ -34,15 +45,17 @@ const CancelledTurnsForAdmin = ({ refreshWhoIsComing }) => {
 
   useEffect(() => {
     const fetchCount = async () => {
-      if (selectedWorker) {
+      if (Object.keys(selectedWorker).length > 0) {
+        setIsLoading(true);
         try {
           const response = await axios.post(
             `${VITE_BACKEND_URL}/cancelledturns/getcount`,
-            { emailWorker: selectedWorker }
+            { emailWorker: selectedWorker.email }
           );
           setCount(response.data);
           setSelectedDay(""); // Reset selected day
           setCancelledTurnsByDays([]); // Clear turns when changing worker
+          setIsLoading(false);
         } catch (error) {
           console.error("Error fetching count.", error);
         }
@@ -53,12 +66,16 @@ const CancelledTurnsForAdmin = ({ refreshWhoIsComing }) => {
 
   useEffect(() => {
     const fetchCancelledTurns = async () => {
-      if (selectedDay) {
+      if (selectedDay !== "") {
         const [numberDay, numberMonth] = selectedDay.split("/").map(Number);
         try {
           const response = await axios.post(
             `${VITE_BACKEND_URL}/cancelledturns/getforworker`,
-            { emailWorker: selectedWorker, month: numberMonth, day: numberDay }
+            {
+              emailWorker: selectedWorker.email,
+              month: numberMonth,
+              day: numberDay,
+            }
           );
           setCancelledTurnsByDays(response.data);
         } catch (error) {
@@ -69,197 +86,349 @@ const CancelledTurnsForAdmin = ({ refreshWhoIsComing }) => {
     fetchCancelledTurns();
   }, [selectedDay, selectedWorker]);
 
-  const handleChangeWorker = (email) => {
-    setSelectedWorker(email);
+  const handleChangeWorker = (worker) => {
+    setSelectedWorker(worker);
+    setExpanded("");
   };
 
   const handleChangeDay = (element) => {
     setSelectedDay(element);
+    setExpanded("");
+  };
+
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
   };
 
   return (
-    <div>
+    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
       <hr
         style={{
-          marginBottom: "15px",
+          margin: "10px auto 0px auto",
           border: "none",
           height: "2px",
-          backgroundColor: "#2196f3",
+          backgroundColor: "var(--accent-color)",
+          width: "95%",
         }}
       />
-      <Box
-        className="box-container-ctfw"
+
+      <Accordion
         style={{
-          overFlow: "scroll",
-          marginBottom: "20px",
+          width: "100%",
+          borderRadius: "20px",
+          boxShadow: "0px 5px 10px -5px rgba(0,0,0,0.50)",
+          backgroundColor: "var(--bg-color)",
+          padding: "4px",
+        }}
+        expanded={expanded === "accordion"}
+        onChange={handleChange("accordion")}
+      >
+        <AccordionSummary
+          style={{
+            borderRadius: "20px",
+            backgroundColor:
+              expanded === "accordion"
+                ? "var( --bg-color-hover)"
+                : "var(--transparent)",
+          }}
+          expandIcon={
+            <ExpandMoreIcon
+              fontSize="large"
+              sx={{
+                color:
+                  expanded === "accordion"
+                    ? "var(--text-color)"
+                    : "var(--accent-color)",
+              }}
+            />
+          }
+          aria-controls="accordionbh-content"
+          id="accordionbh-header"
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+            }}
+          >
+            {Object.keys(selectedWorker).length > 0 && (
+              <img
+                src={selectedWorker.image}
+                alt={selectedWorker.name}
+                style={{ width: "35px", borderRadius: "35px" }}
+              />
+            )}
+            <span>
+              {Object.keys(selectedWorker).length > 0
+                ? selectedWorker.name
+                : "Seleccione un profesional"}
+            </span>
+          </div>
+        </AccordionSummary>
+        <AccordionDetails sx={{ p: 1 }}>
+          <div className="container-workers-turns">
+            {workers.length > 0 &&
+              workers.map((worker, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="select-workers-turns"
+                    onClick={() => handleChangeWorker(worker)}
+                    style={{
+                      width: sm ? "100%" : "fit-content",
+                      backgroundColor:
+                        selectedWorker.email === worker.email
+                          ? "var(--accent-color)"
+                          : "var(--bg-color)",
+                    }}
+                  >
+                    <img src={worker.image} alt={worker.name} />
+                    <span>{worker.name}</span>
+                  </div>
+                );
+              })}
+          </div>
+        </AccordionDetails>
+      </Accordion>
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          height: "50px",
+          overflow: "auto",
+          backgroundColor:
+            count.length < 1 && Object.keys(selectedWorker).length > 0
+              ? "var(--accent-color)"
+              : "",
+          borderRadius: "12px",
         }}
       >
-        {/* ********************************************** */}
-        <div className="box-container-ctfw">
-        <div style={{ display: "flex", flexWrap: "wrap", overflowY: "scroll", maxHeight: "120px" }}>
-          {workers.length > 0 &&
-            workers.map((worker, index) => (
-              <button
-                className="btn-worker-wic"
+        {isLoading ? (
+          <div
+            style={{
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              margin: "0 auto",
+            }}
+          >
+            <LoaderUserReady />
+          </div>
+        ) : count.length > 0 ? (
+          count.map((element, index) => {
+            const isSelected = selectedDay === element;
+            return (
+              <Button
+                variant="contained"
                 key={index}
                 style={{
-                  backgroundColor: selectedWorker === worker.email ? (darkMode.on ? "white" : "black") : "",
-                  color: selectedWorker === worker.email ? (darkMode.on ? "black" : "white") : "white",
-                }}
-                onClick={() => handleChangeWorker(worker.email)}
-              >
-                <img src={worker.image} alt="Worker" />
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "start", marginLeft: "5px" }}>
-                  <span style={{ color: selectedWorker === worker.email ? "#a3a3a3" : "#727272" }}>
-                    {worker.email}
-                  </span>
-                  <span style={{ color: selectedWorker === worker.email ? "#a3a3a3" : "#727272" }}>
-                    {worker.name}
-                  </span>
-                </div>
-              </button>
-            ))}
-        </div>
-        </div>
+                  backgroundColor: isSelected
+                    ? "var(--accent-color)"
+                    : "var(--color-disponibility)",
 
-        <Box
-          style={{
-            display: "flex",
-            width: "100%",
-            maxWidth: "900px",
-            overflow: "auto",
-          }}
-        >
-          {count.length > 0 &&
-            count.map((element, index) => {
-              return (
-                <Button
-                  variant="contained"
-                  key={index}
-                  style={{
-                    backgroundColor:
-                      selectedDay == element && darkMode.on
-                        ? "white"
-                        : selectedDay == element && !darkMode.on
-                        ? "black"
-                        : "",
-                    color:
-                      selectedDay == element && darkMode.on ? "black" : "white",
-                    margin: "5px",
-                    fontFamily: "Jost, sans-serif",
-                    fontWeight: "bold",
-                  }}
-                  onClick={() => {
-                    handleChangeDay(element);
-                  }}
-                >
-                  {element}
-                </Button>
-              );
-            })}
-          {count.length < 1 && selectedWorker !== "" && (
-            <h2
+                  color: "white",
+                  margin: "5px",
+                  fontFamily: "Jost, sans-serif",
+                  fontWeight: "bold",
+                  letterSpacing: "1.5px",
+                  height: "40px",
+                  borderRadius: "10px",
+                  minWidth: "60px",
+                  maxWidth: "60px",
+                }}
+                onClick={() => handleChangeDay(element)}
+              >
+                {element}
+              </Button>
+            );
+          })
+        ) : (
+          Object.keys(selectedWorker).length > 0 && (
+            <span
               style={{
                 display: "flex",
-                justifyContent: "center",
-                padding: "10px",
-                color: darkMode.on ? "white" : darkMode.dark,
+                height: "40px",
+                margin: "0 auto",
+                alignItems: "center",
+                color: "white",
+                fontSize: "18px",
               }}
             >
-              Todavía no hay dias
-            </h2>
-          )}
-        </Box>
-      </Box>
-      <Box
-        className="box-container-ctfw"
-        sx={{
-          width: "100%",
-          overFlow: "scroll",
-        }}
-      >
-        <Box style={{ overflow: "scroll", maxHeight: "350px" }}>
-          {cancelledTurnsByDays.length > 0 &&
-            cancelledTurnsByDays.map((element, index) => (
-              <Box key={index}>
-                {index === 0 && (
-                  <Box>
-                    <Box
-                      style={{
-                        display: "flex",
-                        color: darkMode.on ? "white" : darkMode.dark,
-                      }}
-                    >
-                      <h3 className="h-email-ctfw">Email</h3>
-                      <hr />
-                      <h3 className="h-whocancelled-ctfw">Quien canceló?</h3>
-                      <hr />
-                      <h3 className="h-phone-ctfw">Celular</h3>
-                      <hr />
-                      <h3 className="h-day-ctfw">Día</h3>
-                    </Box>
-                    <hr className="hr-ctfw" />
-                  </Box>
-                )}
-                <Box
+              El profesional no tiene días creados
+            </span>
+          )
+        )}
+      </div>
+
+      {isLoading ? (
+        <div
+          style={{
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            margin: "0 auto",
+          }}
+        >
+          <LoaderUserReady />
+        </div>
+      ) : cancelledTurnsByDays.length > 0 ? (
+        <div
+          style={{
+            width: "100%",
+            overflow: "scroll",
+            maxHeight: "350px",
+            backgroundColor: "var(--bg-color)",
+            borderRadius: "10px",
+          }}
+        >
+          <table>
+            <thead style={{ pointerEvents: "none" }}>
+              <tr>
+                <th style={{ maxWidth: "180px" }}>Quien canceló</th>
+                <th
                   style={{
-                    display: "flex",
-                    color: darkMode.on ? "white" : darkMode.dark,
+                    minWidth: "180px",
                   }}
                 >
-                  <h4 className="h-email-ctfw">{element.email}</h4>
-                  <hr />
-                  <h4 className="h-whocancelled-ctfw">
-                    {element.howCancelled}
-                  </h4>
-                  <hr />
-                  <Box
-                    className={
-                      darkMode.on ? "h-phone-ctfw-dark" : "h-phone-ctfw"
-                    }
+                  Profesional
+                </th>
+                <th
+                  style={{
+                    minWidth: "120px",
+                  }}
+                >
+                  Horario
+                </th>
+                <th
+                  style={{
+                    minWidth: "160px",
+                  }}
+                >
+                  Celular
+                </th>
+                <th
+                  style={{
+                    minWidth: "180px",
+                  }}
+                >
+                  Email
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {cancelledTurnsByDays.map((turn, index) => (
+                <tr key={index}>
+                  <td
+                    style={{
+                      maxWidth: "250px",
+                      overflowX: "hidden",
+                      padding: 0,
+                      border: "none",
+                    }}
                   >
-                    {element.phone !== "no requerido" ? (
+                    <td
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                      }}
+                    >
+                      <img
+                        src={turn.image ? turn.image : noUserImg}
+                        alt="Profile"
+                        style={{
+                          width: "30px",
+                          borderRadius: "50px",
+                          filter: turn.image ? "" : "var(--filter-invert)",
+                        }}
+                      />
+                      <span>{turn.howCancelled}</span>
+                    </td>
+                  </td>
+                  <td
+                    style={{
+                      maxWidth: "250px",
+                      overflowX: "hidden",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                    }}
+                  >
+                    <img
+                      src={turn.image ? turn.image : noUserImg}
+                      alt="Profile"
+                      style={{
+                        width: "30px",
+                        borderRadius: "50px",
+                        filter: turn.image ? "" : "var(--filter-invert)",
+                      }}
+                    />
+                    <span>{turn.nameWorker}</span>
+                  </td>
+                  <td
+                    style={{
+                      maxWidth: "180px",
+                      overflowX: "hidden",
+                    }}
+                  >{`${formatHour(turn.turn.ini)} - ${formatHour(
+                    turn.turn.end
+                  )}`}</td>
+                  <td
+                    style={{
+                      maxWidth: "180px",
+                      overflowX: "hidden",
+                    }}
+                  >
+                    {turn.phone !== "no requerido" ? (
                       <a
-                        href={`whatsapp://send?phone=${element.phone}&text=Su turno para la barbería ha sido cancelado, por favor realice una nueva reserva.`}
+                        href={`whatsapp://send?phone=${turn.phone}&text=Recuerda que tienes reserva en la barbería, revisa en la página, sección "Mis Turnos".`}
                         target="_blank"
                         rel="noopener noreferrer"
                         style={{ textDecoration: "none" }}
                       >
-                        <button
-                          className={
-                            element.phone === "no requerido"
-                              ? "btn-wsp-ctfw-false"
-                              : "btn-wsp-ctfw"
-                          }
-                          style={{
-                            fontFamily: "Jost, sans-serif",
-                            fontWeight: "bold",
-                            border: "none",
-                            cursor: "pointer",
-                            width: "100%",
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                          }}
-                        >
-                          <h4>{element.phone}</h4>
-                          {element.phone !== "no requerido" && (
-                            <WhatsApp color="success" />
-                          )}
+                        <button className="btn-wsp-ctfw">
+                          <WhatsApp color="success" />
+                          <span>{turn.phone}</span>
                         </button>
                       </a>
                     ) : (
-                      <h4>{element.phone}</h4>
+                      turn.phone
                     )}
-                  </Box>
-                  <hr />
-                  <h4 className="h-day-ctfw">{selectedDay}</h4>
-                </Box>
-                <hr className="hr-ctfw" />
-              </Box>
-            ))}
-        </Box>
-      </Box>
+                  </td>
+                  <td
+                    style={{
+                      maxWidth: "220px",
+                      overflowX: "hidden",
+                    }}
+                  >
+                    {turn.emailUser}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        selectedDay !== "" && (
+          <span
+            style={{
+              display: "flex",
+              margin: "0 auto",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+              backgroundColor: "var(--accent-color)",
+              borderRadius: "12px",
+              height: "40px",
+              color: "white",
+              fontSize: "18px",
+            }}
+          >
+            No hay turnos para este día
+          </span>
+        )
+      )}
     </div>
   );
 };

@@ -65,6 +65,31 @@
    color: var(--text-color);
  }
 
+ table {
+   border-collapse: separate;
+   /* width: 100%; */
+   text-align: center;
+ }
+
+ th, td {
+   border-left: 1px solid var(--bg-color-secondary);
+   border-right: 1px solid var(--bg-color-secondary);
+   border-bottom: 1px solid var(--bg-color-secondary);
+   border-radius: 6px;
+   width: 100%;
+   height: 50px;
+   /* Define el borde de cada celda */
+   padding: 8px;
+   text-overflow: ellipsis;
+   /* Espaciado interno */
+   transition: .2s;
+ }
+
+ tr:hover {
+   background-color: var(--bg-color-hover);
+   /* cursor: pointer; */
+ }
+
  hr {
    background-color: var(--bg-color-medium);
    height: 1px;
@@ -75,7 +100,7 @@
  /* Estilos para motores Webkit y blink (Chrome, Safari, Opera...) */
  *::-webkit-scrollbar {
    width: 2px;
-   height: 2px;
+   height: 5px;
  }
 
  *::-webkit-scrollbar-thumb {
@@ -108,7 +133,7 @@
    z-index: 2 !important;
    /* text-align: left !important; */
  }
- 
+
  /* Estilos para el contenedor de los botones */
  .swal2-actions {
    justify-content: flex-end;
