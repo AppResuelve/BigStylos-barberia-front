@@ -16,6 +16,7 @@
 }
 
 .container-accordion {
+      margin-bottom: 5px !important;
       border-radius: 18px !important;
       padding: 5px !important;
       background-color: var(--bg-color-secondary) !important;

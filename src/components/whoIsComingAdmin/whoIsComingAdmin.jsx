@@ -142,7 +142,7 @@ const WhoIsComingAdmin = ({ refreshWhoIsComing }) => {
       <Accordion
         style={{
           width: "100%",
-          borderRadius: "20px",
+          borderRadius: "15px",
           boxShadow: "0px 5px 10px -5px rgba(0,0,0,0.50)",
           backgroundColor: "var(--bg-color)",
           padding: "4px",
@@ -152,7 +152,7 @@ const WhoIsComingAdmin = ({ refreshWhoIsComing }) => {
       >
         <AccordionSummary
           style={{
-            borderRadius: "20px",
+            borderRadius: "15px",
             backgroundColor:
               expanded === "accordion"
                 ? "var( --bg-color-hover)"
@@ -220,7 +220,7 @@ const WhoIsComingAdmin = ({ refreshWhoIsComing }) => {
       </Accordion>
       <div
         style={{
-          display: "flex",
+          display: Object.keys(selectedWorker).length > 0 ? "flex" : "none",
           width: "100%",
           height: "50px",
           overflow: "auto",
@@ -290,7 +290,7 @@ const WhoIsComingAdmin = ({ refreshWhoIsComing }) => {
           )
         )}
       </div>
-      {Object.keys(selectedDay).length > 0 && (
+      {selectedDay !== "" && (
         <div
           style={{
             backgroundColor: "var(--bg-color)",
@@ -303,7 +303,11 @@ const WhoIsComingAdmin = ({ refreshWhoIsComing }) => {
           }}
         >
           <span
-            style={{ fontSize: "18px", fontWeight: "bold", textAlign: "left" }}
+            style={{
+              fontSize: "18px",
+              fontWeight: "bold",
+              textAlign: "left",
+            }}
           >
             Horario del Jornal:
           </span>

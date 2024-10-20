@@ -131,7 +131,7 @@ const CancelledTurnsForAdmin = ({ refreshWhoIsComing }) => {
       <Accordion
         style={{
           width: "100%",
-          borderRadius: "20px",
+          borderRadius: "15px",
           boxShadow: "0px 5px 10px -5px rgba(0,0,0,0.50)",
           backgroundColor: "var(--bg-color)",
           padding: "4px",
@@ -141,7 +141,7 @@ const CancelledTurnsForAdmin = ({ refreshWhoIsComing }) => {
       >
         <AccordionSummary
           style={{
-            borderRadius: "20px",
+            borderRadius: "15px",
             backgroundColor:
               expanded === "accordion"
                 ? "var( --bg-color-hover)"
@@ -209,7 +209,7 @@ const CancelledTurnsForAdmin = ({ refreshWhoIsComing }) => {
       </Accordion>
       <div
         style={{
-          display: "flex",
+          display: Object.keys(selectedWorker).length > 0 ? "flex" : "none",
           width: "100%",
           height: "50px",
           overflow: "auto",

@@ -6,7 +6,6 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
-  LinearProgress,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Services from "../services/services";
@@ -110,6 +109,7 @@ const AdminAcordeon = () => {
       setExpanded(isExpanded ? panel : false);
     }
   };
+  console.log(expanded === "panel1");
 
   return (
     <div
@@ -118,9 +118,6 @@ const AdminAcordeon = () => {
     >
       <Accordion
         className="container-accordion"
-        sx={{
-          marginBottom: expanded === "panel1" ? "20px" : "5px",
-        }}
         expanded={expanded === "panel1"}
         onChange={handleChange("panel1")}
       >
@@ -162,9 +159,6 @@ const AdminAcordeon = () => {
       {/* ********************************************************************************************************* */}
       <Accordion
         className="container-accordion"
-        sx={{
-          marginBottom: expanded === "panel2" ? "20px" : "5px",
-        }}
         expanded={expanded === "panel2"}
         onChange={handleChange("panel2")}
       >
@@ -208,9 +202,6 @@ const AdminAcordeon = () => {
       {/* ********************************************************************************************************* */}
       <Accordion
         className="container-accordion"
-        style={{
-          marginBottom: expanded === "panel3" ? "20px" : "5px",
-        }}
         expanded={expanded === "panel3"}
         onChange={handleChange("panel3")}
       >
@@ -266,9 +257,6 @@ const AdminAcordeon = () => {
       {/* ********************************************************************************************************* */}
       <Accordion
         className="container-accordion"
-        style={{
-          marginBottom: expanded === "panel4" ? "20px" : "5px",
-        }}
         expanded={expanded === "panel4"}
         onChange={handleChange("panel4")}
       >
@@ -311,9 +299,6 @@ const AdminAcordeon = () => {
       {/* ********************************************************************************************************* */}
       <Accordion
         className="container-accordion"
-        style={{
-          marginBottom: expanded === "panel5" ? "20px" : "5px",
-        }}
         expanded={expanded === "panel5"}
         onChange={handleChange("panel5")}
       >
@@ -350,9 +335,6 @@ const AdminAcordeon = () => {
       {/* ********************************************************************************************************* */}
       <Accordion
         className="container-accordion"
-        style={{
-          marginBottom: expanded === "panel6" ? "20px" : "5px",
-        }}
         expanded={expanded === "panel6"}
         onChange={handleChange("panel6")}
       >
@@ -396,9 +378,6 @@ const AdminAcordeon = () => {
       {/* ********************************************************************************************************* */}
       <Accordion
         className="container-accordion"
-        style={{
-          marginBottom: expanded === "panel7" ? "20px" : "5px",
-        }}
         expanded={expanded === "panel7"}
         onChange={handleChange("panel7")}
       >
@@ -433,9 +412,6 @@ const AdminAcordeon = () => {
       {/********************************************************************************************************** */}
       <Accordion
         className="container-accordion"
-        style={{
-          marginBottom: expanded === "panel8" ? "20px" : "5px",
-        }}
         expanded={expanded === "panel8"}
         onChange={handleChange("panel8")}
       >

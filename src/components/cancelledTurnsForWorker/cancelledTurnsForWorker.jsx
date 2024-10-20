@@ -31,7 +31,9 @@ const CancelledTurnsForWorker = ({ userData, refreshWhoIsComing }) => {
           { emailWorker: userData.email }
         );
         setCount(response.data);
-        setSelectedDay(response.data[0]); // Usa el primer día si está disponible
+        if (response.data.length !== 0) {
+          setSelectedDay(response.data[0]); // Usa el primer día si está disponible
+        }
       } catch (error) {
         console.error("Error al obtener el count.", error);
       }
@@ -147,7 +149,7 @@ const CancelledTurnsForWorker = ({ userData, refreshWhoIsComing }) => {
               fontSize: "18px",
             }}
           >
-            No tienes días creados
+            No tienes días con turnos cancelados
           </span>
         )}
       </div>

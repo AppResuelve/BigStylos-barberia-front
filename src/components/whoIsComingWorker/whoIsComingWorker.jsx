@@ -42,13 +42,15 @@ const WhoIsComingWorker = ({
           { emailWorker: userData.email }
         );
         setCount(response.data);
-        setSelectedDay(response.data[0].day); // Selecciona el primer día al inicio
-        setSelectedTimes({
-          ini: response.data[0].ini,
-          end: response.data[0].end,
-          ini2: response.data[0].ini2,
-          end2: response.data[0].end2,
-        });
+        if (response.data.length !== 0) {
+          setSelectedDay(response.data[0].day); // Usa el primer día si está disponible
+          setSelectedTimes({
+            ini: response.data[0].ini,
+            end: response.data[0].end,
+            ini2: response.data[0].ini2,
+            end2: response.data[0].end2,
+          });
+        }
       } catch (error) {
         console.error("Error al obtener el count.", error);
       }

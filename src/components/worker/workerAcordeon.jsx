@@ -116,9 +116,6 @@ const WorkerAcordeon = ({ userData }) => {
       <Box>
         <Accordion
           className="container-accordion"
-          sx={{
-            marginBottom: expanded === "panel1" ? "20px" : "5px",
-          }}
           expanded={
             redirectToMyServices ? false : expanded === "panel1" ? true : false
           }
@@ -179,9 +176,7 @@ const WorkerAcordeon = ({ userData }) => {
         {/*  //------------------// */}
         <Accordion
           className="container-accordion"
-          sx={{
-            marginBottom: expanded === "panel2" ? "20px" : "5px",
-          }}
+         
           expanded={expanded === "panel2" || redirectToMyServices}
           onChange={handleChange("panel2")}
         >
@@ -251,9 +246,7 @@ const WorkerAcordeon = ({ userData }) => {
         {/*  //------------------// */}
         <Accordion
           className="container-accordion"
-          style={{
-            marginBottom: expanded === "panel3" ? "20px" : "5px",
-          }}
+          
           expanded={expanded === "panel3"}
           onChange={handleChange("panel3")}
         >
@@ -291,9 +284,7 @@ const WorkerAcordeon = ({ userData }) => {
         {/*  //------------------// */}
         <Accordion
           className="container-accordion"
-          style={{
-            marginBottom: expanded === "panel4" ? "20px" : "5px",
-          }}
+        
           expanded={expanded === "panel4"}
           onChange={handleChange("panel4")}
         >
