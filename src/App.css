@@ -5,7 +5,7 @@
 
  /* light theme */
  :root {
-   --bg-color: #E6E6E6;
+   --bg-color: #e6e6e6;
    --bg-color-secondary: #c3c3c3;
    --bg-color-medium: lightgray;
    --bg-color-hover: lightgray;
@@ -14,6 +14,7 @@
    --filter-invert: invert(.1);
    --accent-color: rgb(32, 141, 231);
    --color-shadow-icon-swal: 195, 195, 195;
+   --color-bg-radial-gradient: 230, 230, 230;
    /* --accent-color-selected: #208de7; */
    /* --bg-color-selected: #E6E6E6; */
    /* --bg-color-secondary-selected: #cbcbcb; */
@@ -30,7 +31,7 @@
    --filter-invert: invert(.8);
    --accent-color: rgb(32, 141, 231);
    --color-shadow-icon-swal: 25, 24, 34;
-
+   --color-bg-radial-gradient: 47, 46, 62;
  }
 
  * {

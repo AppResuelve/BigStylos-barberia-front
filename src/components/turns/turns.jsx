@@ -1,9 +1,5 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
-import {
-  UNSAFE_NavigationContext,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ThemeContext from "../../context/ThemeContext";
 import AuthContext from "../../context/AuthContext";
 import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
@@ -22,6 +18,7 @@ import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import CartContext from "../../context/CartContext";
 import axios from "axios";
 import "./turns.css";
+import { LoaderServicesReady } from "../loaders/loaders";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -44,7 +41,6 @@ const Turns = () => {
   const [days, setDays] = useState({});
   const [turnsButtons, setTurnsButtons] = useState([]);
   const navigate = useNavigate();
-  const location = useLocation();
   // Referencias para los acordeones
   const serviceAccordionRef = useRef(null);
   const workerAccordionRef = useRef(null);
@@ -54,6 +50,18 @@ const Turns = () => {
       Swal.fire({
         title: "Debes estar loggeado para reservar.",
         confirmButtonText: "Ok",
+        icon: "warning",
+        reverseButtons: true,
+        backdrop: `rgba(0,0,0,0.8)`,
+        customClass: {
+          container: "custom-swal-container",
+          htmlContainer: "custom-swal-body",
+          popup: "custom-swal-modal",
+          actions: "swal2-actions",
+          confirmButton: "custom-confirm-button",
+          denyButton: "custom-deny-button",
+          icon: "custom-icon-swal",
+        },
       }).then(() => {
         navigate("/");
       });
@@ -205,6 +213,7 @@ const Turns = () => {
       //   marginBottom: turnsCart.length > 0 ? "85px" : "0px", //condicion con el cart
       // }}
     >
+      {catServices.length < 1 && <LoaderServicesReady />}
       <div className="div-bg-turns"></div>
       {dayIsSelected.length < 1 ? (
         <div className="subcontainer-turns">

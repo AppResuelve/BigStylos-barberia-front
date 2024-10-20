@@ -1,9 +1,10 @@
 import mercadoPagoIcon from "../../assets/images/mercadopago.png";
 import securePayIcon from "../../assets/icons/secure-pay.png";
-import "./loaders.css";
+import servicesIcon from "../../assets/icons/review.png";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 import { LinearProgress } from "@mui/material";
 const { xs, sm, md, lg, xl } = useMediaQueryHook();
+import "./loaders.css";
 
 const LoaderToBuy = ({ redirect }) => {
   return (
@@ -114,6 +115,22 @@ const LoaderLinearProgress = ({ loadingServices }) => {
   );
 };
 
+const LoaderServicesReady = () => {
+  return (
+    <div className="container-loaderservicesready">
+      <img src={servicesIcon} alt="cargando servicios" />
+      <div
+        className="container-dots-servicesready"
+     
+      >
+        <li className="dots-servicesready" id="dot-1"></li>
+        <li className="dots-servicesready" id="dot-2"></li>
+        <li className="dots-servicesready" id="dot-3"></li>
+      </div>
+    </div>
+  );
+};
+
 export {
   LoaderToBuy,
   LoaderUserReady,
@@ -121,4 +138,5 @@ export {
   LoaderPage,
   LoaderMapReady,
   LoaderLinearProgress,
+  LoaderServicesReady,
 };

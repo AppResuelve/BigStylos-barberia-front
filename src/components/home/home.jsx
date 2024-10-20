@@ -18,11 +18,10 @@ const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Home = () => {
   const { darkMode, homeImages } = useContext(ThemeContext);
-  const { googleLogin, userData } = useContext(AuthContext);
+  const { googleLogin, userData, setUserIsReady } = useContext(AuthContext);
   const { setImgLogoLoaded } = useContext(LoadAndRefreshContext);
   const navigate = useNavigate();
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
-
 
   useEffect(async () => {
     // Extraer la URL y sus parámetros
@@ -62,9 +61,22 @@ const Home = () => {
         showDenyButton: true,
         confirmButtonText: "Iniciar sesión",
         denyButtonText: "Más tarde",
+        icon: "warning",
+        reverseButtons: true,
+        backdrop: `rgba(0,0,0,0.8)`,
+        customClass: {
+          container: "custom-swal-container",
+          htmlContainer: "custom-swal-body",
+          popup: "custom-swal-modal",
+          actions: "swal2-actions",
+          confirmButton: "custom-confirm-button",
+          denyButton: "custom-deny-button",
+          icon: "custom-icon-swal",
+        },
       }).then((result) => {
         if (result.isConfirmed) {
           googleLogin();
+          setUserIsReady(false);
         }
       });
     } else {
@@ -98,7 +110,7 @@ const Home = () => {
             onLoad={() => setImgLogoLoaded(true)}
             className="img-logotipo-home"
             src={
-              homeImages && homeImages[0] && homeImages[0][1] !==""
+              homeImages && homeImages[0] && homeImages[0][1] !== ""
                 ? homeImages[0][1]
                 : darkMode.on
                 ? defaultImgLight
