@@ -74,7 +74,6 @@ const SliderModal = ({
   const handleChange = (event, newValue, index, stop) => {
     const newValues = [...values];
     newValues[index] = newValue;
-
     setValues(newValues);
   };
 

@@ -146,8 +146,8 @@ const CreateWorkDays = ({
   const handleSubmit = async (time, values) => {
     const currentMonth = getCurrentMonth();
     const currentMonth2 = currentMonth == 12 ? 1 : currentMonth + 1;
-
     const resultDuration = durationMax(userData.services, values);
+    
     if (resultDuration) {
       const arrayServices = Object.keys(userData.services);
       let objServices = {};
@@ -210,7 +210,6 @@ const CreateWorkDays = ({
             `${VITE_BACKEND_URL}/workdays/create`,
             submitArray[i]
           );
-          const { data } = response;
 
           setDayIsSelected((prevState) => {
             let newState = { ...prevState };
@@ -244,7 +243,17 @@ const CreateWorkDays = ({
       Swal.fire({
         title: "El rango horario debe ser mayor a la tardanza de tus servicios",
         icon: "warning",
-        timer: 3000,
+        reverseButtons: true,
+        backdrop: `rgba(0,0,0,0.8)`,
+        customClass: {
+          container: "custom-swal-container",
+          htmlContainer: "custom-swal-body",
+          popup: "custom-swal-modal",
+          actions: "swal2-actions",
+          confirmButton: "custom-confirm-button",
+          denyButton: "custom-deny-button",
+          icon: "custom-icon-swal",
+        },
       });
     }
   };

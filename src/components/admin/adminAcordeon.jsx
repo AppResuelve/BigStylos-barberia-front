@@ -41,33 +41,33 @@ const AdminAcordeon = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading((prevState) => ({ ...prevState, services: true })); // Empieza la carga de services
       try {
-        setLoading((prevState) => ({ ...prevState, services: true })); // Empieza la carga de services
         const response = await axios.get(`${VITE_BACKEND_URL}/services`);
         const { data } = response;
         setServices(data); // Setea los servicios obtenidos
-        setLoading((prevState) => ({ ...prevState, services: false })); // Termina la carga de services
       } catch (error) {
         console.error("Error al obtener los servicios:", error);
         setLoading((prevState) => ({ ...prevState, services: false }));
       }
+      setLoading((prevState) => ({ ...prevState, services: false })); // Termina la carga de services
     };
     fetchData();
   }, [refreshServices]);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading((prevState) => ({ ...prevState, schedule: true })); // Empieza la carga de schedule
       try {
-        setLoading((prevState) => ({ ...prevState, schedule: true })); // Empieza la carga de schedule
         const response = await axios.get(`${VITE_BACKEND_URL}/schedule`);
         const { data } = response;
         setSchedule(data.businessSchedule);
-        setLoading((prevState) => ({ ...prevState, schedule: false }));
       } catch (error) {
         console.error("Error al obtener los horarios", error);
         alert("Error al obtener los horarios");
         setLoading((prevState) => ({ ...prevState, schedule: false }));
       }
+      setLoading((prevState) => ({ ...prevState, schedule: false }));
     };
     fetchData();
   }, [refresh]);
@@ -104,12 +104,22 @@ const AdminAcordeon = () => {
         icon: "warning",
         timer: 3000,
         showConfirmButton: true,
+        reverseButtons: true,
+        backdrop: `rgba(0,0,0,0.8)`,
+        customClass: {
+          container: "custom-swal-container",
+          htmlContainer: "custom-swal-body",
+          popup: "custom-swal-modal",
+          actions: "swal2-actions",
+          confirmButton: "custom-confirm-button",
+          denyButton: "custom-deny-button",
+          icon: "custom-icon-swal",
+        },
       });
     } else {
       setExpanded(isExpanded ? panel : false);
     }
   };
-  console.log(expanded === "panel1");
 
   return (
     <div

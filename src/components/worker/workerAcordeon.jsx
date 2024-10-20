@@ -101,6 +101,17 @@ const WorkerAcordeon = ({ userData }) => {
         title: "Tienes cambios sin guardar",
         icon: "warning",
         timer: 3000,
+        reverseButtons: true,
+        backdrop: `rgba(0,0,0,0.8)`,
+        customClass: {
+          container: "custom-swal-container",
+          htmlContainer: "custom-swal-body",
+          popup: "custom-swal-modal",
+          actions: "swal2-actions",
+          confirmButton: "custom-confirm-button",
+          denyButton: "custom-deny-button",
+          icon: "custom-icon-swal",
+        },
       });
     } else {
       setExpanded(isExpanded ? panel : false);
@@ -176,7 +187,6 @@ const WorkerAcordeon = ({ userData }) => {
         {/*  //------------------// */}
         <Accordion
           className="container-accordion"
-         
           expanded={expanded === "panel2" || redirectToMyServices}
           onChange={handleChange("panel2")}
         >
@@ -246,7 +256,6 @@ const WorkerAcordeon = ({ userData }) => {
         {/*  //------------------// */}
         <Accordion
           className="container-accordion"
-          
           expanded={expanded === "panel3"}
           onChange={handleChange("panel3")}
         >
@@ -284,7 +293,6 @@ const WorkerAcordeon = ({ userData }) => {
         {/*  //------------------// */}
         <Accordion
           className="container-accordion"
-        
           expanded={expanded === "panel4"}
           onChange={handleChange("panel4")}
         >
