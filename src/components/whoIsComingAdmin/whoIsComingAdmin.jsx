@@ -110,6 +110,8 @@ const WhoIsComingAdmin = ({ refreshWhoIsComing }) => {
   }, [selectedDay, selectedWorker]);
 
   const handleChangeWorker = (worker) => {
+    setSelectedDay("");
+    setTurns([]);
     setSelectedWorker(worker);
     setExpanded("");
   };
@@ -146,6 +148,7 @@ const WhoIsComingAdmin = ({ refreshWhoIsComing }) => {
           boxShadow: "0px 5px 10px -5px rgba(0,0,0,0.50)",
           backgroundColor: "var(--bg-color)",
           padding: "4px",
+          margin: 0,
         }}
         expanded={expanded === "accordion"}
         onChange={handleChange("accordion")}

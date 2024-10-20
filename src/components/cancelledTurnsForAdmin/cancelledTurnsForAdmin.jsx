@@ -103,6 +103,8 @@ const CancelledTurnsForAdmin = ({ refreshWhoIsComing }) => {
   }, [selectedDay, selectedWorker]);
 
   const handleChangeWorker = (worker) => {
+    setSelectedDay("")
+    setCancelledTurnsByDays([])
     setSelectedWorker(worker);
     setExpanded("");
   };
@@ -135,6 +137,7 @@ const CancelledTurnsForAdmin = ({ refreshWhoIsComing }) => {
           boxShadow: "0px 5px 10px -5px rgba(0,0,0,0.50)",
           backgroundColor: "var(--bg-color)",
           padding: "4px",
+          margin: 0,
         }}
         expanded={expanded === "accordion"}
         onChange={handleChange("accordion")}
@@ -213,10 +216,11 @@ const CancelledTurnsForAdmin = ({ refreshWhoIsComing }) => {
           width: "100%",
           height: "50px",
           overflow: "auto",
-          backgroundColor:
-            count.length < 1 && Object.keys(selectedWorker).length > 0
-              ? "var(--accent-color)"
-              : "",
+          backgroundColor: isLoading.count
+            ? ""
+            : count.length < 1 && Object.keys(selectedWorker).length > 0
+            ? "var(--accent-color)"
+            : "",
           borderRadius: "12px",
         }}
       >
