@@ -7,6 +7,7 @@ import { ThemeProvider } from "./context/ThemeContext";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
 import { LoadAndRefreshProvider } from "./context/LoadAndRefreshContext.jsx";
+import { useMediaQueryHook } from "./components/interfazMUI/useMediaQuery.jsx";
 
 const VITE_GOOGLE_OAUTH_CLIENT_ID = import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID;
 
@@ -19,6 +20,12 @@ if ("serviceWorker" in navigator && "PushManager" in window) {
     .catch((error) => {
       console.error("Error al registrar el Service Worker:", error);
     });
+}
+const { sm } = useMediaQueryHook();
+if (sm) {
+  document.addEventListener("contextmenu", function (event) {
+    event.preventDefault();
+  });
 }
 
 ReactDOM.render(
