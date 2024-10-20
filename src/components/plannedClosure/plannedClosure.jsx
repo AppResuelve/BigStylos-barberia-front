@@ -81,6 +81,17 @@ const PlannedClosure = ({ schedule }) => {
         showDenyButton: true,
         confirmButtonText: "Sí, cancelar",
         denyButtonText: "Más tarde",
+        reverseButtons: true,
+        backdrop: `rgba(0,0,0,0.8)`,
+        customClass: {
+          container: "custom-swal-container",
+          htmlContainer: "custom-swal-body",
+          popup: "custom-swal-modal",
+          actions: "swal2-actions",
+          confirmButton: "custom-confirm-button-error",
+          denyButton: "custom-deny-button",
+          icon: "custom-icon-swal",
+        },
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
