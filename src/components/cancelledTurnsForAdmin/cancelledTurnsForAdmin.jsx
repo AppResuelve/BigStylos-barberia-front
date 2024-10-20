@@ -13,7 +13,6 @@ import { LoaderUserReady } from "../loaders/loaders";
 import noUserImg from "../../assets/icons/noUser.png";
 import formatHour from "../../functions/formatHour";
 import axios from "axios";
-import "./cancelledTurns.css";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -26,7 +25,10 @@ const CancelledTurnsForAdmin = ({ refreshWhoIsComing }) => {
   const [count, setCount] = useState([]);
   const [expanded, setExpanded] = useState("accordion");
   const { sm } = useMediaQueryHook();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState({
+    count: false,
+    turns: false,
+  });
 
   useEffect(() => {
     const fetchWorkers = async () => {
@@ -46,7 +48,10 @@ const CancelledTurnsForAdmin = ({ refreshWhoIsComing }) => {
   useEffect(() => {
     const fetchCount = async () => {
       if (Object.keys(selectedWorker).length > 0) {
-        setIsLoading(true);
+        setIsLoading((prevState) => ({
+          ...prevState,
+          count: true,
+        }));
         try {
           const response = await axios.post(
             `${VITE_BACKEND_URL}/cancelledturns/getcount`,
@@ -55,10 +60,13 @@ const CancelledTurnsForAdmin = ({ refreshWhoIsComing }) => {
           setCount(response.data);
           setSelectedDay(""); // Reset selected day
           setCancelledTurnsByDays([]); // Clear turns when changing worker
-          setIsLoading(false);
         } catch (error) {
           console.error("Error fetching count.", error);
         }
+        setIsLoading((prevState) => ({
+          ...prevState,
+          count: false,
+        }));
       }
     };
     fetchCount();
@@ -67,6 +75,10 @@ const CancelledTurnsForAdmin = ({ refreshWhoIsComing }) => {
   useEffect(() => {
     const fetchCancelledTurns = async () => {
       if (selectedDay !== "") {
+        setIsLoading((prevState) => ({
+          ...prevState,
+          turns: true,
+        }));
         const [numberDay, numberMonth] = selectedDay.split("/").map(Number);
         try {
           const response = await axios.post(
@@ -81,6 +93,10 @@ const CancelledTurnsForAdmin = ({ refreshWhoIsComing }) => {
         } catch (error) {
           console.error("Error fetching turns.", error);
         }
+        setIsLoading((prevState) => ({
+          ...prevState,
+          turns: false,
+        }));
       }
     };
     fetchCancelledTurns();
@@ -204,7 +220,7 @@ const CancelledTurnsForAdmin = ({ refreshWhoIsComing }) => {
           borderRadius: "12px",
         }}
       >
-        {isLoading ? (
+        {isLoading.count ? (
           <div
             style={{
               height: "100%",
@@ -248,8 +264,8 @@ const CancelledTurnsForAdmin = ({ refreshWhoIsComing }) => {
             <span
               style={{
                 display: "flex",
-                height: "40px",
                 margin: "0 auto",
+                height: "100%",
                 alignItems: "center",
                 color: "white",
                 fontSize: "18px",
@@ -260,60 +276,44 @@ const CancelledTurnsForAdmin = ({ refreshWhoIsComing }) => {
           )
         )}
       </div>
-
-      {isLoading ? (
-        <div
-          style={{
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            margin: "0 auto",
-          }}
-        >
-          <LoaderUserReady />
-        </div>
-      ) : cancelledTurnsByDays.length > 0 ? (
-        <div
-          style={{
-            width: "100%",
-            overflow: "scroll",
-            maxHeight: "350px",
-            backgroundColor: "var(--bg-color)",
-            borderRadius: "10px",
-          }}
-        >
+      <div
+        style={{
+          display: selectedDay !== "" ? "block" : "none",
+          overflow: "scroll",
+          height: isLoading.turns
+            ? "50px"
+            : cancelledTurnsByDays.length < 1
+            ? "50px"
+            : "fit-content",
+          maxHeight: "350px",
+          backgroundColor: isLoading.turns
+            ? ""
+            : cancelledTurnsByDays.length < 1
+            ? "var(--accent-color)"
+            : "var(--bg-color)",
+          borderRadius: "12px",
+        }}
+      >
+        {isLoading.turns ? (
+          <div
+            style={{
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              margin: "0 auto",
+            }}
+          >
+            <LoaderUserReady />
+          </div>
+        ) : cancelledTurnsByDays.length > 0 ? (
           <table>
             <thead style={{ pointerEvents: "none" }}>
               <tr>
                 <th style={{ maxWidth: "180px" }}>Quien canceló</th>
-                <th
-                  style={{
-                    minWidth: "180px",
-                  }}
-                >
-                  Profesional
-                </th>
-                <th
-                  style={{
-                    minWidth: "120px",
-                  }}
-                >
-                  Horario
-                </th>
-                <th
-                  style={{
-                    minWidth: "160px",
-                  }}
-                >
-                  Celular
-                </th>
-                <th
-                  style={{
-                    minWidth: "180px",
-                  }}
-                >
-                  Email
-                </th>
+                <th style={{ minWidth: "180px" }}>Profesional</th>
+                <th style={{ minWidth: "120px" }}>Horario</th>
+                <th style={{ minWidth: "160px" }}>Celular</th>
+                <th style={{ minWidth: "180px" }}>Email</th>
               </tr>
             </thead>
             <tbody>
@@ -408,27 +408,24 @@ const CancelledTurnsForAdmin = ({ refreshWhoIsComing }) => {
               ))}
             </tbody>
           </table>
-        </div>
-      ) : (
-        selectedDay !== "" && (
-          <span
-            style={{
-              display: "flex",
-              margin: "0 auto",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "100%",
-              backgroundColor: "var(--accent-color)",
-              borderRadius: "12px",
-              height: "40px",
-              color: "white",
-              fontSize: "18px",
-            }}
-          >
-            No hay turnos para este día
-          </span>
-        )
-      )}
+        ) : (
+          selectedDay !== "" && (
+            <span
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "100%",
+                height: "100%",
+                color: "white",
+                fontSize: "18px",
+              }}
+            >
+              No hay turnos para este día
+            </span>
+          )
+        )}
+      </div>
     </div>
   );
 };
