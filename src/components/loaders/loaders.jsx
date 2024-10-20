@@ -115,14 +115,41 @@ const LoaderLinearProgress = ({ loadingServices }) => {
   );
 };
 
-const LoaderServicesReady = () => {
+import { useEffect, useState } from "react";
+
+const LoaderServicesReady = ({ servicesReady }) => {
+  const [isFading, setIsFading] = useState(false);
+
+  useEffect(() => {
+    if (servicesReady) {
+      setIsFading(true);
+      // Esperar un poco antes de ocultar completamente el loader
+      const timeout = setTimeout(() => {
+        setIsFading(false);
+      }, 200); // Aquí ajustas el tiempo que coincide con la transición en CSS
+      return () => clearTimeout(timeout);
+    }
+  }, [servicesReady]);
+
   return (
-    <div className="container-loaderservicesready">
-      <img src={servicesIcon} alt="cargando servicios" />
-      <div
-        className="container-dots-servicesready"
-     
-      >
+    <div
+      className={
+        isFading
+          ? "container-loaderservicesready fade-out"
+          : "container-loaderservicesready"
+      }
+      style={{ display: servicesReady && !isFading ? "none" : "flex" }}
+    >
+      <img
+        src={servicesIcon}
+        alt="cargando servicios"
+        style={{
+          width: sm ? "120px" : "140px",
+          height: sm ? "120px" : "140px",
+          filter: "var(--filter-invert)",
+        }}
+      />
+      <div className="container-dots-servicesready">
         <li className="dots-servicesready" id="dot-1"></li>
         <li className="dots-servicesready" id="dot-2"></li>
         <li className="dots-servicesready" id="dot-3"></li>
@@ -130,6 +157,7 @@ const LoaderServicesReady = () => {
     </div>
   );
 };
+
 
 export {
   LoaderToBuy,

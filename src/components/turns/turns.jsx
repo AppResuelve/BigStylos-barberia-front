@@ -72,8 +72,7 @@ const Turns = () => {
     const fetchServices = async () => {
       try {
         const response = await axios.get(`${VITE_BACKEND_URL}/services/`);
-        const { data } = response;
-        setCatServices(data);
+        setCatServices(response.data);
       } catch (error) {
         console.error("Error al obtener los servicios:", error);
         alert("Error al obtener los servicios");
@@ -213,9 +212,12 @@ const Turns = () => {
       //   marginBottom: turnsCart.length > 0 ? "85px" : "0px", //condicion con el cart
       // }}
     >
-      {Object.keys(catServices).length < 1 && <LoaderServicesReady />}
       <div className="div-bg-turns"></div>
-      {dayIsSelected.length < 1 ? (
+
+      <LoaderServicesReady
+        servicesReady={Object.keys(catServices).length > 0}
+      />
+      {Object.keys(catServices).length < 1 ? null : dayIsSelected.length < 1 ? (
         <div className="subcontainer-turns">
           {/* seccion seleccion de servicio */}
           <div

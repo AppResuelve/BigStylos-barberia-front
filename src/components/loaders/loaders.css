@@ -523,13 +523,17 @@
       justify-content: center;
       list-style: none;
       border-radius: 16px;
-      background: radial-gradient(circle farthest-corner at center center, rgba(var(--color-bg-radial-gradient), 0) 0%, rgba(var(--color-bg-radial-gradient), 0.98) 40%);
+      background: radial-gradient(circle farthest-corner at center center,
+                  rgba(var(--color-bg-radial-gradient), 0) 0%,
+                  rgba(var(--color-bg-radial-gradient), 0.98) 40%);
+      transition: opacity .2s ease-in-out;
+      opacity: 1;
+      /* Inicialmente visible */
 }
 
-.container-loaderservicesready img {
-      width: 140px;
-      height: 140px;
-      filter: var(--filter-invert);
+.container-loaderservicesready.fade-out {
+      opacity: 0;
+      /* Desvanecimiento */
 }
 
 .container-dots-servicesready {
