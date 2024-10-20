@@ -363,9 +363,7 @@ const WhoIsComingAdmin = ({ refreshWhoIsComing }) => {
           <table>
             <thead style={{ pointerEvents: "none" }}>
               <tr>
-                <th style={{ maxWidth: "200px", maxWidth: "210px" }}>
-                  Cliente
-                </th>
+                <th style={{ maxWidth: "200px" }}>Cliente</th>
                 <th style={{ minWidth: "120px" }}>Horario</th>
                 <th style={{ minWidth: "160px" }}>Celular</th>
                 <th style={{ minWidth: "180px" }}>Email</th>

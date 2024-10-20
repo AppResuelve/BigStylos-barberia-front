@@ -271,9 +271,8 @@ const Footer = () => {
           <div style={{ display: "flex", alignItems: "center" }}>
             <span>Contáctenos</span>
             <a
-              className="img-social-home-link
-              href="
-              whatsapp:target="_blank" //send?phone=+5492983664119&text=Quiero saber cómo obtener una página para mi negocio."
+              href={`whatsapp://send?phone=3834971799&text=Hola! Recuerda que tienes reserva en la barbería, revisa en la sección "Mis Turnos". 🤗`}
+              className="img-social-home-link"
               rel="noopener noreferrer"
             >
               <img className="img-social-home" src={whatsapp} alt="whatsapp" />
