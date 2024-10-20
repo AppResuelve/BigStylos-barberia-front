@@ -213,7 +213,7 @@ const Turns = () => {
       //   marginBottom: turnsCart.length > 0 ? "85px" : "0px", //condicion con el cart
       // }}
     >
-      {catServices.length < 1 && <LoaderServicesReady />}
+      {Object.keys(catServices).length < 1 && <LoaderServicesReady />}
       <div className="div-bg-turns"></div>
       {dayIsSelected.length < 1 ? (
         <div className="subcontainer-turns">
