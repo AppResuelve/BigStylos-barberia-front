@@ -57,6 +57,18 @@
  }
 
 
+ /* Estilo general para todos los botones */
+ button {
+   outline: none;
+ }
+
+ /* Estilos solo para pantallas móviles */
+ @media only screen and (max-width: 768px) {
+   button:active {
+     box-shadow: 0 0 0 60px rgba(0, 123, 255, 0.4) inset;
+   }
+ }
+
  body {
    user-select: none;
  }
