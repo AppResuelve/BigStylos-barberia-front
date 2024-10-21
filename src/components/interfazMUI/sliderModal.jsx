@@ -19,17 +19,15 @@ const SliderModal = ({
   timeSelected,
   setTimeSelected,
   handleSubmit,
+  isChecked,
+  setIsChecked
 }) => {
   const { darkMode } = useContext(ThemeContext);
   const { xs, sm, md, lg, xl } = useMediaQueryHook();
   const [timeResult, setTimeResult] = useState([]); // aca estaran los values convertidos a time de back
-  const [values, setValues] = useState([
-    [660, 840],
-    [660, 840],
-  ]); // Solo 2 rangos
-  const [isChecked, setIsChecked] = useState(false);
   const handleClose = () => setIsOpen(false);
-
+  console.log(timeSelected, 'time selected es esto')
+  
   const obtenerDuracionMaxima = (obj) => {
     let duracionMaxima = 0;
     for (const key in obj.services) {
@@ -43,13 +41,18 @@ const SliderModal = ({
     return duracionMaxima;
   };
   const maxDelay = obtenerDuracionMaxima(userData);
+  console.log(maxDelay, 'esto es maxDelay')
+  const [values, setValues] = useState([
+    [openClose[0], openClose[0] + maxDelay], // Primer rango desde el inicio
+    [openClose[1] - maxDelay, openClose[1]], // Segundo rango desde el final
+  ]);  
 
   useEffect(() => {
     setValues([
-      [openClose[0], openClose[0] + maxDelay],
-      [openClose[0], openClose[0] + maxDelay],
+      [openClose[0], openClose[0] + maxDelay],  // Primer rango desde el inicio
+      [openClose[1] - maxDelay, openClose[1]],  // Segundo rango desde el final
     ]);
-  }, [openClose]);
+  }, [openClose, maxDelay]);  
 
   useEffect(() => {
     let array = new Array(1440).fill(null).map(() => ({
@@ -58,16 +61,22 @@ const SliderModal = ({
       ini: null,
       end: null,
     }));
-    for (let i = 0; array.length > i; i++) {
-      if (
-        (i <= values[1][1] && i >= values[1][0]) || // values 30 , 0
-        (i <= values[0][1] && i >= values[0][0]) // values 30 , 0
-      ) {
+  
+    for (let i = 0; i < array.length; i++) {
+      // Siempre considerar el primer slider
+      if (i >= values[0][0] && i <= values[0][1]) {
+        array[i].applicant = "free";
+      }
+      
+      // Solo considerar el segundo slider si isChecked es true
+      if (isChecked && i >= values[1][0] && i <= values[1][1]) {
         array[i].applicant = "free";
       }
     }
+  
     setTimeSelected(array);
-  }, [values]);
+  }, [values, isChecked]);
+  
 
   const marks = time;
 

@@ -15,7 +15,7 @@ const durationMax = (serv, time) => {
       });
       const value1 = time[0][1] - time[0][0]
       const value2 = time[1][1] - time[1][0]
-      if (maxDurationElement < value1 && maxDurationElement < value2 ) {
+      if (maxDurationElement <= value1 && maxDurationElement <= value2 ) {
         return true
       }
     }
