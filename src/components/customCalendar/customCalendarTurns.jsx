@@ -1,16 +1,15 @@
 import { useEffect, useState, useContext } from "react";
-import { Box } from "@mui/material";
 import daysMonthCalendarCustom from "../../functions/daysMonthCalendarCustom";
 import getToday from "../../functions/getToday";
 import obtainDayName from "../../functions/obtainDayName";
-import "./customCalendar.css";
 import axios from "axios";
 import ThemeContext from "../../context/ThemeContext";
+import "./customCalendar.css";
+import { Skeleton } from "@mui/material";
 
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const CustomCalendarTurns = ({
-  sm,
   days,
   dayIsSelected,
   setDayIsSelected,
@@ -20,7 +19,7 @@ const CustomCalendarTurns = ({
 }) => {
   const { darkMode } = useContext(ThemeContext);
   const daysCalendarCustom = daysMonthCalendarCustom(27, true);
-  const { currentMonth, nextMonth, currentYear, nextYear, month1, month2 } =
+  const { currentMonth, nextMonth, currentYear, nextYear, month1 } =
     daysCalendarCustom;
   const daysOfWeek = ["lun", "mar", "mie", "jue", "vie", "sab", "dom"];
   const getDayPosition = getToday() == 0 ? 7 : getToday();
@@ -78,98 +77,144 @@ const CustomCalendarTurns = ({
             <span key={day}>{day}</span>
           ))}
         </div>
-        <div className="line7-calendar">
-          {daysCalendarCustom.month1.map((day, index) => {
-            let dayName = obtainDayName(day, currentMonth, currentYear);
-            let colorDay = "var(--bg-color)"; // Inicializar colorDay fuera del mapeo
-            let disable = true;
-            if (days[currentMonth] && days[currentMonth][day]) {
-              disable = false;
-              colorDay = "var(--color-disponibility)";
-            }
-            if (noWork[currentMonth] && noWork[currentMonth][day]) {
-              disable = true;
-              colorDay = "var(--bg-color-medium)";
-            }
-            if (
-              !schedule[dayName] ||
-              (schedule[dayName].open === 0 && schedule[dayName].close === 1440)
-            ) {
-              disable = true;
-              colorDay = "var(--bg-color-medium)";
-            }
+        {Object.keys(days).length > 0 ? (
+          <div className="line7-calendar">
+            {daysCalendarCustom.month1.map((day, index) => {
+              let dayName = obtainDayName(day, currentMonth, currentYear);
+              let colorDay = "var(--bg-color)"; // Inicializar colorDay fuera del mapeo
+              let disable = true;
+              if (days[currentMonth] && days[currentMonth][day]) {
+                disable = false;
+                colorDay = "var(--color-disponibility)";
+              }
+              if (noWork[currentMonth] && noWork[currentMonth][day]) {
+                disable = true;
+                colorDay = "var(--bg-color-medium)";
+              }
+              if (
+                !schedule[dayName] ||
+                (schedule[dayName].open === 0 &&
+                  schedule[dayName].close === 1440)
+              ) {
+                disable = true;
+                colorDay = "var(--bg-color-medium)";
+              }
 
-            return (
-              <button
-                key={index}
-                className="month1"
-                onClick={() => getTime(day, currentMonth)}
-                disabled={disable}
-                style={{
-                  gridColumnStart: index === 0 ? getDayPosition : "auto",
-                  backgroundColor:
-                    dayIsSelected.length > 0 &&
-                    dayIsSelected[0] == day &&
-                    dayIsSelected[1] == currentMonth
-                      ? "var(--accent-color)"
-                      : colorDay,
-                  color: disable ? "#9f9f9f" : "white",
-                  fontSize:
-                    days[currentMonth] && days[currentMonth][day] ? "22px" : "",
-                  cursor: disable ? "" : "pointer",
-                }}
-              >
-                {day}
-              </button>
-            );
-          })}
-          {daysCalendarCustom.month2.map((day, index) => {
-            let dayName = obtainDayName(day, nextMonth, nextYear);
-            let colorDay = "var(--bg-color)"; // Inicializar colorDay fuera del mapeo
-            let disable = true;
-            if (days[nextMonth] && days[nextMonth][day]) {
-              disable = false;
-              colorDay = "var(--color-disponibility)";
-            }
-            if (noWork[nextMonth] && noWork[nextMonth][day]) {
-              disable = true;
-              colorDay = "var(--bg-color-medium)";
-            }
-            if (
-              !schedule[dayName] ||
-              (schedule[dayName].open === 0 && schedule[dayName].close === 1440)
-            ) {
-              disable = true;
-              colorDay = "var(--bg-color-medium)";
-            }
+              return (
+                <button
+                  key={index}
+                  className="month1"
+                  onClick={() => getTime(day, currentMonth)}
+                  disabled={disable}
+                  style={{
+                    gridColumnStart: index === 0 ? getDayPosition : "auto",
+                    backgroundColor:
+                      dayIsSelected.length > 0 &&
+                      dayIsSelected[0] == day &&
+                      dayIsSelected[1] == currentMonth
+                        ? "var(--accent-color)"
+                        : colorDay,
+                    color: disable ? "#9f9f9f" : "white",
+                    fontSize:
+                      days[currentMonth] && days[currentMonth][day]
+                        ? "22px"
+                        : "",
+                    cursor: disable ? "" : "pointer",
+                  }}
+                >
+                  {day}
+                </button>
+              );
+            })}
+            {daysCalendarCustom.month2.map((day, index) => {
+              let dayName = obtainDayName(day, nextMonth, nextYear);
+              let colorDay = "var(--bg-color)"; // Inicializar colorDay fuera del mapeo
+              let disable = true;
+              if (days[nextMonth] && days[nextMonth][day]) {
+                disable = false;
+                colorDay = "var(--color-disponibility)";
+              }
+              if (noWork[nextMonth] && noWork[nextMonth][day]) {
+                disable = true;
+                colorDay = "var(--bg-color-medium)";
+              }
+              if (
+                !schedule[dayName] ||
+                (schedule[dayName].open === 0 &&
+                  schedule[dayName].close === 1440)
+              ) {
+                disable = true;
+                colorDay = "var(--bg-color-medium)";
+              }
 
-            return (
-              <button
-                key={index + 100}
-                className="month2"
-                onClick={() => getTime(day, nextMonth)}
-                disabled={disable}
-                style={{
-                  gridColumnStart:
-                    month1.length < 1 && index === 0 ? getDayPosition : "auto",
-                  backgroundColor:
-                    dayIsSelected.length > 0 &&
-                    dayIsSelected[0] == day &&
-                    dayIsSelected[1] == nextMonth
-                      ? "var(--accent-color)"
-                      : colorDay,
-                  color: disable ? "white" : "white",
+              return (
+                <button
+                  key={index + 100}
+                  className="month2"
+                  onClick={() => getTime(day, nextMonth)}
+                  disabled={disable}
+                  style={{
+                    gridColumnStart:
+                      month1.length < 1 && index === 0
+                        ? getDayPosition
+                        : "auto",
+                    backgroundColor:
+                      dayIsSelected.length > 0 &&
+                      dayIsSelected[0] == day &&
+                      dayIsSelected[1] == nextMonth
+                        ? "var(--accent-color)"
+                        : colorDay,
+                    color: disable ? "white" : "white",
 
-                  fontSize:
-                    days[nextMonth] && days[nextMonth][day] ? "22px" : "",
-                  cursor: disable ? "" : "pointer",
-                }}
-              >
-                {day}
-              </button>
-            );
-          })}
-        </div>
+                    fontSize:
+                      days[nextMonth] && days[nextMonth][day] ? "22px" : "",
+                    cursor: disable ? "" : "pointer",
+                  }}
+                >
+                  {day}
+                </button>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="line7-calendar">
+            {daysCalendarCustom.month1.map((day, index) => {
+              return (
+                <Skeleton
+                  key={index}
+                  className="month1"
+                  variant="rounded"
+                  sx={{
+                    bgcolor: "var(--bg-color)",
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: "15px",
+                    gridColumnStart: index === 0 ? getDayPosition : "auto",
+                  }}
+                />
+              );
+            })}
+            {daysCalendarCustom.month2.map((day, index) => {
+              return (
+                <Skeleton
+                  key={index + 100}
+                  className="month2"
+                  variant="rounded"
+                  sx={{
+                    bgcolor: "var(--bg-color)",
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: "15px",
+                    gridColumnStart:
+                      month1.length < 1 && index === 0
+                        ? getDayPosition
+                        : "auto",
+                  }}
+                />
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );
