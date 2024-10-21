@@ -84,11 +84,13 @@ const Turns = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await axios.post(
-          `${VITE_BACKEND_URL}/workdays/byservices`,
-          { servicesForTurns: serviceSelected.name }
-        );
-        const { workers, result } = response.data;
+        setTimeout(async () => {
+          const response = await axios.post(
+            `${VITE_BACKEND_URL}/workdays/byservices`,
+            { servicesForTurns: serviceSelected.name }
+          );
+        }, 3000);
+          const { workers, result } = response.data;
         workers.unshift({
           email: "cualquiera",
           name: "cualquiera",
@@ -104,8 +106,8 @@ const Turns = () => {
         });
         // setWorkerDays(JSON.parse(JSON.stringify(result)));
       } catch (error) {
-        console.error("Error al obtener los servicios:", error);
-        alert("Error al obtener los servicios");
+        console.error("Error al obtener los dias:", error);
+        alert("Error al obtener los dias");
       }
     };
 

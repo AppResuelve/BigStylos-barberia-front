@@ -180,37 +180,99 @@ const CustomCalendarTurns = ({
           <div className="line7-calendar">
             {daysCalendarCustom.month1.map((day, index) => {
               return (
-                <Skeleton
-                  key={index}
-                  className="month1"
-                  variant="rounded"
-                  sx={{
-                    bgcolor: "var(--bg-color)",
+                <div
+                  style={{
+                    position: "relative",
                     width: "100%",
                     height: "100%",
                     borderRadius: "15px",
-                    gridColumnStart: index === 0 ? getDayPosition : "auto",
                   }}
-                />
+                >
+                  <Skeleton
+                    key={index}
+                    className="month1"
+                    variant="rounded"
+                    sx={{
+                      bgcolor: "var(--bg-color)",
+                      width: "100%",
+                      height: "100%",
+                      borderRadius: "15px",
+                      gridColumnStart: index === 0 ? getDayPosition : "auto",
+                      "@keyframes wave": {
+                        "0%": {
+                          transform: "translateX(-100%)",
+                        },
+                        "100%": {
+                          transform: "translateX(100%)",
+                        },
+                      },
+                      animationDuration: "1s",
+                      animationDelay: `${index * 0.1}s`,
+                    }}
+                  />
+                  <span
+                    style={{
+                      position: "absolute",
+                      width: "20px",
+                      height: "20px",
+                      borderRadius: "15px",
+                      top: "calc(50% - 12px)",
+                      left: "calc(50% - 8px)",
+                    }}
+                  >
+                    {day}
+                  </span>
+                </div>
               );
             })}
             {daysCalendarCustom.month2.map((day, index) => {
               return (
-                <Skeleton
-                  key={index + 100}
-                  className="month2"
-                  variant="rounded"
-                  sx={{
-                    bgcolor: "var(--bg-color)",
+                <div
+                  style={{
+                    position: "relative",
                     width: "100%",
                     height: "100%",
                     borderRadius: "15px",
-                    gridColumnStart:
-                      month1.length < 1 && index === 0
-                        ? getDayPosition
-                        : "auto",
                   }}
-                />
+                >
+                  <Skeleton
+                    key={index + 100}
+                    className="month2"
+                    variant="rounded"
+                    sx={{
+                      bgcolor: "var(--bg-color)",
+                      width: "100%",
+                      height: "100%",
+                      borderRadius: "15px",
+                      gridColumnStart:
+                        month1.length < 1 && index === 0
+                          ? getDayPosition
+                          : "auto",
+                      "@keyframes wave": {
+                        "0%": {
+                          transform: "translateX(-100%)",
+                        },
+                        "100%": {
+                          transform: "translateX(100%)",
+                        },
+                      },
+                      animationDuration: "1s",
+                      animationDelay: `${index * 0.1}s`,
+                    }}
+                  />
+                  <span
+                    style={{
+                      position: "absolute",
+                      width: "20px",
+                      height: "20px",
+                      borderRadius: "15px",
+                      top: "calc(50% - 12px)",
+                      left: "calc(50% - 8px)",
+                    }}
+                  >
+                    {day}
+                  </span>
+                </div>
               );
             })}
           </div>
