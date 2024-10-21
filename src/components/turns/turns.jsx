@@ -85,11 +85,9 @@ const Turns = () => {
     const fetchServices = async () => {
       try {
         setTimeout(async () => {
-          const response = await axios.post(
             `${VITE_BACKEND_URL}/workdays/byservices`,
             { servicesForTurns: serviceSelected.name }
           );
-        }, 3000);
           const { workers, result } = response.data;
         workers.unshift({
           email: "cualquiera",
