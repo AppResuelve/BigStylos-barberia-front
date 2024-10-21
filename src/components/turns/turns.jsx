@@ -84,11 +84,11 @@ const Turns = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        setTimeout(async () => {
-            `${VITE_BACKEND_URL}/workdays/byservices`,
-            { servicesForTurns: serviceSelected.name }
-          );
-          const { workers, result } = response.data;
+        const response = await axios.post(
+          `${VITE_BACKEND_URL}/workdays/byservices`,
+          { servicesForTurns: serviceSelected.name }
+        );
+        const { workers, result } = response.data;
         workers.unshift({
           email: "cualquiera",
           name: "cualquiera",
