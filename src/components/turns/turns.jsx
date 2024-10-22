@@ -40,6 +40,7 @@ const Turns = () => {
   const [workerDays, setWorkerDays] = useState({});
   const [days, setDays] = useState({});
   const [turnsButtons, setTurnsButtons] = useState([]);
+  const [isCalendarLoading, setIsCalendarLoading] = useState(false);
   const navigate = useNavigate();
   // Referencias para los acordeones
   const serviceAccordionRef = useRef(null);
@@ -94,6 +95,7 @@ const Turns = () => {
           name: "cualquiera",
           image: cualquieraImg,
         });
+        setIsCalendarLoading(false);
         setWorkers(workers);
         setDays(result);
         setWorkerDays(result);
@@ -140,6 +142,7 @@ const Turns = () => {
         });
       }
     }
+    setIsCalendarLoading(true);
     setExpanded(false);
   };
 
@@ -545,6 +548,7 @@ const Turns = () => {
                   selectedWorker={selectedWorker}
                   serviceSelected={serviceSelected}
                   setTurnsButtons={setTurnsButtons}
+                  isCalendarLoading={isCalendarLoading}
                 />
               </div>
             </>
