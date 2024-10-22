@@ -181,7 +181,13 @@ const CustomCalendarTurns = ({
             {daysCalendarCustom.month1.map((day, index) => {
               return (
                 <div
+                  key={index}
+                  className="month1"
                   style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gridColumnStart: index === 0 ? getDayPosition : "auto",
                     position: "relative",
                     width: "100%",
                     height: "100%",
@@ -189,15 +195,12 @@ const CustomCalendarTurns = ({
                   }}
                 >
                   <Skeleton
-                    key={index}
-                    className="month1"
                     variant="rounded"
                     sx={{
                       bgcolor: "var(--bg-color)",
                       width: "100%",
                       height: "100%",
                       borderRadius: "15px",
-                      gridColumnStart: index === 0 ? getDayPosition : "auto",
                       "@keyframes wave": {
                         "0%": {
                           transform: "translateX(-100%)",
@@ -213,11 +216,7 @@ const CustomCalendarTurns = ({
                   <span
                     style={{
                       position: "absolute",
-                      width: "20px",
-                      height: "20px",
                       borderRadius: "15px",
-                      top: "calc(50% - 12px)",
-                      left: "calc(50% - 8px)",
                     }}
                   >
                     {day}
@@ -228,7 +227,16 @@ const CustomCalendarTurns = ({
             {daysCalendarCustom.month2.map((day, index) => {
               return (
                 <div
+                  key={index + 100}
+                  className="month2"
                   style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gridColumnStart:
+                      month1.length < 1 && index === 0
+                        ? getDayPosition
+                        : "auto",
                     position: "relative",
                     width: "100%",
                     height: "100%",
@@ -236,18 +244,12 @@ const CustomCalendarTurns = ({
                   }}
                 >
                   <Skeleton
-                    key={index + 100}
-                    className="month2"
                     variant="rounded"
                     sx={{
                       bgcolor: "var(--bg-color)",
                       width: "100%",
                       height: "100%",
                       borderRadius: "15px",
-                      gridColumnStart:
-                        month1.length < 1 && index === 0
-                          ? getDayPosition
-                          : "auto",
                       "@keyframes wave": {
                         "0%": {
                           transform: "translateX(-100%)",
@@ -263,11 +265,8 @@ const CustomCalendarTurns = ({
                   <span
                     style={{
                       position: "absolute",
-                      width: "20px",
-                      height: "20px",
+
                       borderRadius: "15px",
-                      top: "calc(50% - 12px)",
-                      left: "calc(50% - 8px)",
                     }}
                   >
                     {day}
