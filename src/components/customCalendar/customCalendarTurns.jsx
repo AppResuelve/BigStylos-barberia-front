@@ -17,6 +17,7 @@ const CustomCalendarTurns = ({
   selectedWorker,
   setTurnsButtons,
   isCalendarLoading,
+  setIsDayLoading,
 }) => {
   const { darkMode } = useContext(ThemeContext);
   const daysCalendarCustom = daysMonthCalendarCustom(27, true);
@@ -26,7 +27,6 @@ const CustomCalendarTurns = ({
   const getDayPosition = getToday() == 0 ? 7 : getToday();
   const [schedule, setSchedule] = useState({});
   const [noWork, setNoWork] = useState({});
-console.log(isCalendarLoading);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,25 +43,34 @@ console.log(isCalendarLoading);
     fetchData();
   }, []);
 
-  const getTime = async (day, month) => {
-    try {
-      const response = await axios.post(
-        `${VITE_BACKEND_URL}/workdays/dayforturns`,
-        {
-          dayForTurns: [day, month],
-          worker: selectedWorker.email,
-          service: serviceSelected.name,
-        }
-      );
-      const { data } = response;
-      window.scrollTo({ top: 0, behavior: "instant" });
-      setTurnsButtons(data);
-      setDayIsSelected([day, month]);
-    } catch (error) {
-      console.error("Error al obtener los horarios", error);
-      alert("Error al obtener los horarios");
-    }
-  };
+const handleSelectedDay = async (day, month) => {
+  // Activar el estado de loading
+  setIsDayLoading(true);
+  setDayIsSelected([day, month]);
+
+  try {
+    // Hacer la llamada al backend
+    let response = await axios.post(
+      `${VITE_BACKEND_URL}/workdays/dayforturns`,
+      {
+        dayForTurns: [day, month], // Enviar los valores seleccionados
+        worker: selectedWorker.email,
+        service: serviceSelected.name,
+      }
+    );
+
+    // Realizar la lógica después de obtener la respuesta
+    window.scrollTo({ top: 0, behavior: "instant" });
+    setTurnsButtons(response.data);
+  } catch (error) {
+    // Manejar el error si la llamada falla
+    console.error("Error al obtener los horarios", error);
+    alert("Error al obtener los horarios");
+  } finally {
+    // Desactivar el estado de loading en ambos casos: éxito o error
+    setIsDayLoading(false);
+  }
+};
 
   return (
     <div
@@ -205,7 +214,7 @@ console.log(isCalendarLoading);
                   <button
                     key={index}
                     className="month1"
-                    onClick={() => getTime(day, currentMonth)}
+                    onClick={() => handleSelectedDay(day, currentMonth)}
                     disabled={disable}
                     style={{
                       gridColumnStart: index === 0 ? getDayPosition : "auto",
@@ -215,7 +224,7 @@ console.log(isCalendarLoading);
                         dayIsSelected[1] == currentMonth
                           ? "var(--accent-color)"
                           : colorDay,
-                      color: disable ? "#9f9f9f" : "white",
+                      color: disable ? "var(--text-color)" : "white",
                       fontSize:
                         days[currentMonth] && days[currentMonth][day]
                           ? "22px"
@@ -252,7 +261,7 @@ console.log(isCalendarLoading);
                   <button
                     key={index + 100}
                     className="month2"
-                    onClick={() => getTime(day, nextMonth)}
+                    onClick={() => handleSelectedDay(day, nextMonth)}
                     disabled={disable}
                     style={{
                       gridColumnStart:
@@ -265,7 +274,7 @@ console.log(isCalendarLoading);
                         dayIsSelected[1] == nextMonth
                           ? "var(--accent-color)"
                           : colorDay,
-                      color: disable ? "white" : "white",
+                      color: disable ? "var(--text-color)" : "white",
                       fontSize:
                         days[nextMonth] && days[nextMonth][day] ? "22px" : "",
                       cursor: disable ? "" : "pointer",

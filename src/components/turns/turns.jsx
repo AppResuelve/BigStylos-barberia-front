@@ -41,6 +41,8 @@ const Turns = () => {
   const [days, setDays] = useState({});
   const [turnsButtons, setTurnsButtons] = useState([]);
   const [isCalendarLoading, setIsCalendarLoading] = useState(false);
+  const [isDayLoading, setIsDayLoading] = useState(false);
+
   const navigate = useNavigate();
   // Referencias para los acordeones
   const serviceAccordionRef = useRef(null);
@@ -208,6 +210,8 @@ const Turns = () => {
       quantity: 1,
     });
   };
+
+  
   return (
     <div
       className="container-turns"
@@ -549,6 +553,7 @@ const Turns = () => {
                   serviceSelected={serviceSelected}
                   setTurnsButtons={setTurnsButtons}
                   isCalendarLoading={isCalendarLoading}
+                  setIsDayLoading={setIsDayLoading}
                 />
               </div>
             </>
@@ -584,7 +589,7 @@ const Turns = () => {
               dayIsSelected[1]
             )}`}</span>
           </section>
-          {turnsButtons.length > 0 ? (
+          {!isDayLoading ? (
             <section className="section-turnsbtns-turns">
               <div style={{ marginTop: "5px" }}>
                 <span style={{ padding: "15px", fontSize: "18px" }}>
