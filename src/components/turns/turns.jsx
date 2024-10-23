@@ -186,15 +186,6 @@ const Turns = () => {
           behavior: "smooth",
         });
       }
-    } else {
-      if (panel === "panel1") {
-        navHeight = 140;
-        // Desplazar a la posición calculada
-        window.scrollTo({
-          top: navHeight, // Ajuste según la altura de la navegación y la posición
-          behavior: "smooth",
-        });
-      }
     }
   };
 
@@ -211,7 +202,6 @@ const Turns = () => {
     });
   };
 
-  
   return (
     <div
       className="container-turns"
@@ -258,6 +248,11 @@ const Turns = () => {
               }}
               expanded={expanded === "panel1"}
               onChange={handleChange("panel1")}
+              slotProps={{
+                transition: {
+                  timeout: 100,
+                },
+              }}
             >
               {Object.keys(serviceSelected).length > 0 && (
                 <AccordionSummary
@@ -438,6 +433,11 @@ const Turns = () => {
                   }}
                   expanded={expanded === "panel2"}
                   onChange={handleChange("panel2")}
+                  slotProps={{
+                    transition: {
+                      timeout: 100,
+                    },
+                  }}
                 >
                   <AccordionSummary
                     style={{

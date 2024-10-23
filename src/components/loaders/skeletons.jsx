@@ -2,6 +2,9 @@ import { Skeleton, Stack } from "@mui/material";
 import { useMediaQueryHook } from "../interfazMUI/useMediaQuery";
 
 const TurnsButtonsSkeleton = () => {
+  let morning = [1, 2, 3, 4, 5, 6, 7];
+  let evening = [1, 2, 3, 4, 5, 6, 7, 8];
+  let night = [1, 2, 3, 4, 5, 6];
   return (
     <>
       <Stack style={{ margin: "15px 0px 0px 0px", padding: "10px" }}>
@@ -10,48 +13,26 @@ const TurnsButtonsSkeleton = () => {
           gap={1}
           style={{ display: "flex", flexWrap: "wrap" }}
         >
-          <Skeleton
-            variant="rounded"
-            width={70}
-            height={40}
-            sx={{ borderRadius: "15px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            width={70}
-            height={40}
-            sx={{ borderRadius: "15px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            width={70}
-            height={40}
-            sx={{ borderRadius: "15px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            width={70}
-            height={40}
-            sx={{ borderRadius: "15px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            width={70}
-            height={40}
-            sx={{ borderRadius: "15px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            width={70}
-            height={40}
-            sx={{ borderRadius: "15px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            width={70}
-            height={40}
-            sx={{ borderRadius: "15px" }}
-          />
+          {morning.map((skeleton, index) => {
+            <Skeleton
+              key={index}
+              variant="rounded"
+              width={70}
+              height={40}
+              sx={{
+                borderRadius: "15px",
+                "@keyframes wave": {
+                  "0%": {
+                    transform: "translateX(-100%)",
+                  },
+                  "100%": {
+                    transform: "translateX(100%)",
+                  },
+                },
+                animationDuration: "1s",
+              }}
+            />;
+          })}
         </Stack>
       </Stack>
       <hr
@@ -68,54 +49,26 @@ const TurnsButtonsSkeleton = () => {
           gap={1}
           style={{ display: "flex", flexWrap: "wrap" }}
         >
-          <Skeleton
-            variant="rounded"
-            width={70}
-            height={40}
-            sx={{ borderRadius: "15px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            width={70}
-            height={40}
-            sx={{ borderRadius: "15px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            width={70}
-            height={40}
-            sx={{ borderRadius: "15px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            width={70}
-            height={40}
-            sx={{ borderRadius: "15px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            width={70}
-            height={40}
-            sx={{ borderRadius: "15px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            width={70}
-            height={40}
-            sx={{ borderRadius: "15px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            width={70}
-            height={40}
-            sx={{ borderRadius: "15px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            width={70}
-            height={40}
-            sx={{ borderRadius: "15px" }}
-          />
+          {evening.map((skeleton, index) => {
+            <Skeleton
+              key={index}
+              variant="rounded"
+              width={70}
+              height={40}
+              sx={{
+                borderRadius: "15px",
+                "@keyframes wave": {
+                  "0%": {
+                    transform: "translateX(-100%)",
+                  },
+                  "100%": {
+                    transform: "translateX(100%)",
+                  },
+                },
+                animationDuration: "1s",
+              }}
+            />;
+          })}
         </Stack>
       </Stack>
       <hr
@@ -132,42 +85,26 @@ const TurnsButtonsSkeleton = () => {
           gap={1}
           style={{ display: "flex", flexWrap: "wrap" }}
         >
-          <Skeleton
-            variant="rounded"
-            width={70}
-            height={40}
-            sx={{ borderRadius: "15px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            width={70}
-            height={40}
-            sx={{ borderRadius: "15px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            width={70}
-            height={40}
-            sx={{ borderRadius: "15px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            width={70}
-            height={40}
-            sx={{ borderRadius: "15px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            width={70}
-            height={40}
-            sx={{ borderRadius: "15px" }}
-          />
-          <Skeleton
-            variant="rounded"
-            width={70}
-            height={40}
-            sx={{ borderRadius: "15px" }}
-          />
+          {night.map((skeleton, index) => {
+            <Skeleton
+              key={index}
+              variant="rounded"
+              width={70}
+              height={40}
+              sx={{
+                borderRadius: "15px",
+                "@keyframes wave": {
+                  "0%": {
+                    transform: "translateX(-100%)",
+                  },
+                  "100%": {
+                    transform: "translateX(100%)",
+                  },
+                },
+                animationDuration: "1s",
+              }}
+            />;
+          })}
         </Stack>
       </Stack>
     </>
@@ -175,7 +112,7 @@ const TurnsButtonsSkeleton = () => {
 };
 
 const AdminWorkerSkeleton = ({ numAcordeon }) => {
-  const { xs, sm, md, lg, xl } = useMediaQueryHook();
+  const { sm } = useMediaQueryHook();
 
   return (
     <>
@@ -195,7 +132,7 @@ const AdminWorkerSkeleton = ({ numAcordeon }) => {
               key={index}
               variant="rounded"
               height={58}
-              style={{ width: "95vw", maxWidth: "900px" }}
+              style={{ width: "95vw", maxWidth: "900px", borderRadius:"25px" }}
             />
           );
         })}
