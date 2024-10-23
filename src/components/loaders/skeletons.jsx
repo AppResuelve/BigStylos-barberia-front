@@ -5,6 +5,7 @@ const TurnsButtonsSkeleton = () => {
   let morning = [1, 2, 3, 4, 5, 6, 7];
   let evening = [1, 2, 3, 4, 5, 6, 7, 8];
   let night = [1, 2, 3, 4, 5, 6];
+
   return (
     <>
       <Stack style={{ margin: "15px 0px 0px 0px", padding: "10px" }}>
@@ -13,7 +14,7 @@ const TurnsButtonsSkeleton = () => {
           gap={1}
           style={{ display: "flex", flexWrap: "wrap" }}
         >
-          {morning.map((skeleton, index) => {
+          {morning.map((skeleton, index) => (
             <Skeleton
               key={index}
               variant="rounded"
@@ -31,8 +32,8 @@ const TurnsButtonsSkeleton = () => {
                 },
                 animationDuration: "1s",
               }}
-            />;
-          })}
+            />
+          ))}
         </Stack>
       </Stack>
       <hr
@@ -49,7 +50,7 @@ const TurnsButtonsSkeleton = () => {
           gap={1}
           style={{ display: "flex", flexWrap: "wrap" }}
         >
-          {evening.map((skeleton, index) => {
+          {evening.map((skeleton, index) => (
             <Skeleton
               key={index}
               variant="rounded"
@@ -67,8 +68,8 @@ const TurnsButtonsSkeleton = () => {
                 },
                 animationDuration: "1s",
               }}
-            />;
-          })}
+            />
+          ))}
         </Stack>
       </Stack>
       <hr
@@ -85,7 +86,7 @@ const TurnsButtonsSkeleton = () => {
           gap={1}
           style={{ display: "flex", flexWrap: "wrap" }}
         >
-          {night.map((skeleton, index) => {
+          {night.map((skeleton, index) => (
             <Skeleton
               key={index}
               variant="rounded"
@@ -103,13 +104,14 @@ const TurnsButtonsSkeleton = () => {
                 },
                 animationDuration: "1s",
               }}
-            />;
-          })}
+            />
+          ))}
         </Stack>
       </Stack>
     </>
   );
 };
+
 
 const AdminWorkerSkeleton = ({ numAcordeon }) => {
   const { sm } = useMediaQueryHook();
