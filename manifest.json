@@ -3,8 +3,8 @@
   "short_name": "Tengo turno",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "background_color": "#e6e6e6",
+  "theme_color": "#208de7",
   "icons": [
     {
       "src": "/images/logo-tengoturno-72.png",
